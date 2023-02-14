@@ -2,8 +2,8 @@
 
 # DNS domain where all managed OCP clusters will be created
 base_domain: "lab.signal9.gg"
-gitops_repo_url: "https://github.com/marbindrakon/rhte-2023-fleet-gitops.git"
-gitops_repo_url_authed: "https://{{ upstream_git_user|urlencode }}:{{ upstream_git_password|urlencode }}@github.com/marbindrakon/rhte-2023-fleet-gitops.git"
+gitops_repo_url: "https://github.com/marbindrakon/signal9-lab-gitops.git"
+gitops_repo_url_authed: "https://{{ upstream_git_user|urlencode }}:{{ upstream_git_password|urlencode }}@github.com/marbindrakon/signal9-lab-gitops.git"
 cluster_builds_dir: "argocd/clusters/rhte-acm-hub/live/cluster-builds"
 hub_type: acm
 
