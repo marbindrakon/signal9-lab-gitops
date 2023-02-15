@@ -1,0 +1,23 @@
+apiVersion: nfd.openshift.io/v1
+kind: NodeFeatureDiscovery
+metadata:
+  name: nfd-master-server
+  namespace: openshift-operators
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  operand:
+    image: 'registry.redhat.io/openshift4/ose-node-feature-discovery:v4.12'
+    imagePullPolicy: Always
+    namespace: node-feature-discovery-operator
+  workerConfig:
+    configData: |
+      sources:
+        pci:
+          deviceLabelFields:
+            - "vendor"
+          deviceClassWhitelist:
+            - "0200"
+            - "03"
+            - "12"

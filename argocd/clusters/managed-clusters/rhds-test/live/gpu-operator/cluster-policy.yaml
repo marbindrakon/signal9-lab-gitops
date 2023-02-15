@@ -1,0 +1,112 @@
+apiVersion: nvidia.com/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '2'
+  name: gpu-cluster-policy
+spec:
+  operator:
+    defaultRuntime: crio
+    runtimeClass: nvidia
+    initContainer: {}
+    use_ocp_driver_toolkit: true
+
+  psp:
+    enabled: false
+
+  sandboxWorkloads:
+    enabled: false
+    defaultWorkload: "container"
+
+  mig:
+    strategy: single
+
+  daemonsets: {}
+
+  validator:
+    plugin:
+    env:
+      - name: WITH_WORKLOAD
+        value: "true"
+
+  devicePlugin:
+    enabled: true
+    config:
+      name: ""
+      default: ""
+
+  gfd:
+    enabled: true
+
+  toolkit:
+    enabled: true
+
+  dcgm:
+    enabled: true
+
+  dcgmExporter:
+    enabled: true
+    # configmap name for custom dcgm metrics
+    config:
+      name: ""
+
+  migManager:
+    enabled: true
+    config:
+      name: ""
+    gpuClientsConfig:
+      name: ""
+
+  nodeStatusExporter:
+    enabled: false
+  driver:
+    enabled: true
+    upgradePolicy:
+      autoUpgrade: true
+      drain:
+        deleteEmptyDir: false
+        enable: false
+        force: false
+        timeoutSeconds: 300
+      maxParallelUpgrades: 1
+      podDeletion:
+        deleteEmptyDir: false
+        force: false
+        timeoutSeconds: 300
+      waitForCompletion:
+        timeoutSeconds: 0
+    rdma:
+      enabled: false
+    # private mirror repository configuration
+    repoConfig:
+      configMapName: ""
+    # custom ssl key/certificate configuration
+    certConfig:
+      name: ""
+    # vGPU licensing configuration
+    licensingConfig:
+      configMapName: ""
+      nlsEnabled: false
+    # vGPU topology daemon configuration
+    virtualTopology:
+      config: ""
+    # kernel module configuration for NVIDIA driver
+    kernelModuleConfig:
+      name: ""
+    # configuration for controlling rolling update of NVIDIA driver DaemonSet pods
+    rollingUpdate:
+      # maximum number of nodes to simultaneously apply pod updates on.
+      # can be specified either as number or percentage of nodes. Default 1.
+      maxUnavailable: "1"
+  vgpuManager:
+    enabled: true
+  vgpuDeviceManager:
+    enabled: true
+    config:
+      name: ""
+      default: "default"
+  vfioManager:
+    enabled: true
+  sandboxDevicePlugin:
+    enabled: true
