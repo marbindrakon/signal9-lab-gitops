@@ -7,8 +7,8 @@ cluster:
   clusterImageSet: img4.12.1-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 3
-  apiVIP: "172.18.104.159"
-  ingressVIP: "172.18.104.208"
+  apiVIP: "172.18.104.152"
+  ingressVIP: "172.18.104.182"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
@@ -118,4 +118,4 @@ provider:
     existingImage: rhcos-4.12.0
     externalNetwork: lab-net
     computeAZs: null
-    workerFlavor: g1.xlarge
+    workerFlavor: g1.2xlarge
