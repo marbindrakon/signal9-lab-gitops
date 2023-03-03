@@ -1,0 +1,6 @@
+apiVersion: user.openshift.io/v1
+kind: Group
+metadata:
+  name: local-admins
+users:
+  - rcuda@redhat.com
