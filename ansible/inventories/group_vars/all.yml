@@ -19,10 +19,10 @@ loadbalancer_api_shared_frontend: "fe-ocp-api"
 loadbalancer_http_shared_frontend: "fe-ocp-http"
 loadbalancer_https_shared_frontend: "fe-ocp-https"
 loadbalancer_machineapi_shared_frontend: "fe-ocp-machineapi"
-loadbalancer_api_shared_vip: "75.8.216.227"
-loadbalancer_ingress_shared_vip: "75.8.216.227"
+loadbalancer_api_shared_vip: "75.8.222.17"
+loadbalancer_ingress_shared_vip: "75.8.222.17"
 # external_vip_prefix is only used when loadbalancer_frontend_mode is 'dedicated'
-external_vip_prefix: "172.18.16.0/24"
+external_vip_prefix: "75.8.222.16/28"
 
 # Multiple DNS providers can be enabled for split-horizon use cases
 enabled_dns_providers:
