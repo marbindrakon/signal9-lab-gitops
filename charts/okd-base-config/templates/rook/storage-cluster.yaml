@@ -4,6 +4,10 @@ kind: CephCluster
 metadata:
   name: rook-ceph
   namespace: rook-ceph
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '2'
+
 spec:
   external:
     enable: true
