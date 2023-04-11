@@ -1,0 +1,8 @@
+{{- if .Values.certManager.enabled -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: '-2'
+{{ end }}

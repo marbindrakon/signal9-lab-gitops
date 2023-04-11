@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager-helm
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: '-1'
+spec:
+  destination:
+    namespace: cert-manager
+    server: "https://kubernetes.default.svc"
+  project: default
+  syncPolicy:
+    automated: {}
+  source:
+    repoURL: "https://github.com/cert-manager/cert-manager.git"
+    path: "deploy/charts/cert-manager"
+    targetRevision: "v1.11.1"
+    helm:
+      values: |
+        installCRDs: true
+        extraArgs:
+          - '--leader-election-namespace=kube-system'
+          - '--dns01-recursive-nameservers=8.8.8.8:53'
+          - '--dns01-recursive-nameservers-only'

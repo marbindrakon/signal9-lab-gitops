@@ -1,0 +1,13 @@
+{{- if and .Values.rookStorage.enabled .Values.rookStorage.external -}}
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: external-ceph-rbd
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
+    argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false,SkipDryRunOnMissingResource=true
+    storageclass.kubernetes.io/is-default-class: 'true'
+provisioner: rook-ceph.rbd.csi.ceph.com
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+{{- end -}}

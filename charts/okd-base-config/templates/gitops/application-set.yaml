@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-configs
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: '10'
+spec:
+  generators:
+    - git:
+        repoURL: "{{ .Values.cluster.gitOpsRepo }}"
+        revision: HEAD
+        directories:
+        - path: "{{ .Values.cluster.gitOpsBasePath }}/{{ .Values.cluster.name }}/live/*"
+        - path: "{{ .Values.cluster.gitOpsBasePath }}/{{ .Values.cluster.name }}/live/base-configs"
+          exclude: true
+  template:
+    metadata:
+      name: '{{ "{{ path.basename }}" }}'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          allowEmpty: true
+      destination:
+        namespace: argocd
+        server: "https://kubernetes.default.svc"
+      source:
+        repoURL: "{{ .Values.cluster.gitOpsRepo }}"
+        targetRevision: HEAD
+        path: '{{ "{{ path }}" }}'

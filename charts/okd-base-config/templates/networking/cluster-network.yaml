@@ -1,0 +1,13 @@
+{{- if .Values.network.hostRouting -}}
+apiVersion: operator.openshift.io/v1
+kind: Network
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
+  name: cluster
+spec:
+  defaultNetwork:
+    ovnKubernetesConfig:
+      gatewayConfig:
+        routingViaHost: true
+{{- end -}}

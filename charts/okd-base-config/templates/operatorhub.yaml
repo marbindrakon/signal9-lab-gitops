@@ -1,0 +1,28 @@
+{{- if .Values.olm.useUpstreamCatalog -}}
+apiVersion: config.openshift.io/v1
+kind: OperatorHub
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: "-50"
+    argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
+spec:
+  disableAllDefaultSources: true
+  sources: []
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: community-operators
+  namespace: openshift-marketplace
+  annotations:
+    argocd.argoproj.io/sync-wave: "-50"
+spec:
+  sourceType: grpc
+  image: quay.io/operatorhubio/catalog:latest
+  displayName: Community Operators
+  publisher: OperatorHub.io
+  updateStrategy:
+    registryPoll:
+      interval: 60m
+{{- end -}}
