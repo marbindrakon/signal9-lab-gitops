@@ -13,8 +13,8 @@ spec:
   syncPolicy:
     automated: {}
   source:
-    repoURL: "https://github.com/cert-manager/cert-manager.git"
-    path: "deploy/charts/cert-manager"
+    repoURL: "https://charts.jetstack.io"
+    chart: "cert-manager"
     targetRevision: "v1.11.1"
     helm:
       values: |
