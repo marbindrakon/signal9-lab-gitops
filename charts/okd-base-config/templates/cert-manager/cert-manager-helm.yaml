@@ -1,3 +1,4 @@
+{{- if .Values.certManager.enabled -}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -23,3 +24,4 @@ spec:
           - '--leader-election-namespace=kube-system'
           - '--dns01-recursive-nameservers=8.8.8.8:53'
           - '--dns01-recursive-nameservers-only'
+{{- end -}}

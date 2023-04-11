@@ -1,37 +1,26 @@
 {{- if .Values.rookStorage.enabled -}}
----
-apiVersion: v1
-kind: Namespace
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: '-1'
-  labels:
-  name: rook-ceph
-spec: {}
----
-apiVersion: operators.coreos.com/v1
-kind: OperatorGroup
-metadata:
-  name: rook-ceph-operatorgroup
-  namespace: rook-ceph
+  name: rook-helm
+  namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: '0'
 spec:
-  targetNamespaces:
-  - rook-ceph
----
-apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
-metadata:
-  name: rook-operator
-  namespace: rook-ceph
-  annotations:
-    argocd.argoproj.io/sync-wave: '0'
-spec:
-  channel: "{{ .Values.rookStorage.version }}"
-  installPlanApproval: Automatic
-  name: rook-ceph
-  source: community-operators
-  sourceNamespace: openshift-marketplace
----
+  destination:
+    namespace: rook-ceph
+    server: "https://kubernetes.default.svc"
+  project: default
+  syncPolicy:
+    automated: {}
+  source:
+    repoURL: "https://charts.rook.io/release"
+    chart: "rook-ceph"
+    targetRevision: "v1.11.3"
+    helm:
+      values: |
+        crds:
+          enabled: true
+        monitoring:
+          enabled: true
 {{- end -}}

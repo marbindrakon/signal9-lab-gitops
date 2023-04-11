@@ -1,0 +1,8 @@
+{{- if .Values.rookStorage.enabled -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rook-ceph
+  annotations:
+    argocd.argoproj.io/sync-wave: '-2'
+{{ end }}
