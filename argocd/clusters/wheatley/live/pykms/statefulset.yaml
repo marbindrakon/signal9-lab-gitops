@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pykms
+  namespace: pykms
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: pykms
+  serviceName: pykms
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: pykms
+    spec:
+      containers:
+      - env:
+        - name: LOGFILE
+          value: STDOUT
+        - name: LOGLEVEL
+          value: INFO
+        image: quay.signal9.gg/pykms/pykms:latest
+        imagePullPolicy: Always
+        name: pykms
+        ports:
+        - containerPort: 1688
+          name: kms
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 10
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
