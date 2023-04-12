@@ -22,5 +22,5 @@ spec:
     - 'int-apps.wheatley.lab.signal9.gg'
     - '*.int-apps.wheatley.lab.signal9.gg'
   issuerRef:
-    name: letsencrypt-prod
+    name: cluster-acme
     kind: ClusterIssuer
