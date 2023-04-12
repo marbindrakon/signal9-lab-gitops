@@ -1,0 +1,81 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    app: matrix
+  name: matrix
+  namespace: home-infra
+spec:
+  runStrategy: RerunOnFailure
+  dataVolumeTemplates:
+  - apiVersion: cdi.kubevirt.io/v1beta1
+    kind: DataVolume
+    metadata:
+      name: matrix
+    spec:
+      storage:
+        storageClassName: ocs-external-storagecluster-ceph-rbd
+        accessModes:
+        - ReadWriteMany
+        resources:
+          requests:
+            storage: 60Gi
+      source:
+        http:
+          url: "https://virt-exportproxy-openshift-cnv.apps.atlas.lab.signal9.gg/api/export.kubevirt.io/v1alpha1/namespaces/home-infra/virtualmachineexports/matrix/volumes/matrix/disk.img.gz"
+          secretExtraHeaders:
+            - matrix-import-token
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/os: fedora
+        vm.kubevirt.io/workload: server
+      labels:
+        kubevirt.io/domain: matrix
+    spec:
+      domain:
+        cpu:
+          cores: 4
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: matrix
+          - disk:
+              bus: virtio
+            name: cloudinitdisk
+          interfaces:
+            - name: home
+              bridge: {}
+            - name: nfs
+              bridge: {}
+          networkInterfaceMultiqueue: true
+          rng: {}
+        machine:
+          type: pc-q35-rhel8.4.0
+        resources:
+          requests:
+            memory: 8Gi
+      networks:
+      - name: home
+        multus:
+          networkName: default/home
+      - name: nfs
+        multus:
+          networkName: default/nfs
+      terminationGracePeriodSeconds: 180
+      volumes:
+      - name: cloudinitdisk
+        cloudInitNoCloud:
+          userData: |-
+            #cloud-config
+            password: fedora
+            chpasswd: { expire: False }
+            ssh_pwauth: false
+            ssh_authorized_keys:
+              - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCg+4j4gUEdpCLLNra0QiXUPcyAcuf3R8bL9s9MabN4sWTemUYzCUURs2zfa6mG2Fkl1rWhJCoiJ8OqXmjJ6dF/MrD95UghECB4IijQDbREBnNk5xRoDkTVrYzJedEAZJzQVZPwgfuECLDseVGJr+muinI9iun2xO2o0+urIPZ6qnP37TezhCdq4lhKDE03pD7lubBcjsrcG9LaH2CRJmS4z/lJ6fDYdjdYI0lWukqZ7FSN4GYUDNZ2EnAqVGCoWYx04B4kzDzt9SWmsf9hlrvF/jdS4ZNYefa2WiTM8MqNRp97aqyBBB8pL1K5lfCfgIzXst8GVb8irFbUxKgQXqx9
+      - dataVolume:
+          name: matrix
+        name: matrix
