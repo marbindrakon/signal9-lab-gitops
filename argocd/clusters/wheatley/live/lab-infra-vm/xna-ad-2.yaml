@@ -57,7 +57,7 @@ spec:
       networks:
       - name: lab-inf
         multus:
-          networkName: lab-infra-lab-inf
+          networkName: default/lab-inf
       terminationGracePeriodSeconds: 180
       volumes:
       - dataVolume:
