@@ -22,6 +22,7 @@ spec:
       - name: br-nfs
         description: VLAN 11 bridge
         type: linux-bridge
+        mtu: 9000
         state: up
         ipv4:
           dhcp: false
