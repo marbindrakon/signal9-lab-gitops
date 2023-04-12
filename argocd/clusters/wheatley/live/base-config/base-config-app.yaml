@@ -40,7 +40,7 @@ spec:
         auth:
           enabled: true
           name: Signal9
-          clientID: wheatley
+          oidcClientID: wheatley
           oidcIssuer: https://login.home.signal9.gg/auth/realms/signal9
           externalSecret:
             name: signal9-client-secret
