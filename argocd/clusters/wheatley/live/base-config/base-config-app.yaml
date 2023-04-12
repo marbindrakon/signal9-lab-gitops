@@ -49,9 +49,8 @@ spec:
           enabled: false
         externalSecrets:
           vaultAuthPath: 'k8s-wheatley'
-        rookStorage:
+        odfStorage:
           enabled: true
-          version: 'beta'
           external: true
           externalSecret:
             name: rook-ceph-external-cluster-details
