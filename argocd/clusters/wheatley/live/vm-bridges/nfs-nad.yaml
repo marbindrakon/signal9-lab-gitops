@@ -11,5 +11,6 @@ spec:
     "name": "nfs",
     "type": "cnv-bridge",
     "bridge": "br-nfs",
+    "mtu": "9000",
     "macspoofchk": true 
   }'
