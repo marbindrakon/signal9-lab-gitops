@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabnzbd
+  namespace: sabnzbd
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: sabnzbd
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      annotations:
+        backup.velero.io/backup-volumes: sabnzbd-config
+      labels:
+        app: sabnzbd
+    spec:
+      containers:
+      - command:
+        - ./SABnzbd.py
+        - -f
+        - /config/sabnzbd.ini
+        env:
+        - name: SABNZBD_UID
+          value: "995"
+        - name: SABNZBD_GID
+          value: "991"
+        - name: HOST_WHITELIST_ENTRIES
+          value: sabnzbd.int-apps.wheatley.lab.signal9.gg
+        - name: CONFIG
+          value: /config/sabnzbd.ini
+        image: quay.signal9.gg/sabnzbd/sabnzbd@sha256:2ef9ebaacd299729ebd9dc9d7fc6f980a1abc1e96a96ff2f4e918b52fcfecc2f
+        imagePullPolicy: Always
+        name: sabnzbd
+        ports:
+        - containerPort: 9080
+          protocol: TCP
+        resources: {}
+        securityContext:
+          runAsGroup: 996
+          runAsUser: 998
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/sabnzbd
+          name: sabnzbd-data
+        - mountPath: /config
+          name: sabnzbd-config
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: sabnzbd
+      serviceAccountName: sabnzbd
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: sabnzbd-data
+        nfs:
+          path: /mnt/zpool1/media
+          server: 172.18.0.11
+      - name: sabnzbd-config
+        persistentVolumeClaim:
+          claimName: sabnzbd-config

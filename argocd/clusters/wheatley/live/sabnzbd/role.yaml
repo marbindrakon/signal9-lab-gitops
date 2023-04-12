@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sabnzbd-scc-clusterrole
+rules:
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - sabnzbd-scc
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
