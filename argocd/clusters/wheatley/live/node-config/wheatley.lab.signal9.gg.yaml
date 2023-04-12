@@ -1,0 +1,8 @@
+kind: Node
+apiVersion: v1
+metadata:
+  name: wheatley.lab.signal9.gg
+  annotations:
+    argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
+  labels:
+    cluster.ocs.openshift.io/openshift-storage: ''
