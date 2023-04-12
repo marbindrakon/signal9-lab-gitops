@@ -13,6 +13,8 @@ spec:
   project: default
   syncPolicy:
     automated: {}
+    syncOptions:
+      - ServerSideApply=true
   source:
     repoURL: "https://charts.rook.io/release"
     chart: "rook-ceph"
