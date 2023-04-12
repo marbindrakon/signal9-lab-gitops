@@ -44,9 +44,8 @@ network:
 olm:
   useUpstreamCatalog: true
 
-rookStorage:
+odfStorage:
   enabled: false
-  version: 'beta'
   external: false
   externalSecret:
     name: rook-ceph-external-cluster-details
