@@ -22,7 +22,7 @@ spec:
             storage: 180Gi
       source:
         http:
-          url: "https://virt-exportproxy-openshift-cnv.apps.atlas.lab.signal9.gg/api/export.kubevirt.io/v1alpha1/namespaces/minecraft/virtualmachineexports/minecraft-vm/volumes/minecraft-vm/disk.img"
+          url: "https://virt-exportproxy-openshift-cnv.apps.atlas.lab.signal9.gg/api/export.kubevirt.io/v1alpha1/namespaces/minecraft/virtualmachineexports/minecraft-vm/volumes/minecraft-vm/disk.img.gz"
           secretExtraHeaders:
             - minecraft-vm-import-token
   template:
