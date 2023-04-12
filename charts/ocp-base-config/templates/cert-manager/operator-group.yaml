@@ -9,5 +9,4 @@ metadata:
 spec:
   targetNamespaces:
     - cert-manager-operator
-spec: {}
 {{ end }}
