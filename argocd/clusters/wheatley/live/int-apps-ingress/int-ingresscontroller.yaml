@@ -1,0 +1,24 @@
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  name: signal9-internal
+  namespace: openshift-ingress-operator
+spec:
+  defaultCertificate:
+    name: signal9-int-apps
+  domain: int-apps.wheatley.lab.signal9.gg
+  replicas: 1
+  endpointPublishingStrategy:
+    type: LoadBalancerService
+    loadBalancer:
+      scope: External
+  routeAdmission:
+    wildcardPolicy: WildcardsAllowed
+  nodePlacement:
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+  routeSelector:
+    matchExpressions:
+      - key: signal9-internal
+        operator: Exists
