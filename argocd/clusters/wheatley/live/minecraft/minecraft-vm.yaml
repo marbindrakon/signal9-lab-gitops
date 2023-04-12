@@ -1,0 +1,65 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    app: minecraft-vm
+  name: minecraft-vm
+  namespace: minecraft
+spec:
+  runStrategy: RerunOnFailure
+  dataVolumeTemplates:
+  - apiVersion: cdi.kubevirt.io/v1beta1
+    kind: DataVolume
+    metadata:
+      name: minecraft-vm
+    spec:
+      storage:
+        storageClassName: ocs-external-storagecluster-ceph-rbd
+        accessModes:
+        - ReadWriteMany
+        resources:
+          requests:
+            storage: 180Gi
+      source:
+        http:
+          url: "https://virt-exportproxy-openshift-cnv.apps.atlas.lab.signal9.gg/api/export.kubevirt.io/v1alpha1/namespaces/minecraft/virtualmachineexports/minecraft-vm/volumes/minecraft-vm/disk.img"
+          secretExtraHeaders:
+            - minecraft-vm-import-token
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/os: fedora
+        vm.kubevirt.io/workload: server
+      labels:
+        kubevirt.io/domain: minecraft-vm
+    spec:
+      domain:
+        cpu:
+          cores: 8
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: minecraft-vm
+          interfaces:
+            - name: home-dmz
+              bridge: {}
+              macAddress: "02:df:4b:00:00:02"
+          networkInterfaceMultiqueue: true
+          rng: {}
+        machine:
+          type: pc-q35-rhel8.4.0
+        resources:
+          requests:
+            memory: 32Gi
+      networks:
+      - name: home-dmz
+        multus:
+          networkName: default/home-dmz
+      terminationGracePeriodSeconds: 180
+      volumes:
+      - dataVolume:
+          name: minecraft-vm
+        name: minecraft-vm
