@@ -62,10 +62,10 @@ spec:
       networks:
       - name: lab-inf
         multus:
-          networkName: quay-lab-inf
+          networkName: default/lab-inf
       - name: nfs
         multus:
-          networkName: quay-nfs
+          networkName: default/nfs
       terminationGracePeriodSeconds: 180
       volumes:
       - dataVolume:
