@@ -12,7 +12,7 @@ spec:
     automated: {}
   source:
     repoURL: "https://github.com/marbindrakon/signal9-lab-gitops.git"
-    path: "charts/okd-base-config"
+    path: "charts/ocp-base-config"
     targetRevision: HEAD
     helm:
       values: |
@@ -52,6 +52,7 @@ spec:
         odfStorage:
           enabled: true
           external: true
+          version: '4.12'
           externalSecret:
             name: rook-ceph-external-cluster-details
             vaultName: wheatley-rook-data
