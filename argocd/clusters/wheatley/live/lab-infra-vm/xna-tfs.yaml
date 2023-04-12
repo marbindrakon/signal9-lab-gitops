@@ -1,0 +1,66 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  labels:
+    app: xna-tfs
+  name: xna-tfs
+  namespace: lab-infra-vm
+spec:
+  runStrategy: RerunOnFailure
+  dataVolumeTemplates:
+  - apiVersion: cdi.kubevirt.io/v1beta1
+    kind: DataVolume
+    metadata:
+      name: xna-tfs
+    spec:
+      storage:
+        storageClassName: ocs-external-storagecluster-ceph-rbd
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 128Gi
+      source:
+        http:
+          url: "https://virt-exportproxy-openshift-cnv.apps.atlas.lab.signal9.gg/api/export.kubevirt.io/v1alpha1/namespaces/lab-infra-vm/virtualmachineexports/xna-tfs/volumes/xna-tfs/disk.img.gz"
+          secretExtraHeaders:
+            - xna-tfs-import-token
+
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/os: windows
+        vm.kubevirt.io/workload: server
+      labels:
+        kubevirt.io/domain: xna-tfs
+    spec:
+      domain:
+        cpu:
+          cores: 4
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: xna-tfs
+          interfaces:
+            - name: lab-inf
+              bridge: {}
+              macAddress: "02:df:4b:00:00:00"
+          networkInterfaceMultiqueue: true
+          rng: {}
+        machine:
+          type: pc-q35-rhel8.4.0
+        resources:
+          requests:
+            memory: 8Gi
+      networks:
+      - name: lab-inf
+        multus:
+          networkName: lab-infra-lab-inf
+      terminationGracePeriodSeconds: 180
+      volumes:
+      - dataVolume:
+          name: xna-tfs
+        name: xna-tfs
