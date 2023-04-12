@@ -39,7 +39,7 @@ spec:
             -----END CERTIFICATE-----
         auth:
           enabled: true
-          name: Signal9
+          oidcDisplayName: Signal9
           oidcClientID: wheatley
           oidcIssuer: https://login.home.signal9.gg/auth/realms/signal9
           externalSecret:
