@@ -1,30 +1,34 @@
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
 metadata:
-  name: lab-inf-bridge
+  name: nfs-bridge
 spec:
   nodeSelector: 
     node-role.kubernetes.io/worker: "" 
   maxUnavailable: 3 
   desiredState:
     interfaces:
-      - name: bond2.10
+      - name: bond1.11
         type: vlan
         state: up
-        mtu: 1500
+        mtu: 9000
         ipv4:
           enabled: false
         ipv6:
           enabled: false
         vlan:
-          base-iface: bond2
-          id: 10
-      - name: br-lab-inf
-        description: VLAN 10 bridge
+          base-iface: bond1
+          id: 11
+      - name: br-nfs
+        description: VLAN 11 bridge
         type: linux-bridge
         state: up
         ipv4:
-          enabled: false
+          dhcp: false
+          address:
+            - ip: 172.18.5.7
+              prefix-length: 24
+          enabled: true
         ipv6:
           enabled: false
         bridge:
@@ -32,4 +36,4 @@ spec:
             stp:
               enabled: false
           port:
-            - name: bond2.10
+            - name: bond1.11
