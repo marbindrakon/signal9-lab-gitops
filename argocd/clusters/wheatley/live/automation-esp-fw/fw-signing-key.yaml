@@ -1,0 +1,16 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: fw-signing-key
+  namespace: esp-sensor-fw
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault-wheatley
+  target:
+    name: fw-signing-key
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: fw-signing-key

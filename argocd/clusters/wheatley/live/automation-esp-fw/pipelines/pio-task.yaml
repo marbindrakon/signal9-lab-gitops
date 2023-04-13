@@ -1,0 +1,49 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: pio-build
+  namespace: esp-sensor-fw
+spec:
+  resources:
+    inputs:
+      - name: firmware-git
+        type: git
+  steps:
+    - image: >-
+        quay.signal9.gg/home-automation/platformio-builder:latest
+      name: ''
+      resources: {}
+      script: >
+        #!/bin/bash
+
+        set -xe
+
+        ls -l /workspace
+
+        cd /workspace/firmware-git
+
+        git fetch --unshallow
+
+        VERSION=$(git describe --long --dirty)
+
+        echo "Building FW $VERSION"
+
+        pio lib install
+
+        pio run
+
+        mkdir -p /fw-files/release
+
+        mkdir -p /fw-files/debug
+
+        ./tools/signing.py -m sign -b .pio/build/release/firmware.bin -s
+        /signing/privkey.pem -o /fw-files/release/$VERSION-release.bin
+
+        ./tools/signing.py -m sign -b .pio/build/debug/firmware.bin -s
+        /signing/privkey.pem -o /fw-files/debug/$VERSION-debug.bin
+  workspaces:
+    - mountPath: /fw-files
+      name: fw-files
+    - mountPath: /signing
+      name: signing
+      readOnly: true

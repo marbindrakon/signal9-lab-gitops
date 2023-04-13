@@ -1,0 +1,12 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: esp-mqtt-sensor
+  namespace: esp-sensor-fw
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - bindings:
+        - ref: esp-mqtt-sensor
+      template:
+        ref: esp-mqtt-sensor

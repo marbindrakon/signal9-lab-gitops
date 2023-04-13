@@ -1,0 +1,17 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: esp-firmware-github
+  namespace: esp-sensor-fw
+spec:
+  host: esp-firmware-github.apps.wheatley.lab.signal9.gg
+  to:
+    kind: Service
+    name: el-esp-mqtt-sensor
+    weight: 100
+  port:
+    targetPort: http-listener
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
