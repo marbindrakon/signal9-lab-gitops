@@ -4,7 +4,7 @@
 base_domain: "lab.signal9.gg"
 gitops_repo_url: "https://github.com/marbindrakon/signal9-lab-gitops.git"
 gitops_repo_url_authed: "https://{{ upstream_git_user|urlencode }}:{{ upstream_git_password|urlencode }}@github.com/marbindrakon/signal9-lab-gitops.git"
-cluster_builds_dir: "argocd/clusters/rhte-acm-hub/live/cluster-builds"
+cluster_builds_dir: "argocd/clusters/wheatley/live/cluster-builds"
 hub_type: acm
 
 # LB type can be external or internal, this will likely be overridden
@@ -40,7 +40,7 @@ enabled_dns_providers:
 hashicorp_vault:
   url: "https://vault.lab.signal9.gg"
   auth_type: jwt
-  auth_mount: k8s-rhte-acm-hub
+  auth_mount: k8s-wheatley
   jwt_location: "/var/run/secrets/kubernetes.io/serviceaccount/token"
   auth_role: aap
   # Policy to be used for new k8s auth methods
