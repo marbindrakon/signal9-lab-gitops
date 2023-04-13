@@ -9,7 +9,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   create_preload_data: false
-  route_tls_termination_mechanism: Edge
+  route_tls_termination_mechanism: Passthrough
+  route_tls_secret: aap-route-certificate
   ingress_type: route
   service_type: ClusterIP
   garbage_collect_secrets: false
