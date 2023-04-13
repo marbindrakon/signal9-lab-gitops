@@ -10,6 +10,10 @@ metadata:
   name: metallb-operator-sub
   namespace: metallb-system
 spec:
+  config:
+    env:
+      - name: FRR_IMAGE
+        value: registry.redhat.io/openshift4/frr-rhel8@sha256:1c41f8498b39d5df04491eecf887c259e7cd1bdc9a31f30738f94635e652eca3
   channel: "stable"
   name: metallb-operator
   source: redhat-operators
