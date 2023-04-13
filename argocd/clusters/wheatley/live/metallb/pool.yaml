@@ -1,5 +1,5 @@
 apiVersion: metallb.io/v1beta1
-kind: AddressPool
+kind: IPAddressPool
 metadata:
   name: wheatley-lab-bgp
   namespace: metallb-system
@@ -7,7 +7,6 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  protocol: bgp
   addresses:
     - 172.18.17.0/24
     - 2001:470:382a:17::/64
