@@ -6,7 +6,7 @@ metadata:
   labels:
     signal9-internal: ''
 spec:
-  host: fw-download.int-apps.atlas.lab.signal9.gg
+  host: fw-download.int-apps.wheatley.lab.signal9.gg
   to:
     kind: Service
     name: fw-download
