@@ -55,6 +55,7 @@ hashicorp_vault:
     cert-manager-acme-acct: rhte-le-account
     pull-secret: ocp-pull-secret
     openstack-cloud: opensnack-cloud-config
+    vsphere-credentials: vsphere-credentials
     node-ssh: rhte-cluster-ssh-key
 
 # CA bundle to be added to provisioned clusters, may not match platform
@@ -205,6 +206,68 @@ platform_configs:
       4RgqsahDYVvTH9w7jXbyLeiNdd8XM2w9U/t7y0Ff/9yi0GE44Za4rF2LN9d11TPA
       mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
       emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
+      -----END CERTIFICATE-----
+  vsphere:
+    node_prefix: "172.18.16.0/24"
+    network: ocp0-infra
+    vcenter: xna-vcenter.lab.signal9.gg
+    cluster: XNA-ESX-1
+    datacenter: XNA
+    datastore: CEPH-NVME
+    disk_type: thin
+    cluster_sizes:
+      sandbox:
+        controller_count: 3
+        controller_vcpu: 4
+        controller_ram: 16384
+        controller_disk: 120
+        worker_count: 2
+        worker_vcpu: 2
+        worker_ram: 4096
+        worker_disk: 120
+      small:
+        controller_count: 3
+        controller_vcpu: 4
+        controller_ram: 16384
+        controller_disk: 120
+        worker_count: 3
+        worker_vcpu: 4
+        worker_ram: 8196
+        worker_disk: 120
+      medium:
+        controller_count: 3
+        controller_vcpu: 8
+        controller_ram: 16384
+        controller_disk: 256
+        worker_count: 3
+        worker_vcpu: 8
+        worker_ram: 16384
+        worker_disk: 120
+      large:
+        controller_count: 3
+        controller_vcpu: 8
+        controller_ram: 32768
+        controller_disk: 256
+        worker_count: 6
+        worker_vcpu: 8
+        worker_ram: 16384
+        worker_disk: 256
+    platform_ca_bundle: |
+      -----BEGIN CERTIFICATE-----
+      MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
+      dzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYDVQQHDAZSb2dl
+      cnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5BMR8wHQYDVQQD
+      DBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MB4XDTIxMDMwMTA0MDMwNFoXDTQxMDIy
+      NDA0MDMwNFowdzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYD
+      VQQHDAZSb2dlcnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5B
+      MR8wHQYDVQQDDBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MHYwEAYHKoZIzj0CAQYF
+      K4EEACIDYgAE5w5BHLiaagf5eSNkQYuDIdyWe7ULLY2z2qAP1fKXM+RrSHQQb5x1
+      Q9+IhQRhf7exw/pJS5Vs1R8IyQ3B8r6xz885w6+Fk6iyMAlFn979RU6V5lbxMRGG
+      Vxq/CEL/iorVo2MwYTAdBgNVHQ4EFgQUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwHwYD
+      VR0jBBgwFoAUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwDwYDVR0TAQH/BAUwAwEB/zAO
+      BgNVHQ8BAf8EBAMCAYYwCgYIKoZIzj0EAwIDaQAwZgIxAJLOIPP9J1/mttvGdQtM
+      Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
+      vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
       -----END CERTIFICATE-----
 
   infra_env_hybrid:
