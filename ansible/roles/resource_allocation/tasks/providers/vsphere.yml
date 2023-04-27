@@ -62,7 +62,7 @@
 - name: set internal ingress VIP based on new record
   set_fact:
     internal_ingress_vip: "{{ nb_internal_ingress_create.ip_address.address | ansible.netcommon.ipaddr('address') }}"
-    internal_ingress_cidr: "{{ nb_internal_api_create.ip_address.address }}"
+    internal_ingress_cidr: "{{ nb_internal_ingress_create.ip_address.address }}"
   when:
     - internal_ingress_vip is not defined 
     - nb_internal_ingress_create is defined
