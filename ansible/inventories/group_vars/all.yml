@@ -116,7 +116,7 @@ cluster_dns_servers:
   - 172.18.42.10
   - 172.18.42.11
 
-cluster_ntp_soruces: "{{ cluster_dns_servers }}"
+cluster_ntp_sources: "{{ cluster_dns_servers }}"
 
 cluster_sso:
   client_id: "{{ cluster_name }}-openshift"
