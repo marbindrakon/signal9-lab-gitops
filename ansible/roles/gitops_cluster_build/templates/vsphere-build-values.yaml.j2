@@ -20,20 +20,12 @@ cluster:
   sshPubKey: "{{ cluster_ssh_pubkey }}"
   dnsServers: {{ cluster_dns_servers | to_json }}
 provider:
+  installConfigVault: {{ hashicorp_vault['cluster_secrets']['install-config'] }
   providerCredsVault: {{ hashicorp_vault['cluster_secrets']['vsphere-credentials'] }}
   providerCAs: |
     {{ vsphere_platform_config['platform_ca_bundle'] | indent(4) }}
   type: vSphere
   vsphere:
-    workerVCPU: {{ vsphere_platform_config['cluster_sizes'][cluster_size]['worker_vcpu'] }}
-    workerCoresPerSocket: 2
-    workerRamMb: {{ vsphere_platform_config['cluster_sizes'][cluster_size]['worker_ram'] }}
-    workerDiskSize: {{ vsphere_platform_config['cluster_sizes'][cluster_size]['worker_disk'] }}
-    controlPlaneVCPU: {{ vsphere_platform_config['cluster_sizes'][cluster_size]['controller_vcpu'] }}
-    controlPlaneCoresPerSocket: 2
-    controlPlaneRamMb: {{ vsphere_platform_config['cluster_sizes'][cluster_size]['controller_ram'] }}
-    controlPlaneDiskSize: {{ vsphere_platform_config['cluster_sizes'][cluster_size]['controller_disk'] }}
-    diskType: {{ vsphere_platform_config['disk_type'] }}
     datacenter: {{ vsphere_platform_config['datacenter'] }}
     cluster: {{ vsphere_platform_config['cluster'] }}
     defaultDatastore: {{ vsphere_platform_config['datastore'] }}

@@ -57,6 +57,7 @@ hashicorp_vault:
     openstack-cloud: opensnack-cloud-config
     vsphere-credentials: vsphere-credentials
     node-ssh: rhte-cluster-ssh-key
+    install-config: "{{ cluster_name }}-install-config"
 
 # CA bundle to be added to provisioned clusters, may not match platform
 # bundle. Should include the root CA for the OCP API even if it is normally

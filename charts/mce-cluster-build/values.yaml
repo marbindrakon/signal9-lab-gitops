@@ -20,18 +20,11 @@ cluster:
 provider:
   providerCredsVault: ""
   providerCAs: ""
+  # Only used for vSphere
+  installConfigVault: ""
   # Can be OpenStack, InfraEnv, or vSphere
   type: OpenStack
   vsphere:
-    workerVCPU: 4
-    workerCoresPerSocket: 2
-    workerRamMb: 8192
-    workerDiskSize: 120
-    controlPlaneVCPU: 8
-    controlPlaneCoresPerSocket: 2
-    controlPlaneRamMb: 16384
-    controlPlaneDiskSize: 120
-    diskType: thin
     datacenter: ""
     cluster: ""
     defaultDatastore: ""
