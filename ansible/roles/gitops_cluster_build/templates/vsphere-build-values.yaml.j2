@@ -20,7 +20,7 @@ cluster:
   sshPubKey: "{{ cluster_ssh_pubkey }}"
   dnsServers: {{ cluster_dns_servers | to_json }}
 provider:
-  installConfigVault: {{ hashicorp_vault['cluster_secrets']['install-config'] }
+  installConfigVault: {{ hashicorp_vault['cluster_secrets']['install-config'] }}
   providerCredsVault: {{ hashicorp_vault['cluster_secrets']['vsphere-credentials'] }}
   providerCAs: |
     {{ vsphere_platform_config['platform_ca_bundle'] | indent(4) }}
