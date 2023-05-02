@@ -11,8 +11,7 @@ externalSecrets:
   vaultAuthPath: "k8s-mgd-rawad-20230428"
 
 timesync:
-  enabled: true
-  ntpServers: ['172.18.42.10', '172.18.42.11']
+  enabled: false
 
 auth:
   oidcClientID: "rawad-20230428-openshift"
