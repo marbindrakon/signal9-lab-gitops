@@ -12,12 +12,3 @@ spec:
     enabled: true
     serviceMonitor:
       enabled: true
-  webhook:
-    enabled: true
-    certificate:
-      certManager: true
-      default:
-        caExpirationDays: 365
-        certExpirationDays: 365
-        annotations: {}
-      path: /tmp/k8s-webhook-server/serving-certs
