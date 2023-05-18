@@ -1,0 +1,19 @@
+apiVersion: helm.mariadb.mmontes.io/v1alpha1
+kind: MariadbOperator
+metadata:
+  name: mariadb-operator
+spec:
+  image:
+    repository: ghcr.io/mariadb-operator/mariadb-operator
+    pullPolicy: IfNotPresent
+  logLevel: INFO
+  ha:
+    enabled: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  webhook:
+    enabled: true
+    certificate:
+      certManager: true
