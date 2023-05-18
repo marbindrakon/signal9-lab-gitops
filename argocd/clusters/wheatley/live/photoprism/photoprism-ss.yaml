@@ -24,7 +24,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: photoprism
-        image: photoprism/photoprism:20211215
+        image: photoprism/photoprism:230514
         imagePullPolicy: IfNotPresent
         env:
         - name: PHOTOPRISM_HTTP_HOST
