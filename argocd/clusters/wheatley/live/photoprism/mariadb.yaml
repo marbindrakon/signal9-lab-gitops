@@ -19,6 +19,7 @@ spec:
   metrics:
     exporter:
       image:
+        repository: prom/mysqld-exporter
         pullPolicy: IfNotPresent
         tag: latest
     serviceMonitor:
