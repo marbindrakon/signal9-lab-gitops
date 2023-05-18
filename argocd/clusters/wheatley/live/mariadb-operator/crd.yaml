@@ -8,8 +8,6 @@ spec:
     repository: ghcr.io/mariadb-operator/mariadb-operator
     pullPolicy: IfNotPresent
   logLevel: INFO
-  ha:
-    enabled: false
   metrics:
     enabled: true
     serviceMonitor:
@@ -18,3 +16,8 @@ spec:
     enabled: true
     certificate:
       certManager: true
+      default:
+        caExpirationDays: 365
+        certExpirationDays: 365
+        annotations: {}
+      path: /tmp/k8s-webhook-server/serving-certs
