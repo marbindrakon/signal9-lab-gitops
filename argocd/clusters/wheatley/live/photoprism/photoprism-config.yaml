@@ -10,3 +10,4 @@ data:
   PHOTOPRISM_ORIGINALS_PATH: "/storage/originals"
   PHOTOPRISM_IMPORT_PATH: "/storage/import"
   PHOTOPRISM_STORAGE_PATH: "/storage/cache"
+  PHOTOPRISM_DATABASE_DRIVER: mysql
