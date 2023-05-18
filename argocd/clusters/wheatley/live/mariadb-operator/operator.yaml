@@ -7,4 +7,12 @@ spec:
   source: community-operators
   sourceNamespace: openshift-marketplace
   name: mariadb-operator
-  channel: "alpha" 
+  channel: "alpha"
+  config:
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+      limits:
+        memory: "1024Mi"
+        cpu: "1" 
