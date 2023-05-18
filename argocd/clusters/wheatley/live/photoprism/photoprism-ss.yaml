@@ -36,14 +36,6 @@ spec:
             name: photoprism-config
         - secretRef:
             name: photoprism-connection
-        livenessProbe:
-          httpGet:
-            path: /
-            port: http
-        readinessProbe:
-          httpGet:
-            path: /
-            port: http
         ports:
         - containerPort: 2342
           name: http
