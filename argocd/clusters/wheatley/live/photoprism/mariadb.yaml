@@ -9,7 +9,7 @@ spec:
   connection:
     secretName: photoprism-connection
     secretTemplate:
-      key: dsn
+      key: PHOTOPRISM_DATABASE_DSN
     params:
       parseTime: "true"
   port: 3306

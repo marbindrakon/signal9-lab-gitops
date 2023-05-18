@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: photoprism
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  serviceAccount: photoprism
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: photoprism
+      app.kubernetes.io/instance: photoprism
+      app: photoprism
+  serviceName: photoprism
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: photoprism
+        app.kubernetes.io/instance: photoprism
+        app: photoprism
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+      - name: photoprism
+        image: photoprism/photoprism:20211215
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PHOTOPRISM_HTTP_HOST
+          value: 0.0.0.0
+        - name: PHOTOPRISM_HTTP_PORT
+          value: "2342"
+        envFrom:
+        - configMapRef:
+            name: photoprism-config
+        - secretRef:
+            name: photoprism-connection
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        ports:
+        - containerPort: 2342
+          name: http
+        volumeMounts:
+          - mountPath: /storage/import
+            name: import
+          - mountPath: /storage/originals
+            name: originals
+          - mountPath: /storage/cache
+            name: storage
+      volumes:
+      - name: originals
+        nfs:
+          path: /zpool1/photoprism-data
+          server: 172.18.5.5
+      - name: import
+        readOnly: true
+        nfs:
+          path: /zpool1/Allie-GooglePhotos
+          server: 172.18.5.5
+      - name: storage
+        nfs:
+          path: /ssd/photoprism-cache
+          server: 172.18.5.5

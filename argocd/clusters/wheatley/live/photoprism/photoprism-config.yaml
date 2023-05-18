@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: photoprism-config
+  namespace: photoprism
+data:
+  PHOTOPRISM_AUTH_MODE: public
+  PHOTOPRISM_READONLY: "false"
+  PHOTOPRISM_ORIGINALS_PATH: "/storage/originals"
+  PHOTOPRISM_IMPORT_PATH: "/storage/import"
+  PHOTOPRISM_STORAGE_PATH: "/storage/cache"
