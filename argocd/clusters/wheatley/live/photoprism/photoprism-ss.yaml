@@ -5,7 +5,6 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: '3'
 spec:
-  serviceAccountName: photoprism
   selector:
     matchLabels:
       app.kubernetes.io/name: photoprism
@@ -20,6 +19,7 @@ spec:
         app.kubernetes.io/instance: photoprism
         app: photoprism
     spec:
+      serviceAccountName: photoprism
       terminationGracePeriodSeconds: 5
       containers:
       - name: photoprism
