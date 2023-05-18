@@ -1,0 +1,38 @@
+apiVersion: mariadb.mmontes.io/v1alpha1
+kind: MariaDB
+metadata:
+  name: mariadb
+  namespace: photoprism
+spec:
+  port: 3306
+  rootPasswordSecretKeyRef:
+    key: rootPassword
+    name: mariadb
+  metrics:
+    exporter:
+      image:
+        pullPolicy: IfNotPresent
+        tag: latest
+  resources:
+    requests:
+      cpu: 100m
+      memory: 1024Mi
+  env:
+    - name: TZ
+      value: SYSTEM
+  image:
+    pullPolicy: IfNotPresent
+    tag: 10.7.4
+    repository: mariadb
+  volumeClaimTemplate:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 5Gi
+    storageClassName: ocs-external-storagecluster-ceph-rbd
+  passwordSecretKeyRef:
+    key: password
+    name: mariadb
+  database: photoprism
+  username: photoprism
