@@ -228,7 +228,7 @@ platform_configs:
         controller_ram: 16384
         controller_disk: 120
         worker_count: 2
-        worker_vcpu: 2
+        worker_vcpu: 4
         worker_ram: 4096
         worker_disk: 120
       small:
