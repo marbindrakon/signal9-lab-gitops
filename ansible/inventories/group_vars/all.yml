@@ -128,13 +128,13 @@ cluster_sso:
   console_sso_label: "Signal9-RHT"
 
 service_now:
-  cluster_info_table: x_956379_opensnax_cluster_requests
+  cluster_info_table: x_956379_openshi_0_openshift_clusters
 
 platform_configs:
   openstack:
     vip_network: lab-net
     use_existing_image: true
-    glance_image: rhcos-4.12.0
+    glance_image: rhcos-4.12.17
     cluster_sizes:
       sandbox:
         controller_count: 3
