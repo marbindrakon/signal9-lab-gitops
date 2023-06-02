@@ -11,10 +11,15 @@
         cluster_platform: infra_env_hybrid
       when: snow_cluster_platform == "auto" and cluster_special_feature == "virtualization"
 
+    - name: auto platform - set platform based for vsphere
+      ansible.builtin.set_fact:
+        cluster_platform: infra_env_hybrid
+      when: snow_cluster_platform == "auto" and cluster_special_feature == "vsphere"
+
     - name: auto platform - default to openstack
       ansible.builtin.set_fact:
         cluster_platform: openstack
-      when: snow_cluster_platform == "auto" and cluster_special_feature not in ["gpu", "virtualization"]
+      when: snow_cluster_platform == "auto" and cluster_special_feature not in ["gpu", "virtualization", "vsphere"]
 
     - name: set cluster_platform based on non-auto snow_cluster_platform
       ansible.builtin.set_fact:
