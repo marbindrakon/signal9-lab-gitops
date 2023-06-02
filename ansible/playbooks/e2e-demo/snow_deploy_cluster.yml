@@ -13,7 +13,7 @@
 
     - name: auto platform - set platform based for vsphere
       ansible.builtin.set_fact:
-        cluster_platform: infra_env_hybrid
+        cluster_platform: vsphere
       when: snow_cluster_platform == "auto" and cluster_special_feature == "vsphere"
 
     - name: auto platform - default to openstack
