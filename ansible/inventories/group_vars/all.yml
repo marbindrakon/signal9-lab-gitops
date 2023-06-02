@@ -129,6 +129,11 @@ cluster_sso:
 
 service_now:
   cluster_info_table: x_956379_openshi_0_openshift_clusters
+  version_mapping:
+    "4.13": "4.13.1"
+    "4.12": "4.12.18"
+    "4.11": "4.11.42"
+    "4.10": "4.10.59"
 
 platform_configs:
   openstack:

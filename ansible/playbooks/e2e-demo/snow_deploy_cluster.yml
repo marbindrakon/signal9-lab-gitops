@@ -21,6 +21,10 @@
         cluster_platform: "{{ snow_cluster_platform }}"
       when: snow_cluster_platform != "auto"
 
+    - name: set cluster version to specific patch level
+      ansible.builtin.set_fact:
+        cluster_version: "{{ service_now['version_mapping'].get(snow_cluster_version) }}"
+
     - name: update platform in SNOW
       servicenow.itsm.api:
         resource: "{{ service_now['cluster_info_table'] }}"
