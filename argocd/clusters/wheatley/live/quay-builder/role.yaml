@@ -6,7 +6,7 @@ rules:
 - apiGroups:
   - security.openshift.io
   resourceNames:
-  - quay-builder
+  - anyuid
   resources:
   - securitycontextconstraints
   verbs:
