@@ -221,7 +221,7 @@ platform_configs:
     datacenter: XNA
     datastore: CEPH-NVME
     disk_type: thin
-    folder: 'Ansible-Testing'
+    folder: 'XNA/vm/Ansible-Testing'
     cluster_sizes:
       sandbox:
         controller_count: 3
