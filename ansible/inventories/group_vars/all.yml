@@ -139,7 +139,7 @@ platform_configs:
   openstack:
     vip_network: lab-net
     use_existing_image: true
-    glance_image: rhcos-4.12.17
+    glance_image: "{{ glance_image_override|default('rhcos-4.12.17') }}"
     cluster_sizes:
       sandbox:
         controller_count: 3
