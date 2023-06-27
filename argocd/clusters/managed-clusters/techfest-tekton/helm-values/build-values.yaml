@@ -7,8 +7,8 @@ cluster:
   clusterImageSet: imgokd-4.13.0-0.okd-scos-2023-06-22-002852-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 3
-  apiVIP: "172.18.104.196"
-  ingressVIP: "172.18.104.195"
+  apiVIP: "172.18.104.78"
+  ingressVIP: "172.18.104.225"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
@@ -115,7 +115,7 @@ provider:
 
   type: OpenStack
   openstack:
-    existingImage: rhcos-4.12.17
+    existingImage: scos-414.9.20230605
     externalNetwork: lab-net
     computeAZs: null
-    workerFlavor: m1.xlarge
+    workerFlavor: m5.xlarge
