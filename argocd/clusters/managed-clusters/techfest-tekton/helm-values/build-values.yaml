@@ -4,11 +4,11 @@ cluster:
   createGitopsManifestWorks: false
   name: techfest-tekton
   baseDomain: lab.signal9.gg
-  clusterImageSet: imgokd-4.13.0-0.okd-scos-2023-06-22-002852-x86-64-appsub
+  clusterImageSet: img4.13.4-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 3
-  apiVIP: "172.18.104.78"
-  ingressVIP: "172.18.104.225"
+  apiVIP: "172.18.104.209"
+  ingressVIP: "172.18.104.220"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
@@ -115,7 +115,7 @@ provider:
 
   type: OpenStack
   openstack:
-    existingImage: scos-414.9.20230605
+    existingImage: rhcos-4.13.0
     externalNetwork: lab-net
     computeAZs: null
     workerFlavor: m5.xlarge
