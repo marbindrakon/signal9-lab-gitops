@@ -5,6 +5,7 @@ cluster:
   importToHub: true
   createGitopsManifestWorks: false
   useACM: false
+  type: ocp
   clusterImageSet: img4.11.17-x86-64-appsub
   releaseImage: null
   controlPlaneCount: 3

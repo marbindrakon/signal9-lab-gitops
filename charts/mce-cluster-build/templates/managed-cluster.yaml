@@ -7,6 +7,7 @@ metadata:
     name: {{ .Values.cluster.name }}
     vendor: OpenShift
     spoke-gitops: 'true'
+    gitops-type: {{ .Values.cluster.type }}
   name: {{ .Values.cluster.name }}
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous

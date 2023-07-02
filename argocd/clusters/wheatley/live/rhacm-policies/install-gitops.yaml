@@ -136,3 +136,4 @@ spec:
   clusterSelector:
     matchExpressions:
       - { key: spoke-gitops, operator: In, values: ["true"] }
+      - { key: gitops-type, operator: In, values: ["ocp"] }
