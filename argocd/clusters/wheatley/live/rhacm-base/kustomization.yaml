@@ -13,3 +13,4 @@ resources:
   - mco.yaml
 
   - custom-imagesets.yaml
+  - agent-service-config.yaml
