@@ -26,6 +26,6 @@ spec:
   admin_email: admin@signal9.gg
   admin_password_secret: aap-admin-password
   secret_key_secret: aap-secret-key
-  bundle_cacert_secret: app-ca-trust
+    #bundle_cacert_secret: app-ca-trust
   route_host: aap.lab.signal9.gg
   hostname: aap.lab.signal9.gg
