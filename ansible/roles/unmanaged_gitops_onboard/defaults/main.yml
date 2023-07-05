@@ -1,0 +1,5 @@
+---
+# defaults file for unmanaged_gitops_onboard
+
+gitops_version: 1.8
+gitops_import_to_hub: true

@@ -1,0 +1,67 @@
+---
+- name: onboard unmanaged cluster
+  block:
+  - name: Get kubeconfig secret
+    kubernetes.core.k8s_info:
+      api_version: v1
+      kind: Secret
+      namespace: "{{ cluster_name }}"
+      label_selectors:
+        - "hive.openshift.io/secret-type=kubeconfig"
+      wait: true
+      wait_sleep: 10
+      wait_timeout: 1200
+    register: kubeconfig_secret
+    until: kubeconfig_secret.resources | length > 0
+    retries: 120
+    delay: 10
+    no_log: true
+    when: cluster_kubeconfig is not defined
+
+  - name: load cluster kubeconfig
+    ansible.builtin.set_fact:
+      cluster_kubeconfig: "{{ kubeconfig_secret.resources.0.data.kubeconfig | b64decode | from_yaml }}"
+    no_log: true
+    when: cluster_kubeconfig is not defined
+
+  - name: create tempfile for kubeconfig
+    ansible.builtin.tempfile:
+      state: file
+    register: kubeconfig_tempfile
+
+  - name: save kubeconfig data to temp file
+    ansible.builtin.template:
+      dest: "{{ kubeconfig_tempfile.path }}"
+      src: "temp-kubeconfig.j2"
+
+  - name: install openshift gitops
+    kubernetes.core.k8s:
+      state: present
+      kubeconfig: "{{ kubeconfig_tempfile.path }}"
+      template: 'subscription.yaml.j2'
+
+  - name: create gitops cluster admin binding
+    kubernetes.core.k8s:
+      state: present
+      kubeconfig: "{{ kubeconfig_tempfile.path }}"
+      template: 'rolebinding.yaml.j2'
+
+  - name: wait for default appproject to exist
+    kubernetes.core.k8s_info:
+      kubeconfig: "{{ kubeconfig_tempfile.path }}"
+      api_version: argoproj.io/v1alpha1
+      kind: AppProject
+      namespace: openshift-gitops
+      name: default
+    register: default_appproj
+    until: default_appproj.resources | length > 0
+    retries: 120
+    delay: 10
+
+  - name: create applicationset
+    kubernetes.core.k8s:
+      state: present
+      kubeconfig: "{{ kubeconfig_tempfile.path }}"
+      template: 'applicationset.yaml.j2'
+
+  when: cluster_state == "present" and gitops_import_to_hub|bool != true

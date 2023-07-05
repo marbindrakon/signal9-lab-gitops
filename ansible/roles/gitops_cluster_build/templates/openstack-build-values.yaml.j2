@@ -2,14 +2,15 @@ cluster:
 {% if gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
   importToHub: false
   useACM: false
+  createGitopsManifestWorks: false
 {% else %}
   importToHub: true
-{% endif %}
-{% if hub_type == 'acm' and gitops_import_to_hub != 'false' %}
+{% if hub_type == 'acm' %}
   useACM: true
   createGitopsManifestWorks: false
 {% else %}
   createGitopsManifestWorks: true
+{% endif %}
 {% endif %}
   name: {{ cluster_name }}
   baseDomain: {{ base_domain }}
