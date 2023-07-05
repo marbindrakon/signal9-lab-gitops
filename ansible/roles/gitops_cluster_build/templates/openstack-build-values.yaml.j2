@@ -16,6 +16,7 @@ cluster:
 {% endif %}
 {% endif %}
   name: {{ cluster_name }}
+  gitOpsRepo: "{{ gitops_repo_url }}"
   baseDomain: {{ base_domain }}
   clusterImageSet: {{ cluster_image_set }}
   controlPlaneCount: {{ openstack_platform_config['cluster_sizes'][cluster_size]['controller_count'] }}
