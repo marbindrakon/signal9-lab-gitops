@@ -49,22 +49,3 @@
     - name: include vault_config role
       ansible.builtin.include_role:
         name: vault_config
-
-    - name: wait up to two for ManagedClusterAvailable before unboarding unmanaged cluster
-      kubernetes.core.k8s_info:
-        api_version: hive.openshift.io/v1
-        kind: ClusterDeployment
-        name: "{{ cluster_name }}"
-        wait_condition:
-          type: "Provisioned"
-          status: "True"
-          reason: "Provisioned"
-        wait: true
-        wait_sleep: 45
-        wait_timeout: 7200
-      when: gitops_import_to_hub|bool != true
-
-    - name: include unmanaged_gitops_onboard role
-      ansible.builtin.include_role:
-        name: unmanaged_gitops_onboard
-      when: gitops_import_to_hub|bool != true

@@ -3,13 +3,16 @@ cluster:
   importToHub: false
   useACM: false
   createGitopsManifestWorks: false
+  createGitopsSyncSet: true
 {% else %}
   importToHub: true
 {% if hub_type == 'acm' %}
   useACM: true
   createGitopsManifestWorks: false
+  createGitopsSyncSet: false
 {% else %}
-  createGitopsManifestWorks: true
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: true
 {% endif %}
 {% endif %}
   name: {{ cluster_name }}
