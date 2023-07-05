@@ -2,6 +2,7 @@ cluster:
   importToHub: false
   useACM: false
   createGitopsManifestWorks: false
+  createGitopsSyncSet: true
   name: non-mgd-test-3
   baseDomain: lab.signal9.gg
   clusterImageSet: img4.13.4-x86-64-appsub
