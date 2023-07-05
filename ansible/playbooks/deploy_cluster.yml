@@ -52,13 +52,13 @@
 
     - name: wait up to two for ManagedClusterAvailable before unboarding unmanaged cluster
       kubernetes.core.k8s_info:
-        api_version: cluster.open-cluster-management.io/v1
-        kind: ManagedCluster
+        api_version: hive.openshift.io/v1
+        kind: ClusterDeployment
         name: "{{ cluster_name }}"
         wait_condition:
-          type: ManagedClusterConditionAvailable
+          type: "Provisioned"
           status: "True"
-          reason: "ManagedClusterAvailable"
+          reason: "Provisioned"
         wait: true
         wait_sleep: 45
         wait_timeout: 7200
