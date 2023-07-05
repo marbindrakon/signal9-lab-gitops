@@ -1,11 +1,11 @@
 cluster:
-{% if gitops_import_to_hub %}
-  importToHub: true
-{% else %}
-  useACM: false
+{% if gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
   importToHub: false
+  useACM: false
+{% else %}
+  importToHub: true
 {% endif %}
-{% if hub_type == 'acm' %}
+{% if hub_type == 'acm' and gitops_import_to_hub != 'false' %}
   useACM: true
   createGitopsManifestWorks: false
 {% else %}
