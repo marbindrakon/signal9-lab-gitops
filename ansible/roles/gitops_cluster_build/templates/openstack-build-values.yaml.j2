@@ -4,6 +4,7 @@ cluster:
 {% else %}
   useACM: false
   importToHub: false
+{% endif %}
 {% if hub_type == 'acm' %}
   useACM: true
   createGitopsManifestWorks: false
