@@ -1,5 +1,9 @@
 cluster:
+{% if gitops_import_to_hub %}
   importToHub: true
+{% else %}
+  useACM: false
+  importToHub: false
 {% if hub_type == 'acm' %}
   useACM: true
   createGitopsManifestWorks: false

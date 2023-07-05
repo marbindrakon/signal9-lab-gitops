@@ -15,3 +15,6 @@ cluster_special_feature: ""
 # This is useful for debugging and to avoid certain race
 # conditions on cluster deletion
 gitops_retain_cluster_configs: true
+
+# Do we create a ManagedCluster resource
+gitops_import_to_hub: true
