@@ -10,6 +10,13 @@ rules:
       - 'cluster.open-cluster-management.io'
     resources:
       - managedclusters
+  - verbs:
+      - get
+      - list
+    apiGroups:
+      - 'hive.openshift.io'
+    resources:
+      - clusterdeployments
 
   - verbs:
       - get
