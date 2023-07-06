@@ -26,6 +26,19 @@ spec:
           url: "https://virt-exportproxy-openshift-cnv.apps.atlas.lab.signal9.gg/api/export.kubevirt.io/v1alpha1/namespaces/quay-vm/virtualmachineexports/quay-export/volumes/quay-vm/disk.img.gz"
           secretExtraHeaders:
             - quay-import-token
+  - apiVersion: cdi.kubevirt.io/v1beta1
+    kind: DataVolume
+    metadata:
+      name: quay-vm-vdb
+    spec:
+      storage:
+        storageClassName: ocs-external-storagecluster-ceph-rbd
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 250Gi
+
   running: true
   template:
     metadata:
@@ -45,6 +58,9 @@ spec:
           - disk:
               bus: virtio
             name: quay-vm
+          - disk:
+              bus: virtio
+            name: quay-vm-vdb
           interfaces:
             - name: lab-inf
               macAddress: "02:df:4b:00:00:1c"
