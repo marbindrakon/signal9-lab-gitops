@@ -1,8 +1,10 @@
 cluster:
-  importToHub: true
-  useACM: true
+  importToHub: false
+  useACM: false
   createGitopsManifestWorks: false
+  createGitopsSyncSet: true
   name: igou-hub
+  gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
   clusterImageSet: img4.13.4-x86-64-appsub
   controlPlaneCount: 3
