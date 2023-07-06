@@ -87,3 +87,6 @@ spec:
       - dataVolume:
           name: quay-vm
         name: quay-vm
+      - dataVolume:
+          name: quay-vm-vdb
+        name: quay-vm-vdb
