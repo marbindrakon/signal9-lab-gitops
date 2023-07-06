@@ -31,6 +31,8 @@ spec:
     metadata:
       name: quay-vm-vdb
     spec:
+      source:
+        blank: {}
       storage:
         storageClassName: ocs-external-storagecluster-ceph-rbd
         accessModes:
