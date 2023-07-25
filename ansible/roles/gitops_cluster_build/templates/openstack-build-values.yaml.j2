@@ -40,10 +40,7 @@ provider:
 {% endif %}
     externalNetwork: {{ openstack_platform_config['vip_network'] }}
     computeAZs: null
-{% if 'gpu' in cluster_special_feature|lower and cluster_size == 'sandbox' %}
-    controlPlaneFlavor: {{ openstack_platform_config['cluster_sizes'][cluster_size]['gpu_flavor'] }}
-{% else %}
-{% endif %}
+    controlPlaneFlavor: {{ openstack_platform_config['cluster_sizes'][cluster_size]['controller_flavor'] }}
 {% if 'gpu' in cluster_special_feature|lower %}
     workerFlavor: {{ openstack_platform_config['cluster_sizes'][cluster_size]['gpu_flavor'] }}
 {% else %}
