@@ -6,5 +6,5 @@ metadata:
   labels:
     node-role.kubernetes.io/infra: ""
     node-role.kubernetes.io/worker: null
-  name: test-07272023-1-9tfr8-worker-0-ljhb4
+  name: test-07272023-1-9tfr8-worker-0-4mhzp
 spec: {}
