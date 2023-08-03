@@ -8,4 +8,3 @@ metadata:
     bar: baz
     foo: bar
     node-role.kubernetes.io/infra: ''
-    node-role.kubernetes.io/worker:
