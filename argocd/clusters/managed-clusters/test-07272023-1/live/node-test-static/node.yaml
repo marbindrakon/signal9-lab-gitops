@@ -9,3 +9,4 @@ metadata:
     node-role.kubernetes.io/worker: null
     foo: bar
     bar: baz
+spec: {}
