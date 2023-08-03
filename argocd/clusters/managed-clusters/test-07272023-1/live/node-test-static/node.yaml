@@ -5,7 +5,5 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
   labels:
-    node-role.kubernetes.io/infra: ""
-    node-role.kubernetes.io/worker: null
-    foo: bar
     bar: baz
+    foo: bar
