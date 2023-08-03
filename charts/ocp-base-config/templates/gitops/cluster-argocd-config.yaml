@@ -6,6 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
 spec:
+  resourceTrackingMethod: annotation
   resourceExclusions: |
     - apiGroups:
       - tekton.dev
