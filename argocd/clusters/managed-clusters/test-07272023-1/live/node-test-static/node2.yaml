@@ -3,9 +3,9 @@ kind: Node
 metadata:
   name: test-07272023-1-9tfr8-worker-1-ll87l
   annotations:
-    argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
+    argocd.argoproj.io/sync-options: Validate=false
   labels:
     bar: baz
     foo: bar
     node-role.kubernetes.io/infra: ''
-    node-role.kubernetes.io/worker:
+    node-role.kubernetes.io/worker: null
