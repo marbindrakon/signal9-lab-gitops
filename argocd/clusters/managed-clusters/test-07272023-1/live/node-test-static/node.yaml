@@ -7,3 +7,4 @@ metadata:
   labels:
     bar: baz
     foo: bar
+    node-role.kubernetes.io/infra: ''
