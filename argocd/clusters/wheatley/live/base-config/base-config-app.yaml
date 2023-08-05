@@ -37,6 +37,14 @@ spec:
             Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
             vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
             -----END CERTIFICATE-----
+        gitops:
+          applicationControllerResources:
+            limits:
+              cpu: '4'
+              memory: 8Gi
+            requests:
+              cpu: 250m
+              memory: 3Gi
         auth:
           enabled: true
           oidcDisplayName: Signal9
