@@ -5,7 +5,5 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: Validate=false
   labels:
-    bar: baz
-    foo: bar
-    node-role.kubernetes.io/infra: ''
-    node-role.kubernetes.io/worker: null
+    node-role.kubernetes.io/worker: ''
+    node-role.kubernetes.io/infra: null

@@ -1,0 +1,25 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: aap-route-certificate
+  namespace: aap
+spec:
+  secretName: aap-route-certificate
+  duration: 2160h0m0s # 90d
+  renewBefore: 720h0m0s # 30d
+  subject:
+    organizations:
+    - "Signal9 Labs"
+  privateKey:
+    size: 256
+    algorithm: ECDSA
+    encoding: PKCS1
+    rotationPolicy: Always
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - 'aap.apps.test-07272023-1.lab.signal9.gg'
+  issuerRef:
+    name: cluster-acme
+    kind: ClusterIssuer
