@@ -6,6 +6,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
 spec:
+{{ if .Values.gitops.applicationControllerResources }}
+  controller:
+    resources:
+{{ toYaml .Values.gitops.applicationControllerResources | indent 6 }}
+{{ end }}
   resourceTrackingMethod: annotation
   resourceExclusions: |
     - apiGroups:

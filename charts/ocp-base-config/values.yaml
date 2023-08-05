@@ -69,3 +69,6 @@ timesync:
     - 172.18.0.79
     - 172.18.42.10
     - 172.18.42.11
+
+gitops:
+  applicationControllerResources: {}
