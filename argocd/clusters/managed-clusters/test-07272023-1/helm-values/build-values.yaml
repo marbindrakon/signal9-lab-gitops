@@ -1,16 +1,16 @@
 cluster:
-  importToHub: true
-  useACM: true
+  importToHub: false
+  useACM: false
   createGitopsManifestWorks: false
-  createGitopsSyncSet: false
+  createGitopsSyncSet: true
   name: test-07272023-1
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
   clusterImageSet: img4.13.4-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 3
-  apiVIP: "172.18.104.78"
-  ingressVIP: "172.18.104.122"
+  apiVIP: "172.18.104.90"
+  ingressVIP: "172.18.104.137"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
@@ -117,8 +117,8 @@ provider:
 
   type: OpenStack
   openstack:
-    existingImage: rhcos-4.13.0
+    existingImage: 
     externalNetwork: lab-net
     computeAZs: null
-    controlPlaneFlavor: m5.xlarge
-    workerFlavor: g1.large
+    controlPlaneFlavor: m1.2xlarge
+    workerFlavor: m1.2xlarge
