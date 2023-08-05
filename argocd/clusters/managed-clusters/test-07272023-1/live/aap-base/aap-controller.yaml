@@ -20,7 +20,7 @@ spec:
   projects_storage_access_mode: ReadWriteOnce
   projects_persistence: true
   projects_use_existing_claim: _No_
-  projects_storage_class: ocs-external-storagecluster-cephfs
+  projects_storage_class: standard-csi
   replicas: 1
   admin_user: admin
   admin_email: admin@signal9.gg
