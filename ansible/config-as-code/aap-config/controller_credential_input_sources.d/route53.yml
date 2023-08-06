@@ -12,7 +12,7 @@ controller_credential_input_sources:
  - input_field_name: username
    metadata:
      auth_path: ''
-     secret_backend: lab/service-accounts
+     secret_backend: lab/rht-shared
      secret_key: access-key
      secret_path: signal9-route53
      secret_version: ''
