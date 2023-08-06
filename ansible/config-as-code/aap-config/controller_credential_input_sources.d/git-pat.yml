@@ -1,0 +1,22 @@
+---
+controller_credential_input_sources:
+ - input_field_name: password
+   metadata:
+     auth_path: ''
+     secret_backend: lab/rht-shared
+     secret_key: githubPat
+     secret_path: rhte-aap-git-ssh
+     secret_version: ''
+   source_credential: '{{ env }} - vault'
+   target_credential: '{{ env }} - github-pat'
+ - input_field_name: username
+   metadata:
+     auth_path: ''
+     secret_backend: lab/rht-shared
+     secret_key: githubUsername
+     secret_path: rhte-aap-git-ssh
+     secret_version: ''
+   source_credential: '{{ env }} - vault'
+   target_credential: '{{ env }} - github-pat'
+
+...

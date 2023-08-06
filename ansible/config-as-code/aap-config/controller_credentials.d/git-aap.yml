@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - git-ssh"
+    description: ""
+    credential_type: "Source Control"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      username: git
+
+...

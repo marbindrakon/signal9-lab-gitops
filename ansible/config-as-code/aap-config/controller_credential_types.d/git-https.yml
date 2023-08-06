@@ -1,0 +1,23 @@
+---
+controller_credential_types:
+  - name: "{{ env }} - Playbook Git HTTPS"
+    description: ""
+    kind: "cloud"
+    inputs:
+      fields:
+      - id: username
+        label: Username
+        type: string
+      - id: password
+        label: Password
+        secret: true
+        type: string
+      required:
+      - username
+      - password
+
+    injectors:
+      extra_vars:
+        upstream_git_password: !unsafe '{{ password }}'
+        upstream_git_user: !unsafe '{{ username }}'
+...

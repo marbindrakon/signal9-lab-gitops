@@ -1,0 +1,15 @@
+---
+controller_credentials:
+  - name: "{{ env }} - Opensnack"
+    description: ""
+    credential_type: "OpenStack"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      domain: "{{ openstack_user_domain }}"
+      host: "{{ openstack_keystone_url }}"
+      project: "{{ openstack_project }}"
+      project_domain_name: "{{ openstack_project_domain }}"
+      region: "{{ openstack_region }}"
+      verify_ssl: false
+
+...

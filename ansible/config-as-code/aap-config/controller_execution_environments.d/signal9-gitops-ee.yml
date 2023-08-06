@@ -1,0 +1,7 @@
+---
+controller_execution_environments:
+  - name: "{{ env }} - signal9-lab-gitops"
+    description: ""
+    image: "{{ gitops_ee_image }}"
+    pull: "missing"
+...

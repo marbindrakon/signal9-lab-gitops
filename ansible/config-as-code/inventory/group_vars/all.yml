@@ -1,0 +1,10 @@
+aap_vault_auth_role: aap
+aap_vault_url: https://vault.lab.signal9.gg
+vcenter_host: xna-vcenter.lab.signal9.gg
+openstack_user_domain: idm
+openstack_project_domain: Default
+openstack_keystone_url: https://opensnack.lab.signal9.gg:13000
+openstack_project: ocp1-infra
+openstack_region: XNA
+netbox_url: https://xna-ipam.lab.signal9.gg
+orgs: Signal9Lab

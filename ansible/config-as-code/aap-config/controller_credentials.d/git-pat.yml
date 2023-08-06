@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - github-pat"
+    description: ""
+    credential_type: "{{ env }} - Playbook Git HTTPS"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      {}
+
+...

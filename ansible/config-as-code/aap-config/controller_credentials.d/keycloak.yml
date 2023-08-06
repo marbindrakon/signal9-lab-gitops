@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - RH-SSO OpenShift"
+    description: ""
+    credential_type: "{{ env }} - RH SSO Admin Login"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      {}
+
+...

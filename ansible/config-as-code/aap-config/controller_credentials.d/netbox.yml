@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - XNA Netbox"
+    description: ""
+    credential_type: "{{ env }} - Netbox API"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      api_url: "{{ netbox_url }}"
+
+...

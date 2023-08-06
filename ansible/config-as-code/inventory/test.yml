@@ -1,0 +1,9 @@
+all:
+  children:
+    test:
+      hosts:
+        localhost:
+      vars:
+        connection: local
+  vars:
+    env: test

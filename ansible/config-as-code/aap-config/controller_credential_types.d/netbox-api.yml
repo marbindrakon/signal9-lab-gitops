@@ -1,0 +1,23 @@
+---
+controller_credential_types:
+  - name: "{{ env }} - Netbox API"
+    description: ""
+    kind: "cloud"
+    inputs:
+      fields:
+      - id: api_url
+        label: Netbox Base URL
+        type: string
+      - id: api_token
+        label: Netbox API Token
+        secret: true
+        type: string
+      required:
+      - api_token
+      - api_url
+
+    injectors:
+      env:
+        NETBOX_TOKEN: !unsafe '{{ api_token }}'
+        NETBOX_URL: !unsafe '{{ api_url }}'
+...

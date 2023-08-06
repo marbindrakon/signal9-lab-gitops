@@ -1,0 +1,11 @@
+---
+controller_credentials:
+  - name: "{{ env }} - svc-openshift-linux"
+    description: ""
+    credential_type: "Machine"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      become_method: sudo
+      become_username: ''
+
+...

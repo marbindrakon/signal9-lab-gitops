@@ -1,0 +1,22 @@
+---
+controller_credential_input_sources:
+ - input_field_name: password
+   metadata:
+     auth_path: ''
+     secret_backend: lab/service-accounts
+     secret_key: password
+     secret_path: openshift-ldap
+     secret_version: ''
+   source_credential: '{{ env }} - vault'
+   target_credential: '{{ env }} - vSphere'
+ - input_field_name: username
+   metadata:
+     auth_path: ''
+     secret_backend: lab/service-accounts
+     secret_key: username
+     secret_path: openshift-ldap
+     secret_version: ''
+   source_credential: '{{ env }} - vault'
+   target_credential: '{{ env }} - vSphere'
+
+...

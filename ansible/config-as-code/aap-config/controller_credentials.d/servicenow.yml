@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - snow pdi"
+    description: ""
+    credential_type: "{{ env }} - ServiceNow"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      instance_host: "https://{{ servicenow_host }}.service-now.com"
+
+...

@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - Route53"
+    description: ""
+    credential_type: "Amazon Web Services"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      {}
+
+...

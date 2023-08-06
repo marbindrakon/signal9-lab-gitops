@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - vSphere"
+    description: ""
+    credential_type: "VMware vCenter"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      host: "{{ vcenter_host }}"
+
+...

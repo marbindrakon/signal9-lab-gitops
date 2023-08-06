@@ -1,0 +1,11 @@
+---
+controller_applications:
+  - name: "{{ env }} - servicenow"
+    description: ""
+    organization: "Signal9 Lab - {{ env }}"
+    authorization_grant_type: "authorization-code"
+    redirect_uris: "https://{{ servicenow_host }}/oauth_redirect.do"
+    skip_authorization: "False"
+    client_id: "{{ servicenow_client_id }}"
+    client_type: "confidential"
+...

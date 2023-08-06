@@ -1,0 +1,23 @@
+---
+controller_credential_types:
+  - name: "{{ env }} - RH SSO Admin Login"
+    description: ""
+    kind: "cloud"
+    inputs:
+      fields:
+      - id: username
+        label: Username
+        type: string
+      - id: password
+        label: Password
+        secret: true
+        type: string
+      required:
+      - username
+      - password
+
+    injectors:
+      extra_vars:
+        sso_admin_password: !unsafe '{{ password }}'
+        sso_admin_user: !unsafe '{{ username }}'
+...

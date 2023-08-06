@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - XNA FreeIPA OpenShift"
+    description: ""
+    credential_type: "{{ env }} - FreeIPA Admin Principal"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      {}
+
+...

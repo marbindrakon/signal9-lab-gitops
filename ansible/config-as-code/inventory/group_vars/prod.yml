@@ -1,0 +1,5 @@
+servicenow_host: dev71874.service-now.com
+servicenow_client_id: fake
+aap_vault_auth_path: k8s-wheatley
+gitops_ee_image: quay.signal9.gg/aaustin/rhte-2023-gitops-ansible-env:50678
+vault_controller_hostname: aap.lab.signal9.gg

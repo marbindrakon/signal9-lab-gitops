@@ -1,0 +1,12 @@
+---
+controller_inventory_sources:
+  - name: "git-source"
+    description: ""
+    organization: "Signal9 Lab - {{ env }}"
+    source: "scm"
+    source_project: "Signal9 Lab Gitops - {{ env }}"
+    source_path: "ansible/inventories/fixed-assets"
+    inventory: "{{ env }} - Signal9 Lab Gitops Fixed Assets"
+    update_on_launch: "True"
+    overwrite: "False"
+...
