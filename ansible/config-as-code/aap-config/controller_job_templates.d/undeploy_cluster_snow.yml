@@ -40,6 +40,8 @@ controller_templates:
     ask_job_slice_count_on_launch: False
     ask_timeout_on_launch: False
     ask_instance_groups_on_launch: False
+    instance_groups:
+      - container-with-ca
     job_tags: ""
     force_handlers: False
     skip_tags: ""

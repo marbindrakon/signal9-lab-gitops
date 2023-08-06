@@ -39,6 +39,8 @@ controller_templates:
     ask_job_slice_count_on_launch: False
     ask_timeout_on_launch: False
     ask_instance_groups_on_launch: False
+    instance_groups:
+      - container-with-ca
     extra_vars:
       cluster_protected: false
     job_tags: ""
