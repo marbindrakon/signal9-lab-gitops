@@ -3,4 +3,6 @@ controller_inventories:
   - name: "{{ env }} - Signal9 Lab Gitops Fixed Assets"
     description: ""
     organization: "Signal9 Lab - {{ env }}"
+    instance_groups:
+      - container-with-ca
 ...
