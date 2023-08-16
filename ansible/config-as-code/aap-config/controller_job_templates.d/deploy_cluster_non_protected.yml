@@ -51,7 +51,116 @@ controller_templates:
     execution_environment: "{{ env }} - signal9-lab-gitops"
     host_config_key: ""
     survey_enabled: True
-    survey_spec: {'name': '', 'description': '', 'spec': [{'question_name': 'Name', 'question_description': '', 'required': True, 'type': 'text', 'variable': 'cluster_name', 'min': 3, 'max': 63, 'default': '', 'choices': '', 'new_question': False}, {'question_name': 'Size', 'question_description': '', 'required': True, 'type': 'multiplechoice', 'variable': 'cluster_size', 'min': 0, 'max': 1024, 'default': 'sandbox', 'choices': ['sandbox', 'small', 'medium', 'large'], 'new_question': True}, {'question_name': 'Platform', 'question_description': '', 'required': True, 'type': 'multiplechoice', 'variable': 'cluster_platform', 'min': 0, 'max': 1024, 'new_question': False, 'default': 'openstack', 'choices': ['openstack', 'infra_env_hybrid', 'vsphere']}, {'question_name': 'Version', 'question_description': '', 'required': True, 'type': 'multiplechoice', 'variable': 'cluster_version', 'min': 0, 'max': 1024, 'new_question': False, 'default': '4.13.4', 'choices': ['4.12.13', '4.11.24', '4.10.50', '4.13.4', 'okd-4.13.0-0.okd-scos-2023-06-22-002852']}, {'question_name': 'Use External or Internal LB', 'question_description': '', 'required': True, 'type': 'multiplechoice', 'variable': 'loadbalancer_type', 'min': 0, 'max': 1024, 'new_question': False, 'default': 'internal', 'choices': ['internal']}, {'question_name': 'Special Feature', 'question_description': '', 'required': True, 'type': 'multiplechoice', 'variable': 'cluster_special_feature', 'min': 0, 'max': 1024, 'new_question': False, 'default': 'none', 'choices': ['gpu', 'none']}, {'question_name': 'Glance Image Override', 'question_description': '', 'required': False, 'type': 'text', 'variable': 'glance_image_override', 'min': 0, 'max': 1024, 'default': '', 'choices': '', 'new_question': True}, {'question_name': 'Manage with ACM', 'question_description': '', 'required': True, 'type': 'multiplechoice', 'variable': 'gitops_import_to_hub', 'min': 0, 'max': 1024, 'new_question': False, 'default': 'true', 'choices': ['true', 'false']}]}
+    survey_spec: 
+      name: ""
+      description: ""
+      spec:
+        - question_name: Name
+          question_description: ""
+          required: True
+          type: text
+          variable: cluster_name
+          min: 3
+          max: 63
+          default: ""
+          choices: ""
+          new_question: False
+        - question_name: Size
+          question_description: ""
+          required: True
+          type: multiplechoice
+          variable: cluster_size
+          min: 0
+          max: 1024
+          default: sandbox
+          choices:
+            - sandbox
+            - small
+            - medium
+            - large
+          new_question: True
+        - question_name: Platform
+          question_description: ""
+          required: True
+          type: multiplechoice
+          variable: cluster_platform
+          min: 0
+          max: 1024
+          new_question: False
+          default: openstack
+          choices:
+            - openstack
+            - infra_env_hybrid
+            - vsphere
+        - question_name: Version
+          question_description: ""
+          required: True
+          type: multiplechoice
+          variable: cluster_version
+          min: 0
+          max: 1024
+          new_question: False
+          default: 4.13.4
+          choices:
+            - 4.12.27
+            - 4.10.64
+            - 4.13.6
+            - okd-4.13.0-0.okd-scos-2023-06-22-002852
+        - question_name: Use External or Internal LB
+          question_description: ""
+          required: True
+          type: multiplechoice
+          variable: loadbalancer_type
+          min: 0
+          max: 1024
+          new_question: False
+          default: internal
+          choices:
+            - internal
+        - question_name: Special Feature
+          question_description: ""
+          required: True
+          type: multiplechoice
+          variable: cluster_special_feature
+          min: 0
+          max: 1024
+          new_question: False
+          default: none
+          choices:
+            - gpu
+            - none
+        - question_name: Glance Image Override
+          question_description: ""
+          required: False
+          type: text
+          variable: glance_image_override
+          min: 0
+          max: 1024
+          default: ""
+          choices: ""
+          new_question: True
+        - question_name: OSP External Network Override
+          question_description: ""
+          required: False
+          type: text
+          variable: osp_ext_net_override
+          min: 0
+          max: 1024
+          default: ""
+          choices: ""
+          new_question: True
+        - question_name: Manage with ACM
+          question_description: ""
+          required: True
+          type: multiplechoice
+          variable: gitops_import_to_hub
+          min: 0
+          max: 1024
+          new_question: False
+          default: "true"
+          choices:
+            - "true"
+            - "false"
     become_enabled: False
     diff_mode: False
     webhook_service: ""
