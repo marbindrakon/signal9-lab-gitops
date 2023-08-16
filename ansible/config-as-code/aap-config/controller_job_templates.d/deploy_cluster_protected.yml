@@ -100,7 +100,7 @@ controller_templates:
           min: 0
           max: 1024
           new_question: False
-          default: 4.13.4
+          default: 4.13.6
           choices:
             - 4.12.27
             - 4.10.64

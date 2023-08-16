@@ -8,3 +8,4 @@ openstack_project: ocp1-infra
 openstack_region: XNA
 netbox_url: https://xna-ipam.lab.signal9.gg
 orgs: Signal9Lab
+vault_controller_validate_certs: true
