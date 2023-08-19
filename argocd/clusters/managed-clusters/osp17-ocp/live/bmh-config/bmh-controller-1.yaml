@@ -8,7 +8,7 @@ metadata:
 spec:
   automatedCleaningMode: metadata
   bmc:
-    address: "ilo4-virtualmedia://ilo-hp-blade-1.oob.signal9.gg"
+    address: "ipmi://ilo-hp-blade-1.oob.signal9.gg:623"
     credentialsName: "osp17-ocp-controller-1"
   bootMACAddress: 2c:41:38:eb:d2:38
   bootMode: legacy

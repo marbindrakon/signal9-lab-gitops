@@ -9,5 +9,5 @@ spec:
   bootMode: legacy
   bootMACAddress: '2c:41:38:eb:d6:10'
   bmc:
-    address: 'ilo4-virtualmedia://ilo-hp-blade-2.oob.signal9.gg'
+    address: 'ipmi://ilo-hp-blade-2.oob.signal9.gg:623'
     credentialsName: 'osp17-ocp-controller-2'
