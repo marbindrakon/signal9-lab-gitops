@@ -14,6 +14,14 @@ timesync:
   enabled: true
   ntpServers: ['172.18.42.10', '172.18.42.11']
 
+odfStorage:
+  enabled: true
+  version: '4.13'
+  external: true
+  externalSecret:
+    name: rook-ceph-external-cluster-details
+    vaultName: osp17-ocp-rook-data
+
 auth:
   oidcClientID: "openshift"
   externalSecret:
