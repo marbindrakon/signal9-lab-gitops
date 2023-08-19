@@ -9,6 +9,7 @@ spec:
   automatedCleaningMode: metadata
   online: false
   bootMode: legacy
+  bootMACAddress: "2c:41:38:eb:da:18"
   bmc:
     address: 'ilo4-virtualmedia://ilo-hp-blade-4.oob.signal9.gg'
     credentialsName: 'ilo-hp-blade-4'
