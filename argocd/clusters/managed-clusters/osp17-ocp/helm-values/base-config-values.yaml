@@ -21,6 +21,8 @@ odfStorage:
   externalSecret:
     name: rook-ceph-external-cluster-details
     vaultName: osp17-ocp-rook-data
+network:
+  hostRouting: true
 
 auth:
   oidcClientID: "openshift"
