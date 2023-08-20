@@ -6,7 +6,7 @@ cluster:
   name: osp17-ocp
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
-  clusterImageSet: img4.13.6-x86-64-appsub
+  clusterImageSet: img4.12.28-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 0
   apiVIP: "172.18.16.6"
@@ -94,6 +94,7 @@ provider:
                 port:
                   - eno1
                   - eno2
+
             - name: bond1
               type: bond
               mtu: 9000
@@ -123,6 +124,20 @@ provider:
                 address:
                   - ip: 172.18.19.19
                     prefix-length: 24
+            - name: bond1.201
+              type: vlan
+              state: up
+              mtu: 1500
+              vlan:
+                id: 201
+                base-iface: bond1
+              ipv4:
+                enabled: true
+                dhcp: false
+                address:
+                  - ip: 172.18.201.19
+                    prefix-length: 24
+
           dns-resolver:
             config:
               server:
@@ -197,6 +212,20 @@ provider:
                 address:
                   - ip: 172.18.19.27
                     prefix-length: 24
+            - name: bond1.201
+              type: vlan
+              state: up
+              mtu: 1500
+              vlan:
+                id: 201
+                base-iface: bond1
+              ipv4:
+                enabled: true
+                dhcp: false
+                address:
+                  - ip: 172.18.201.27
+                    prefix-length: 24
+
           dns-resolver:
             config:
               server:
@@ -271,6 +300,20 @@ provider:
                 address:
                   - ip: 172.18.19.28
                     prefix-length: 24
+            - name: bond1.201
+              type: vlan
+              state: up
+              mtu: 1500
+              vlan:
+                id: 201
+                base-iface: bond1
+              ipv4:
+                enabled: true
+                dhcp: false
+                address:
+                  - ip: 172.18.201.28
+                    prefix-length: 24
+
           dns-resolver:
             config:
               server:
