@@ -13,3 +13,16 @@ spec:
     address: 'ilo4-virtualmedia://ilo-hp-blade-2.oob.signal9.gg'
     credentialsName: 'osp17-ocp-controller-2'
     disableCertificateVerification: true
+  hardwareProfile: unknown
+  automatedCleaningMode: metadata
+  userData:
+    name: master-user-data-managed
+    namespace: openshift-machine-api
+  customDeploy:
+    method: install_coreos
+  externallyProvisioned: true
+  consumerRef:
+    apiVersion: machine.openshift.io/v1beta1
+    kind: Machine
+    name: osp17-ocp-mr9qx-master-1
+    namespace: openshift-machine-api
