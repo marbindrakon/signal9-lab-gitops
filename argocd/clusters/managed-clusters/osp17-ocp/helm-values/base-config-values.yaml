@@ -16,7 +16,7 @@ timesync:
 
 odfStorage:
   enabled: true
-  version: '4.13'
+  version: '4.12'
   external: true
   externalSecret:
     name: rook-ceph-external-cluster-details
