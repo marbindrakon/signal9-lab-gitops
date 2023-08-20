@@ -8,6 +8,7 @@ metadata:
 spec:
   bootMode: legacy
   bootMACAddress: '2c:41:38:eb:d2:39'
+  online: true
   bmc:
     address: 'ilo4-virtualmedia://ilo-hp-blade-1.oob.signal9.gg'
     credentialsName: "osp17-ocp-controller-1"
