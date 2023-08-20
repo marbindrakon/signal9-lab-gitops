@@ -6,22 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: 'ServerSideApply=True'
 spec:
-  automatedCleaningMode: metadata
   bmc:
-    address: "ipmi://ilo-hp-blade-1.oob.signal9.gg:623"
+    address: 'ilo4-virtualmedia://ilo-hp-blade-1.oob.signal9.gg'
     credentialsName: "osp17-ocp-controller-1"
-  bootMACAddress: 2c:41:38:eb:d2:38
-  bootMode: legacy
-  consumerRef:
-    apiVersion: machine.openshift.io/v1beta1
-    kind: Machine
-    name: osp17-ocp-296dj-master-0
-    namespace: openshift-machine-api
-  customDeploy:
-    method: install_coreos
-  externallyProvisioned: true
-  hardwareProfile: unknown
-  online: true
-  userData:
-    name: master-user-data-managed
-    namespace: openshift-machine-api
+    disableCertificateVerification: true
