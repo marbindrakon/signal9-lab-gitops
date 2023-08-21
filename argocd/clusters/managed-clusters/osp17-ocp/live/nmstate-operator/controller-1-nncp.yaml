@@ -1,0 +1,48 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: controller-1-static-config
+spec:
+  desiredState:
+    interfaces:
+    - ipv4:
+        dhcp: false
+        enabled: false
+      ipv6:
+        enabled: false
+      link-aggregation:
+        mode: active-backup
+        options:
+          miimon: "100"
+        port:
+        - eno3
+        - eno3d1
+      mtu: 9000
+      name: bond1
+      state: up
+      type: bond
+    - name: bond1.19
+      type: vlan
+      state: up
+      mtu: 9000
+      vlan:
+        id: 19
+        base-iface: bond1
+      ipv4:
+        enabled: true
+        dhcp: false
+        address:
+          - ip: 172.18.19.19
+            prefix-length: 24
+    - name: bond1.201
+      type: vlan
+      state: up
+      mtu: 1500
+      vlan:
+        id: 201
+        base-iface: bond1
+      ipv4:
+        enabled: false
+        dhcp: false
+  nodeSelector:
+    kubernetes.io/hostname: "osp17-ocp-controller-1.lab.signal9.gg"
