@@ -33,7 +33,7 @@ spec:
       mtu: 9000
       vlan:
         id: 19
-        base-iface: odf
+        base-iface: bond1
       ipv4:
         enabled: true
         dhcp: false
