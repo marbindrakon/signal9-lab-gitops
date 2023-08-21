@@ -27,13 +27,13 @@ spec:
       name: bond1
       state: up
       type: bond
-    - name: bond1.19
+    - name: odf
       type: vlan
       state: up
       mtu: 9000
       vlan:
         id: 19
-        base-iface: bond1
+        base-iface: odf
       ipv4:
         enabled: true
         dhcp: false
