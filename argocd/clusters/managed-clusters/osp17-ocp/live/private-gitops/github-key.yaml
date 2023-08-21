@@ -16,7 +16,8 @@ spec:
     name: osp17-private-github
     template:
       metadata:
-        labels: argocd.argoproj.io/secret-type: repo-creds
+        labels:
+          argocd.argoproj.io/secret-type: repo-creds
       engineVersion: v2
       data:
         type: git
