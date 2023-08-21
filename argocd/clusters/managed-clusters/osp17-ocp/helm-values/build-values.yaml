@@ -132,11 +132,8 @@ provider:
                 id: 201
                 base-iface: bond1
               ipv4:
-                enabled: true
+                enabled: false
                 dhcp: false
-                address:
-                  - ip: 172.18.201.19
-                    prefix-length: 24
 
           dns-resolver:
             config:
@@ -220,11 +217,8 @@ provider:
                 id: 201
                 base-iface: bond1
               ipv4:
-                enabled: true
+                enabled: false
                 dhcp: false
-                address:
-                  - ip: 172.18.201.27
-                    prefix-length: 24
 
           dns-resolver:
             config:
@@ -308,11 +302,8 @@ provider:
                 id: 201
                 base-iface: bond1
               ipv4:
-                enabled: true
+                enabled: false
                 dhcp: false
-                address:
-                  - ip: 172.18.201.28
-                    prefix-length: 24
 
           dns-resolver:
             config:
