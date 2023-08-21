@@ -5,5 +5,12 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: "ServerSideApply=True"
 spec:
-  provisioningNetwork: Disabled
+  watchAllNamespaces: true
+  virtualMediaViaExternalNetwork: true
+  provisioningNetwork: Managed
   disableVirtualMediaTLS: true
+  provisioningInterface: bond1.201
+  provisioningMacAddresses: []
+  provisioningIp: 172.18.201.5
+  provisioningDHCPRange: "172.18.201.50,172.18.201.124"
+
