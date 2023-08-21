@@ -11,7 +11,7 @@ spec:
         repoURL: "ssh://git@github.com/marbindrakon/osp17-hackfest-private.git"
         revision: HEAD
         directories:
-        - path: "gitops/clusters/osp17-ocp"
+        - path: "gitops/clusters/osp17-ocp/*"
   template:
     metadata:
       name: "osp17-private-{{ path.basename }}"
