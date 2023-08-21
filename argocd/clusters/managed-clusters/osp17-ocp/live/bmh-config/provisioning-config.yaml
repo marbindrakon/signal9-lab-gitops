@@ -9,7 +9,7 @@ spec:
   virtualMediaViaExternalNetwork: true
   provisioningNetwork: Managed
   disableVirtualMediaTLS: true
-  provisioningInterface: bond1.201
+  provisioningInterface: provisioning
   provisioningIP: "172.18.201.5"
   provisioningDHCPRange: "172.18.201.50,172.18.201.124"
   provisioningNetworkCIDR: "172.18.201.0/24"
