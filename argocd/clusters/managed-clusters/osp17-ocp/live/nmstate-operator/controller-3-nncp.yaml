@@ -4,6 +4,12 @@ metadata:
   name: controller-3-static-config
 spec:
   desiredState:
+    routes:
+      config:
+        - destination: 172.18.14.0/24
+          next-hop-address: 172.18.19.1
+          next-hop-interface: bond1.19
+          table-id: 254
     interfaces:
     - ipv4:
         dhcp: false
