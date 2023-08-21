@@ -40,7 +40,7 @@ spec:
         address:
           - ip: 172.18.19.27
             prefix-length: 24
-    - name: bond1.201
+    - name: provisioning
       type: vlan
       state: up
       mtu: 1500
