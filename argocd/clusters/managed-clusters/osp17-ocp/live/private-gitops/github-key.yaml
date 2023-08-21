@@ -1,0 +1,31 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "-1"
+  labels:
+    argocd.argoproj.io/secret-type: repo-creds
+  name: osp17-private-github
+  namespace: openshift-gitops
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault
+  target:
+    name: osp17-private-github
+    template:
+      engineVersion: v2
+      data:
+        type: git
+        url: "{{ .url }}"
+        sshPrivateKey: "{{ .privateKey }}"
+  data:
+  - secretKey: url
+    remoteRef:
+      key: osp17-ocp-git
+      property: url
+  - secretKey: privateKey
+    remoteRef:
+      key: osp17-ocp-git
+      property: privateKey
