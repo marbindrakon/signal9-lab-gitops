@@ -11,6 +11,22 @@ spec:
           next-hop-interface: odf
           table-id: 254
     interfaces:
+    - name: eno3
+      type: ethernet
+      state: up
+      mtu: 9000
+      ipv4:
+        enabled: false
+      ipv6:
+        enabled: false
+    - name: eno3d1
+      type: ethernet
+      state: up
+      mtu: 9000
+      ipv4:
+        enabled: false
+      ipv6:
+        enabled: false
     - ipv4:
         dhcp: false
         enabled: false
