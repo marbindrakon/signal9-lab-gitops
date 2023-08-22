@@ -36,7 +36,7 @@ spec:
           stp:
             enabled: false
         port:
-        - bond1
+        - name: bond1
     - name: odf
       type: vlan
       state: up
