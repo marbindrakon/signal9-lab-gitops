@@ -111,26 +111,36 @@ provider:
                 port:
                   - eno3
                   - eno3d1
-            - name: bond1.19
+            - name: br-osp
+              type: linux-bridge
+              state: up
+              mtu: 9000
+              bridge:
+                options:
+                  stp:
+                    enabled: false
+                port:
+                - name: bond1
+            - name: odf
               type: vlan
               state: up
               mtu: 9000
               vlan:
                 id: 19
-                base-iface: bond1
+                base-iface: br-osp
               ipv4:
                 enabled: true
                 dhcp: false
                 address:
                   - ip: 172.18.19.19
                     prefix-length: 24
-            - name: bond1.201
+            - name: provisioning
               type: vlan
               state: up
               mtu: 1500
               vlan:
                 id: 201
-                base-iface: bond1
+                base-iface: br-osp
               ipv4:
                 enabled: false
                 dhcp: false
@@ -148,7 +158,7 @@ provider:
                 table-id: 254
               - destination: 172.18.14.0/24
                 next-hop-address: 172.18.19.1
-                next-hop-interface: bond1.19
+                next-hop-interface: odf
                 table-id: 254
         interfaces:
           - name: eno1
@@ -196,26 +206,36 @@ provider:
                 port:
                   - eno3
                   - eno3d1
-            - name: bond1.19
+            - name: br-osp
+              type: linux-bridge
+              state: up
+              mtu: 9000
+              bridge:
+                options:
+                  stp:
+                    enabled: false
+                port:
+                - name: bond1
+            - name: odf
               type: vlan
               state: up
               mtu: 9000
               vlan:
                 id: 19
-                base-iface: bond1
+                base-iface: br-osp
               ipv4:
                 enabled: true
                 dhcp: false
                 address:
                   - ip: 172.18.19.27
                     prefix-length: 24
-            - name: bond1.201
+            - name: provisioning
               type: vlan
               state: up
               mtu: 1500
               vlan:
                 id: 201
-                base-iface: bond1
+                base-iface: br-osp
               ipv4:
                 enabled: false
                 dhcp: false
@@ -233,7 +253,7 @@ provider:
                 table-id: 254
               - destination: 172.18.14.0/24
                 next-hop-address: 172.18.19.1
-                next-hop-interface: bond1.19
+                next-hop-interface: odf
                 table-id: 254
         interfaces:
           - name: eno1
@@ -281,26 +301,36 @@ provider:
                 port:
                   - eno3
                   - eno3d1
-            - name: bond1.19
+            - name: br-osp
+              type: linux-bridge
+              state: up
+              mtu: 9000
+              bridge:
+                options:
+                  stp:
+                    enabled: false
+                port:
+                - name: bond1
+            - name: odf
               type: vlan
               state: up
               mtu: 9000
               vlan:
                 id: 19
-                base-iface: bond1
+                base-iface: br-osp
               ipv4:
                 enabled: true
                 dhcp: false
                 address:
                   - ip: 172.18.19.28
                     prefix-length: 24
-            - name: bond1.201
+            - name: provisioning
               type: vlan
               state: up
               mtu: 1500
               vlan:
                 id: 201
-                base-iface: bond1
+                base-iface: br-osp
               ipv4:
                 enabled: false
                 dhcp: false
@@ -318,7 +348,7 @@ provider:
                 table-id: 254
               - destination: 172.18.14.0/24
                 next-hop-address: 172.18.19.1
-                next-hop-interface: bond1.19
+                next-hop-interface: odf
                 table-id: 254
         interfaces:
           - name: eno1
