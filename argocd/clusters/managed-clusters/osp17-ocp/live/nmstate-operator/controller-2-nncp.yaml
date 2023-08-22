@@ -6,11 +6,34 @@ spec:
   desiredState:
     routes:
       config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 172.18.16.1
+          next-hop-interface: bond0
+          table-id: 254
         - destination: 172.18.14.0/24
           next-hop-address: 172.18.19.1
           next-hop-interface: odf
           table-id: 254
     interfaces:
+    - name: bond0
+      type: bond
+      state: up
+      mtu: 1500
+      ipv4:
+        dhcp: false
+        enabled: true
+        address:
+          - ip: 172.18.16.27
+            prefix-length: 24
+      ipv6:
+        enabled: false
+      link-aggregation:
+        mode: active-backup
+        options:
+          miimon: "100"
+        port:
+        - eno1
+        - eno2
     - ipv4:
         dhcp: false
         enabled: false
@@ -27,13 +50,23 @@ spec:
       name: bond1
       state: up
       type: bond
+    - name: br-osp
+      type: linux-bridge
+      state: up
+      mtu: 9000
+      bridge:
+        options:
+          stp:
+            enabled: false
+        port:
+        - bond1
     - name: odf
       type: vlan
       state: up
       mtu: 9000
       vlan:
         id: 19
-        base-iface: bond1
+        base-iface: br-osp
       ipv4:
         enabled: true
         dhcp: false
@@ -46,9 +79,14 @@ spec:
       mtu: 1500
       vlan:
         id: 201
-        base-iface: bond1
+        base-iface: br-osp
       ipv4:
         enabled: false
         dhcp: false
+    dns-resolver:
+      config:
+        server:
+          - 172.18.42.10
+          - 172.18.42.11
   nodeSelector:
     kubernetes.io/hostname: "osp17-ocp-controller-2.lab.signal9.gg"
