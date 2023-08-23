@@ -20,6 +20,8 @@ spec:
     spec:
       project: default
       syncPolicy:
+        syncOptions:
+        - RespectIgnoreDifferences=true
         automated:
           prune: true
           allowEmpty: true
