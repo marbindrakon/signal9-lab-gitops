@@ -12,6 +12,13 @@ spec:
 {{ toYaml .Values.gitops.applicationControllerResources | indent 6 }}
 {{ end }}
   resourceTrackingMethod: annotation
+  resourceIgnoreDifferences:
+    resourceIdentifiers:
+    - group: metal3.io
+      kind: BareMetalHost
+      customization:
+        jsonPointers:
+        - /spec/online
   resourceExclusions: |
     - apiGroups:
       - tekton.dev
