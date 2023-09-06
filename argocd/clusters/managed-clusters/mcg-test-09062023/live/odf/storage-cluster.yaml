@@ -1,7 +1,7 @@
 apiVersion: ocs.openshift.io/v1
 kind: StorageCluster
 metadata:
-  name: ocs-external-storagecluster
+  name: ocs-mcgonly-storagecluster
   namespace: openshift-storage
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
