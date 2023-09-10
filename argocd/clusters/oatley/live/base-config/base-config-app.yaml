@@ -1,0 +1,80 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: base-config-chart
+  namespace: openshift-gitops
+spec:
+  destination:
+    namespace: openshift-gitops
+    server: "https://kubernetes.default.svc"
+  project: default
+  syncPolicy:
+    automated: {}
+  source:
+    repoURL: "https://github.com/marbindrakon/signal9-lab-gitops.git"
+    path: "charts/ocp-base-config"
+    targetRevision: HEAD
+    helm:
+      values: |
+        cluster:
+          name: oatley
+          baseDomain: lab.signal9.gg
+          gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
+          trustedCABundle: |
+            -----BEGIN CERTIFICATE-----
+            MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
+            dzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYDVQQHDAZSb2dl
+            cnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5BMR8wHQYDVQQD
+            DBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MB4XDTIxMDMwMTA0MDMwNFoXDTQxMDIy
+            NDA0MDMwNFowdzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYD
+            VQQHDAZSb2dlcnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5B
+            MR8wHQYDVQQDDBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MHYwEAYHKoZIzj0CAQYF
+            K4EEACIDYgAE5w5BHLiaagf5eSNkQYuDIdyWe7ULLY2z2qAP1fKXM+RrSHQQb5x1
+            Q9+IhQRhf7exw/pJS5Vs1R8IyQ3B8r6xz885w6+Fk6iyMAlFn979RU6V5lbxMRGG
+            Vxq/CEL/iorVo2MwYTAdBgNVHQ4EFgQUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwHwYD
+            VR0jBBgwFoAUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwDwYDVR0TAQH/BAUwAwEB/zAO
+            BgNVHQ8BAf8EBAMCAYYwCgYIKoZIzj0EAwIDaQAwZgIxAJLOIPP9J1/mttvGdQtM
+            Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
+            vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
+            -----END CERTIFICATE-----
+        gitops:
+          applicationControllerResources:
+            limits:
+              cpu: '4'
+              memory: 8Gi
+            requests:
+              cpu: 250m
+              memory: 3Gi
+        auth:
+          enabled: true
+          oidcDisplayName: Signal9
+          oidcClientID: oatley
+          oidcIssuer: https://login.home.signal9.gg/auth/realms/signal9
+          externalSecret:
+            name: signal9-client-secret
+            vaultName: oatley-oidc
+        monitoring:
+          enabled: false
+        externalSecrets:
+          vaultAuthPath: 'k8s-oatley'
+        odfStorage:
+          enabled: false
+        network:
+          hostRouting: true
+        certManager:
+          solvers:
+            - http01:
+                ingress: {}
+            - dns01:
+                route53:
+                  accessKeyIDSecretRef:
+                    name: route53-key
+                    key: access-key
+                  region: us-east-1
+                  secretAccessKeySecretRef:
+                    key: secret-access-key
+                    name: route53-key
+              selector:
+                dnsZones:
+                  - signal9.gg
+                  - lab.signal9.gg
