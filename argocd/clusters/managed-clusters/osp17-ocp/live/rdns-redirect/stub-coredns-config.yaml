@@ -9,7 +9,7 @@ data:
       bufsize 512
       errors
       log . {
-        class any
+        class all
       }
       health {
         lameduck 20s
