@@ -9,7 +9,7 @@ spec:
   servers:
   - name: ovn-join-returner
     zones:
-    - 64.100.in-addr.arpa
+    - 64.100.in-addr.arpa.
     forwardPlugin:
       policy: Random
       upstreams: 
