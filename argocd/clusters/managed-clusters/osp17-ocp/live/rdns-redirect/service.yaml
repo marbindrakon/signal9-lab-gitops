@@ -16,6 +16,14 @@ spec:
       protocol: TCP
       port: 53
       targetPort: dns-tcp
+    - name: dns-forward
+      protocol: UDP
+      port: 5353
+      targetPort: dns
+    - name: dns-forward-tcp
+      protocol: TCP
+      port: 5353
+      targetPort: dns-tcp
   internalTrafficPolicy: Cluster
   clusterIPs:
     - 172.30.0.42
