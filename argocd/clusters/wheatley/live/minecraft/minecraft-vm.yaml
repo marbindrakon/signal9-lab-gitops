@@ -6,7 +6,7 @@ metadata:
   name: minecraft-vm
   namespace: minecraft
 spec:
-  runStrategy: RerunOnFailure
+  running: false
   dataVolumeTemplates:
   - apiVersion: cdi.kubevirt.io/v1beta1
     kind: DataVolume

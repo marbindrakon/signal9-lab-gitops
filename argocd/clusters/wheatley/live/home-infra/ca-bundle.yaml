@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: base-config-ca-certs
-  namespace: home-infra
-  labels:
-    config.openshift.io/inject-trusted-cabundle: 'true'

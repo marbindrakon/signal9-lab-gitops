@@ -6,7 +6,7 @@ metadata:
   name: xna-ad-1
   namespace: lab-infra-vm
 spec:
-  runStrategy: RerunOnFailure
+  running: false
   dataVolumeTemplates:
   - apiVersion: cdi.kubevirt.io/v1beta1
     kind: DataVolume
