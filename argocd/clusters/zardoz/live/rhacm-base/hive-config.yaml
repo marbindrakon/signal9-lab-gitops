@@ -7,4 +7,4 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   additionalCertificateAuthoritiesSecretRef:
-    name: signal9-ca-bundle
+    - name: signal9-ca-bundle
