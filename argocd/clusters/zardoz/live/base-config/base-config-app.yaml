@@ -17,7 +17,7 @@ spec:
     helm:
       values: |
         cluster:
-          name: rhte-acm-hub
+          name: zardoz
           baseDomain: lab.signal9.gg
           gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
           trustedCABundle: |
@@ -37,13 +37,32 @@ spec:
             Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
             vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
             -----END CERTIFICATE-----
+        gitops:
+          applicationControllerResources:
+            limits:
+              cpu: '4'
+              memory: 8Gi
+            requests:
+              cpu: 250m
+              memory: 3Gi
+        auth:
+          enabled: true
+          oidcDisplayName: Signal9-RHT
+          oidcClientID: zardoz
+          externalSecret:
+            name: signal9-client-secret
+            vaultName: zardoz-oidc
         monitoring:
           enabled: false
         externalSecrets:
-          vaultAuthPath: 'k8s-rhte-acm-hub'
+          vaultAuthPath: 'k8s-zardoz'
         odfStorage:
           enabled: true
           external: true
+          version: '4.13'
+          externalSecret:
+            name: rook-ceph-external-cluster-details
+            vaultName: zardoz-rook-data
         network:
           hostRouting: true
         certManager:
@@ -52,9 +71,9 @@ spec:
                 ingress: {}
             - dns01:
                 route53:
-                  # Required prior to 1.9 when this can be moved to a 
-                  # secret and pulled from vault like the secret key
-                  accessKeyID: AKIAR3Z7ELN7VLNNHZHZ
+                  accessKeyIDSecretRef:
+                    name: route53-key
+                    key: access-key
                   region: us-east-1
                   secretAccessKeySecretRef:
                     key: secret-access-key
