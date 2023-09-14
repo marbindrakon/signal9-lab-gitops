@@ -4,7 +4,7 @@
 base_domain: "lab.signal9.gg"
 gitops_repo_url: "https://github.com/marbindrakon/signal9-lab-gitops.git"
 gitops_repo_url_authed: "https://{{ upstream_git_user|urlencode }}:{{ upstream_git_password|urlencode }}@github.com/marbindrakon/signal9-lab-gitops.git"
-cluster_builds_dir: "argocd/clusters/wheatley/live/cluster-builds"
+cluster_builds_dir: "argocd/clusters/zardoz/live/cluster-builds"
 hub_type: acm
 
 # LB type can be external or internal, this will likely be overridden
@@ -40,7 +40,7 @@ enabled_dns_providers:
 hashicorp_vault:
   url: "https://vault.lab.signal9.gg"
   auth_type: jwt
-  auth_mount: k8s-wheatley
+  auth_mount: k8s-zardoz
   jwt_location: "/var/run/secrets/kubernetes.io/serviceaccount/token"
   auth_role: aap
   # Policy to be used for new k8s auth methods
@@ -376,6 +376,11 @@ platform_configs:
         controller_ram_gb: 32
         controller_disk_gb: 256
         worker_count: 0
+      metal-sno:
+        controller_count: 1
+        controller_type: metal
+        worker_type: metal
+        worker_count: 0
       small:
         controller_count: 3
         controller_type: vmware
@@ -389,7 +394,7 @@ platform_configs:
         worker_disk_gb: 128
       medium:
         controller_count: 3
-        controller_type: ilo
+        controller_type: metal
         worker_count: 0
       large:
         controller_count: 3
@@ -398,4 +403,4 @@ platform_configs:
         controller_ram_gb: 32
         controller_disk_gb: 128
         worker_count: 5
-        worker_type: ilo
+        worker_type: metal
