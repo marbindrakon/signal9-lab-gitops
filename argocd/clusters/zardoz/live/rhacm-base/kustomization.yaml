@@ -7,7 +7,6 @@ resources:
   - mco-namespace.yaml
   - mco-pull-secret.yaml
   - mco-obc.yaml
-  - custom-imagesets.yaml
   - agent-service-config.yaml
   - hive-ca-bundle.yaml
   - hive-config.yaml

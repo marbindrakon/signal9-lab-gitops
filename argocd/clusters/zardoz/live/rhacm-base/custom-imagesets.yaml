@@ -1,9 +1,0 @@
-apiVersion: hive.openshift.io/v1
-kind: ClusterImageSet
-metadata:
-  labels:
-    channel: 4-scos-stable
-    visible: "true"
-  name: imgokd-4.13.0-0.okd-scos-2023-06-22-002852-x86-64-appsub
-spec:
-  releaseImage: quay.io/okd/scos-release:4.13.0-0.okd-scos-2023-06-22-002852
