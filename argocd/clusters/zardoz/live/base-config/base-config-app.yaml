@@ -53,7 +53,8 @@ spec:
             name: signal9-client-secret
             vaultName: zardoz-oidc
         monitoring:
-          enabled: false
+          enabled: true
+          storageClass: ocs-external-storagecluster-ceph-rbd
         externalSecrets:
           vaultAuthPath: 'k8s-zardoz'
         odfStorage:
