@@ -41,7 +41,7 @@ spec:
           requests:
             storage: 250Gi
 
-  running: false
+  running: true
   template:
     metadata:
       annotations:
