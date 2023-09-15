@@ -137,7 +137,7 @@ service_now:
 
 platform_configs:
   openstack:
-    vip_network: "{{ osp_ext_net_override|default('lab-net') }}"
+    vip_network: "{{ osp_ext_net_override if osp_ext_net_override != '' else 'lab-net' }}"
     use_existing_image: true
     glance_image: "{{ glance_image_override|default('rhcos-4.12.17') }}"
     cluster_sizes:
