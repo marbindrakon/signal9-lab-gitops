@@ -1,0 +1,12 @@
+apiVersion: operator.openshift.io/v1
+kind: Console
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-options: 'ServerSideApply=True'
+spec:
+  customization:
+    customLogoFile:
+      key: custom-logo.png
+      name: console-custom-logo 
+    customProductName: Zardoz
