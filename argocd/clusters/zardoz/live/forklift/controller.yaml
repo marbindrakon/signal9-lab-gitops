@@ -12,3 +12,4 @@ spec:
   validation_container_limits_cpu: "8000m"
   inventory_container_limits_cpu: "8000m"
   controller_container_limits_cpu: "8000m"
+  api_container_limits_cpu: "8000m"
