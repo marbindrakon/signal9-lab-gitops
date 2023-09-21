@@ -8,3 +8,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 spec:
   olm_managed: true
+  must_gather_api_container_limits_cpu: "8000m"
+  validation_container_limits_cpu: "8000m"
+  inventory_container_limits_cpu: "8000m"
+  controller_container_limits_cpu: "8000m"
