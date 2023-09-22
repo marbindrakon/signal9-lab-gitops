@@ -34,7 +34,10 @@ spec:
                 values:
                   - 'true'
   secretsProvider: k8s
+  deleteStrategy:
+    type: UninstallAndWipe
   security:
+    enabled: true
     auth:
       guestAccess: Enabled
       selfSigned:
