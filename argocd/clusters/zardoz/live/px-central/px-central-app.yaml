@@ -11,9 +11,9 @@ spec:
   syncPolicy:
     automated: {}
   source:
-    repoURL: "https://charts.portworx.io"
-    chart: "px-central"
-    targetRevision: 2.5.1
+    repoURL: "https://github.com/portworx/helm"
+    path: "charts/px-central"
+    targetRevision: px-central-2.5.1
     helm:
       releaseName: px-central
       values: |
