@@ -8,8 +8,7 @@ spec:
     namespace: px-central
     server: "https://kubernetes.default.svc"
   project: default
-  syncPolicy:
-    automated: {}
+  syncPolicy: {}
   source:
     repoURL: "https://github.com/portworx/helm"
     path: "charts/px-central"
