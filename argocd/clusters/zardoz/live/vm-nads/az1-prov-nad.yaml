@@ -1,0 +1,15 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: az1-prov
+  namespace: default
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br-az1-prov
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "az1-prov", 
+    "type": "cnv-bridge", 
+    "bridge": "br-az1-prov", 
+    "macspoofchk": false 
+  }'
