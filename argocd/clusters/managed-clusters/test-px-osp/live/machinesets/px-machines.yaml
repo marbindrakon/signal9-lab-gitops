@@ -1,0 +1,58 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  name: test-px-osp-qbntq-portworx
+  namespace: openshift-machine-api
+  labels:
+    machine.openshift.io/cluster-api-cluster: test-px-osp-qbntq
+    machine.openshift.io/cluster-api-machine-role: worker
+    machine.openshift.io/cluster-api-machine-type: worker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: test-px-osp-qbntq
+      machine.openshift.io/cluster-api-machineset: test-px-osp-qbntq-portworx
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: test-px-osp-qbntq
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: test-px-osp-qbntq-portworx
+    spec:
+      lifecycleHooks: {}
+      metadata:
+        labels:
+          px-node: 'true'
+          px/metadata-node: 'true'
+      providerSpec:
+        value:
+          cloudName: openstack
+          networks:
+            - filter: {}
+              subnets:
+                - filter:
+                    name: test-px-osp-qbntq-nodes
+                    tags: openshiftClusterID=test-px-osp-qbntq
+          userDataSecret:
+            name: worker-user-data
+          serverGroupName: test-px-osp-qbntq-portworx
+          cloudsSecret:
+            name: openstack-cloud-credentials
+            namespace: openshift-machine-api
+          metadata:
+            creationTimestamp: null
+          serverMetadata:
+            Name: test-px-osp-qbntq-portworx
+            openshiftClusterID: test-px-osp-qbntq
+          securityGroups:
+            - filter: {}
+              name: test-px-osp-qbntq-worker
+          trunk: true
+          kind: OpenstackProviderSpec
+          tags:
+            - openshiftClusterID=test-px-osp-qbntq
+          image: test-px-osp-qbntq-rhcos
+          apiVersion: openstackproviderconfig.openshift.io/v1alpha1
+          flavor: m1.2xlarge
