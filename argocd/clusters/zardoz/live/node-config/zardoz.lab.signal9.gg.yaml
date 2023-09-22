@@ -6,3 +6,4 @@ metadata:
     argocd.argoproj.io/sync-options: ServerSideApply=true,Validate=false
   labels:
     cluster.ocs.openshift.io/openshift-storage: ''
+    px/ls: 'true'
