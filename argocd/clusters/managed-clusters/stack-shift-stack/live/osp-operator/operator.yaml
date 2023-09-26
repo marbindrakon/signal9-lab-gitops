@@ -3,7 +3,7 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
   name: osp-operator-index
-  namespace: openstack
+  namespace: openstack-operators
   annotations:
     argocd.argoproj.io/sync-wave: '1'
 spec:
@@ -14,10 +14,20 @@ apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: "osp-operator-group"
-  namespace: openstack
+  namespace: openstack-operators
   annotations:
     argocd.argoproj.io/sync-wave: '2'
-spec:
-  targetNamespaces:
-  - openstack
+spec: {}
 ---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: openstack-operator
+  namespace: openstack-operators
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  source: osp-operator-index
+  sourceNamespace: openstack-operators
+  name: openstack-operator
+  channel: "alpha"
