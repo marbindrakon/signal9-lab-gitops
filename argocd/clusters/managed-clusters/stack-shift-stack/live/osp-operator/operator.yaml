@@ -1,0 +1,23 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: osp-operator-index
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
+spec:
+  sourceType: grpc
+  image: quay.io/openstack-k8s-operators/openstack-operator-index
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: "osp-operator-group"
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
+spec:
+  targetNamespaces:
+  - openstack
+---
