@@ -133,6 +133,7 @@ spec:
       networkAttachments:
       - internalapi
   horizon:
+    enabled: true
     apiOverride:
       route:
         host: osp2.apps.osp17-ocp.lab.signal9.gg
