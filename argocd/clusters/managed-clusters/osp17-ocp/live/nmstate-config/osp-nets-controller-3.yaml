@@ -12,7 +12,7 @@ spec:
   desiredState:
     interfaces:
       - name: eno3d1
-        type: interface
+        type: ethernet
         state: up
         mtu: 9000
         ipv4:
