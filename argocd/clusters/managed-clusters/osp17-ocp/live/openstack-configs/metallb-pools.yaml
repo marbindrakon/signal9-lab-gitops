@@ -1,0 +1,10 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: osp2-internalapi
+  namespace: metallb-system
+spec:
+  addresses:
+  - 172.18.202.80-172.18.202.90
+  autoAssign: true
+  avoidBuggyIPs: false
