@@ -352,9 +352,9 @@ spec:
         storageClass: "ocs-external-storagecluster-cephfs"
         storageRequest: 150G
       ironicInspector:
-        replicas: 2
+        replicas: 1
       ironicNeutronAgent:
-        replicas: 2
+        replicas: 1
       secret: osp-secret
   ceilometer:
     template:
