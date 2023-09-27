@@ -47,6 +47,7 @@ spec:
         - destination: 172.18.14.0/24
           nexthop: 172.18.19.1
   - name: Tenant
+    dnsDomain: tenant.osp2.lab.signal9.gg
     mtu: 9000
     subnets:
     - name: subnet1
