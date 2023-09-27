@@ -264,7 +264,7 @@ spec:
           system-id: "random"
           ovn-bridge: "br-int"
           ovn-encap-type: "geneve"
-        networkAttachment: tenant
+        networkAttachment: tunnel
   placement:
     apiOverride:
       route:
