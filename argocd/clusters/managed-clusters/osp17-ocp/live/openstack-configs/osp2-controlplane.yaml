@@ -291,7 +291,8 @@ spec:
         replicas: 1
       ironicConductors:
       - replicas: 1
-        storageRequest: 10G
+        storageClass: "ocs-external-storagecluster-cephfs"
+        storageRequest: 150G
       ironicInspector:
         replicas: 1
       ironicNeutronAgent:
