@@ -6,6 +6,25 @@ metadata:
 spec:
   secret: osp-secret
   storageClass: ocs-external-storagecluster-ceph-rbd
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+          - CinderVolume
+          - GlanceAPI
+          - ManilaShare
+          extraVolType: Ceph
+          volumes:
+          - name: ceph
+            projected:
+              sources:
+              - secret:
+                  name: ceph-conf-files
+          mounts:
+          - name: ceph
+            mountPath: "/etc/ceph"
+            readOnly: true
   dns:
     template:
       override:
@@ -41,16 +60,32 @@ spec:
               spec:
                 type: LoadBalancer
       cinderScheduler:
-        replicas: 1
+        replicas: 2
       cinderBackup:
+        customServiceConfig: |
+          [DEFAULT]
+          backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+          backup_ceph_pool = osp2-backups
+          backup_ceph_user = osp2
         networkAttachments:
         - storage
-        replicas: 0 # backend needs to be configured
+        replicas: 1 # backend needs to be configured
       cinderVolumes:
-        volume1:
+        ceph:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph
+            [ceph]
+            volume_backend_name=ceph
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user=osp2
+            rbd_pool=volumes
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid=14e37f3d-9026-46c3-a503-82fa0acbac3f
           networkAttachments:
           - storage
-          replicas: 0 # backend needs to be configured
+          replicas: 1 # backend needs to be configured
   glance:
     apiOverride:
       route:
@@ -77,7 +112,8 @@ spec:
   keystone:
     apiOverride:
       route:
-        host: osp2-keystone.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-keystone.apps.osp17-ocp.lab.signal9.gg
     template:
       override:
         service:
@@ -116,7 +152,8 @@ spec:
   neutron:
     apiOverride:
       route:
-        host: osp2-neutron.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-neutron.apps.osp17-ocp.lab.signal9.gg
     template:
       override:
         service:
@@ -136,14 +173,16 @@ spec:
     enabled: true
     apiOverride:
       route:
-        host: osp2.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2.apps.osp17-ocp.lab.signal9.gg
     template:
-      replicas: 3
+      replicas: 2
       secret: osp-secret
   nova:
     apiOverride:
       route:
-        host: osp2-nova.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-nova.apps.osp17-ocp.lab.signal9.gg
     template:
       apiServiceTemplate:
         override:
@@ -170,10 +209,11 @@ spec:
   manila:
     apiOverride:
       route:
-        host: osp2-manila.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-manila.apps.osp17-ocp.lab.signal9.gg
     template:
       manilaAPI:
-        replicas: 3
+        replicas: 2
         networkAttachments:
         - internalapi
         override:
@@ -187,9 +227,22 @@ spec:
               spec:
                 type: LoadBalancer
       manilaScheduler:
-        replicas: 1
+        replicas: 2
       manilaShares:
         share1:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends=cephfs
+            enabled_share_protocols=cephfs
+            [cephfs]
+            driver_handles_share_servers=False
+            share_backend_name=cephfs
+            share_driver=manila.share.drivers.cephfs.driver.CephFSDriver
+            cephfs_conf_path=/etc/ceph/ceph.conf
+            cephfs_auth_id=manila
+            cephfs_cluster_name=ceph
+            cephfs_volume_mode=0755
+            cephfs_protocol_helper_type=CEPHFS
           replicas: 1
           networkAttachments:
           - storage
@@ -215,8 +268,10 @@ spec:
   placement:
     apiOverride:
       route:
-        host: osp2-nova-placement.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-nova-placement.apps.osp17-ocp.lab.signal9.gg
     template:
+      replicas: 2
       override:
         service:
           internal:
@@ -252,10 +307,12 @@ spec:
   heat:
     apiOverride:
       route:
-        host: osp2-heat.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-heat.apps.osp17-ocp.lab.signal9.gg
     cnfAPIOverride:
       route:
-        host: osp2-heat-cfn.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-heat-cfn.apps.osp17-ocp.lab.signal9.gg
     enabled: true
     template:
       databaseInstance: openstack
@@ -270,7 +327,7 @@ spec:
                   metallb.universe.tf/loadBalancerIPs: 172.18.202.80
               spec:
                 type: LoadBalancer
-        replicas: 3
+        replicas: 2
       heatEngine:
         override:
           service:
@@ -282,22 +339,22 @@ spec:
                   metallb.universe.tf/loadBalancerIPs: 172.18.202.80
               spec:
                 type: LoadBalancer
-        replicas: 3
+        replicas: 2
       secret: osp-secret
   ironic:
     enabled: true
     template:
       databaseInstance: openstack
       ironicAPI:
-        replicas: 1
+        replicas: 2
       ironicConductors:
-      - replicas: 1
+      - replicas: 2
         storageClass: "ocs-external-storagecluster-cephfs"
         storageRequest: 150G
       ironicInspector:
-        replicas: 1
+        replicas: 2
       ironicNeutronAgent:
-        replicas: 1
+        replicas: 2
       secret: osp-secret
   ceilometer:
     template:
@@ -307,31 +364,12 @@ spec:
       serviceUser: ceilometer
   swift:
     enabled: false
-    proxyOverride:
-      route: {}
-    template:
-      swiftRing:
-        ringReplicas: 1
-      swiftStorage:
-        replicas: 1
-      swiftProxy:
-        replicas: 1
-        override:
-          service:
-            internal:
-              metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: internalapi
-                  metallb.universe.tf/allow-shared-ip: internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.17.0.80
-              spec:
-                type: LoadBalancer
   octavia:
     enabled: true
     template:
       databaseInstance: openstack
       octaviaAPI:
-        replicas: 1
+        replicas: 2
       secret: osp-secret
   redis:
     enabled: true
