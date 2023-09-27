@@ -1,7 +1,8 @@
 apiVersion: core.openstack.org/v1beta1
 kind: OpenStackControlPlane
 metadata:
-  name: openstack-galera-network-isolation-3replicas
+  name: osp2
+  namespace: openstack
 spec:
   secret: osp-secret
   storageClass: ocs-external-storagecluster-rbd
