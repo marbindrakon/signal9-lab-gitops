@@ -21,7 +21,6 @@ spec:
       - key: server
         values:
         - 172.18.42.10
-        - 172.18.42.11
       replicas: 2
   cinder:
     apiOverride:
