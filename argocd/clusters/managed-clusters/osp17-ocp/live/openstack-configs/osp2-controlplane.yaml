@@ -143,6 +143,7 @@ spec:
             termination: edge
 
     template:
+      replicas: 2
       override:
         service:
           internal:
@@ -293,14 +294,17 @@ spec:
     template:
       ovnDBCluster:
         ovndbcluster-nb:
+          replicas: 3
           dbType: NB
           storageRequest: 10G
           networkAttachment: internalapi
         ovndbcluster-sb:
+          replicas: 3
           dbType: SB
           storageRequest: 10G
           networkAttachment: internalapi
       ovnNorthd:
+        replicas: 3
         networkAttachment: internalapi
       ovnController:
         external-ids:
@@ -334,6 +338,7 @@ spec:
   rabbitmq:
     templates:
       rabbitmq:
+        replicas: 3
         override:
           service:
             metadata:
@@ -343,6 +348,7 @@ spec:
             spec:
               type: LoadBalancer
       rabbitmq-cell1:
+        replicas: 3
         override:
           service:
             metadata:
