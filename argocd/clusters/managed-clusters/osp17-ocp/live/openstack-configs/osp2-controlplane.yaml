@@ -3,6 +3,9 @@ kind: OpenStackControlPlane
 metadata:
   name: osp2
   namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   secret: osp-secret
   storageClass: ocs-external-storagecluster-ceph-rbd

@@ -73,7 +73,7 @@ provider:
     useExternalLB: false
     machineCIDR: "172.18.16.0/24"
     hostNetworkConfigs:
-      osp17-ocp-controller-1:
+      osp17-ocp-1:
         config:
           interfaces:
             - name: bond0
@@ -111,23 +111,13 @@ provider:
                 port:
                   - eno3
                   - eno3d1
-            - name: br-osp
-              type: linux-bridge
-              state: up
-              mtu: 9000
-              bridge:
-                options:
-                  stp:
-                    enabled: false
-                port:
-                - name: bond1
             - name: odf
               type: vlan
               state: up
               mtu: 9000
               vlan:
                 id: 19
-                base-iface: br-osp
+                base-iface: bond1
               ipv4:
                 enabled: true
                 dhcp: false
@@ -140,10 +130,10 @@ provider:
               mtu: 1500
               vlan:
                 id: 201
-                base-iface: br-osp
+                base-iface: bond1
               ipv4:
                 enabled: false
-                dhcp: false
+                dhcp: true
 
           dns-resolver:
             config:
@@ -169,7 +159,7 @@ provider:
             macAddress: 00:02:C9:2F:30:C0
           - name: eno3d1
             macAddress: 00:02:C9:2F:30:C8
-      osp17-ocp-controller-2:
+      osp17-ocp-2:
         config:
           interfaces:
             - name: bond0
@@ -206,23 +196,13 @@ provider:
                 port:
                   - eno3
                   - eno3d1
-            - name: br-osp
-              type: linux-bridge
-              state: up
-              mtu: 9000
-              bridge:
-                options:
-                  stp:
-                    enabled: false
-                port:
-                - name: bond1
             - name: odf
               type: vlan
               state: up
               mtu: 9000
               vlan:
                 id: 19
-                base-iface: br-osp
+                base-iface: bond1
               ipv4:
                 enabled: true
                 dhcp: false
@@ -235,10 +215,10 @@ provider:
               mtu: 1500
               vlan:
                 id: 201
-                base-iface: br-osp
+                base-iface: bond1
               ipv4:
                 enabled: false
-                dhcp: false
+                dhcp: true
 
           dns-resolver:
             config:
@@ -264,7 +244,7 @@ provider:
             macAddress: 00:02:C9:2F:4D:80
           - name: eno3d1
             macAddress: 00:02:C9:2F:4D:88
-      osp17-ocp-controller-3:
+      osp17-ocp-3:
         config:
           interfaces:
             - name: bond0
@@ -301,23 +281,13 @@ provider:
                 port:
                   - eno3
                   - eno3d1
-            - name: br-osp
-              type: linux-bridge
-              state: up
-              mtu: 9000
-              bridge:
-                options:
-                  stp:
-                    enabled: false
-                port:
-                - name: bond1
             - name: odf
               type: vlan
               state: up
               mtu: 9000
               vlan:
                 id: 19
-                base-iface: br-osp
+                base-iface: bond1
               ipv4:
                 enabled: true
                 dhcp: false
@@ -330,10 +300,10 @@ provider:
               mtu: 1500
               vlan:
                 id: 201
-                base-iface: br-osp
+                base-iface: bond1
               ipv4:
                 enabled: false
-                dhcp: false
+                dhcp: true
 
           dns-resolver:
             config:

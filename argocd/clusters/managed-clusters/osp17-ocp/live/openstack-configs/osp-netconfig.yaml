@@ -3,6 +3,9 @@ kind: NetConfig
 metadata:
   name: osp2-netconfig
   namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   networks:
   - name: CtlPlane

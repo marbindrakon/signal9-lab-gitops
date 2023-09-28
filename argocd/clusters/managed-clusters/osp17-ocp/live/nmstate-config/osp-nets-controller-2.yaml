@@ -7,18 +7,10 @@ metadata:
     argocd.argoproj.io/sync-wave: '3'
 spec:
   nodeSelector: 
-    kubernetes.io/hostname: "osp17-ocp-controller-2.lab.signal9.gg"
+    kubernetes.io/hostname: "osp17-ocp-2.lab.signal9.gg"
   maxUnavailable: 1
   desiredState:
     interfaces:
-      - name: eno3d1
-        type: ethernet
-        state: up
-        mtu: 9000
-        ipv4:
-          enabled: false
-        ipv6:
-          enabled: false
       - name: osp2-int-api
         type: vlan
         state: up
@@ -32,7 +24,7 @@ spec:
           enabled: false
         vlan:
           id: 202
-          base-iface: eno3d1
+          base-iface: bond1
       - name: osp2-pub
         type: vlan
         state: up
@@ -46,7 +38,7 @@ spec:
           enabled: false
         vlan:
           id: 203
-          base-iface: eno3d1
+          base-iface: bond1
       - name: osp2-tun
         type: vlan
         state: up
@@ -60,4 +52,4 @@ spec:
           enabled: false
         vlan:
           id: 204
-          base-iface: eno3d1
+          base-iface: bond1
