@@ -47,7 +47,8 @@ spec:
   cinder:
     apiOverride:
       route:
-        host: osp2-cinder.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-cinder.apps.osp17-ocp.lab.signal9.gg
     template:
       databaseInstance: openstack
       secret: osp-secret
@@ -92,7 +93,8 @@ spec:
   glance:
     apiOverride:
       route:
-        host: osp2-glance.apps.osp17-ocp.lab.signal9.gg
+        spec:
+          host: osp2-glance.apps.osp17-ocp.lab.signal9.gg
     template:
       databaseInstance: openstack
       storageClass: "ocs-external-storagecluster-cephfs"
@@ -118,6 +120,7 @@ spec:
         spec:
           host: osp2-keystone.apps.osp17-ocp.lab.signal9.gg
     template:
+      region: XNA
       override:
         service:
           internal:
@@ -332,16 +335,6 @@ spec:
                 type: LoadBalancer
         replicas: 2
       heatEngine:
-        override:
-          service:
-            internal:
-              metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: osp2-internalapi
-                  metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.18.202.80
-              spec:
-                type: LoadBalancer
         replicas: 2
       secret: osp-secret
   ironic:
