@@ -135,8 +135,7 @@ spec:
       glanceAPIExternal:
         override:
           service:
-            public:
-              endpointURL: "https://osp2-glance.apps.osp17-ocp.lab.signal9.gg"
+            endpointURL: "https://osp2-glance.apps.osp17-ocp.lab.signal9.gg"
         networkAttachments:
         - storage
   keystone:
