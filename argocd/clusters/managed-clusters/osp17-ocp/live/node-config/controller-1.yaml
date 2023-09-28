@@ -1,7 +1,7 @@
 kind: Node
 apiVersion: v1
 metadata:
-  name: osp17-ocp-controller-1.lab.signal9.gg
+  name: osp17-ocp-1.lab.signal9.gg
   labels:
     cluster.ocs.openshift.io/openshift-storage: ''
   annotations:

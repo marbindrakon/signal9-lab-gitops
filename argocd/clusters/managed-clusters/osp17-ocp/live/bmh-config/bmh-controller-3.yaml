@@ -1,7 +1,7 @@
 apiVersion: metal3.io/v1alpha1
 kind: BareMetalHost
 metadata:
-  name: osp17-ocp-controller-3.lab.signal9.gg
+  name: osp17-ocp-3.lab.signal9.gg
   namespace: openshift-machine-api
   annotations:
     argocd.argoproj.io/sync-options: "ServerSideApply=True"
