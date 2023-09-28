@@ -60,6 +60,8 @@ spec:
       cinderAPI:
         override:
           service:
+            public:
+              endpointURL: "https://osp2-cinder.apps.osp17-ocp.lab.signal9.gg"
             internal:
               metadata:
                 annotations:
@@ -131,6 +133,10 @@ spec:
         networkAttachments:
         - storage
       glanceAPIExternal:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-glance.apps.osp17-ocp.lab.signal9.gg"
         networkAttachments:
         - storage
   keystone:
@@ -146,6 +152,8 @@ spec:
       replicas: 2
       override:
         service:
+          public:
+            endpointURL: "https://osp2-keystone.apps.osp17-ocp.lab.signal9.gg"
           internal:
             metadata:
               annotations:
@@ -189,6 +197,8 @@ spec:
     template:
       override:
         service:
+          public:
+            endpointURL: "https://osp2-neutron.apps.osp17-ocp.lab.signal9.gg"
           internal:
             metadata:
               annotations:
@@ -227,6 +237,8 @@ spec:
       apiServiceTemplate:
         override:
           service:
+            public:
+              endpointURL: "https://osp2-nova.apps.osp17-ocp.lab.signal9.gg"
             internal:
               metadata:
                 annotations:
@@ -262,6 +274,8 @@ spec:
         - internalapi
         override:
           service:
+            public:
+              endpointURL: "https://osp2-manila.apps.osp17-ocp.lab.signal9.gg"
             internal:
               metadata:
                 annotations:
@@ -325,6 +339,8 @@ spec:
       replicas: 2
       override:
         service:
+          public:
+            endpointURL: "https://osp2-nova-placement.apps.osp17-ocp.lab.signal9.gg"
           internal:
             metadata:
               annotations:
@@ -380,6 +396,8 @@ spec:
       heatAPI:
         override:
           service:
+            public:
+              endpointURL: "https://osp2-heat.apps.osp17-ocp.lab.signal9.gg"
             internal:
               metadata:
                 annotations:
@@ -389,6 +407,21 @@ spec:
               spec:
                 type: LoadBalancer
         replicas: 2
+      heatCfnAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-heat-cfn.apps.osp17-ocp.lab.signal9.gg"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: osp2-internalapi
+                  metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+              spec:
+                type: LoadBalancer
+        replicas: 2
+
       heatEngine:
         replicas: 2
       secret: osp-secret
@@ -411,17 +444,26 @@ spec:
     template:
       databaseInstance: openstack
       ironicAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-ironic-api.apps.osp17-ocp.lab.signal9.gg"
         replicas: 2
       ironicConductors:
       - replicas: 2
         storageClass: "ocs-external-storagecluster-cephfs"
         storageRequest: 150G
       ironicInspector:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-inspector.apps.osp17-ocp.lab.signal9.gg"
         replicas: 1
       ironicNeutronAgent:
         replicas: 1
       secret: osp-secret
   ceilometer:
+    enabled: false
     template:
       passwordSelector:
         service: CeilometerPassword
@@ -441,6 +483,10 @@ spec:
     template:
       databaseInstance: openstack
       octaviaAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-octavia.apps.osp17-ocp.lab.signal9.gg"
         replicas: 2
       secret: osp-secret
   redis:
