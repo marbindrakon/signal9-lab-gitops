@@ -388,6 +388,20 @@ spec:
       secret: osp-secret
   ironic:
     enabled: true
+    apiOverride:
+      route:
+        spec:
+          host: osp2-ironic-api.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    inspectorOverride:
+      route:
+        spec:
+          host: osp2-inspector.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
     template:
       databaseInstance: openstack
       ironicAPI:
@@ -411,6 +425,13 @@ spec:
     enabled: false
   octavia:
     enabled: true
+    apiOverride:
+      route:
+        spec:
+          host: osp2-octavia.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
     template:
       databaseInstance: openstack
       octaviaAPI:
