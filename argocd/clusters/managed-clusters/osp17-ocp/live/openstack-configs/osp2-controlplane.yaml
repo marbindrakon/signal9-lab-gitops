@@ -50,6 +50,10 @@ spec:
       route:
         spec:
           host: osp2-cinder.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     template:
       databaseInstance: openstack
       secret: osp-secret
@@ -96,6 +100,10 @@ spec:
       route:
         spec:
           host: osp2-glance.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     template:
       databaseInstance: openstack
       storageClass: "ocs-external-storagecluster-cephfs"
@@ -130,6 +138,10 @@ spec:
       route:
         spec:
           host: osp2-keystone.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     template:
       override:
         service:
@@ -170,6 +182,9 @@ spec:
       route:
         spec:
           host: osp2-neutron.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
     template:
       override:
         service:
@@ -191,6 +206,10 @@ spec:
       route:
         spec:
           host: osp2.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     template:
       replicas: 2
       secret: osp-secret
@@ -199,6 +218,10 @@ spec:
       route:
         spec:
           host: osp2-nova.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     template:
       apiServiceTemplate:
         override:
@@ -227,6 +250,10 @@ spec:
       route:
         spec:
           host: osp2-manila.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     template:
       manilaAPI:
         replicas: 2
@@ -286,6 +313,10 @@ spec:
       route:
         spec:
           host: osp2-nova-placement.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     template:
       replicas: 2
       override:
@@ -325,10 +356,18 @@ spec:
       route:
         spec:
           host: osp2-heat.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     cnfAPIOverride:
       route:
         spec:
           host: osp2-heat-cfn.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
     enabled: true
     template:
       databaseInstance: openstack
