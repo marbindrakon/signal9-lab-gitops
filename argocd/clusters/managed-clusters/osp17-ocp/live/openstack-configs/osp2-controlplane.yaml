@@ -15,6 +15,7 @@ spec:
       extraVol:
         - propagation:
           - CinderVolume
+          - CinderBackup
           - GlanceAPI
           - ManilaShare
           extraVolType: Ceph
@@ -84,7 +85,7 @@ spec:
             volume_driver=cinder.volume.drivers.rbd.RBDDriver
             rbd_ceph_conf=/etc/ceph/ceph.conf
             rbd_user=osp2
-            rbd_pool=volumes
+            rbd_pool=osp2-volumes
             rbd_flatten_volume_from_snapshot=False
             rbd_secret_uuid=14e37f3d-9026-46c3-a503-82fa0acbac3f
           networkAttachments:
@@ -99,6 +100,16 @@ spec:
       databaseInstance: openstack
       storageClass: "ocs-external-storagecluster-cephfs"
       storageRequest: 150G
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = default_backend:rbd
+        [glance_store]
+        default_backend = default_backend
+        [default_backend]
+        rbd_store_ceph_conf = /etc/ceph/ceph.conf
+        store_description = "RBD backend"
+        rbd_store_pool = osp2-images
+        rbd_store_user = osp2
       glanceAPIInternal:
         override:
           service:
@@ -120,7 +131,6 @@ spec:
         spec:
           host: osp2-keystone.apps.osp17-ocp.lab.signal9.gg
     template:
-      region: XNA
       override:
         service:
           internal:
