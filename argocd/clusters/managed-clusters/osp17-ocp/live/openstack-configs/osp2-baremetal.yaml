@@ -2,6 +2,7 @@ apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneNodeSet
 metadata:
   name: osp2-nodeset
+  namespace: openstack
 spec:
   env:
     - name: ANSIBLE_FORCE_COLOR
