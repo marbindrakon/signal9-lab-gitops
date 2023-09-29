@@ -158,8 +158,8 @@ spec:
          edpm_iscsid_image: "{{ registry_url }}/openstack-iscsid:{{ image_tag }}"
          edpm_logrotate_crond_image: "{{ registry_url }}/openstack-cron:{{ image_tag }}"
          # For some reason this tag is being overridden with a digest
-         edpm_nova_compute_container_image: "{{ registry_url }}/openstack-nova-compute@{{ image_tag }}"
-         edpm_nova_libvirt_container_image: "{{ registry_url }}/openstack-nova-libvirt:{{ image_tag }}"
+         edpm_nova_compute_image: "{{ registry_url }}/openstack-nova-compute:{{ image_tag }}"
+         edpm_nova_libvirt_image: "{{ registry_url }}/openstack-nova-libvirt:{{ image_tag }}"
          edpm_ovn_metadata_agent_image: "{{ registry_url }}/openstack-neutron-metadata-agent-ovn:{{ image_tag }}"
          gather_facts: false
          enable_debug: true
