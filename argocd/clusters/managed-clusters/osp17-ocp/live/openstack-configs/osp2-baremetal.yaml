@@ -27,6 +27,8 @@ spec:
       app: openstack
     ctlplaneInterface: eno1
     cloudUserName: cloud-admin
+    provisionServerName: osp2-provision
+    passwordSecret: osp-secret
   nodes:
     osp2-compute-0:
       hostName: osp2-compute-0.ctlplane.osp2.lab.signal9.gg
