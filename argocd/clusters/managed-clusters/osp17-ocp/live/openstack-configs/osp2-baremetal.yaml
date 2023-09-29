@@ -4,6 +4,17 @@ metadata:
   name: osp2-nodeset
   namespace: openstack
 spec:
+  services:
+    - download-cache
+    - configure-network
+    - validate-network
+    - install-os
+    - configure-os
+    - run-os
+    - ceph-client
+    - libvirt
+    - nova-custom-ceph
+    - ovn
   env:
     - name: ANSIBLE_FORCE_COLOR
       value: "True"
@@ -16,9 +27,9 @@ spec:
     cloudUserName: cloud-admin
   nodes:
     osp2-compute-0:
-      hostName: osp2-compute-0.lab.signal9.gg
+      hostName: osp2-compute-0.ctlplane.osp2.lab.signal9.gg
     osp2-compute-1:
-      hostName: osp2-compute-1.lab.signal9.gg
+      hostName: osp2-compute-1.ctlplane.osp2.lab.signal9.gg
   networkAttachments:
     - ctlplane
   nodeTemplate:
