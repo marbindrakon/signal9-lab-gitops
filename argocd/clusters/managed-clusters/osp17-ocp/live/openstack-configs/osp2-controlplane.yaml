@@ -37,7 +37,7 @@ spec:
             annotations:
               metallb.universe.tf/address-pool: osp2-internalapi
               metallb.universe.tf/allow-shared-ip: osp2-internalapi
-              metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+              metallb.universe.tf/loadBalancerIPs: 172.18.202.82
           spec:
             type: LoadBalancer
       options:
@@ -67,7 +67,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: osp2-internalapi
                   metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
               spec:
                 type: LoadBalancer
       cinderScheduler:
@@ -127,7 +127,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: osp2-internalapi
                 metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
             spec:
               type: LoadBalancer
         networkAttachments:
@@ -158,7 +158,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: osp2-internalapi
                 metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
             spec:
               type: LoadBalancer
       databaseInstance: openstack
@@ -203,7 +203,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: osp2-internalapi
                 metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
             spec:
               type: LoadBalancer
       databaseInstance: openstack
@@ -243,7 +243,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: osp2-internalapi
                   metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
               spec:
                 type: LoadBalancer
       metadataServiceTemplate:
@@ -253,7 +253,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: osp2-internalapi
                 metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
             spec:
               type: LoadBalancer
       secret: osp-secret
@@ -280,7 +280,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: osp2-internalapi
                   metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
               spec:
                 type: LoadBalancer
       manilaScheduler:
@@ -345,7 +345,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: osp2-internalapi
                 metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
             spec:
               type: LoadBalancer
       databaseInstance: openstack
@@ -402,7 +402,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: osp2-internalapi
                   metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
               spec:
                 type: LoadBalancer
         replicas: 2
@@ -416,7 +416,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: osp2-internalapi
                   metallb.universe.tf/allow-shared-ip: osp2-internalapi
-                  metallb.universe.tf/loadBalancerIPs: 172.18.202.80
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
               spec:
                 type: LoadBalancer
         replicas: 2
