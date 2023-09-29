@@ -8,7 +8,7 @@ metadata:
     argocd.argoproj.io/sync-wave: '1'
 spec:
   sourceType: grpc
-  image: quay.signal9.gg/aaustin/openstack-operator-index:v0.0.1
+  image: quay.signal9.gg/aaustin/openstack-operator-index:v0.0.2
 ---
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
