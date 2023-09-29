@@ -3,6 +3,8 @@ kind: OpenStackDataPlaneNodeSet
 metadata:
   name: osp2-nodeset
   namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-wave: '4'
 spec:
   services:
     - download-cache
