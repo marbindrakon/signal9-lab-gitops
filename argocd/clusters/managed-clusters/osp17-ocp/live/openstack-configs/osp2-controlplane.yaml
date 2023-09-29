@@ -35,9 +35,9 @@ spec:
         service:
           metadata:
             annotations:
-              metallb.universe.tf/address-pool: osp2-internalapi
-              metallb.universe.tf/allow-shared-ip: osp2-internalapi
-              metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+              metallb.universe.tf/address-pool: osp2-ctlplane
+              metallb.universe.tf/allow-shared-ip: osp2-ctlplane
+              metallb.universe.tf/loadBalancerIPs: 172.18.201.251
           spec:
             type: LoadBalancer
       options:

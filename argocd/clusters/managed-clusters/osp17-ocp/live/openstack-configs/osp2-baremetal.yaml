@@ -73,6 +73,11 @@ spec:
          # These vars are edpm_network_config role vars
          edpm_network_config_hide_sensitive_logs: false
          edpm_network_config_override: ""
+         ctlplane_dns_nameservers:
+           - 172.18.201.251
+         dns_search_domains:
+           - ctlplane.osp2.lab.signal9.gg
+           - lab.signal9.gg
          edpm_network_config_template: |
               ---
               {% set mtu_list = [ctlplane_mtu] %}
