@@ -85,60 +85,60 @@ spec:
            - ctlplane.osp2.lab.signal9.gg
            - lab.signal9.gg
          edpm_network_config_template: |
-              ---
-              {% set mtu_list = [ctlplane_mtu] %}
-              {% for network in role_networks %}
-              {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
-              {%- endfor %}
-              {% set min_viable_mtu = mtu_list | max %}
-              network_config:
-              - type: linux_bond
-                name: bond0
-                mtu: {{ ctlplane_mtu }}
-                use_dhcp: false
-                bonding_options: "mode=active-backup"
-                dns_servers: {{ ctlplane_dns_nameservers }}
-                domain: {{ dns_search_domains }}
-                addresses:
-                - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_subnet_cidr }}
-                members:
-                - type: interface
-                  name: nic1
-                  mtu: {{ ctlplane_mtu }}
-                  primary: true
-                - type: interface
-                  name: nic2
-                  mtu: {{ ctlplane_mtu }}
-              - type: ovs_bridge
-                name: br-ex
-                members:
-                - type: linux_bond
-                  name: bond1
-                  mtu: 9000
-                  bonding_options: "mode=active-backup"
-                  members:
-                  - type: interface
-                    name: nic3
-                    mtu: 9000
-                    primary: true
-                  - type: interface
-                    name: nic4
-                    mtu: 9000
-                {% for network in role_networks %}
-                  - type: vlan
-                    mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
-                    vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
-                    addresses:
-                    - ip_netmask: {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
-                {% if network == 'External' %}
-                    routes:
-                    - ip_netmask: 0.0.0.0/0
-                      next_hop: {{ external_gateway_ip }}
-                      default: true
-                {% else %}
-                    routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
-                {% endif %}
-                {% endfor %}
+           ---
+           {% set mtu_list = [ctlplane_mtu] %}
+           {% for network in role_networks %}
+           {{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}
+           {%- endfor %}
+           {% set min_viable_mtu = mtu_list | max %}
+           network_config:
+           - type: linux_bond
+             name: bond0
+             mtu: {{ ctlplane_mtu }}
+             use_dhcp: false
+             bonding_options: "mode=active-backup"
+             dns_servers: {{ ctlplane_dns_nameservers }}
+             domain: {{ dns_search_domains }}
+             addresses:
+             - ip_netmask: {{ ctlplane_ip }}/{{ ctlplane_subnet_cidr }}
+             members:
+             - type: interface
+               name: nic1
+               mtu: {{ ctlplane_mtu }}
+               primary: true
+             - type: interface
+               name: nic2
+               mtu: {{ ctlplane_mtu }}
+           - type: ovs_bridge
+             name: br-ex
+             members:
+             - type: linux_bond
+               name: bond1
+               mtu: 9000
+               bonding_options: "mode=active-backup"
+               members:
+               - type: interface
+                 name: nic3
+                 mtu: 9000
+                 primary: true
+               - type: interface
+                 name: nic4
+                 mtu: 9000
+           {% for network in role_networks %}
+             - type: vlan
+               mtu: {{ lookup('vars', networks_lower[network] ~ '_mtu') }}
+               vlan_id: {{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}
+               addresses:
+               - ip_netmask: {{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}
+           {% if network == 'External' %}
+               routes:
+               - ip_netmask: 0.0.0.0/0
+                 next_hop: {{ external_gateway_ip }}
+                 default: true
+           {% else %}
+               routes: {{ lookup('vars', networks_lower[network] ~ '_host_routes') }}
+           {% endif %}
+           {% endfor %}
          # These vars are for the network config templates themselves and are
          # considered EDPM network defaults.
          neutron_physical_bridge_name: br-ex
