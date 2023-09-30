@@ -36,6 +36,7 @@ spec:
         start: 172.18.203.100
       cidr: 172.18.203.0/24
       gateway: 172.18.203.1
+      vlan: 203
   - name: Storage
     dnsDomain: storage.osp2.lab.signal9.gg
     mtu: 9000
