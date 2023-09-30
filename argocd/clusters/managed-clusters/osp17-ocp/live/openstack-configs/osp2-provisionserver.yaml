@@ -6,6 +6,6 @@ metadata:
 spec:
   agentImageUrl: quay.io/openstack-k8s-operators/openstack-baremetal-operator-agent:latest
   apacheImageUrl: registry.redhat.io/rhel8/httpd-24:latest
-  osContainerImageUrl: quay.signal9.gg/aaustin/edpm-custom-image:0929202301
+  osContainerImageUrl: quay.signal9.gg/aaustin/epdm-custom-image:0928202302
   port: 8080
   osImage: edpm-hardened-uefi.qcow2
