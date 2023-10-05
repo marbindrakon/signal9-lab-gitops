@@ -5,7 +5,7 @@ cluster:
   gitOpsBasePath: argocd/clusters/managed-clusters
 
 monitoring:
-  enabled: true
+  enabled: false
   storageClass: ocs-external-storagecluster-ceph-rbd
 
 externalSecrets:
