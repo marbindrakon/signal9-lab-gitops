@@ -1,0 +1,12 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ceph
+  namespace: openstack
+spec:
+  label: dataplane-deployment-nova-custom-ceph
+  configMaps:
+    - ceph-nova
+  secrets:
+    - nova-cell1-compute-config
+  playbook: osp.edpm.nova

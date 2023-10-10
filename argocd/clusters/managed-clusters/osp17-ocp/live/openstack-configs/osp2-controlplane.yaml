@@ -1,0 +1,492 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: osp2
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  secret: osp-secret
+  storageClass: ocs-external-storagecluster-ceph-rbd
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+          - CinderVolume
+          - CinderBackup
+          - GlanceAPI
+          - ManilaShare
+          extraVolType: Ceph
+          volumes:
+          - name: ceph
+            projected:
+              sources:
+              - secret:
+                  name: ceph-conf-files
+          mounts:
+          - name: ceph
+            mountPath: "/etc/ceph"
+            readOnly: true
+  dns:
+    template:
+      override:
+        service:
+          metadata:
+            annotations:
+              metallb.universe.tf/address-pool: osp2-ctlplane
+              metallb.universe.tf/allow-shared-ip: osp2-ctlplane
+              metallb.universe.tf/loadBalancerIPs: 172.18.201.251
+          spec:
+            type: LoadBalancer
+      options:
+      - key: server
+        values:
+        - 172.18.42.10
+      replicas: 2
+  cinder:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-cinder.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      databaseInstance: openstack
+      secret: osp-secret
+      cinderAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-cinder.apps.osp17-ocp.lab.signal9.gg"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: osp2-internalapi
+                  metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+              spec:
+                type: LoadBalancer
+      cinderScheduler:
+        replicas: 2
+      cinderBackup:
+        customServiceConfig: |
+          [DEFAULT]
+          backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+          backup_ceph_pool = osp2-backups
+          backup_ceph_user = osp2
+        networkAttachments:
+        - storage
+        replicas: 1 # backend needs to be configured
+      cinderVolumes:
+        ceph:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph
+            [ceph]
+            volume_backend_name=ceph
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user=osp2
+            rbd_pool=osp2-volumes
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid=14e37f3d-9026-46c3-a503-82fa0acbac3f
+          networkAttachments:
+          - storage
+          replicas: 1 # backend needs to be configured
+  glance:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-glance.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      databaseInstance: openstack
+      storageClass: "ocs-external-storagecluster-cephfs"
+      storageRequest: 150G
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = default_backend:rbd
+        [glance_store]
+        default_backend = default_backend
+        [default_backend]
+        rbd_store_ceph_conf = /etc/ceph/ceph.conf
+        store_description = "RBD backend"
+        rbd_store_pool = osp2-images
+        rbd_store_user = osp2
+      glanceAPIInternal:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: osp2-internalapi
+                metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+            spec:
+              type: LoadBalancer
+        networkAttachments:
+        - storage
+      glanceAPIExternal:
+        override:
+          service:
+            endpointURL: "https://osp2-glance.apps.osp17-ocp.lab.signal9.gg"
+        networkAttachments:
+        - storage
+  keystone:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-keystone.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      replicas: 2
+      override:
+        service:
+          public:
+            endpointURL: "https://osp2-keystone.apps.osp17-ocp.lab.signal9.gg"
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: osp2-internalapi
+                metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: osp-secret
+  mariadb:
+    enabled: false
+    templates:
+      openstack:
+        storageRequest: 500M
+      openstack-cell1:
+        storageRequest: 500M
+  galera:
+    enabled: true
+    templates:
+      openstack:
+        storageRequest: 5Gi
+        secret: osp-secret
+        replicas: 3
+      openstack-cell1:
+        storageRequest: 5Gi
+        secret: osp-secret
+        replicas: 3
+  memcached:
+    templates:
+      memcached:
+        replicas: 3
+  neutron:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-neutron.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    template:
+      override:
+        service:
+          public:
+            endpointURL: "https://osp2-neutron.apps.osp17-ocp.lab.signal9.gg"
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: osp2-internalapi
+                metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: osp-secret
+      networkAttachments:
+      - internalapi
+  horizon:
+    enabled: true
+    apiOverride:
+      route:
+        spec:
+          host: osp2.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      replicas: 2
+      secret: osp-secret
+  nova:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-nova.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      apiServiceTemplate:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-nova.apps.osp17-ocp.lab.signal9.gg"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: osp2-internalapi
+                  metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+              spec:
+                type: LoadBalancer
+      metadataServiceTemplate:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: osp2-internalapi
+                metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+            spec:
+              type: LoadBalancer
+      secret: osp-secret
+  manila:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-manila.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      manilaAPI:
+        replicas: 2
+        networkAttachments:
+        - internalapi
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-manila.apps.osp17-ocp.lab.signal9.gg"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: osp2-internalapi
+                  metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+              spec:
+                type: LoadBalancer
+      manilaScheduler:
+        replicas: 2
+      manilaShares:
+        share1:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends=cephfs
+            enabled_share_protocols=cephfs
+            [cephfs]
+            driver_handles_share_servers=False
+            share_backend_name=cephfs
+            share_driver=manila.share.drivers.cephfs.driver.CephFSDriver
+            cephfs_conf_path=/etc/ceph/ceph.conf
+            cephfs_auth_id=manila
+            cephfs_cluster_name=ceph
+            cephfs_volume_mode=0755
+            cephfs_protocol_helper_type=CEPHFS
+          replicas: 1
+          networkAttachments:
+          - storage
+  ovn:
+    template:
+      ovnDBCluster:
+        ovndbcluster-nb:
+          replicas: 3
+          dbType: NB
+          storageRequest: 10G
+          networkAttachment: internalapi
+        ovndbcluster-sb:
+          replicas: 3
+          dbType: SB
+          storageRequest: 10G
+          networkAttachment: internalapi
+      ovnNorthd:
+        replicas: 3
+        networkAttachment: internalapi
+      ovnController:
+        external-ids:
+          system-id: "random"
+          ovn-bridge: "br-int"
+          ovn-encap-type: "geneve"
+        networkAttachment: tunnel
+  placement:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-nova-placement.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      replicas: 2
+      override:
+        service:
+          public:
+            endpointURL: "https://osp2-nova-placement.apps.osp17-ocp.lab.signal9.gg"
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: osp2-internalapi
+                metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: osp-secret
+  rabbitmq:
+    templates:
+      rabbitmq:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: osp2-internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.85
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell1:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: osp2-internalapi
+                metallb.universe.tf/loadBalancerIPs: 172.18.202.86
+            spec:
+              type: LoadBalancer
+  heat:
+    apiOverride:
+      route:
+        spec:
+          host: osp2-heat.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    cnfAPIOverride:
+      route:
+        spec:
+          host: osp2-heat-cfn.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    enabled: true
+    template:
+      databaseInstance: openstack
+      heatAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-heat.apps.osp17-ocp.lab.signal9.gg"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: osp2-internalapi
+                  metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+              spec:
+                type: LoadBalancer
+        replicas: 2
+      heatCfnAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-heat-cfn.apps.osp17-ocp.lab.signal9.gg"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: osp2-internalapi
+                  metallb.universe.tf/allow-shared-ip: osp2-internalapi
+                  metallb.universe.tf/loadBalancerIPs: 172.18.202.82
+              spec:
+                type: LoadBalancer
+        replicas: 2
+
+      heatEngine:
+        replicas: 2
+      secret: osp-secret
+  ironic:
+    enabled: true
+    apiOverride:
+      route:
+        spec:
+          host: osp2-ironic-api.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    inspectorOverride:
+      route:
+        spec:
+          host: osp2-inspector.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    template:
+      databaseInstance: openstack
+      ironicAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-ironic-api.apps.osp17-ocp.lab.signal9.gg"
+        replicas: 2
+      ironicConductors:
+      - replicas: 2
+        storageClass: "ocs-external-storagecluster-cephfs"
+        storageRequest: 150G
+      ironicInspector:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-inspector.apps.osp17-ocp.lab.signal9.gg"
+        replicas: 1
+      ironicNeutronAgent:
+        replicas: 1
+      secret: osp-secret
+  ceilometer:
+    enabled: false
+    template:
+      passwordSelector:
+        service: CeilometerPassword
+      secret: osp-secret
+      serviceUser: ceilometer
+  swift:
+    enabled: false
+  octavia:
+    enabled: true
+    apiOverride:
+      route:
+        spec:
+          host: osp2-octavia.apps.osp17-ocp.lab.signal9.gg
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    template:
+      databaseInstance: openstack
+      octaviaAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://osp2-octavia.apps.osp17-ocp.lab.signal9.gg"
+        replicas: 2
+      secret: osp-secret
+  redis:
+    enabled: true
