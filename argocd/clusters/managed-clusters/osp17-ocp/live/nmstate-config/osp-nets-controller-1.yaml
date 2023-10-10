@@ -1,0 +1,55 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: openstack-nets-ctrl-1
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  nodeSelector: 
+    kubernetes.io/hostname: "osp17-ocp-1.lab.signal9.gg"
+  maxUnavailable: 1
+  desiredState:
+    interfaces:
+      - name: osp2-int-api
+        type: vlan
+        state: up
+        mtu: 9000
+        ipv4:
+          enabled: true
+          address:
+            - ip: 172.18.202.5
+              prefix-length: 24
+        ipv6:
+          enabled: false
+        vlan:
+          id: 202
+          base-iface: bond1
+      - name: osp2-pub
+        type: vlan
+        state: up
+        mtu: 1500
+        ipv4:
+          enabled: true
+          address:
+            - ip: 172.18.203.5
+              prefix-length: 24
+        ipv6:
+          enabled: false
+        vlan:
+          id: 203
+          base-iface: bond1
+      - name: osp2-tun
+        type: vlan
+        state: up
+        mtu: 9000
+        ipv4:
+          enabled: true
+          address:
+            - ip: 172.18.204.5
+              prefix-length: 24
+        ipv6:
+          enabled: false
+        vlan:
+          id: 204
+          base-iface: bond1
