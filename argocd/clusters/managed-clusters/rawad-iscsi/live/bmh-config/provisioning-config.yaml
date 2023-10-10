@@ -1,0 +1,15 @@
+apiVersion: metal3.io/v1alpha1
+kind: Provisioning
+metadata:
+  name: provisioning-configuration
+  annotations:
+    argocd.argoproj.io/sync-options: "ServerSideApply=True"
+spec:
+  watchAllNamespaces: true
+  virtualMediaViaExternalNetwork: true
+  provisioningNetwork: Managed
+  disableVirtualMediaTLS: true
+  provisioningInterface: provisioning
+  provisioningIP: "172.18.201.5"
+  provisioningDHCPRange: "172.18.201.50,172.18.201.124"
+  provisioningNetworkCIDR: "172.18.201.0/24"
