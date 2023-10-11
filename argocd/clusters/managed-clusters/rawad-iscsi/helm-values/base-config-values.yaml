@@ -16,7 +16,7 @@ timesync:
   ntpServers: ['172.18.42.10', '172.18.42.11']
 
 odfStorage:
-  enabled: true
+  enabled: false
   version: '4.12'
   external: true
   externalSecret:
