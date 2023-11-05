@@ -110,7 +110,6 @@ provider:
                   miimon: '100'
                 port:
                   - eno3
-                  - eno3d1
             - name: odf
               type: vlan
               state: up
@@ -195,7 +194,6 @@ provider:
                   miimon: '100'
                 port:
                   - eno3
-                  - eno3d1
             - name: odf
               type: vlan
               state: up
@@ -280,7 +278,6 @@ provider:
                   miimon: '100'
                 port:
                   - eno3
-                  - eno3d1
             - name: odf
               type: vlan
               state: up
