@@ -13,4 +13,3 @@ spec:
     app: test-app
   sessionAffinity: None
   type: LoadBalancer
-  loadBalancerIP: 172.18.99.6
