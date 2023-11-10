@@ -1,0 +1,29 @@
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: lab-rtr-1-peer
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peerAddress: 172.18.16.2
+  peerASN: 65123
+  myASN: 65131
+  peerPort: 179
+  routerID: 172.18.16.99
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: lab-rtr-2-peer
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peerAddress: 172.18.16.3
+  peerASN: 65123
+  myASN: 65131
+  peerPort: 179
+  routerID: 172.18.16.99
