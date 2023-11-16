@@ -4,3 +4,8 @@ metadata:
   name: local-admins
 users:
   - gprocuni@redhat.com
+  - alhandy@redhat.com
+  - bstack@redhat.com
+  - hdalwadi@redhat.com
+  - jnaess@redhat.com
+  - mfau@redhat.com
