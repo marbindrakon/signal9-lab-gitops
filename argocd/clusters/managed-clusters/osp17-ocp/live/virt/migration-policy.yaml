@@ -1,0 +1,13 @@
+apiVersion: migrations.kubevirt.io/v1alpha1
+kind: MigrationPolicy
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  name: openstack-converge-policy
+spec:
+  allowAutoConverge: true
+  selectors:
+    namespaceSelector:
+      kubernetes.io/metadata.name: openstack
+    virtualMachineInstanceSelector: {}
