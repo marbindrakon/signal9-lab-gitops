@@ -2,7 +2,7 @@ apiVersion: automationhub.ansible.com/v1beta1
 kind: AutomationHub
 metadata:
   name: acm-hub-aap-hub                             
-  namespace: ansible-automation-platform
+  namespace: aap
   annotations:
     argocd.argoproj.io/sync-wave: '3'
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
