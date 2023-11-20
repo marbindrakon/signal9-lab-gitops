@@ -1,0 +1,40 @@
+apiVersion: eda.ansible.com/v1alpha1
+kind: EDA
+metadata:
+  name: aap-eda
+  namespace: aap
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '4'
+spec:
+  route_tls_termination_mechanism: Passthrough
+  ingress_type: Route
+  loadbalancer_port: 80
+  no_log: true
+  image_pull_policy: IfNotPresent
+  ui:
+    replicas: 1
+  set_self_labels: true
+  api:
+    gunicorn_workers: 2
+    replicas: 1
+  database:
+    storage_requirements:
+      limits:
+        storage: '25'
+      requests:
+        storage: '25'
+    postgres_storage_class: ocs-external-storagecluster-ceph-rbd
+  redis:
+    replicas: 1
+  admin_user: admin
+  loadbalancer_protocol: http
+  worker:
+    replicas: 2
+  automation_server_url: 'https://aap.lab.signal9.gg'
+  automation_server_ssl_verify: 'yes'
+  hostname: aap-eda.lab.signal9.gg
+  admin_password_secret: aap-admin-password
+  route_host: aap-eda.lab.signal9.gg
+  service_type: ClusterIP
+  route_tls_secret: aap-eda-certificate
