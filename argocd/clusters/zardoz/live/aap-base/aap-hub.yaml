@@ -22,6 +22,9 @@ spec:
   admin_password_secret: aap-admin-password
   postgres_storage_class: ocs-external-storagecluster-ceph-rbd
   file_storage_access_mode: ReadWriteMany
+  pulp_settings:
+    galaxy_collection_signing_service: ''
+    galaxy_container_signing_service: ''
   content:
     log_level: INFO
     replicas: 2
