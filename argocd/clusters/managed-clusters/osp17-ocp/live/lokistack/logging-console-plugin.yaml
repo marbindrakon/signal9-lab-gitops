@@ -17,7 +17,8 @@ spec:
             - -c
             - |
               echo "Patching the console to enable Logging console plugin"
-              oc patch consoles.operator.openshift.io cluster --patch '{ "spec": { "plugins": ["logging-view-plugin"] } }' --type=strategic
+              oc version
+              oc patch consoles.operator.openshift.io cluster --patch '{ "op": "add", "path": "/spec/plugins", "value": "logging-view-plugin" }' --type=json
               if [ $? = 0 ]
               then
                   echo "Logging console enabled, patch was applied ok"
