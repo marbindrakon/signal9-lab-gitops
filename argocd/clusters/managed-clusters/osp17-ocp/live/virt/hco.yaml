@@ -12,3 +12,7 @@ spec:
     enableCommonBootImageImport: true
     nonRoot: true
     withHostPassthroughCPU: false
+  permittedHostDevices:
+    pciHostDevices:
+      - pciDeviceSelector: "1077:2532"
+        resourceName: "qlogic.com/isp2532" 
