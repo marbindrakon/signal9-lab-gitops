@@ -29,6 +29,8 @@ providerConfig:
     folder: /XNA/vm/vm-openshift
     resourcePool: Resources
     cluster: XNA-ESX-1
+    networks:
+      - ocp0-infra
 
 odfStorage:
   enabled: false
