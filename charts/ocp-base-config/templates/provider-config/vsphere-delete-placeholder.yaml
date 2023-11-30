@@ -1,0 +1,28 @@
+{{- if and .Values.providerConfig.managed (eq .Values.providerConfig.provider "vsphere") -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: delete-placeholder-secret
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/hook: "PostSync"
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+  namespace: openshift-gitops
+spec:
+  template:
+    spec:
+      containers:
+      - name: delete-placeholder-secret
+        command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Patching the cloud provider credentials secret to remove placeholders"
+              oc patch -n kube-system secret vsphere-creds --patch  [{"op": "remove", "path": "/data/vcenterplaceholder.password"}] --type=json
+              oc patch -n kube-system secret vsphere-creds --patch  [{"op": "remove", "path": "/data/vcenterplaceholder.username"}] --type=json
+
+        image: "registry.redhat.io/openshift4/ose-cli:latest"
+      serviceAccount: openshift-gitops-argocd-application-controller
+      serviceAccountName: openshift-gitops-argocd-application-controller
+      restartPolicy: Never
+{{ end }}

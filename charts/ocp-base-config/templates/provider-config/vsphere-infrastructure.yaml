@@ -1,0 +1,35 @@
+{{- if and .Values.providerConfig.managed (eq .Values.providerConfig.provider "vsphere") -}}
+{{- if has .Values.cluster.openshiftVersion (list "4.13" "4.14" "4.15") -}}
+apiVersion: config.openshift.io/v1
+kind: Infrastructure
+metadata:
+  name: cluster
+spec:
+  cloudConfig:
+    key: config
+    name: cloud-provider-config
+  platformSpec:
+    type: VSphere
+    vsphere:
+      failureDomains:
+      - name: assisted-generated-failure-domain
+        region: assisted-generated-region
+        server: "{{ .Values.providerConfig.vsphereConfig.vcenter }}"
+        topology:
+          computeCluster: /{{ .Values.providerConfig.vsphereConfig.datacenter }}/host/{{ .Values.providerConfig.vsphereConfig.cluster }}
+          datacenter: {{ .Values.providerConfig.vsphereConfig.datacenter }}
+          datastore: /{{ .Values.providerConfig.vsphereConfig.datacenter }}/datastore/{{ .Values.providerConfig.vsphereConfig.datastore }}
+          folder: {{ .Values.providerConfig.vsphereConfig.folder }}
+          networks:
+            {{ toYaml .Values.providerConfig.vsphereConfig.networks | nindent 12 }}
+          resourcePool: /{{ .Values.providerConfig.vsphereConfig.datacenter }}/host/{{ .Values.providerConfig.vsphereConfig.cluster }}//{{ .Values.providerConfig.vsphereConfig.resourcePool }}
+        zone: assisted-generated-zone
+      nodeNetworking:
+        external: {}
+        internal: {}
+      vcenters:
+      - datacenters:
+        - {{ .Values.providerConfig.vsphereConfig.datacenter }}
+        server: {{ .Values.providerConfig.vsphereConfig.vcenter }}
+{{ end }}
+{{ end }}

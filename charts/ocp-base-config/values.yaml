@@ -4,6 +4,7 @@ cluster:
   gitOpsRepo: https://github.com/marbindrakon/rhte-2023-fleet-gitops.git
   gitOpsBasePath: argocd/clusters
   trustedCABundle: ""
+  openshiftVersion: "4.12"
 
 externalSecrets:
   enabled: true
