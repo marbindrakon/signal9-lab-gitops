@@ -11,6 +11,9 @@ metadata:
 spec:
   clusterDeploymentRef:
     name: {{ .Values.cluster.name }}
+{{ if .Values.provider.infraenv.platformType }}
+  platformType: {{ .Values.provider.infraenv.platformType }}
+{{ end }}
   imageSetRef:
 {{ if .Values.cluster.clusterImageSet }}
     name: {{ .Values.cluster.clusterImageSet }}

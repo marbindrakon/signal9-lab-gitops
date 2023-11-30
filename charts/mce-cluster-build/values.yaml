@@ -22,7 +22,7 @@ cluster:
 provider:
   providerCredsVault: ""
   providerCAs: ""
-  # Only used for vSphere
+  # Only used for vSphere IPI
   installConfigVault: ""
   # Can be OpenStack, InfraEnv, or vSphere
   type: OpenStack
@@ -40,6 +40,8 @@ provider:
     controlPlaneFlavor: m1.xlarge
     workerFlavor: m1.large
   infraenv:
+    # Override provider type on AgentClusterInstall (i.e. agent install on VSphere)
+    infraEnvProvider: null
     networkType: static
     useExternalLB: true
     machineCIDR: ""
