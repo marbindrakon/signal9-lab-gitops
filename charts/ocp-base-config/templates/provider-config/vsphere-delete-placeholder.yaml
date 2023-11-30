@@ -18,8 +18,8 @@ spec:
             - -c
             - |
               echo "Patching the cloud provider credentials secret to remove placeholders"
-              oc patch -n kube-system secret vsphere-creds --patch  [{"op": "remove", "path": "/data/vcenterplaceholder.password"}] --type=json
-              oc patch -n kube-system secret vsphere-creds --patch  [{"op": "remove", "path": "/data/vcenterplaceholder.username"}] --type=json
+              oc patch -n kube-system secret vsphere-creds --patch '[{"op": "remove", "path": "/data/vcenterplaceholder.password"}]' --type=json
+              oc patch -n kube-system secret vsphere-creds --patch '[{"op": "remove", "path": "/data/vcenterplaceholder.username"}]' --type=json
 
         image: "registry.redhat.io/openshift4/ose-cli:latest"
       serviceAccount: openshift-gitops-argocd-application-controller
