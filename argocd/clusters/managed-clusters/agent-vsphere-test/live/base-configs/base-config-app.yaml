@@ -20,4 +20,4 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-        - "../../argocd/clusters/managed-clusters/osp17-ocp/helm-values/base-config-values.yaml"
+        - "../../argocd/clusters/managed-clusters/agent-vsphere-test/helm-values/base-config-values.yaml"
