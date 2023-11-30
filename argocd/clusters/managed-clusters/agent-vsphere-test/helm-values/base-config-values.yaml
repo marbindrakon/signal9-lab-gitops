@@ -27,6 +27,8 @@ providerConfig:
     datacenter: XNA
     datastore: CEPH-NVME
     folder: /XNA/vm/vm-openshift
+    resourcePool: Resources
+    cluster: XNA-ESX-1
 
 odfStorage:
   enabled: false
