@@ -30,7 +30,7 @@ providerConfig:
 odfStorage:
   enabled: false
   version: '4.12'
-  external: true
+  external: false
   externalSecret:
     name: rook-ceph-external-cluster-details
     vaultName: agent-vsphere-test-rook-data
