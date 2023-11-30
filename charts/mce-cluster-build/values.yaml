@@ -41,7 +41,7 @@ provider:
     workerFlavor: m1.large
   infraenv:
     # Override provider type on AgentClusterInstall (i.e. agent install on VSphere)
-    infraEnvProvider: null
+    platformType: null
     networkType: static
     useExternalLB: true
     machineCIDR: ""
