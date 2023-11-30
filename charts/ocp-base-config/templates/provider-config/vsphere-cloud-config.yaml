@@ -1,0 +1,22 @@
+{{- if and .Values.providerConfig.managed (eq .Values.providerConfig.provider "vsphere") -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloud-provider-config
+  namespace: openshift-config
+data:
+  config: |
+    [Global]
+    secret-name = "vsphere-creds"
+    secret-namespace = "kube-system"
+    insecure-flag = "1"
+
+    [Workspace]
+    server = "{{ .Values.providerConfig.vsphereConfig.vcenter }}"
+    datacenter = "{{ .Values.providerConfig.vsphereConfig.datacenter }}"
+    default-datastore = "{{ .Values.providerConfig.vsphereConfig.datastore }}"
+    folder = "{{ .Values.providerConfig.vsphereConfig.folder }}"
+
+    [VirtualCenter "{{ .Values.providerConfig.vsphereConfig.vcenter }}"]
+    datacenters = "{{ .Values.providerConfig.vsphereConfig.datacenter }}"
+{{ end }}

@@ -34,6 +34,18 @@ certManager:
           - signal9.gg
           - lab.signal9.gg
 
+providerConfig:
+  managed: false
+  provider: vsphere
+  externalSecret:
+    name: vsphere-creds
+    vaultName: vsphere-credentials
+  vsphereConfig:
+    vcenter: xna-vcenter.lab.signal9.gg
+    datacenter: XNA
+    datastore: CEPH-NVME
+    folder: /XNA/vm/vm-openshift
+
 monitoring:
   enabled: true
   storageClass: standard
