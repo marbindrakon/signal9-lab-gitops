@@ -7,7 +7,7 @@ cluster:
 
 monitoring:
   enabled: true
-  storageClass: thin
+  storageClass: thin-csi
 
 externalSecrets:
   vaultAuthPath: "k8s-mgd-agent-vsphere-test"
