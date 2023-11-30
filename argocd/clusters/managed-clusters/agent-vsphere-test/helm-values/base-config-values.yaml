@@ -6,7 +6,7 @@ cluster:
 
 monitoring:
   enabled: true
-  storageClass: ocs-external-storagecluster-ceph-rbd
+  storageClass: thin
 
 externalSecrets:
   vaultAuthPath: "k8s-mgd-agent-vsphere-test"
@@ -15,8 +15,20 @@ timesync:
   enabled: true
   ntpServers: ['172.18.42.10', '172.18.42.11']
 
+providerConfig:
+  managed: true
+  provider: vsphere
+  externalSecret:
+    name: vsphere-creds
+    vaultName: vsphere-credentials
+  vsphereConfig:
+    vcenter: xna-vcenter.lab.signal9.gg
+    datacenter: XNA
+    datastore: CEPH-NVME
+    folder: /XNA/vm/vm-openshift
+
 odfStorage:
-  enabled: true
+  enabled: false
   version: '4.12'
   external: true
   externalSecret:
