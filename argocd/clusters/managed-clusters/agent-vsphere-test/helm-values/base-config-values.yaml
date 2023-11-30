@@ -3,6 +3,7 @@ cluster:
   baseDomain: "lab.signal9.gg"
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   gitOpsBasePath: argocd/clusters/managed-clusters
+  openshiftVersion: "4.14"
 
 monitoring:
   enabled: true
