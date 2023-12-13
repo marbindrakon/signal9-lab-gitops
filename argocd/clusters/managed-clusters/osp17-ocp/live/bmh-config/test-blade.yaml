@@ -1,0 +1,15 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: test-blade
+  namespace: openshift-machine-api
+  annotations:
+    argocd.argoproj.io/sync-options: 'ServerSideApply=True'
+spec:
+  bootMode: legacy
+  bootMACAddress: '00:17:a4:77:24:20'
+  online: true
+  bmc:
+    address: 'ilo4-virtualmedia://172.18.2.105'
+    credentialsName: "test-blade-creds"
+    disableCertificateVerification: true
