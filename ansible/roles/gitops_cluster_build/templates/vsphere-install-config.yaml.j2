@@ -35,7 +35,7 @@ networking:
   - cidr: {{ vsphere_platform_config['node_prefix'] }}
   serviceNetwork:
   - 172.30.0.0/16
-
+{% if cluster_version is version_compare('4.13', 'lt') %}
 platform:
   vsphere:
     username: "{{ lookup('env', 'VMWARE_USER') }}"
@@ -50,6 +50,36 @@ platform:
     network: {{ vsphere_platform_config['network'] }}
 {% if vsphere_platform_config.get('folder', None) %}
     folder: {{ vsphere_platform_config['folder'] | default("null") }}
+{% endif %}
+{% else %}
+platform:
+  vsphere:
+    apiVIPs:
+      - {{ internal_api_vip }}
+    ingressVIPs:
+      - {{ internal_ingress_vip }}
+    failureDomains:
+    - name: {{ vsphere_platform_config['datacenter'] }}
+      region: {{ vsphere_platform_config['datacenter'] }}
+      server: {{ vsphere_platform_config['vcenter'] }}
+      zone: {{ vsphere_platform_config['cluster'] }}
+      topology:
+        computeCluster: "/{{ vsphere_platform_config['datacenter'] }}/host/{{ vsphere_platform_config['cluster'] }}"
+        datacenter: {{ vsphere_platform_config['datacenter'] }}
+        datastore: "/{{ vsphere_platform_config['datacenter'] }}/datastore/{{ vsphere_platform_config['datastore'] }}"
+        networks:
+        - {{ vsphere_platform_config['network'] }}
+{% if vsphere_platform_config.get('folder', None) %}
+        folder: {{ vsphere_platform_config['folder'] | default("null") }}
+{% endif %}
+
+    vcenters:
+    - server: {{ vsphere_platform_config['vcenter'] }}
+      user: "{{ lookup('env', 'VMWARE_USER') }}"
+      password: "{{ lookup('env', 'VMWARE_PASSWORD') }}"
+      port: 443
+      datacenters:
+      - {{ vsphere_platform_config['datacenter'] }}
 {% endif %}
 
 additionalTrustBundle: |
