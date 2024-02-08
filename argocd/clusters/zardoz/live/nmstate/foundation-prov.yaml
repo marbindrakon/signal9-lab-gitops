@@ -16,7 +16,11 @@ spec:
         state: up
         mtu: 1500
         ipv4:
-          enabled: false
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 172.18.101.5
+              prefix-length: 24
         ipv6:
           enabled: false
         vlan:
