@@ -11,5 +11,5 @@ spec:
   disableVirtualMediaTLS: true
   provisioningInterface: bond0.101
   provisioningIP: "172.18.101.5"
-  provisioningDHCPRange: "172.18.101.50,172.18.101.124"
+  provisioningDHCPRange: "172.18.101.50,172.18.101.75"
   provisioningNetworkCIDR: "172.18.101.0/24"
