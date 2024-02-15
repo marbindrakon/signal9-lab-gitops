@@ -11,3 +11,4 @@ spec:
   kernelArguments:
       - intel_iommu=on
       - mitigations=off
+      - mce=ignore_ce

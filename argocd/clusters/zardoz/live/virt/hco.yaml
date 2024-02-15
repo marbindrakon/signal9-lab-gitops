@@ -11,6 +11,7 @@ spec:
     deployTektonTaskResources: true
     enableCommonBootImageImport: true
     nonRoot: true
-    withHostPassthroughCPU: false
+    withHostPassthroughCPU: true
   workloadUpdateStrategy:
-    workloadUpdateMethods: []
+    workloadUpdateMethods:
+      - LiveMigration

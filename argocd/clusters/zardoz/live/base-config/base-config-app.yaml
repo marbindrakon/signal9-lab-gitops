@@ -60,7 +60,7 @@ spec:
         odfStorage:
           enabled: true
           external: true
-          version: '4.13'
+          version: '4.14'
           externalSecret:
             name: rook-ceph-external-cluster-details
             vaultName: zardoz-rook-data
