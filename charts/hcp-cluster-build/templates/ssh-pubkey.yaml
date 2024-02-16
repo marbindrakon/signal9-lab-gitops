@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "{{ .Values.cluster.name }}-ssh-key"
+  namespace: {{ .Values.cluster.hcpNamespace }}
+data:
+  id_rsa.pub: {{ .Values.cluster.sshPubKey | b64enc | quote }}
+type: Opaque

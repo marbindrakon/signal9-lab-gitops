@@ -1,0 +1,16 @@
+{{- if .Values.ingress.managed -}}
+apiVersion: operator.openshift.io/v1
+kind: IngressController
+metadata:
+  name: default
+  namespace: openshift-ingress-operator
+  annotations:
+    argocd.argoproj.io/sync-options: ServerSideApply=True,Validate=False
+spec:
+  defaultCertificate:
+    name: public-ingress-cert
+{{- if eq .Values.platform "agent" }}
+  endpointPublishingStrategy:
+    type: Private
+{{ end }}
+{{ end }}

@@ -1,0 +1,14 @@
+{{- if eq .Values.cluster.type "agent" -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: capi-provider-role
+  namespace: {{ .Values.cluster.agent.agentNamespaceOverride | default (print "clusters-" .Values.cluster.name) }}
+rules:
+- apiGroups:
+  - agent-install.openshift.io
+  resources:
+  - agents
+  verbs:
+  - '*'
+{{ end }}

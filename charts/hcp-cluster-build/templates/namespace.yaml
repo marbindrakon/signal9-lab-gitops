@@ -1,0 +1,8 @@
+{{- if eq .Values.cluster.type "agent" -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: clusters-{{ .Values.cluster.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '-1'
+{{ end }}

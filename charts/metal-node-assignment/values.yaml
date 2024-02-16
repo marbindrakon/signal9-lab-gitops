@@ -1,0 +1,22 @@
+assignments: []
+  #- node: <node name from node list>
+  #  namespace: <destination namespace>
+  #  assignmentType: metal3 / agent
+  #  extraLabels: {}
+  #  extraAnnotations: {}
+  #  infraEnvName: <infraenv name, only used if type is agent>
+
+nodes: []
+  #<name>:
+  #  labels:
+  #  annotations:
+  #  bootMac:
+  #  bmc:
+  #   url:
+  #   externalSecret:
+  #     vaultName:
+  #     usernameKey:
+  #     passwordKey:
+  #  network:
+  #    nmstateConfig:
+  #    interfaceMap:

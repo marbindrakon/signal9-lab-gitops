@@ -1,0 +1,29 @@
+{{- if .Values.ingress.managed -}}
+{{- if eq .Values.platform "agent" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: router-internal-metallb
+  namespace: openshift-ingress
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: {{ .Values.agent.ingressVip }}
+    argocd.argoproj.io/sync-wave: '5'
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    ingresscontroller.operator.openshift.io/deployment-ingresscontroller: default
+  type: LoadBalancer
+{{ end }}
+{{ end }}

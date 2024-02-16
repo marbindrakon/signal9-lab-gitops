@@ -1,0 +1,28 @@
+# expected to be kubevirt or agent
+platform: kubevirt
+
+cluster:
+  name: placeholder
+  baseDomain: lab.signal9.gg
+  foundationIngressBaseDomain: apps.zardoz.lab.signal9.gg
+
+rbac:
+  globalAdminGroups:
+    - global-admins
+
+ingress:
+  managed: true
+
+agent:
+  installMetalLB: true
+  localAsn: 64720
+  peers:
+    - name: lab-rtr-1
+      address: 172.18.16.2
+      asn: 65123
+    - name: lab-rtr-2
+      address: 172.18.16.3
+      asn: 65123
+  clusterIpPool: "172.18.72.0/25"
+  anycastIpPool: "172.18.71.0/24"
+  ingressVip: 172.18.72.5

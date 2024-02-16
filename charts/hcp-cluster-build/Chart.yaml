@@ -1,0 +1,9 @@
+apiVersion: v2
+name: hcp-cluster-build
+description: Helm chart for generating cluster build manifests using hosted control planes
+
+type: application
+
+version: 0.0.1
+
+appVersion: "4.14"

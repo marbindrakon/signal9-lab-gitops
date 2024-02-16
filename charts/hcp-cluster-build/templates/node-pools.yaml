@@ -1,0 +1,47 @@
+{{- range .Values.nodePools -}}
+---
+apiVersion: hypershift.openshift.io/v1beta1
+kind: NodePool
+metadata:
+  name: {{ $.Values.cluster.name }}-{{ .name }}
+  namespace: {{ $.Values.cluster.hcpNamespace }}
+spec:
+  arch: amd64
+  clusterName: {{ $.Values.cluster.name }}
+{{ if $.Values.imageDigestMirror }}
+  config:
+    - name: {{ $.Values.cluster.name }}-idms-config
+{{ end }}
+  management:
+    {{ toYaml .management | nindent 4 }}
+  nodeDrainTimeout: {{ .nodeDrainTimeout }}
+  platform:
+{{ if eq $.Values.cluster.type "kubevirt" }}
+    kubevirt:
+      compute:
+        cores: {{ .kubevirt.resources.cpu }}
+        memory: {{ .kubevirt.resources.memory }}
+      rootVolume:
+        {{ if .kubevirt.enableRootVolumeCache }}
+        cacheStrategy:
+          type: PVC
+        {{ end }}
+        persistent:
+          size: {{ .kubevirt.resources.rootVolumeSize }}
+        type: Persistent
+    type: KubeVirt
+{{ end }}
+{{ if eq $.Values.cluster.type "agent" }}
+    type: Agent
+    {{ if .agent.agentLabels }}
+    agent:
+      agentLabelSelector:
+        {{ toYaml .agent.agentLabels | nindent 8 }}
+    {{ end }}
+{{ end }}
+  release:
+    image: {{ $.Values.cluster.releaseImage }}
+  replicas: {{ .count }}
+
+---
+{{ end }}

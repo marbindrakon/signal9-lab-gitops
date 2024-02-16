@@ -1,0 +1,19 @@
+{{- range .Values.assignments -}}
+{{- if eq .assignmentType "agent" -}}
+{{- $nodeConfig := get $.Values.nodes .node -}}
+---
+apiVersion: agent-install.openshift.io/v1beta1
+kind: NMStateConfig
+metadata:
+  namespace: {{ .namespace }}
+  name: {{ .node }}-net-config
+  labels:
+    infraenvs.agent-install.openshift.io: {{ .infraEnvName }}
+spec:
+  config:
+    {{- toYaml $nodeConfig.network.nmstateConfig | nindent 4 }}
+  interfaces:
+    {{- toYaml $nodeConfig.network.interfaceMap | nindent 4 }}
+---
+{{ end }}
+{{ end }}

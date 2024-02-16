@@ -1,0 +1,16 @@
+{{- if .Values.imageDigestMirror -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.cluster.name }}-idms-config
+  namespace: clusters
+data:
+  config: |
+    apiVersion: config.openshift.io/v1
+    kind: ImageDigestMirrorSet
+    metadata:
+      name: image-policy
+    spec:
+      imageDigestMirrors:
+        {{ toYaml .Values.imageDigestMirror | nindent 8 }}
+{{ end }}

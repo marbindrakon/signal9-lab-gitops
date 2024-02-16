@@ -1,0 +1,92 @@
+apiVersion: hypershift.openshift.io/v1beta1
+kind: HostedCluster
+metadata:
+  name: {{ .Values.cluster.name }}
+  namespace: {{ .Values.cluster.hcpNamespace }}
+{{- if .Values.cluster.controlPlaneOperatorImageOverride }}
+  annotations:
+    hypershift.openshift.io/control-plane-operator-image: {{ .Values.cluster.controlPlaneOperatorImageOverride }}
+{{ end }}
+spec:
+  autoscaling: {}
+{{- if .Values.cluster.trustBundleConfigMap }}
+  additionalTrustBundle:
+    name: {{ .Values.cluster.trustBundleConfigMap }}
+{{ end }}
+  controllerAvailabilityPolicy: HighlyAvailable
+  dns:
+{{- if and (eq .Values.cluster.type "kubevirt") (.Values.cluster.kubevirt.baseDomainPassthrough) }}
+    baseDomain: ""
+{{ else }}
+    baseDomain: {{ .Values.cluster.baseDomain }}
+{{ end }}
+  configuration:
+    {{- if .Values.certManager.manageApiCert }}
+    apiServer:
+      audit:
+        profile: Default
+      servingCerts:
+        namedCertificates:
+        - names:
+          - api.{{ .Values.cluster.name }}.{{ .Values.cluster.baseDomain }}
+          servingCertificate:
+            name: {{ .Values.cluster.name }}-api-crt
+    {{ end }}
+    oauth:
+      identityProviders:
+      {{- range .Values.auth.idps }}
+        {{ toYaml . | nindent 8 }}
+      {{ end }}
+  etcd:
+    managed:
+      storage:
+        persistentVolume:
+          size: {{ .Values.cluster.etcdSize }}
+        type: PersistentVolume
+    managementType: Managed
+  fips: false
+  networking:
+    clusterNetwork:
+    - cidr: 10.132.0.0/14
+    networkType: OVNKubernetes
+    serviceNetwork:
+    - cidr: 172.31.0.0/16
+  platform:
+{{ if eq .Values.cluster.type "agent" }}
+    agent:
+      agentNamespace: {{ .Values.cluster.agent.agentNamespaceOverride | default (print "clusters-" .Values.cluster.name) }}
+    type: Agent
+{{ end }}
+{{ if eq .Values.cluster.type "kubevirt" }}
+  platform:
+    kubevirt:
+      baseDomainPassthrough: {{ .Values.cluster.kubevirt.baseDomainPassthrough }}
+    type: KubeVirt
+{{ end }}
+  pullSecret:
+    name: {{ .Values.cluster.name }}-pull-secret
+  release:
+    image: {{ .Values.cluster.releaseImage }}
+  services:
+  - service: APIServer
+    servicePublishingStrategy:
+      loadBalancer:
+        hostname: api.{{ .Values.cluster.name }}.{{ .Values.cluster.baseDomain }}
+      type: LoadBalancer
+  - service: OAuthServer
+    servicePublishingStrategy:
+      type: Route
+  - service: OIDC
+    servicePublishingStrategy:
+      type: Route
+  - service: Konnectivity
+    servicePublishingStrategy:
+      type: Route
+  - service: Ignition
+    servicePublishingStrategy:
+      type: Route
+  - service: OVNSbDb
+    servicePublishingStrategy:
+      type: Route
+  sshKey:
+    name: {{ .Values.cluster.name }}-ssh-key

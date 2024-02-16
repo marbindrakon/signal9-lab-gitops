@@ -1,0 +1,48 @@
+{{- if .Values.cluster.importToACM -}}
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  annotations:
+    import.open-cluster-management.io/hosting-cluster-name: local-cluster
+    import.open-cluster-management.io/klusterlet-deploy-mode: Hosted
+    open-cluster-management/created-via: hypershift
+  labels:
+    cloud: auto-detect
+    cluster.open-cluster-management.io/clusterset: default
+    name: {{ .Values.cluster.name }}
+    vendor: OpenShift
+    spoke-gitops: 'true'
+    control-plane: 'hosted'
+    hcp-platform: {{ .Values.cluster.type }}
+  name: {{ .Values.cluster.name }}
+spec:
+  hubAcceptsClient: true
+  leaseDurationSeconds: 60
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: {{ .Values.cluster.name }}
+  namespace: {{ .Values.cluster.name }}
+spec:
+  clusterName: {{ .Values.cluster.name }}
+  clusterNamespace: {{ .Values.cluster.name }}
+  clusterLabels:
+    cloud: auto-detect
+    vendor: auto-detect
+    spoke-gitops: 'true'
+    control-plane: 'hosted'
+    hcp-platform: {{ .Values.cluster.type }}
+  applicationManager:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  iamPolicyController:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: false
+---
+{{ end }}

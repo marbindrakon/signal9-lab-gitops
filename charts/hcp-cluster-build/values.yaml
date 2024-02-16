@@ -1,0 +1,86 @@
+cluster:
+  name: placeholder
+  baseDomain: lab.signal9.gg
+  # Maybe kubevirt or agent
+  type: kubevirt
+  # This namespace must already exist on the cluster
+  hcpNamespace: clusters
+  # This is required for disconnected installs as of 4.14.9
+  controlPlaneOperatorImageOverride: null
+  #controlPlaneOperatorImageOverride: quay.rho.lab.signal9.gg:8443/mirror/openshift/release@sha256:cd603d06b6da4610d3c0e5c9cab466048cbdf7dae6eac3d0e062707db7be29f1
+  releaseImage: quay.io/openshift-release-dev/ocp-release:4.14.9-x86_64
+  foundationIngressBaseDomain: apps.zardoz.lab.signal9.gg
+  importToACM: true
+  etcdSize: 8Gi
+  pullSecretVault: "ocp-pull-secret"
+  trustBundleConfigMap: user-ca-bundle
+  sshPubKey: ""
+  kubevirt:
+    # If true, use a subdomain of the foundation cluster's ingress for workload ingress
+    baseDomainPassthrough: true
+  agent:
+    createInfraEnv: true
+    # Defaults to a new per-cluster namespace
+    agentNamespaceOverride: null
+
+certManager:
+  manageApiCert: true
+  # Ingress certificate will be created, but deployment requires an ACM policy or gitops
+  manageIngressCert: true
+
+nodePools:
+  - name: worker
+    count: 3
+    kubevirt:
+      resources:
+        cpu: 2
+        memory: 8Gi
+        rootVolumeSize: 120Gi
+      enableRootVolumeCache: true
+    agent:
+      agentLabels: {}
+    nodeDrainTimeout: 600s  
+    management:
+      autoRepair: false
+      upgradeType: Replace
+
+agent:
+  infraEnv:
+    networkType: static
+    ntpServers:
+      - 172.18.0.79
+      - 172.18.42.10
+      - 172.18.42.11
+
+imageDigestMirror: []
+
+auth:
+  idps:
+    - name: local-admin 
+      mappingMethod: claim
+      type: HTPasswd
+      htpasswd:
+        fileData:
+          name: local-admin-htpass
+   #- mappingMethod: claim
+   #  name: Signal9-RHT
+   #  openID:
+   #    ca:
+   #      name: openid-ca-bundle
+   #    claims:
+   #      email:
+   #      - email
+   #      groups:
+   #      - groups
+   #      name:
+   #      - name
+   #      preferredUsername:
+   #      - preferred_username
+   #      - email
+   #    clientID: placeholder-openshift
+   #    clientSecret:
+   #      name: placeholder-oauth-client-secret
+   #    extraScopes:
+   #    - profile
+   #    issuer: https://login.home.signal9.gg/auth/realms/Signal9-RHT
+   #  type: OpenID

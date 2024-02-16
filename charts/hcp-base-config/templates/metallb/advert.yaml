@@ -1,0 +1,18 @@
+{{- if and .Values.agent.installMetalLB (eq .Values.platform "agent") -}}
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: external
+  namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peers:
+{{- range .Values.agent.peers }}
+  - peer-{{ .name }}
+{{ end }}
+  ipAddressPools:
+  - cluster-bgp-pool
+  - anycast-bgp-pool
+{{ end }}

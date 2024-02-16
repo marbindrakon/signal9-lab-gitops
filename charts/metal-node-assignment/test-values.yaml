@@ -1,0 +1,774 @@
+assignments:
+  - node: z-50.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-51.lab.signal9.gg
+    namespace: foo-env
+    assignmentType: agent
+    infraEnvName: foo-env
+    extraLabels:
+      foo: bar
+    extraAnnotations:
+      foo: bar
+nodes:
+  z-50.lab.signal9.gg:
+    labels:
+      compute-model: sl230
+    bootMac: 2c:41:38:eb:da:18
+    bmc:
+      url: ipmi://ilo-hp-blade-4.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno3d1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.10
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.10
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+
+      interfaceMap:
+        - name: eno1
+          macAddress: 2c:41:38:eb:da:18
+        - name: eno2
+          macAddress: 2c:41:38:eb:da:19
+        - name: eno3
+          macAddress: 00:02:c9:2f:c0:a8
+        - name: eno3d1
+          macAddress: 00:02:c9:2f:c0:a9
+
+  z-51.lab.signal9.gg:
+    labels:
+      compute-model: sl230
+    bootMac: 2c:41:38:eb:d2:64
+    bmc:
+      url: ipmi://ilo-hp-blade-5.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno3d1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.11
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.11
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+
+      interfaceMap:
+        - name: eno1
+          macAddress: 2c:41:38:eb:d2:64
+        - name: eno2
+          macAddress: 2c:41:38:eb:d2:65
+        - name: eno3
+          macAddress: 00:02:c9:2f:3a:c8
+        - name: eno3d1
+          macAddress: 00:02:c9:2f:3a:c9
+
+  z-52.lab.signal9.gg:
+    labels:
+      compute-model: sl230
+    bootMac: 2c:41:38:eb:d3:90
+    bmc:
+      url: ipmi://ilo-hp-blade-6.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno3d1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.12
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.12
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+
+      interfaceMap:
+        - name: eno1
+          macAddress: 2c:41:38:eb:d3:90
+        - name: eno2
+          macAddress: 2c:41:38:eb:d3:91
+        - name: eno3
+          macAddress: 00:02:c9:2f:3b:68
+        - name: eno3d1
+          macAddress: 00:02:c9:2f:3b:69
+
+  z-53.lab.signal9.gg:
+    labels:
+      compute-model: sl230
+    bootMac: e8:39:35:f0:32:2c
+    bmc:
+      url: ipmi://ilo-hp-blade-7.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno3d1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.13
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.13
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+
+      interfaceMap:
+        - name: eno1
+          macAddress: e8:39:35:f0:32:2c
+        - name: eno2
+          macAddress: e8:39:35:f0:32:2d
+        - name: eno3
+          macAddress: 00:02:c9:2f:25:d8
+        - name: eno3d1
+          macAddress: 00:02:c9:2f:25:d9
+
+  z-54.lab.signal9.gg:
+    labels:
+      compute-model: sl230
+    bootMac: 2c:41:38:eb:d3:2c
+    bmc:
+      url: ipmi://ilo-hp-blade-8.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno3d1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.14
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.14
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+
+      interfaceMap:
+        - name: eno1
+          macAddress: 2c:41:38:eb:d3:2c
+        - name: eno2
+          macAddress: 2c:41:38:eb:d3:2d
+        - name: eno3
+          macAddress: 24:be:05:a0:af:32
+        - name: eno3d1
+          macAddress: 24:be:05:a0:af:33
+
+  z-55.lab.signal9.gg:
+    labels:
+      compute-model: smc
+    bootMac: 00:25:90:85:1f:02
+    bmc:
+      url: ipmi://bmc-smc-node1.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: smc_username
+        passwordKey: smc_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp131s0f0
+                - enp131s0f1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.15
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.15
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+      interfaceMap:
+        - name: eno1
+          macAddress: 00:25:90:85:1f:02
+        - name: eno2
+          macAddress: 00:25:90:85:1f:03
+        - name: enp131s0f0
+          macAddress: 90:e2:ba:91:1c:20
+        - name: enp131s0f1
+          macAddress: 90:e2:ba:91:1c:21
+
+  z-56.lab.signal9.gg:
+    namespace: openshift-machine-api
+    labels:
+      compute-model: smc
+    bootMac: 00:25:90:85:20:36
+    bmc:
+      url: ipmi://bmc-smc-node-2.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: smc_username
+        passwordKey: smc_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp131s0f0
+                - enp131s0f1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.16
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.16
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+      interfaceMap:
+        - name: eno1
+          macAddress: 00:25:90:85:20:36
+        - name: eno2
+          macAddress: 00:25:90:85:20:37
+        - name: enp131s0f0
+          macAddress: 00:1b:21:af:64:08
+        - name: enp131s0f1
+          macAddress: 00:1b:21:af:64:09
+
+  z-57.lab.signal9.gg:
+    namespace: openshift-machine-api
+    labels:
+      compute-model: smc
+    bootMac: 00:25:90:85:75:7c
+    bmc:
+      url: ipmi://bmc-smc-node-3.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-signal9-ldap
+        usernameKey: smc_username
+        passwordKey: smc_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp131s0f0
+                - enp131s0f1
+          - name: bond1.603
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 603
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.63.17
+                  prefix-length: 24
+          - name: bond1.606
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 606
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.66.17
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.60.10
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.63.1
+              next-hop-interface: bond1.603
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.66.1
+              next-hop-interface: bond1.606
+              table-id: 254
+      interfaceMap:
+        - name: eno1
+          macAddress: 00:25:90:85:75:7c
+        - name: eno2
+          macAddress: 00:25:90:85:75:7d
+        - name: enp131s0f0
+          macAddress: 90:e2:ba:91:1c:30
+        - name: enp131s0f1
+          macAddress: 90:e2:ba:91:1c:31
+
