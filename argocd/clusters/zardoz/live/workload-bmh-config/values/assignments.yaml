@@ -1,0 +1,59 @@
+assignments:
+  - node: z-50.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-51.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-52.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-53.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-54.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-55.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-56.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-57.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-58.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels:
+      app: openstack
+    extraAnnotations: {}
+  - node: z-59.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels:
+      app: openstack
+    extraAnnotations: {}
+  - node: z-60.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels:
+      app: openstack
+    extraAnnotations: {}
