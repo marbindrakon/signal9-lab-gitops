@@ -17,10 +17,10 @@ spec:
   image_pull_policy: IfNotPresent
   projects_storage_size: 12Gi
   task_privileged: false
-  projects_storage_access_mode: ReadWriteMany
+  projects_storage_access_mode: ReadWriteOnce
   projects_persistence: false
   projects_use_existing_claim: _No_
-  projects_storage_class: ocs-external-storagecluster-cephfs
+  projects_storage_class: ocs-external-storagecluster-ceph-rbd
   replicas: 1
   admin_user: admin
   admin_email: admin@signal9.gg
