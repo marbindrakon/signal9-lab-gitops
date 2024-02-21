@@ -7,7 +7,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
 spec:
   encryption:
-    type: aescbc
+    type: identity
   servingCerts:
     namedCertificates:
     - names:
