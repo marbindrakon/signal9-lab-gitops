@@ -57,3 +57,23 @@ assignments:
     extraLabels:
       app: openstack
     extraAnnotations: {}
+  - node: z-61.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-62.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-63.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-64.rho.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}

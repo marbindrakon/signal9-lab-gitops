@@ -1054,4 +1054,388 @@ nodes:
           macAddress: 24:8a:07:f6:f4:30
         - name: enp65s0d1
           macAddress:	24:8a:07:f6:f4:31
+  z-61.rho.lab.signal9.gg:
+    deployed: true
+    namespace: openshift-machine-api
+    labels:
+      compute-model: c6220
+    bootMac: f0:4d:a2:72:fb:29
+    bmc:
+      url: ipmi://dell-node1-bmc.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp130s0f0
+                - enp130s0f1
+          - name: bond1.16
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 16
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.61
+                  prefix-length: 24
+          - name: bond1.19
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 19
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.61
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: bond1.16
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: bond1.19
+              table-id: 254
+      interfaceMap:
+        - name: eno1
+          macAddress: f0:4d:a2:72:fb:29
+        - name: eno2
+          macAddress: f0:4d:a2:72:fb:2a
+        - name: enp130s0f0
+          macAddress: 00:8c:fa:53:d7:ae
+        - name: enp130s0f1
+          macAddress:	00:8c:fa:53:d7:af
+  z-62.rho.lab.signal9.gg:
+    deployed: true
+    namespace: openshift-machine-api
+    labels:
+      compute-model: c6220
+    bootMac: f0:4d:a2:72:fa:e4
+    bmc:
+      url: ipmi://dell-node2-bmc.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp130s0f0
+                - enp130s0f1
+          - name: bond1.16
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 16
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.62
+                  prefix-length: 24
+          - name: bond1.19
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 19
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.62
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: bond1.16
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: bond1.19
+              table-id: 254
+      interfaceMap:
+        - name: eno1
+          macAddress: f0:4d:a2:72:fa:e4
+        - name: eno2
+          macAddress: f0:4d:a2:72:fa:e4
+        - name: enp130s0f0
+          macAddress: 00:8c:fa:53:cf:c8
+        - name: enp130s0f1
+          macAddress:	00:8c:fa:53:cf:c9
+  z-63.rho.lab.signal9.gg:
+    deployed: true
+    namespace: openshift-machine-api
+    labels:
+      compute-model: c6220
+    bootMac: f0:4d:a2:72:fa:1b
+    bmc:
+      url: ipmi://dell-node3-bmc.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp130s0f0
+                - enp130s0f1
+          - name: bond1.16
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 16
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.63
+                  prefix-length: 24
+          - name: bond1.19
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 19
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.63
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: bond1.16
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: bond1.19
+              table-id: 254
+      interfaceMap:
+        - name: eno1
+          macAddress: f0:4d:a2:72:fa:1b
+        - name: eno2
+          macAddress: f0:4d:a2:72:fa:1c
+        - name: enp130s0f0
+          macAddress: 00:8c:fa:53:c6:60
+        - name: enp130s0f1
+          macAddress:	00:8c:fa:53:c6:61
+  z-64.rho.lab.signal9.gg:
+    deployed: true
+    namespace: openshift-machine-api
+    labels:
+      compute-model: c6220
+    bootMac: f0:4d:a2:72:fb:02
+    bmc:
+      url: ipmi://dell-node3-bmc.oob.signal9.gg
+      externalSecret:
+        vaultName: openshift-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno1
+                - eno2
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp130s0f0
+                - enp130s0f1
+          - name: bond1.16
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 16
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.64
+                  prefix-length: 24
+          - name: bond1.19
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 19
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.64
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: bond1.16
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: bond1.19
+              table-id: 254
+      interfaceMap:
+        - name: eno1
+          macAddress: f0:4d:a2:72:fb:02
+        - name: eno2
+          macAddress: f0:4d:a2:72:fb:03
+        - name: enp130s0f0
+          macAddress: 00:8c:fa:53:c8:b4
+        - name: enp130s0f1
+          macAddress:	00:8c:fa:53:c8:b5
 
