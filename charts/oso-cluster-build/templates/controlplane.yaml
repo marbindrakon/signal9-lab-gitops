@@ -1,0 +1,527 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: {{ .Values.cloudName }}
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  secret: {{ .Values.cloudName }}-password-secret
+  tls:
+    caBundleSecretName: {{ .Values.cloudName }}-ca-secret
+  storageClass: ocs-external-storagecluster-ceph-rbd
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+          - CinderVolume
+          - CinderBackup
+          - GlanceAPI
+          - ManilaShare
+          extraVolType: Ceph
+          volumes:
+          - name: ceph
+            projected:
+              sources:
+              - secret:
+                  name: ceph-conf-files
+          mounts:
+          - name: ceph
+            mountPath: "/etc/ceph"
+            readOnly: true
+  dns:
+    template:
+      override:
+        service:
+          metadata:
+            annotations:
+              metallb.universe.tf/address-pool: {{ .Values.cloudName }}-ctlplane
+              metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+              metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.ctlplane.loadbalancerIPs 0 }}
+          spec:
+            type: LoadBalancer
+      options:
+      - key: server
+        values:
+        - 172.18.42.10
+        - 172.18.42.11
+      replicas: 2
+  cinder:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-cinder.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      cinderAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-cinder.{{ .Values.foundationIngressBase }}"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+              spec:
+                type: LoadBalancer
+      cinderScheduler:
+        replicas: 2
+      cinderBackup:
+        customServiceConfig: |
+          [DEFAULT]
+          backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+          backup_ceph_pool = {{ .Values.ceph.pools.cinderBackup }}
+          backup_ceph_user = {{ .Values.ceph.client }}
+        networkAttachments:
+        - storage
+        replicas: 1 # backend needs to be configured
+      cinderVolumes:
+        ceph:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph
+            [ceph]
+            volume_backend_name=ceph
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user={{ .Values.ceph.client }}
+            rbd_pool={{ .Values.ceph.pools.cinder }}
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid={{ .Values.ceph.fsid }}
+          networkAttachments:
+          - storage
+          replicas: 1 # backend needs to be configured
+  glance:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-glance.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      databaseInstance: openstack
+      storageClass: "ocs-external-storagecluster-ceph-rbd"
+      storageRequest: 150G
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = default_backend:rbd
+        [glance_store]
+        default_backend = default_backend
+        [default_backend]
+        rbd_store_ceph_conf = /etc/ceph/ceph.conf
+        store_description = "RBD backend"
+        rbd_store_pool = {{ .Values.ceph.pools.glance }}
+        rbd_store_user = {{ .Values.ceph.client }}
+      glanceAPIInternal:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+            spec:
+              type: LoadBalancer
+        networkAttachments:
+        - storage
+      glanceAPIExternal:
+        override:
+          service:
+            endpointURL: "https://{{ .Values.cloudName }}-glance.{{ .Values.foundationIngressBase }}"
+        networkAttachments:
+        - storage
+  keystone:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-keystone.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      replicas: 2
+      override:
+        service:
+          public:
+            endpointURL: "https://{{ .Values.cloudName }}-keystone.{{ .Values.foundationIngressBase }}"
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+  mariadb:
+    enabled: false
+    templates:
+      openstack:
+        storageRequest: 500M
+      openstack-cell1:
+        storageRequest: 500M
+  galera:
+    enabled: true
+    templates:
+      openstack:
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+      openstack-cell1:
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+  memcached:
+    templates:
+      memcached:
+        replicas: 3
+  neutron:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-neutron.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    template:
+      override:
+        service:
+          public:
+            endpointURL: "https://{{ .Values.cloudName }}-neutron.{{ .Values.foundationIngressBase }}"
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      networkAttachments:
+      - internalapi
+  horizon:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}.{{ .Values.baseDomain }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      replicas: 2
+      secret: {{ .Values.cloudName }}-password-secret
+  nova:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-nova.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      apiServiceTemplate:
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-nova.{{ .Values.foundationIngressBase }}"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+              spec:
+                type: LoadBalancer
+      metadataServiceTemplate:
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+            spec:
+              type: LoadBalancer
+      secret: {{ .Values.cloudName }}-password-secret
+  manila:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-manila.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      manilaAPI:
+        replicas: 2
+        networkAttachments:
+        - internalapi
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-manila.{{ .Values.foundationIngressBase }}"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+              spec:
+                type: LoadBalancer
+      manilaScheduler:
+        replicas: 2
+      manilaShares:
+        share1:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends=cephfs
+            enabled_share_protocols=cephfs
+            [cephfs]
+            driver_handles_share_servers=False
+            share_backend_name=cephfs
+            share_driver=manila.share.drivers.cephfs.driver.CephFSDriver
+            cephfs_conf_path=/etc/ceph/ceph.conf
+            cephfs_auth_id=manila
+            cephfs_cluster_name=ceph
+            cephfs_volume_mode=0755
+            cephfs_protocol_helper_type=CEPHFS
+          replicas: 1
+          networkAttachments:
+          - storage
+  ovn:
+    template:
+      ovnDBCluster:
+        ovndbcluster-nb:
+          replicas: 3
+          dbType: NB
+          storageRequest: 10G
+          networkAttachment: internalapi
+        ovndbcluster-sb:
+          replicas: 3
+          dbType: SB
+          storageRequest: 10G
+          networkAttachment: internalapi
+      ovnNorthd:
+        replicas: 3
+        networkAttachment: internalapi
+      ovnController:
+        external-ids:
+          system-id: "random"
+          ovn-bridge: "br-int"
+          ovn-encap-type: "geneve"
+        networkAttachment: tunnel
+  placement:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-nova-placement.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    template:
+      replicas: 2
+      override:
+        service:
+          public:
+            endpointURL: "https://{{ .Values.cloudName }}-nova-placement.{{ .Values.foundationIngressBase }}"
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+  rabbitmq:
+    templates:
+      rabbitmq:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 1 }}
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell1:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 2 }}
+            spec:
+              type: LoadBalancer
+  heat:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-heat.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    cnfAPIOverride:
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-heat-cfn.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+
+    enabled: true
+    template:
+      databaseInstance: openstack
+      heatAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-heat.{{ .Values.foundationIngressBase }}"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+              spec:
+                type: LoadBalancer
+        replicas: 2
+      heatCfnAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-heat-cfn.{{ .Values.foundationIngressBase }}"
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+              spec:
+                type: LoadBalancer
+        replicas: 2
+
+      heatEngine:
+        replicas: 2
+      secret: {{ .Values.cloudName }}-password-secret
+  ironic:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-ironic-api.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    inspectorOverride:
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-inspector.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    template:
+      databaseInstance: openstack
+      ironicAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-ironic-api.{{ .Values.foundationIngressBase }}"
+        replicas: 2
+      ironicConductors:
+      - replicas: 1
+        storageClass: "ocs-external-storagecluster-ceph-rbd"
+        storageRequest: 150G
+      ironicInspector:
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-inspector.{{ .Values.foundationIngressBase }}"
+        replicas: 1
+      ironicNeutronAgent:
+        replicas: 1
+      secret: {{ .Values.cloudName }}-password-secret
+  ceilometer:
+    enabled: false
+    template:
+      passwordSelector:
+        service: CeilometerPassword
+      secret: {{ .Values.cloudName }}-password-secret
+      serviceUser: ceilometer
+  swift:
+    enabled: false
+  octavia:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-public-cert
+
+      route:
+        spec:
+          host: {{ .Values.cloudName }}-octavia.{{ .Values.foundationIngressBase }}
+          tls:
+            insecureEdgeTerminationPolicy: Redirect
+            termination: edge
+    template:
+      databaseInstance: openstack
+      octaviaAPI:
+        override:
+          service:
+            public:
+              endpointURL: "https://{{ .Values.cloudName }}-octavia.{{ .Values.foundationIngressBase }}"
+        replicas: 2
+      secret: {{ .Values.cloudName }}-password-secret
+  redis:
+    enabled: true

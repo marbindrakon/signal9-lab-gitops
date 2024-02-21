@@ -1,0 +1,15 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ceph
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  label: dataplane-deployment-nova-custom-ceph
+  configMaps:
+    - ceph-nova
+  secrets:
+    - nova-cell1-compute-config
+  playbook: osp.edpm.nova

@@ -1,0 +1,29 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: {{ .Values.cloudName }}-internalapi
+  namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  addresses:
+  {{ toYaml .Values.metallbRanges.internalapi | nindent 4 }}
+  autoAssign: false
+  avoidBuggyIPs: false
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: {{ .Values.cloudName }}-ctlplane
+  namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  addresses:
+  {{ toYaml .Values.metallbRanges.ctlplane | nindent 4 }}
+  autoAssign: false
+  avoidBuggyIPs: false
+---

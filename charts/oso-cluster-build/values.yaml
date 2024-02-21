@@ -1,0 +1,119 @@
+cloudName: opensnack
+baseDomain: lab.signal9.gg
+foundationIngressBase: apps.zardoz.lab.signal9.gg
+
+externalPasswordsSecret: "oso-passwords"
+
+ceph:
+  fsid: 14e37f3d-9026-46c3-a503-82fa0acbac3f
+  externalConfigSecret: "oso-ceph-config"
+  client: openstack
+  pools:
+    glance: images
+    nova: vms
+    cinder: volumes
+    cinderBackup: backups
+    metrics: metrics
+
+networks:
+  ctlplane:
+    nodeInterface: bond0.101
+    subnet: 172.18.101.0/24
+    containerRange:
+      start: 172.18.101.201
+      end: 172.18.101.230
+    loadbalancerIPs:
+      - 172.18.101.251
+    nodeRange:
+      start: 172.18.101.175
+      end: 172.18.101.200
+    routes: []
+    vlan: 101
+    mtu: 1500
+  storage:
+    nodeInterface: bond1.19
+    subnet: 172.18.19.0/24
+    containerRange:
+      start: 172.18.19.201
+      end: 172.18.19.230
+    loadbalancerIPs: []
+    nodeRange:
+      start: 172.18.19.175
+      end: 172.18.19.200
+    routes:
+      - prefix: 172.18.14.0/24
+        gw: 172.18.19.1
+    vlan: 19
+    mtu: 9000
+  internalapi:
+    nodeInterface: bond1.102
+    subnet: 172.18.102.0/24
+    containerRange:
+      start: 172.18.102.201
+      end: 172.18.102.230
+    loadbalancerIPs:
+      - 172.18.102.82
+      - 172.18.102.85
+      - 172.18.102.86
+    nodeRange:
+      start: 172.18.102.175
+      end: 172.18.102.200
+    routes: []
+    vlan: 102
+    mtu: 9000
+  tunnel:
+    nodeInterface: bond1.103
+    subnet: 172.18.103.0/24
+    containerRange:
+      start: 172.18.103.201
+      end: 172.18.103.230
+    loadbalancerIPs: []
+    nodeRange:
+      start: 172.18.103.175
+      end: 172.18.103.200
+    routes: []
+    vlan: 103
+    mtu: 9000
+  public:
+    nodeInterface: bond0.104
+    subnet: 172.18.104.0/24
+    containerRange:
+      start: 172.18.104.201
+      end: 172.18.104.230
+    loadbalancerIPs: []
+    nodeRange:
+      start: 172.18.104.175
+      end: 172.18.104.200
+    routes: []
+    vlan: 104
+    mtu: 1500
+
+metallbInterfaces:
+  internalapi:
+    - bond1.102
+  ctlplane:
+    - bond0.101
+
+metallbRanges:
+  internalapi: 
+    - 172.18.64.80-172.18.64.90
+  ctlplane:
+    - 172.18.62.250-172.18.62.254
+
+customCaBundle: |
+  -----BEGIN CERTIFICATE-----
+  MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
+  dzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYDVQQHDAZSb2dl
+  cnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5BMR8wHQYDVQQD
+  DBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MB4XDTIxMDMwMTA0MDMwNFoXDTQxMDIy
+  NDA0MDMwNFowdzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYD
+  VQQHDAZSb2dlcnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5B
+  MR8wHQYDVQQDDBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MHYwEAYHKoZIzj0CAQYF
+  K4EEACIDYgAE5w5BHLiaagf5eSNkQYuDIdyWe7ULLY2z2qAP1fKXM+RrSHQQb5x1
+  Q9+IhQRhf7exw/pJS5Vs1R8IyQ3B8r6xz885w6+Fk6iyMAlFn979RU6V5lbxMRGG
+  Vxq/CEL/iorVo2MwYTAdBgNVHQ4EFgQUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwHwYD
+  VR0jBBgwFoAUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwDwYDVR0TAQH/BAUwAwEB/zAO
+  BgNVHQ8BAf8EBAMCAYYwCgYIKoZIzj0EAwIDaQAwZgIxAJLOIPP9J1/mttvGdQtM
+  Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
+  vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
+  -----END CERTIFICATE-----

@@ -1,0 +1,62 @@
+apiVersion: network.openstack.org/v1beta1
+kind: NetConfig
+metadata:
+  name: {{ .Values.cloudName }}-netconfig
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  networks:
+  - name: CtlPlane
+    dnsDomain: ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    subnets:
+    - name: subnet1
+      allocationRanges:
+      - end: 172.18.62.200
+        start: 172.18.62.125
+      cidr: 172.18.62.0/24
+      gateway: 172.18.62.1
+  - name: InternalApi
+    dnsDomain: internalapi.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: 9000
+    subnets:
+    - name: subnet1
+      allocationRanges:
+      - end: 172.18.64.200
+        start: 172.18.64.100
+      cidr: 172.18.64.0/24
+      vlan: 604
+  - name: External
+    dnsDomain: external.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    subnets:
+    - name: subnet1
+      allocationRanges:
+      - end: 172.18.67.125
+        start: 172.18.67.100
+      cidr: 172.18.67.0/24
+      gateway: 172.18.67.1
+      vlan: 607
+  - name: Storage
+    dnsDomain: storage.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: 9000
+    subnets:
+    - name: subnet1
+      allocationRanges:
+      - end: 172.18.66.199
+        start: 172.18.66.150
+      cidr: 172.18.66.0/24
+      vlan: 606
+      routes:
+        - destination: 172.18.14.0/24
+          nexthop: 172.18.66.1
+  - name: Tenant
+    dnsDomain: tenant.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: 9000
+    subnets:
+    - name: subnet1
+      allocationRanges:
+      - end: 172.18.65.200
+        start: 172.18.65.100
+      cidr: 172.18.65.0/24
+      vlan: 605

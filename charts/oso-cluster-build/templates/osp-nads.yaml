@@ -1,0 +1,106 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: internalapi
+  namespace: openstack
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "name": "internalapi",
+      "type": "macvlan",
+      "master": "{{ .Values.networks.internalapi.nodeInterface }}",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "{{ .Values.networks.internalapi.subnet }}",
+        "range_start": "{{ .Values.networks.internalapi.containerRange.start }}",
+        "range_end": "{{ .Values.networks.internalapi.containerRange.end }}"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: public
+  namespace: openstack
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "name": "public",
+      "type": "macvlan",
+      "master": "{{ .Values.networks.public.nodeInterface }}",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "{{ .Values.networks.public.subnet }}",
+        "range_start": "{{ .Values.networks.public.containerRange.start }}",
+        "range_end": "{{ .Values.networks.public.containerRange.end }}"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: tunnel
+  namespace: openstack
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "name": "tunnel",
+      "type": "macvlan",
+      "master": "{{ .Values.networks.tunnel.nodeInterface }}",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "{{ .Values.networks.tunnel.subnet }}",
+        "range_start": "{{ .Values.networks.tunnel.containerRange.start }}",
+        "range_end": "{{ .Values.networks.tunnel.containerRange.end }}"
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: storage
+  namespace: openstack
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "name": "storage",
+      "type": "macvlan",
+      "master": "{{ .Values.networks.storage.nodeInterface }}",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "{{ .Values.networks.storage.subnet }}",
+        "range_start": "{{ .Values.networks.storage.containerRange.start }}",
+        "range_end": "{{ .Values.networks.storage.containerRange.end }}"
+        {{ if .Values.networks.storage.routes }}
+        "routes": [
+          {{ toPrettyJson .Values.networks.storage.routes | nindent 10}}
+        ]
+        {{ end }}
+      }
+    }
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: ctlplane
+  namespace: openstack
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "name": "internalapi",
+      "type": "macvlan",
+      "master": "{{ .Values.networks.ctlplane.nodeInterface }}",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "{{ .Values.networks.ctlplane.subnet }}",
+        "range_start": "{{ .Values.networks.ctlplane.containerRange.start }}",
+        "range_end": "{{ .Values.networks.ctlplane.containerRange.end }}"
+      }
+    }
+

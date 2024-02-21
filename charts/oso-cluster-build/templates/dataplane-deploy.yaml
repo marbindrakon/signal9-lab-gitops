@@ -1,0 +1,10 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneDeployment
+metadata:
+  name: {{ .Values.cloudName }}-dataplane-0210202301
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-wave: '5'
+spec:
+  nodeSets:
+    - {{ .Values.cloudName }}-nodeset
