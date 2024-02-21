@@ -8,7 +8,7 @@ metadata:
   name: sl230-worker
   namespace: openshift-machine-api
 spec:
-  replicas: 0
+  replicas: 2
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: zardoz-kggrg
