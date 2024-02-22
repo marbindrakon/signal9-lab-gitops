@@ -1349,7 +1349,7 @@ nodes:
       compute-model: c6220
     bootMac: f0:4d:a2:72:fb:02
     bmc:
-      url: ipmi://dell-node3-bmc.oob.signal9.gg
+      url: ipmi://dell-node4-bmc.oob.signal9.gg
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: username
