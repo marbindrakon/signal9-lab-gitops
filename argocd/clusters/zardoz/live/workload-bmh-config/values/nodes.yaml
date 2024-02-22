@@ -1,5 +1,5 @@
 nodes:
-  z-50.rho.lab.signal9.gg:
+  z-50.lab.signal9.gg:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:da:18
@@ -95,7 +95,7 @@ nodes:
         - name: eno3d1
           macAddress: 00:02:c9:2f:c0:a9
 
-  z-51.rho.lab.signal9.gg:
+  z-51.lab.signal9.gg:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:d2:64
@@ -191,7 +191,7 @@ nodes:
         - name: eno3d1
           macAddress: 00:02:c9:2f:3a:c9
 
-  z-52.rho.lab.signal9.gg:
+  z-52.lab.signal9.gg:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:d3:90
@@ -287,7 +287,7 @@ nodes:
         - name: eno3d1
           macAddress: 00:02:c9:2f:3b:69
 
-  z-53.rho.lab.signal9.gg:
+  z-53.lab.signal9.gg:
     labels:
       compute-model: sl230
     bootMac: e8:39:35:f0:32:2c
@@ -383,7 +383,7 @@ nodes:
         - name: eno3d1
           macAddress: 00:02:c9:2f:25:d9
 
-  z-54.rho.lab.signal9.gg:
+  z-54.lab.signal9.gg:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:d3:2c
@@ -479,7 +479,7 @@ nodes:
         - name: eno3d1
           macAddress: 24:be:05:a0:af:33
 
-  z-55.rho.lab.signal9.gg:
+  z-55.lab.signal9.gg:
     labels:
       compute-model: smc
     bootMac: 00:25:90:85:1f:02
@@ -574,7 +574,7 @@ nodes:
         - name: enp131s0f1
           macAddress: 90:e2:ba:91:1c:21
 
-  z-56.rho.lab.signal9.gg:
+  z-56.lab.signal9.gg:
     namespace: openshift-machine-api
     labels:
       compute-model: smc
@@ -670,7 +670,7 @@ nodes:
         - name: enp131s0f1
           macAddress: 00:1b:21:af:64:09
 
-  z-57.rho.lab.signal9.gg:
+  z-57.lab.signal9.gg:
     namespace: openshift-machine-api
     labels:
       compute-model: smc
@@ -765,7 +765,7 @@ nodes:
           macAddress: 90:e2:ba:91:4d:cc
         - name: enp131s0f1
           macAddress: 90:e2:ba:91:4d:cd
-  z-58.rho.lab.signal9.gg:
+  z-58.lab.signal9.gg:
     labels:
       compute-model: r720
     bootMac: b8:ca:3a:62:95:a4
@@ -861,7 +861,7 @@ nodes:
         - name: enp65s0d1
           macAddress:	24:8a:07:61:1e:81
 
-  z-59.rho.lab.signal9.gg:
+  z-59.lab.signal9.gg:
     labels:
       compute-model: r720
     bootMac: bc:30:5b:f1:d7:14
@@ -957,7 +957,7 @@ nodes:
         - name: enp65s0d1
           macAddress: e4:1d:2d:2d:bc:52
 
-  z-60.rho.lab.signal9.gg:
+  z-60.lab.signal9.gg:
     deployed: true
     namespace: openshift-machine-api
     labels:
@@ -1054,7 +1054,7 @@ nodes:
           macAddress: 24:8a:07:f6:f4:30
         - name: enp65s0d1
           macAddress:	24:8a:07:f6:f4:31
-  z-61.rho.lab.signal9.gg:
+  z-61.lab.signal9.gg:
     deployed: true
     namespace: openshift-machine-api
     labels:
@@ -1150,7 +1150,7 @@ nodes:
           macAddress: 00:8c:fa:53:d7:ae
         - name: enp130s0f1
           macAddress:	00:8c:fa:53:d7:af
-  z-62.rho.lab.signal9.gg:
+  z-62.lab.signal9.gg:
     deployed: true
     namespace: openshift-machine-api
     labels:
@@ -1246,7 +1246,7 @@ nodes:
           macAddress: 00:8c:fa:53:cf:c8
         - name: enp130s0f1
           macAddress:	00:8c:fa:53:cf:c9
-  z-63.rho.lab.signal9.gg:
+  z-63.lab.signal9.gg:
     deployed: true
     namespace: openshift-machine-api
     labels:
@@ -1342,7 +1342,7 @@ nodes:
           macAddress: 00:8c:fa:53:c6:60
         - name: enp130s0f1
           macAddress:	00:8c:fa:53:c6:61
-  z-64.rho.lab.signal9.gg:
+  z-64.lab.signal9.gg:
     deployed: true
     namespace: openshift-machine-api
     labels:
