@@ -67,11 +67,11 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
-  - node: z-63.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
+# - node: z-63.lab.signal9.gg
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
 # - node: z-64.lab.signal9.gg
 #   namespace: openshift-machine-api
 #   assignmentType: metal3
