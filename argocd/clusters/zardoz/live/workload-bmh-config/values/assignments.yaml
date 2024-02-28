@@ -1,52 +1,52 @@
 assignments:
-  - node: z-50.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-51.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-52.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-53.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-54.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-55.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-56.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-57.lab.signal9.gg
-    namespace: four-node-ctlplane
-    assignmentType: agent
-    infraEnvName: four-node-ctlplane
-    extraLabels: {}
-    extraAnnotations: {}
+# - node: z-50.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-51.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-52.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-53.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-54.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-55.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-56.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-57.lab.signal9.gg
+#   namespace: four-node-ctlplane
+#   assignmentType: agent
+#   infraEnvName: four-node-ctlplane
+#   extraLabels: {}
+#   extraAnnotations: {}
   - node: z-58.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
