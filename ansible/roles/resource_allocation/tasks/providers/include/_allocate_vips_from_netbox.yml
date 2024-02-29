@@ -27,7 +27,7 @@
     netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
     state: new
     data:
-      prefix: "{{ vsphere_platform_config['node_prefix'] }}"
+      prefix: "{{ internal_vip_prefix }}"
       role: VIP
       dns_name: "api.{{ cluster_name }}.{{ base_domain }}"
       description: "{{ cluster_name }}-Internal-API"
@@ -52,7 +52,7 @@
     netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
     state: new
     data:
-      prefix: "{{ vsphere_platform_config['node_prefix'] }}"
+      prefix: "{{ internal_vip_prefix }}"
       role: VIP
       dns_name: "apps.{{ cluster_name }}.{{ base_domain }}"
       description: "{{ cluster_name }}-Internal-Ingress"
