@@ -6,3 +6,4 @@ openstackclient==4.0.0
 pyOpenSSL==21.0.0
 cryptography==37.0.2
 pysnow==0.7.17
+infoblox-client==0.6.0

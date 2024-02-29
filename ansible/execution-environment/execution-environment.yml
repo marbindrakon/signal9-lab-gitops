@@ -2,7 +2,7 @@
 version: 1
 
 build_arg_defaults:
-  EE_BASE_IMAGE: 'quay.io/ansible/ansible-runner:stable-2.12-devel'
+  EE_BASE_IMAGE: 'quay.io/ansible/awx-ee:23.9.0'
 
 dependencies:
   galaxy: collections/requirements.yml

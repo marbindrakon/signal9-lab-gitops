@@ -12,3 +12,4 @@ collections:
   - name: openstack.cloud
   - name: servicenow.itsm
   - name: ansible.netcommon
+  - name: infoblox.nios_modules
