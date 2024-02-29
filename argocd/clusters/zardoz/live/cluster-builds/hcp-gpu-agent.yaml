@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hcp-gpu-agent-deploy
+  namespace: openshift-gitops
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: openshift-gitops
+    server: "https://kubernetes.default.svc"
+  ignoreDifferences:
+    - group: hive.openshift.io
+      kind: ClusterDeployment
+      jsonPointers:
+        - /spec/installed
+  project: default
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - RespectIgnoreDifferences=true
+  source:
+    repoURL: "https://github.com/marbindrakon/signal9-lab-gitops.git"
+    path: "charts/hcp-cluster-build"
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - "../../argocd/clusters/managed-clusters/hcp-gpu-agent/helm-values/build-values.yaml"
