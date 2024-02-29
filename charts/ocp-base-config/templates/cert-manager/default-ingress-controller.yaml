@@ -9,4 +9,6 @@ metadata:
 spec:
   defaultCertificate:
     name: acme-apps
+  routeAdmission:
+    wildcardPolicy: WildcardsAllowed
 {{ end }}
