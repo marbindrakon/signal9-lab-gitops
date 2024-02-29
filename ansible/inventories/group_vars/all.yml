@@ -127,13 +127,18 @@ cluster_sso:
   client_realm: "Signal9-RHT"
   console_sso_label: "Signal9-RHT"
 
-service_now:
-  cluster_info_table: x_956379_openshi_0_openshift_clusters
-  version_mapping:
-    "4.13": "4.13.1"
-    "4.12": "4.12.18"
-    "4.11": "4.11.42"
-    "4.10": "4.10.59"
+nios_config:
+  infoblox_host: rho-dns-a.rho.lab.signal9.gg
+  dns_views:
+    - Internal
+    - External
+  metallb_network_container: 172.18.72.0/21
+
+version_mapping:
+  "4.15": "4.15.0"
+  "4.14": "4.14.13"
+  "4.13": "4.13.34"
+  "4.12": "4.12.50"
 
 platform_configs:
   openstack:
@@ -404,3 +409,45 @@ platform_configs:
         controller_disk_gb: 128
         worker_count: 5
         worker_type: metal
+  kubevirt:
+    ingress_base_domain: "apps.zardoz.{{ base_domain }}"
+    cluster_sizes:
+      sandbox:
+        etcd_size: 8Gi
+        worker_count: 3
+        worker_cpu: 2
+        worker_ram: 8Gi
+        worker_disk: 64Gi
+      small:
+        etcd_size: 8Gi
+        worker_count: 3
+        worker_cpu: 8
+        worker_ram: 32Gi
+        worker_disk: 256Gi
+      medium:
+        etcd_size: 16Gi
+        worker_count: 6
+        worker_cpu: 8
+        worker_ram: 32Gi
+        worker_disk: 256Gi
+      large:
+        etcd_size: 32Gi
+        worker_count: 9
+        worker_cpu: 8
+        worker_ram: 32Gi
+        worker_disk: 256Gi
+  agent:
+    ingress_base_domain: "{{ base_domain }}"
+    cluster_sizes:
+      sandbox:
+        etcd_size: 8Gi
+        agent_count: 2
+      small:
+        etcd_size: 8Gi
+        agent_count: 2
+      medium:
+        etcd_size: 16Gi
+        agent_count: 3
+      large:
+        etcd_size: 32Gi
+        agent_count: 5
