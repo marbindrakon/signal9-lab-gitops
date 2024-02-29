@@ -1,5 +1,5 @@
 # expected to be kubevirt or agent
-platform: hcp_agent
+platform: agent
 
 cluster:
   name: hcp-test-agent
