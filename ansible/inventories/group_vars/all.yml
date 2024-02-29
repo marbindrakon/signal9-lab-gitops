@@ -409,7 +409,7 @@ platform_configs:
         controller_disk_gb: 128
         worker_count: 5
         worker_type: metal
-  kubevirt:
+  hcp_kubevirt:
     ingress_base_domain: "apps.zardoz.{{ base_domain }}"
     cluster_sizes:
       sandbox:
@@ -436,7 +436,7 @@ platform_configs:
         worker_cpu: 8
         worker_ram: 32Gi
         worker_disk: 256Gi
-  agent:
+  hcp_agent:
     ingress_base_domain: "{{ base_domain }}"
     cluster_sizes:
       sandbox:
