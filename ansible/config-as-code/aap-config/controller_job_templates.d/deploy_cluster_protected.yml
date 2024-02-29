@@ -22,7 +22,7 @@ controller_templates:
       - "{{ env }} - vSphere"
       - "{{ env }} - XNA FreeIPA OpenShift"
       - "{{ env }} - XNA Netbox"
-      - "{{ env }} - RHO Infoblox"
+      - "{{ env }} - Infoblox"
     allow_simultaneous: True
     ask_scm_branch_on_launch: False
     ask_diff_mode_on_launch: False
