@@ -34,9 +34,32 @@ spec:
     {{ end }}
     oauth:
       identityProviders:
-      {{- range .Values.auth.idps }}
-        {{ toYaml . | nindent 8 }}
-      {{ end }}
+        - name: local-admin 
+          mappingMethod: claim
+          type: HTPasswd
+          htpasswd:
+            fileData:
+              name: local-admin-htpass
+        - mappingMethod: claim
+          name: Signal9-RHT
+          openID:
+            claims:
+              email:
+              - email
+              groups:
+              - groups
+              name:
+              - name
+              preferredUsername:
+              - preferred_username
+              - email
+            clientID: {{ .Values.cluster.name }}-openshift
+            clientSecret:
+              name: {{ .Values.cluster.name }}-oauth-client-secret
+            extraScopes:
+            - profile
+            issuer: https://login.home.signal9.gg/auth/realms/Signal9-RHT
+          type: OpenID
   etcd:
     managed:
       storage:
