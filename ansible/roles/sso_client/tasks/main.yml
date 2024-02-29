@@ -12,7 +12,7 @@
 
 - name: construct redirect uri (shared ingress)
   ansible.builtin.set_fact:
-    sso_redirect_uri: "https://oauth-openshift.apps.{{ cluster_name }}.{{ foundation_ingress_base_domain }}/oauth2callback/{{ cluster_sso['console_sso_label'] }}"
+    sso_redirect_uri: "https://oauth-clusters-{{ cluster_name }}.{{ foundation_ingress_base_domain }}:443/oauth2callback/{{ cluster_sso['console_sso_label'] }}"
   when: cluster_platform in ["hcp_kubevirt"]
 
 - name: ensure sso client state
