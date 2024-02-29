@@ -1,0 +1,39 @@
+cluster:
+  name: {{ cluster_name }}
+  baseDomain: {{ base_domain }}
+  # Maybe kubevirt or agent
+  type: agent
+  # This namespace must already exist on the cluster
+  hcpNamespace: clusters
+  controlPlaneOperatorImageOverride: null
+  releaseImage: {{ cluster_release_image }}
+  importToACM: true
+  etcdSize: {{ platform_configs.hcp_agent.cluster_sizes[cluster_size].etcd_size }}
+  pullSecretVault: "{{ hashicorp_vault.cluster_secrets.pull_secret }}"
+  trustBundleConfigMap: user-ca-bundle
+  sshPubKey: "{{ cluster_ssh_pubkey }}"
+  agent:
+    createInfraEnv: true
+    # Defaults to a new per-cluster namespace
+    agentNamespaceOverride: null
+
+certManager:
+  manageApiCert: false
+  # Ingress certificate will be created, but deployment requires an ACM policy or gitops
+  manageIngressCert: true
+
+nodePools:
+  - name: worker
+    count: {{ platform_configs.hcp_agent.cluster_sizes[cluster_size].agent_count }}
+    nodeDrainTimeout: 600s  
+    management:
+      autoRepair: false
+      upgradeType: Replace
+    agent:
+      agentLabels: {}
+agent:
+  infraEnv:
+    networkType: static
+    ntpServers: {{ cluster_ntp_sources | to_yaml }}
+
+imageDigestMirror: []

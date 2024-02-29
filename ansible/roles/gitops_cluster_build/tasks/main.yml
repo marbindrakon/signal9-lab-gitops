@@ -67,7 +67,17 @@
   ansible.builtin.template:
     src: "base-config-values.yaml.j2"
     dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/base-config-values.yaml"
-  when: cluster_state == "present"
+  when: 
+    - cluster_state == "present"
+    - "hcp" not in cluster_platform
+
+- name: template base config values
+  ansible.builtin.template:
+    src: "hcp-base-config-values.yaml.j2"
+    dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/base-config-values.yaml"
+  when: 
+    - cluster_state == "present"
+    - "hcp" in cluster_platform
 
 - name: run git add for new files
   ansible.builtin.command:

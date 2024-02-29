@@ -1,0 +1,29 @@
+# expected to be kubevirt or agent
+platform: {{ cluster_platform }}
+
+cluster:
+  name: {{ cluster_name }}
+  baseDomain: {{ base_domain }}
+  foundationIngressBaseDomain: {{ platform_configs.kubevirt.ingress_base_domain }}
+
+rbac:
+  globalAdminGroups:
+    - global-admins
+
+ingress:
+  managed: true
+{% if cluster_platform == "hcp_agent" %}
+agent:
+  installMetalLB: true
+  localAsn: {{ metallb_asn }}
+  peers:
+    - name: lab-rtr-a
+      address: 172.18.16.2
+      asn: 65123
+    - name: lab-rtr-b
+      address: 172.18.16.3
+      asn: 65123
+  clusterIpPool: "{{ metallb_network.network }}"
+  anycastIpPool: "172.18.71.0/24"
+  ingressVip: {{ internal_ingress_vip }}
+{% endif %}

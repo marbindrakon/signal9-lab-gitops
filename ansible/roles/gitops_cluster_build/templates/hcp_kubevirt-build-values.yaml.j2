@@ -1,0 +1,38 @@
+cluster:
+  name: {{ cluster_name }}
+  baseDomain: {{ base_domain }}
+  # Maybe kubevirt or agent
+  type: kubevirt
+  # This namespace must already exist on the cluster
+  hcpNamespace: clusters
+  releaseImage: {{ cluster_release_image }}
+  foundationIngressBaseDomain: {{ platform_configs.hcp_kubevirt.ingress_base_domain }}
+  importToACM: true
+  etcdSize: {{ platform_configs.hcp_kubevirt.cluster_sizes[cluster_size].etcd_size }}
+  pullSecretVault: "{{ hashicorp_vault.cluster_secrets.pull_secret }}"
+  trustBundleConfigMap: user-ca-bundle
+  sshPubKey: "{{ cluster_ssh_pubkey }}"
+  kubevirt:
+    # If true, use a subdomain of the foundation cluster's ingress for workload ingress
+    baseDomainPassthrough: true
+
+certManager:
+  manageApiCert: false
+  # Ingress certificate will be created, but deployment requires an ACM policy or gitops
+  manageIngressCert: true
+
+nodePools:
+  - name: worker
+    count: {{ platform_configs.hcp_kubevirt.cluster_sizes[cluster_size].worker_count }}
+    kubevirt:
+      resources:
+        cpu: {{ platform_configs.hcp_kubevirt.cluster_sizes[cluster_size].worker_cpu }}
+        memory: {{ platform_configs.hcp_kubevirt.cluster_sizes[cluster_size].worker_ram }}
+        rootVolumeSize: {{ platform_configs.hcp_kubevirt.cluster_sizes[cluster_size].worker_disk }}
+      enableRootVolumeCache: true
+    nodeDrainTimeout: 600s  
+    management:
+      autoRepair: false
+      upgradeType: Replace
+
+imageDigestMirror: []
