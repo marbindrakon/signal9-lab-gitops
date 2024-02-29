@@ -21,7 +21,7 @@
 
 - name: create k8s auth method
   block:
-  - name: Get kubeconfig secret
+  - name: Get kubeconfig secret (Standalone)
     kubernetes.core.k8s_info:
       api_version: v1
       kind: Secret
@@ -33,6 +33,24 @@
       wait_timeout: 1200
     register: kubeconfig_secret
     until: kubeconfig_secret.resources | length > 0
+    when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
+    retries: 120
+    delay: 10
+    no_log: true
+
+  - name: Get kubeconfig secret (HCP)
+    kubernetes.core.k8s_info:
+      api_version: v1
+      kind: Secret
+      namespace: "clusters-{{ cluster_name }}"
+      label_selectors:
+        - "hypershift.openshift.io/kubeconfig=external"
+      wait: true
+      wait_sleep: 10
+      wait_timeout: 1200
+    register: kubeconfig_secret
+    until: kubeconfig_secret.resources | length > 0
+    when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
     retries: 120
     delay: 10
     no_log: true
