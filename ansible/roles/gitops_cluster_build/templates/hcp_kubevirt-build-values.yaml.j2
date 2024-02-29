@@ -9,7 +9,7 @@ cluster:
   foundationIngressBaseDomain: {{ platform_configs.hcp_kubevirt.ingress_base_domain }}
   importToACM: true
   etcdSize: {{ platform_configs.hcp_kubevirt.cluster_sizes[cluster_size].etcd_size }}
-  pullSecretVault: "{{ hashicorp_vault.cluster_secrets.pull_secret }}"
+  pullSecretVault: "{{ hashicorp_vault['cluster_secrets']['pull-secret'] }}"
   trustBundleConfigMap: user-ca-bundle
   sshPubKey: "{{ cluster_ssh_pubkey }}"
   kubevirt:

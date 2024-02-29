@@ -9,7 +9,7 @@ cluster:
   releaseImage: {{ cluster_release_image }}
   importToACM: true
   etcdSize: {{ platform_configs.hcp_agent.cluster_sizes[cluster_size].etcd_size }}
-  pullSecretVault: "{{ hashicorp_vault.cluster_secrets.pull_secret }}"
+  pullSecretVault: "{{ hashicorp_vault['cluster_secrets']['pull-secret'] }}"
   trustBundleConfigMap: user-ca-bundle
   sshPubKey: "{{ cluster_ssh_pubkey }}"
   agent:
