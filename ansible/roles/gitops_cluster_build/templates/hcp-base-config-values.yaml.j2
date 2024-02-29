@@ -4,7 +4,7 @@ platform: {{ cluster_platform }}
 cluster:
   name: {{ cluster_name }}
   baseDomain: {{ base_domain }}
-  foundationIngressBaseDomain: {{ platform_configs.kubevirt.ingress_base_domain }}
+  foundationIngressBaseDomain: {{ platform_configs.hcp_kubevirt.ingress_base_domain }}
 
 rbac:
   globalAdminGroups:
