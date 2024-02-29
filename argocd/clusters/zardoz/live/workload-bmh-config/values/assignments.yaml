@@ -24,27 +24,27 @@ assignments:
     extraLabels: {}
     extraAnnotations: {}
   - node: z-53.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-#   namespace: clusters-hcp-agent-demo
-#   assignmentType: agent
-#   infraEnvName: hcp-agent-demo
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+    namespace: clusters-hcp-gpu-agent
+    assignmentType: agent
+    infraEnvName: hcp-gpu-agent
     extraLabels: {}
     extraAnnotations: {}
   - node: z-54.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-#   namespace: clusters-hcp-agent-demo
-#   assignmentType: agent
-#   infraEnvName: hcp-agent-demo
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+    namespace: clusters-hcp-gpu-agent
+    assignmentType: agent
+    infraEnvName: hcp-gpu-agent
     extraLabels: {}
     extraAnnotations: {}
   - node: z-55.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-#   namespace: clusters-hcp-agent-demo
-#   assignmentType: agent
-#   infraEnvName: hcp-agent-demo
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+    namespace: clusters-hcp-gpu-agent
+    assignmentType: agent
+    infraEnvName: hcp-gpu-agent
     extraLabels: {}
     extraAnnotations: {}
   - node: z-56.lab.signal9.gg
