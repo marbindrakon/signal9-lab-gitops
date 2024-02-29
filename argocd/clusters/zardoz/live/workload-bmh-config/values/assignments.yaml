@@ -1,50 +1,32 @@
 assignments:
   - node: z-50.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-    namespace: clusters-hcp-test-agent
-    assignmentType: agent
-    infraEnvName: hcp-test-agent
+    namespace: openshift-machine-api
+    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
   - node: z-51.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-    namespace: clusters-hcp-test-agent
-    assignmentType: agent
-    infraEnvName: hcp-test-agent
+    namespace: openshift-machine-api
+    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
   - node: z-52.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-    namespace: clusters-hcp-test-agent
-    assignmentType: agent
-    infraEnvName: hcp-test-agent
+    namespace: openshift-machine-api
+    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
   - node: z-53.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-    namespace: clusters-hcp-gpu-agent
-    assignmentType: agent
-    infraEnvName: hcp-gpu-agent
+    namespace: openshift-machine-api
+    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
   - node: z-54.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-    namespace: clusters-hcp-gpu-agent
-    assignmentType: agent
-    infraEnvName: hcp-gpu-agent
+    namespace: openshift-machine-api
+    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
   - node: z-55.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-    namespace: clusters-hcp-gpu-agent
-    assignmentType: agent
-    infraEnvName: hcp-gpu-agent
+    namespace: openshift-machine-api
+    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
   - node: z-56.lab.signal9.gg
