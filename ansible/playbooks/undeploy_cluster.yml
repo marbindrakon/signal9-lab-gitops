@@ -11,6 +11,22 @@
       ansible.builtin.include_role:
         name: vault_config
 
+    - name: get hcp api vip
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Service
+        name: kube-apiserver
+        namespace: "clusters-{{ cluster_name }}"
+      register: hcp_api_vip
+      when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+      delegate_to: localhost
+
+    - name: set api vip fact
+      ansible.builtin.set_fact:
+        internal_api_vip: "{{ hcp_api_vip.resources.0.status.loadBalancer.ingress.0.ip }}"
+      when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+      delegate_to: localhost
+
     - name: include gitops_cluster_build role
       ansible.builtin.include_role:
         name: gitops_cluster_build
