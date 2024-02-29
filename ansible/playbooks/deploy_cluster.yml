@@ -59,7 +59,6 @@
         name: kube-apiserver
         namespace: "clusters-{{ cluster_name }}"
       register: hcp_api_vip
-      until: hcp_api_vip.resources and hcp_api_vip.resources.0.status.loadBalancer.ingress
       when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
 
     - name: set api vip fact
