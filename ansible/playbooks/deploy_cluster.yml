@@ -52,6 +52,21 @@
   vars:
     cluster_state: present
   tasks:
+    - name: get hcp api vip
+       kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Service
+        name: kube-apiserver
+        namespace: "clusters-{{ cluster_name }}"
+      register: hcp_api_vip
+      until: hcp_api_vip.resources and hcp_api_vip.resources.0.status.loadBalancer.ingress
+      when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+
+    - name: set api vip fact
+      ansible.builtin.set_fact:
+        internal_api_vip: "{{ hcp_api_vip.resources.0.status.loadBalancer.ingress.0.ip }}"
+      when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+     
     - name: include lb_config role
       ansible.builtin.include_role:
         name: lb_config
