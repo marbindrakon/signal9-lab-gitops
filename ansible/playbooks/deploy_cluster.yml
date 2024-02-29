@@ -60,11 +60,13 @@
         namespace: "clusters-{{ cluster_name }}"
       register: hcp_api_vip
       when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+      delegate_to: localhost
 
     - name: set api vip fact
       ansible.builtin.set_fact:
         internal_api_vip: "{{ hcp_api_vip.resources.0.status.loadBalancer.ingress.0.ip }}"
       when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+      delegate_to: localhost
      
     - name: include lb_config role
       ansible.builtin.include_role:
