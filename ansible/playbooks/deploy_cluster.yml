@@ -46,12 +46,6 @@
       ansible.builtin.include_role:
         name: vault_config
 
-- hosts: loadbalancers
-  gather_facts: true
-  become: true
-  vars:
-    cluster_state: present
-  tasks:
     - name: get hcp api vip
       kubernetes.core.k8s_info:
         api_version: v1
@@ -67,7 +61,13 @@
         internal_api_vip: "{{ hcp_api_vip.resources.0.status.loadBalancer.ingress.0.ip }}"
       when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
       delegate_to: localhost
-     
+
+- hosts: loadbalancers
+  gather_facts: true
+  become: true
+  vars:
+    cluster_state: present
+  tasks:
     - name: include lb_config role
       ansible.builtin.include_role:
         name: lb_config
