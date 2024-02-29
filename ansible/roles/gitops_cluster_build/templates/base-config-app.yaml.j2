@@ -16,7 +16,11 @@ spec:
       limit: -1
   source:
     repoURL: "{{ gitops_repo_url }}"
+{% if cluster_platform in ["hcp_kubevirt", "hcp_agent"] %}
+    path: "charts/hcp-base-config"
+{% else %}
     path: "charts/ocp-base-config"
+{% endif %}
     targetRevision: HEAD
     helm:
       valueFiles:
