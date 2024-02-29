@@ -18,7 +18,7 @@
   ansible.builtin.set_fact:
     dns_internal_records: '{{ dns_internal_records + [(dns_api_name, internal_api_vip)] }}'
   when:
-    - "hcp" not in cluster_platform
+    - cluster_platform not in ["hcp_kubevirt", "hcp_agent"]
 
 - name: construct internal api-int record
   ansible.builtin.set_fact:
