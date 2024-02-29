@@ -1,5 +1,9 @@
 # expected to be kubevirt or agent
-platform: {{ cluster_platform }}
+{% if cluster_platform == "hcp_agent" %}
+platform: agent
+{% else %}
+platform: kubevirt
+{% endif %}
 
 cluster:
   name: {{ cluster_name }}
