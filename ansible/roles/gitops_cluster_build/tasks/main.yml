@@ -69,7 +69,7 @@
     dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/base-config-values.yaml"
   when: 
     - cluster_state == "present"
-    - "hcp" not in cluster_platform
+    - cluster_platform not in ["hcp_kubevirt", "hcp_agent"]
 
 - name: template base config values
   ansible.builtin.template:
