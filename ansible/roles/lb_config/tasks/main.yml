@@ -46,7 +46,7 @@
         insertbefore: '^.*default_backend be-ocp-https$'
         state: "{{ cluster_state }}"
       notify: "reload haproxy"
-      when: loadbalancer_type == "external" or expose_internal_loadbalancers == true
+      when: loadbalancer_type == "external" or (expose_internal_loadbalancers == true and internal_ingress_vip is defined)
 
     - name: ensure ingress http acl
       ansible.builtin.lineinfile:
@@ -56,7 +56,7 @@
         insertbefore: '^.*default_backend be-ocp-http$'
         state: "{{ cluster_state }}"
       notify: "reload haproxy"
-      when: loadbalancer_type == "external" or expose_internal_loadbalancers == true
+      when: loadbalancer_type == "external" or (expose_internal_loadbalancers == true and internal_ingress_vip is defined)
 
   when: loadbalancer_frontend_mode == "shared"
 
@@ -205,4 +205,4 @@
               server {{ cluster_name }}-vip {{ internal_ingress_vip }}:80 check
         state: "{{ cluster_state }}"
       notify: "reload haproxy"
-      when: loadbalancer_type == "internal" and expose_internal_loadbalancers == true
+      when: loadbalancer_type == "internal" and expose_internal_loadbalancers == true and internal_ingress_vip is defined
