@@ -22,6 +22,7 @@ controller_templates:
       - "{{ env }} - vSphere"
       - "{{ env }} - XNA FreeIPA OpenShift"
       - "{{ env }} - XNA Netbox"
+      - "{{ env }} - RHO Infoblox"
     allow_simultaneous: True
     ask_scm_branch_on_launch: False
     ask_diff_mode_on_launch: False
@@ -90,6 +91,8 @@ controller_templates:
           default: openstack
           choices:
             - openstack
+            - hcp_kubevirt
+            - hcp_agent
             - infra_env_hybrid
             - vsphere
         - question_name: Version
@@ -100,12 +103,12 @@ controller_templates:
           min: 0
           max: 1024
           new_question: False
-          default: 4.14.1
+          default: '4.14'
           choices:
-            - 4.12.27
-            - 4.10.64
-            - 4.13.18
-            - 4.14.1
+            - '4.15'
+            - '4.14'
+            - '4.13'
+            - '4.12'
         - question_name: Use External or Internal LB
           question_description: ""
           required: True

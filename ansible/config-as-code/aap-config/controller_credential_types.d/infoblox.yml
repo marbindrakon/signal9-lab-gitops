@@ -1,0 +1,23 @@
+---
+controller_credential_types:
+  - name: "{{ env }} - Infoblox"
+    description: ""
+    kind: "cloud"
+    inputs:
+      fields:
+      - id: username
+        label: Username
+        type: string
+      - id: password
+        label: Password
+        secret: true
+        type: string
+      required:
+      - username
+      - password
+
+    injectors:
+      env:
+        INFOBLOX_PASSWORD: !unsafe '{{ password }}'
+        INFOBLOX_USERNAME: !unsafe '{{ username }}'
+...

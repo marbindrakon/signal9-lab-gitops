@@ -1,0 +1,10 @@
+---
+controller_credentials:
+  - name: "{{ env }} - Infoblox"
+    description: ""
+    credential_type: "{{ env }} - Infoblox"
+    organization: "Signal9 Lab - {{ env }}"
+    inputs:
+      {}
+
+...
