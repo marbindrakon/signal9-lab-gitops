@@ -16,7 +16,7 @@ spec:
       limit: -1
   source:
     repoURL: "https://github.com/marbindrakon/signal9-lab-gitops.git"
-    path: "charts/ocp-base-config"
+    path: "charts/hcp-base-config"
     targetRevision: HEAD
     helm:
       valueFiles:
