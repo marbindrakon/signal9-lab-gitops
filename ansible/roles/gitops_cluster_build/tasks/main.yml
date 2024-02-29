@@ -77,7 +77,7 @@
     dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/base-config-values.yaml"
   when: 
     - cluster_state == "present"
-    - "hcp" in cluster_platform
+    - cluster_platform in ["hcp_kubevirt", "hcp_agent"]
 
 - name: run git add for new files
   ansible.builtin.command:
