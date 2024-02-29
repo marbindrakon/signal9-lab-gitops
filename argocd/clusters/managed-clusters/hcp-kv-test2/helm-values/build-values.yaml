@@ -5,7 +5,7 @@ cluster:
   type: kubevirt
   # This namespace must already exist on the cluster
   hcpNamespace: clusters
-  releaseImage: quay.io/openshift-release-dev/ocp-release:4.15.0-x86_64
+  releaseImage: quay.io/openshift-release-dev/ocp-release:4.14.13-x86_64
   foundationIngressBaseDomain: apps.zardoz.lab.signal9.gg
   importToACM: true
   etcdSize: 8Gi
@@ -26,9 +26,9 @@ nodePools:
     count: 3
     kubevirt:
       resources:
-        cpu: 8
-        memory: 32Gi
-        rootVolumeSize: 256Gi
+        cpu: 2
+        memory: 8Gi
+        rootVolumeSize: 64Gi
       enableRootVolumeCache: true
     nodeDrainTimeout: 600s  
     management:
