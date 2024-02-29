@@ -1,0 +1,14 @@
+# expected to be kubevirt or agent
+platform: hcp_kubevirt
+
+cluster:
+  name: hcp-kubevirt-test
+  baseDomain: lab.signal9.gg
+  foundationIngressBaseDomain: apps.zardoz.lab.signal9.gg
+
+rbac:
+  globalAdminGroups:
+    - global-admins
+
+ingress:
+  managed: true
