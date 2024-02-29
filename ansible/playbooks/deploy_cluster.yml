@@ -11,6 +11,17 @@
       ansible.builtin.set_fact:
         cluster_image_set: "img{{ cluster_version }}-x86-64-appsub"
 
+    - name: resolve cluster image set
+      kubernetes.core.k8s_info:
+        api_version: hive.openshift.io/v1
+        kind: ClusterImageSet
+        name: "{{ cluster_image_set }}"
+      register: cis_info
+
+    - name: save release image
+      ansible.builtin.set_fact:
+        cluster_release_image: "{{ cis_info.resources.0.spec.releaseImage }}"
+
     - name: include resource_allocation role
       ansible.builtin.include_role:
         name: resource_allocation
@@ -41,10 +52,6 @@
     - name: include gitops_cluster_build role
       ansible.builtin.include_role:
         name: gitops_cluster_build
-
-    - name: wait two minutes because of secrets race condition
-      ansible.builtin.pause:
-        seconds: 120
 
     - name: include vault_config role
       ansible.builtin.include_role:
