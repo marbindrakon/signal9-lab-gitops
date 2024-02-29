@@ -1,18 +1,18 @@
 assignments:
   - node: z-50.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-#   namespace: clusters-hcp-agent-demo
-#   assignmentType: agent
-#   infraEnvName: hcp-agent-demo
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+    namespace: clusters-hcp-test-agent
+    assignmentType: agent
+    infraEnvName: hcp-test-agent
     extraLabels: {}
     extraAnnotations: {}
   - node: z-51.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-#   namespace: clusters-hcp-agent-demo
-#   assignmentType: agent
-#   infraEnvName: hcp-agent-demo
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+    namespace: clusters-hcp-test-agent
+    assignmentType: agent
+    infraEnvName: hcp-test-agent
     extraLabels: {}
     extraAnnotations: {}
   - node: z-52.lab.signal9.gg
