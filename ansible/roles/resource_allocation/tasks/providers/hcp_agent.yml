@@ -1,0 +1,55 @@
+# This will allocate the metallb prefix for the new cluster and calculate the VIP and ASN
+- name: fetch existing networks
+  ansible.builtin.set_fact:
+    metallb_network: "{{ lookup('infoblox.nios_modules.nios_lookup', 'network', provider={'host': nios_config.infoblox_host}, filter={'comment': cluster_name}) }}"
+    next_network: "{{ lookup('infoblox.nios_modules.nios_next_network', nios_config.metallb_network_container, cidr=25, provider={'host': nios_config.infoblox_host}) }}"
+
+- name: debug existing network
+  ansible.builtin.debug:
+    msg: "{{ metallb_network }} Next: {{ next_network }}"
+
+- name: allocate new network
+  infoblox.nios_modules.nios_network:
+    comment: "{{ cluster_name }}"
+    provider:
+      host: "{{ nios_config.infoblox_host }}"
+    network: "{{ next_network | first }}"
+    state: present
+  register: network_create
+  when: 
+    - metallb_network | length == 0
+    - cluster_state == "present"
+
+- name: re-fetch existing networks
+  ansible.builtin.set_fact:
+    metallb_network: "{{ lookup('infoblox.nios_modules.nios_lookup', 'network', provider={'host': nios_config.infoblox_host}, filter={'comment': cluster_name}) }}"
+  when: network_create is changed
+
+- name: handle existing network
+  infoblox.nios_modules.nios_network:
+    provider:
+      host: "{{ nios_config.infoblox_host }}"
+    network: "{{ metallb_network.network }}"
+    state: absent
+  when: 
+    - metallb_network | length > 0
+    - cluster_state == "absent"
+
+- name: get third octet for ASN generation
+  ansible.builtin.set_fact:
+    third_octet: "{{ metallb_network.network.split('.')[2] }}"
+
+- name: determine ASN
+  ansible.builtin.set_fact:
+    metallb_asn: '64{{ third_octet }}{{ "1" if "128" in metallb_network.network else "0" }}'
+
+- name: determine ingress vip
+  ansible.builtin.set_fact:
+    internal_ingress_vip: "{{ metallb_network.network | ansible.utils.ipaddr('net') | ansible.utils.ipaddr('5') | ansible.utils.ipaddr('address') }}"
+
+- name: set ingress cidr
+  ansible.builtin.set_fact:
+    internal_ingress_cidr: "{{ internal_ingress_vip }}/25"
+
+- name: allocate vips from netbox
+  ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"

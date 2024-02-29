@@ -1,0 +1,4 @@
+---
+- name: Note no action to be taken
+  ansible.builtin.debug:
+    msg: "No resource allocation needed for kubevirt"
