@@ -23,7 +23,11 @@ spec:
       - RespectIgnoreDifferences=true
   source:
     repoURL: "{{ gitops_repo_url }}"
+{% if cluster_platform in ["hcp_kubevirt", "hcp_agent"] %}
+    path: "charts/hcp-cluster-build"
+{% else %}
     path: "charts/mce-cluster-build"
+{% endif %}
     targetRevision: HEAD
     helm:
       valueFiles:
