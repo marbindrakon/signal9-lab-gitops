@@ -28,6 +28,7 @@
 - name: construct internal ingress record
   ansible.builtin.set_fact:
     dns_internal_records: '{{ dns_internal_records + [(dns_ingress_name, internal_ingress_vip)] }}'
+  when: internal_ingress_vip
 
 - name: construct external api record
   ansible.builtin.set_fact:
