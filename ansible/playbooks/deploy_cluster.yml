@@ -30,21 +30,6 @@
       ansible.builtin.include_role:
         name: resource_allocation
 
-- hosts: loadbalancers
-  gather_facts: true
-  become: true
-  vars:
-    cluster_state: present
-  tasks:
-    - name: include lb_config role
-      ansible.builtin.include_role:
-        name: lb_config
-
-- hosts: localhost
-  gather_facts: false
-  vars:
-    cluster_state: present
-  tasks:
     - name: include dns role
       ansible.builtin.include_role:
         name: dns_config
@@ -60,3 +45,15 @@
     - name: include vault_config role
       ansible.builtin.include_role:
         name: vault_config
+
+- hosts: loadbalancers
+  gather_facts: true
+  become: true
+  vars:
+    cluster_state: present
+  tasks:
+    - name: include lb_config role
+      ansible.builtin.include_role:
+        name: lb_config
+
+
