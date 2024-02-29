@@ -7,9 +7,13 @@
       ansible.builtin.set_fact:
         "{{ cluster_platform }}_platform_config": "{{ platform_configs[cluster_platform] }}"
 
+    - name: set mapped cluster version
+      ansible.builtin.set_fact:
+        mapped_cluster_version: "{{ version_mapping[cluster_version] }}"
+
     - name: set cluster image set
       ansible.builtin.set_fact:
-        cluster_image_set: "img{{ cluster_version }}-x86-64-appsub"
+        cluster_image_set: "img{{ mapped_cluster_version }}-x86-64-appsub"
 
     - name: resolve cluster image set
       kubernetes.core.k8s_info:
