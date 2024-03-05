@@ -48,16 +48,23 @@
       wait: true
       wait_sleep: 10
       wait_timeout: 1200
-    register: kubeconfig_secret
+    register: kubeconfig_secret_hcp
     until: kubeconfig_secret.resources | length > 0
     when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
     retries: 120
     delay: 10
     no_log: true
 
-  - name: load cluster kubeconfig
+  - name: load cluster kubeconfig (Standalone)
     ansible.builtin.set_fact:
       cluster_kubeconfig: "{{ kubeconfig_secret.resources.0.data.kubeconfig | b64decode | from_yaml }}"
+    when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
+    no_log: true
+
+  - name: load cluster kubeconfig (HCP)
+    ansible.builtin.set_fact:
+      cluster_kubeconfig: "{{ kubeconfig_secret_hcp.resources.0.data.kubeconfig | b64decode | from_yaml }}"
+    when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
     no_log: true
 
   - name: extract initial api ca bundle and combine with inventory
