@@ -5,7 +5,19 @@ cluster:
   gitOpsBasePath: argocd/clusters/managed-clusters
 
 monitoring:
-  enabled: false
+  enabled: true
+  storageClass: ocs-external-storagecluster-ceph-rbd
+
+odfStorage:
+  enabled: true
+  external: true
+  version: '4.14'
+  externalSecret:
+    name: rook-ceph-external-cluster-details
+    vaultName: ai-test-rook-data
+
+network:
+  hostRouting: true
 
 externalSecrets:
   vaultAuthPath: "k8s-mgd-ai-test"
