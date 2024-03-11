@@ -9,18 +9,12 @@ assignments:
     namespace: four-node-ctlplane
     infraEnvName: four-node-ctlplane
     assignmentType: agent
-
-    namespace: openshift-machine-api
-    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
   - node: z-52.lab.signal9.gg
     namespace: four-node-ctlplane
     infraEnvName: four-node-ctlplane
     assignmentType: agent
-
-    namespace: openshift-machine-api
-    assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
 # - node: z-53.lab.signal9.gg
