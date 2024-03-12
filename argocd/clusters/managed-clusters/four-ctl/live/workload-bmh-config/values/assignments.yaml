@@ -2,7 +2,8 @@ assignments:
   - node: z-50.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
-    extraLabels: {}
+    extraLabels:
+      machine-type: control-plane
     extraAnnotations: {}
   - node: z-51.lab.signal9.gg
     namespace: openshift-machine-api
