@@ -19,7 +19,10 @@ spec:
       customDeploy:
         method: install_coreos
       hostSelector:
-        machine-type: control-plane
+        matchExpressions:
+          - key: machine-type
+            operator: In
+            values: ["control-plane"]
       image:
         checksum: ""
         url: ""
