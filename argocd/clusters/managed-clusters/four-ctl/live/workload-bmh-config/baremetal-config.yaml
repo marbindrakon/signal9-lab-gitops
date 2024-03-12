@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: baremetal-manager
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: openshift-gitops
+  syncPolicy:
+    syncOptions:
+    - RespectIgnoreDifferences=true
+    automated:
+      prune: true
+  ignoreDifferences:
+    - group: metal3.io
+      kind: BareMetalHost
+      jsonPointers:
+        - /spec/online
+        - /spec/networkData
+        - /spec/metaData
+        - /spec/image
+  project: default
+  source:
+    repoURL: 'https://github.com/marbindrakon/signal9-lab-gitops.git'
+    targetRevision: HEAD
+    path: 'charts/metal-node-assignment'
+    helm:
+      valueFiles:
+        - ../../argocd/clusters/managed-clusters/four-ctl/live/workload-bmh-config/values/nodes.yaml
+        - ../../argocd/clusters/managed-clusters/four-ctl/live/workload-bmh-config/values/assignments.yaml
