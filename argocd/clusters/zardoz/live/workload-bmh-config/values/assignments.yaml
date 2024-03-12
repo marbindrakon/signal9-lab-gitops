@@ -32,29 +32,23 @@ assignments:
     extraAnnotations: 
       baremetalhost.metal3.io/detached: ""
   - node: z-55.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
+    namespace: four-node-ctlplane
+    infraEnvName: four-node-ctlplane
+    assignmentType: agent
     extraLabels: {}
-    extraAnnotations: 
-      baremetalhost.metal3.io/detached: ""
+    extraAnnotations: {}
   - node: z-56.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-#   namespace: clusters-hcp-agent-demo
-#   assignmentType: agent
-#   infraEnvName: hcp-agent-demo
+    namespace: four-node-ctlplane
+    infraEnvName: four-node-ctlplane
+    assignmentType: agent
     extraLabels: {}
-    extraAnnotations: 
-      baremetalhost.metal3.io/detached: ""
+    extraAnnotations: {}
   - node: z-57.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-#   namespace: clusters-hcp-agent-demo
-#   assignmentType: agent
-#   infraEnvName: hcp-agent-demo
+    namespace: four-node-ctlplane
+    infraEnvName: four-node-ctlplane
+    assignmentType: agent
     extraLabels: {}
-    extraAnnotations: 
-      baremetalhost.metal3.io/detached: ""
+    extraAnnotations: {}
   - node: z-58.lab.signal9.gg
     namespace: ai-test
     assignmentType: agent
