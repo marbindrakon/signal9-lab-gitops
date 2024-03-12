@@ -2,7 +2,7 @@ nodes:
   z-50.lab.signal9.gg:
     labels:
       compute-model: sl230
-    bootMac: 2c:41:38:eb:da:18
+    bootMac: 00:02:c9:2f:c0:a8
     bmc:
       url: ilo4-virtualmedia://ilo-hp-blade-4.oob.signal9.gg
       externalSecret:
@@ -98,7 +98,7 @@ nodes:
   z-51.lab.signal9.gg:
     labels:
       compute-model: sl230
-    bootMac: 2c:41:38:eb:d2:64
+    bootMac: 00:02:c9:2f:3a:c8
     bmc:
       url: ilo4-virtualmedia://ilo-hp-blade-5.oob.signal9.gg
       externalSecret:
@@ -194,7 +194,7 @@ nodes:
   z-52.lab.signal9.gg:
     labels:
       compute-model: sl230
-    bootMac: 2c:41:38:eb:d3:90
+    bootMac: 00:02:c9:2f:3b:68
     bmc:
       url: ilo4-virtualmedia://ilo-hp-blade-6.oob.signal9.gg
       externalSecret:
