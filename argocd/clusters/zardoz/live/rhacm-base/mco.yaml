@@ -6,6 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
+  imagePullSecret: multiclusterhub-operator-pull-secret
   enableDownsampling: true
   advanced:
     retentionConfig:
