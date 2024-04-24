@@ -1,7 +1,7 @@
 # This will allocate the metallb prefix for the new cluster and calculate the VIP and ASN
 - name: fetch existing networks
   ansible.builtin.set_fact:
-    metallb_network: "{{ lookup('netbox.netbox.nb_lookup', 'prefixes', api_filter='description=' + cluster_name + '-MetalLB') | items2dict }}"
+    metallb_network: "{{ lookup('netbox.netbox.nb_lookup', 'prefixes', api_filter='description=' + cluster_name + '-MetalLB') }}"
 
 - name: debug existing network
   ansible.builtin.debug:
@@ -25,7 +25,7 @@
 
 - name: re-fetch existing networks
   ansible.builtin.set_fact:
-    metallb_network: "{{ lookup('netbox.netbox.nb_lookup', 'prefixes', api_filter='description=' + cluster_name + '-MetalLB') | items2dict }}"
+    metallb_network: "{{ lookup('netbox.netbox.nb_lookup', 'prefixes', api_filter='description=' + cluster_name + '-MetalLB') }}"
   when: network_create is changed
 
 - name: debug new or existing network
