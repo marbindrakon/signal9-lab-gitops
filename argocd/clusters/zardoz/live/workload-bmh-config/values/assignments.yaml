@@ -17,11 +17,11 @@ assignments:
     infraEnvName: test-hcp-agent
     extraLabels: {}
     extraAnnotations: {}
-  - node: z-53.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
+# - node: z-53.lab.signal9.gg
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
   - node: z-54.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
