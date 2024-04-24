@@ -5,7 +5,7 @@
 
 - name: debug existing network
   ansible.builtin.debug:
-    msg: "{{ metallb_network }} Next: {{ next_network }}"
+    msg: "{{ metallb_network }}"
 
 - name: allocate new network
   netbox.netbox.netbox_prefix:
@@ -26,6 +26,10 @@
   ansible.builtin.set_fact:
     metallb_network: "{{ lookup('netbox.netbox.nb_lookup', 'prefixes', api_filter='description=' + cluster_name + '-MetalLB') | items2dict }}"
   when: network_create is changed
+
+- name: debug new or existing network
+  ansible.builtin.debug:
+    msg: "{{ metallb_network }}"
 
 - name: handle existing network
   netbox.netbox.netbox_prefix:
