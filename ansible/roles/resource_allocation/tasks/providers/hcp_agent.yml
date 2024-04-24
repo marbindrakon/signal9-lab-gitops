@@ -45,15 +45,15 @@
 
 - name: get third octet for ASN generation
   ansible.builtin.set_fact:
-    third_octet: "{{ metallb_network.prefix.split('.')[2] }}"
+    third_octet: "{{ metallb_network.value.prefix.split('.')[2] }}"
 
 - name: determine ASN
   ansible.builtin.set_fact:
-    metallb_asn: '64{{ third_octet }}{{ "1" if "128" in metallb_network.prefix else "0" }}'
+    metallb_asn: '64{{ third_octet }}{{ "1" if "128" in metallb_network.value.prefix else "0" }}'
 
 - name: determine ingress vip
   ansible.builtin.set_fact:
-    internal_ingress_vip: "{{ metallb_network.prefix | ansible.utils.ipaddr('net') | ansible.utils.ipaddr('5') | ansible.utils.ipaddr('address') }}"
+    internal_ingress_vip: "{{ metallb_network.value.prefix | ansible.utils.ipaddr('net') | ansible.utils.ipaddr('5') | ansible.utils.ipaddr('address') }}"
 
 - name: set ingress cidr
   ansible.builtin.set_fact:
