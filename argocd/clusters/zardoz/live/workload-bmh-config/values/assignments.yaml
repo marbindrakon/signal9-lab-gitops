@@ -23,25 +23,29 @@ assignments:
 #   extraLabels: {}
 #   extraAnnotations: {}
   - node: z-54.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
+    namespace: rawad-test
+    assignmentType: agent
+    infraEnvName: rawad-test
     extraLabels: {}
     extraAnnotations: {}
-# - node: z-55.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-#   extraLabels: {}
-#   extraAnnotations: {}
-# - node: z-56.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-#   extraLabels: {}
-#   extraAnnotations: {}
-# - node: z-57.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-#   extraLabels: {}
-#   extraAnnotations: {}
+  - node: z-55.lab.signal9.gg
+    namespace: rawad-test
+    assignmentType: agent
+    infraEnvName: rawad-test
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-56.lab.signal9.gg
+    namespace: rawad-test
+    assignmentType: agent
+    infraEnvName: rawad-test
+    extraLabels: {}
+    extraAnnotations: {}
+  - node: z-57.lab.signal9.gg
+    namespace: rawad-test
+    assignmentType: agent
+    infraEnvName: rawad-test
+    extraLabels: {}
+    extraAnnotations: {}
   - node: z-58.lab.signal9.gg
     namespace: ai-test
     assignmentType: agent
