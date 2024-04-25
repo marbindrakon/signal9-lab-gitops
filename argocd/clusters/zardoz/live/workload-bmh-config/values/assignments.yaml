@@ -27,21 +27,21 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
-  - node: z-55.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-56.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-57.lab.signal9.gg
-    namespace: openshift-machine-api
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
+# - node: z-55.lab.signal9.gg
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-56.lab.signal9.gg
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-57.lab.signal9.gg
+#   namespace: openshift-machine-api
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
   - node: z-58.lab.signal9.gg
     namespace: ai-test
     assignmentType: agent
