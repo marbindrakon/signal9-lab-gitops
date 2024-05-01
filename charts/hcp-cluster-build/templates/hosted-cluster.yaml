@@ -16,7 +16,7 @@ spec:
   controllerAvailabilityPolicy: HighlyAvailable
   dns:
 {{- if and (eq .Values.cluster.type "kubevirt") (.Values.cluster.kubevirt.baseDomainPassthrough) }}
-    baseDomain: ""
+    baseDomain: "{{ .Values.cluster.foundationIngressBaseDomaion }}"
 {{ else }}
     baseDomain: {{ .Values.cluster.baseDomain }}
 {{ end }}

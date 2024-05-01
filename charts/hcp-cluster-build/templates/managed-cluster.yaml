@@ -8,7 +8,7 @@ metadata:
     import.open-cluster-management.io/klusterlet-deploy-mode: Hosted
     open-cluster-management/created-via: hypershift
   labels:
-    cloud: auto-detect
+    cloud: Other
     cluster.open-cluster-management.io/clusterset: default
     name: {{ .Values.cluster.name }}
     vendor: OpenShift
