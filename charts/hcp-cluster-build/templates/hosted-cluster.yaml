@@ -31,6 +31,10 @@ spec:
           - api.{{ .Values.cluster.name }}.{{ .Values.cluster.baseDomain }}
           servingCertificate:
             name: {{ .Values.cluster.name }}-api-crt
+        - names:
+          - oauth-clusters-{{ .Values.cluster.name}}.{{ .Values.cluster.foundationIngressBaseDomain }}
+          servingCertificates:
+            name: {{ .Values.cluster.name }}-api-crt
     {{ end }}
     oauth:
       identityProviders:

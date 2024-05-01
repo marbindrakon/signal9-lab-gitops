@@ -22,6 +22,7 @@ spec:
     - client auth
   dnsNames:
     - 'api.{{ .Values.cluster.name }}.{{ .Values.cluster.baseDomain }}'
+    - 'oauth-clusters-{{ .Values.cluster.name}}.{{ .Values.cluster.foundationIngressBaseDomain }}'
   issuerRef:
     name: cluster-acme
     kind: ClusterIssuer
