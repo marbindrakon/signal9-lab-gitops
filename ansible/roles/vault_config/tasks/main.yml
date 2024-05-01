@@ -99,7 +99,7 @@
       path: "auth/{{ hashicorp_vault['vault_managed_auth_name'] }}/config"
       data:
         kubernetes_host: "https://api.{{ cluster_name }}.{{ base_domain }}:6443"
-        kubernetes_ca_cert: "{{ vault_k8s_ca_bundle }}"
+        kubernetes_ca_cert: "{{ vault_k8s_ca_bundle | default(omit) }}"
         disable_local_ca_jwt: true
         disable_iss_validation: true
 
