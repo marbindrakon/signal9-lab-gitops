@@ -33,7 +33,7 @@ spec:
             name: {{ .Values.cluster.name }}-api-crt
         - names:
           - oauth-clusters-{{ .Values.cluster.name}}.{{ .Values.cluster.foundationIngressBaseDomain }}
-          servingCertificates:
+          servingCertificate:
             name: {{ .Values.cluster.name }}-api-crt
     {{ end }}
     oauth:
