@@ -38,22 +38,22 @@
     delay: 10
     no_log: true
 
-  - name: Get kubeconfig secret (HCP)
-    kubernetes.core.k8s_info:
-      api_version: v1
-      kind: Secret
-      namespace: "clusters-{{ cluster_name }}"
-      label_selectors:
-        - "hypershift.openshift.io/kubeconfig=external"
-      wait: true
-      wait_sleep: 10
-      wait_timeout: 1200
-    register: kubeconfig_secret_hcp
-    until: kubeconfig_secret.resources | length > 0
-    when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
-    retries: 120
-    delay: 10
-    no_log: false
+# - name: Get kubeconfig secret (HCP)
+#   kubernetes.core.k8s_info:
+#     api_version: v1
+#     kind: Secret
+#     namespace: "clusters-{{ cluster_name }}"
+#     label_selectors:
+#       - "hypershift.openshift.io/kubeconfig=external"
+#     wait: true
+#     wait_sleep: 10
+#     wait_timeout: 1200
+#   register: kubeconfig_secret_hcp
+#   until: kubeconfig_secret.resources | length > 0
+#   when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
+#   retries: 120
+#   delay: 10
+#   no_log: false
 
   - name: load cluster kubeconfig (Standalone)
     ansible.builtin.set_fact:
@@ -61,17 +61,18 @@
     when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
     no_log: true
 
-  - name: load cluster kubeconfig (HCP)
-    ansible.builtin.set_fact:
-      cluster_kubeconfig: "{{ kubeconfig_secret_hcp.resources.0.data.kubeconfig | b64decode | from_yaml }}"
-    when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
-    no_log: true
+# - name: load cluster kubeconfig (HCP)
+#   ansible.builtin.set_fact:
+#     cluster_kubeconfig: "{{ kubeconfig_secret_hcp.resources.0.data.kubeconfig | b64decode | from_yaml }}"
+#   when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
+#   no_log: true
 
   - name: extract initial api ca bundle and combine with inventory
     ansible.builtin.set_fact:
       vault_k8s_ca_bundle: |
         {{ cluster_kubeconfig['clusters'][0]['cluster']['certificate-authority-data'] | b64decode }}
         {{ cluster_trust_bundle }}
+    when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
 
   - name: write k8s auth method to vault
     community.hashi_vault.vault_write:
@@ -84,7 +85,7 @@
       data:
         type: kubernetes
         kubernetes_host: "https://api.{{ cluster_name }}.{{ base_domain }}:6443"
-        kubernetes_ca_cert: "{{ vault_k8s_ca_bundle }}"
+        kubernetes_ca_cert: "{{ vault_k8s_ca_bundle | default(omit) }}"
         disable_local_ca_jwt: true
         disable_iss_validation: true
 
