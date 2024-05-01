@@ -18,7 +18,7 @@ cluster:
     agentNamespaceOverride: null
 
 certManager:
-  manageApiCert: false
+  manageApiCert: true
   # Ingress certificate will be created, but deployment requires an ACM policy or gitops
   manageIngressCert: true
 
@@ -28,7 +28,7 @@ nodePools:
     nodeDrainTimeout: 600s  
     management:
       autoRepair: false
-      upgradeType: Replace
+      upgradeType: InPlace
     agent:
       agentLabels: {}
 agent:
