@@ -53,7 +53,7 @@
     when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
     retries: 120
     delay: 10
-    no_log: true
+    no_log: false
 
   - name: load cluster kubeconfig (Standalone)
     ansible.builtin.set_fact:
