@@ -5,6 +5,8 @@ kind: NodePool
 metadata:
   name: {{ $.Values.cluster.name }}-{{ .name }}
   namespace: {{ $.Values.cluster.hcpNamespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
 spec:
   arch: amd64
   clusterName: {{ $.Values.cluster.name }}

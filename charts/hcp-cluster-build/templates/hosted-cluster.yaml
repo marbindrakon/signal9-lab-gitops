@@ -3,8 +3,9 @@ kind: HostedCluster
 metadata:
   name: {{ .Values.cluster.name }}
   namespace: {{ .Values.cluster.hcpNamespace }}
-{{- if .Values.cluster.controlPlaneOperatorImageOverride }}
   annotations:
+    argocd.argoproj.io/sync-wave: '2'
+{{- if .Values.cluster.controlPlaneOperatorImageOverride }}
     hypershift.openshift.io/control-plane-operator-image: {{ .Values.cluster.controlPlaneOperatorImageOverride }}
 {{ end }}
 spec:
