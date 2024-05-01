@@ -20,7 +20,9 @@ spec:
     helm:
       values: |
         installCRDs: true
-        global.leaderElection.namespace: cert-manager
+        global:
+          leaderElection:
+            namespace: cert-manager
         dns01RecursiveNameservers: "8.8.8.8:53"
         dns01RecursiveNameserversOnly: true
 {{- end -}}
