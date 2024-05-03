@@ -1,0 +1,26 @@
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: rook-ceph-external
+  namespace: rook-ceph
+  annotations:
+    argocd.argoproj.io/sync-wave: '5'
+spec:
+  external:
+    enable: true
+  crashCollector:
+    disable: true
+  healthCheck:
+    daemonHealth:
+      mon:
+        disabled: false
+        interval: 45s
+  monitoring:
+    enabled: true
+    externalMgrEndpoints:
+    - ip: 172.18.14.18
+      externalMgrPrometheusPort: 9283
+    - ip: 172.18.14.19
+      externalMgrPrometheusPort: 9283
+    - ip: 172.18.14.20
+      externalMgrPrometheusPort: 9283
