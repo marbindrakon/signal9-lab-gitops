@@ -1,0 +1,10 @@
+apiVersion: samples.operator.openshift.io/v1
+kind: Config
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-options: 'Validate=False,ServerSideApply=True'
+spec:
+  architectures:
+  - x86_64
+  managementState: Removed
