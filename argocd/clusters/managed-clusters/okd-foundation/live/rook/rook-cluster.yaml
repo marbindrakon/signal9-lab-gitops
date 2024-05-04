@@ -19,8 +19,5 @@ spec:
     enabled: true
     externalMgrEndpoints:
     - ip: 172.18.14.18
-      externalMgrPrometheusPort: 9283
     - ip: 172.18.14.19
-      externalMgrPrometheusPort: 9283
     - ip: 172.18.14.20
-      externalMgrPrometheusPort: 9283
