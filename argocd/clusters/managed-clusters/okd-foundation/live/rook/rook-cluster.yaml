@@ -16,8 +16,4 @@ spec:
         disabled: false
         interval: 45s
   monitoring:
-    enabled: true
-    externalMgrEndpoints:
-    - ip: 172.18.14.18
-    - ip: 172.18.14.19
-    - ip: 172.18.14.20
+    enabled: false
