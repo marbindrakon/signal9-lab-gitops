@@ -35,6 +35,10 @@ spec:
   {{ else }}
   online: true
   {{ end }}
+  {{- if $nodeConfig.rootDeviceHints }}
+  rootDeviceHints:
+    {{ toYaml $nodeConfig.rootDeviceHints | nindent 4 }}
+  {{ end }}
   bmc:
     address: '{{ $nodeConfig.bmc.url }}'
     credentialsName: '{{ .node }}-creds'

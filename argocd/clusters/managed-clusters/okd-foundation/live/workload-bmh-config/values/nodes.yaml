@@ -3,6 +3,8 @@ nodes:
     labels:
       compute-model: kvm
     bootMac: 52:54:00:3f:91:0b
+    rootDeviceHints:
+      deviceName: /dev/vda
     bmc:
       url: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/499078fa-a6fc-4025-ada4-d2536d69ee5f'
       externalSecret:
@@ -57,6 +59,8 @@ nodes:
     labels:
       compute-model: kvm
     bootMac: 52:54:00:3f:91:0c
+    rootDeviceHints:
+      deviceName: /dev/vda
     bmc:
       url: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/58b3fe8d-a07f-4e8f-bdfd-4d7e30e5dd67'
       externalSecret:
@@ -111,6 +115,8 @@ nodes:
     labels:
       compute-model: kvm
     bootMac: 52:54:00:3f:91:0d
+    rootDeviceHints:
+      deviceName: /dev/vda
     bmc:
       url: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/0020ead8-49d1-4c29-9ec9-f9e0b22c1f89'
       externalSecret:
