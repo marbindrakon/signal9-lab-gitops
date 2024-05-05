@@ -12,6 +12,7 @@ spec:
     - RespectIgnoreDifferences=true
     automated:
       prune: true
+      allowEmpty: true
   ignoreDifferences:
     - group: metal3.io
       kind: BareMetalHost
