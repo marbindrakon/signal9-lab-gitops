@@ -1,1 +1,163 @@
-nodes: {}
+nodes:
+  okd-4.lab.signal9.gg:
+    labels:
+      compute-model: kvm
+    bootMac: 52:54:00:3f:91:0b
+    bmc:
+      url: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/499078fa-a6fc-4025-ada4-d2536d69ee5f'
+      externalSecret:
+        vaultName: atlas-sushy
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: enp1s0
+            type: interface
+            state: up
+            mtu: 9000
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.82
+                  prefix-length: 24
+          - name: enp2s0
+            type: interface
+            state: up
+            mtu: 9000
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.82
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: enp1s0
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: enp2s0
+              table-id: 254
+      interfaceMap:
+        - name: enp1s0
+          macAddress: 52:54:00:3f:91:0b
+        - name: enp2s0
+          macAddress: 52:54:00:10:92:df
+
+  okd-5.lab.signal9.gg:
+    labels:
+      compute-model: kvm
+    bootMac: 52:54:00:3f:91:0c
+    bmc:
+      url: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/58b3fe8d-a07f-4e8f-bdfd-4d7e30e5dd67'
+      externalSecret:
+        vaultName: atlas-sushy
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: enp1s0
+            type: interface
+            state: up
+            mtu: 9000
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.83
+                  prefix-length: 24
+          - name: enp2s0
+            type: interface
+            state: up
+            mtu: 9000
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.83
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: enp1s0
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: enp2s0
+              table-id: 254
+      interfaceMap:
+        - name: enp1s0
+          macAddress: 52:54:00:3f:91:0c
+        - name: enp2s0
+          macAddress: 52:54:00:10:92:e1
+
+  okd-6.lab.signal9.gg:
+    labels:
+      compute-model: kvm
+    bootMac: 52:54:00:3f:91:0d
+    bmc:
+      url: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/58b3fe8d-a07f-4e8f-bdfd-4d7e30e5dd67'
+      externalSecret:
+        vaultName: atlas-sushy
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: enp1s0
+            type: interface
+            state: up
+            mtu: 9000
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.84
+                  prefix-length: 24
+          - name: enp2s0
+            type: interface
+            state: up
+            mtu: 9000
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.84
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: enp1s0
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: enp2s0
+              table-id: 254
+      interfaceMap:
+        - name: enp1s0
+          macAddress: 52:54:00:3f:91:0d
+        - name: enp2s0
+          macAddress: 52:54:00:10:92:e2
+

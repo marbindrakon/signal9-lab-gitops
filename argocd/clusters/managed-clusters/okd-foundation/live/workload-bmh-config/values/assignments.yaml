@@ -1,1 +1,19 @@
-assignments: []
+assignments:
+  - node: okd-4.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    #infraEnvName: infraenv
+    extraLabels: {}
+    extraAnnoations: {}
+  - node: okd-5.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    #infraEnvName: infraenv
+    extraLabels: {}
+    extraAnnoations: {}
+  - node: okd-6.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    #infraEnvName: infraenv
+    extraLabels: {}
+    extraAnnoations: {}
