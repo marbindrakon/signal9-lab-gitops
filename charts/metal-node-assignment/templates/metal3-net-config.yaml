@@ -7,6 +7,8 @@ kind: Secret
 metadata:
  name: {{ .node }}-net-config
  namespace: {{ .namespace }}
+ annotations:
+   argocd.argoproj.io/sync-options: 'Delete=false'
 type: Opaque
 stringData:
   nmstate: |
