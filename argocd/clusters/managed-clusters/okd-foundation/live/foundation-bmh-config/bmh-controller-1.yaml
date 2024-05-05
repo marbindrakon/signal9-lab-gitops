@@ -1,0 +1,15 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: okd-1.lab.signal9.gg
+  namespace: openshift-machine-api
+  annotations:
+    argocd.argoproj.io/sync-options: 'ServerSideApply=True'
+spec:
+  bootMode: UEFI
+  bootMACAddress: '52:54:00:3f:90:0b'
+  online: true
+  bmc:
+    address: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/a1cfa988-a389-4828-ba46-3fa1818d2304'
+    eredentialsName: "okd-1"
+    disableCertificateVerification: true
