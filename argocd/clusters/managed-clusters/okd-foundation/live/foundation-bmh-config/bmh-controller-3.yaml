@@ -11,5 +11,5 @@ spec:
   online: true
   bmc:
     address: 'redfish-virtualmedia://atlas.lab.signal9.gg:8443/redfish/v1/Systems/74eaac86-cd44-4791-8d13-cad4b25e0102'
-    eredentialsName: "okd-3"
+    credentialsName: "okd-3"
     disableCertificateVerification: true
