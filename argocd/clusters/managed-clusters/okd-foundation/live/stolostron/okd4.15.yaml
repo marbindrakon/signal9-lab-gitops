@@ -1,0 +1,9 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterImageSet
+metadata:
+  labels:
+    channel: stable-4
+    visible: "true"
+  name: okd4.15
+spec:
+  releaseImage: quay.io/openshift/okd:4.15.0-0.okd-2024-03-10-010116
