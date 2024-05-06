@@ -1,0 +1,31 @@
+apiVersion: agent-install.openshift.io/v1beta1
+kind: AgentServiceConfig
+metadata:
+  name: agent
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  databaseStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 25Gi
+  filesystemStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Gi
+  imageStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 200Gi
+  osImages:
+    - cpuArchitecture: x86_64
+      openshiftVersion: 4.15
+      url: 'https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/39.20240407.3.0/x86_64/fedora-coreos-39.20240407.3.0-live.x86_64.iso'
+      version: '39.20240407.3.0'
