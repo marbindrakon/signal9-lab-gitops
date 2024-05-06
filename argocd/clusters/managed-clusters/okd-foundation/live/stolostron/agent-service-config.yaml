@@ -26,6 +26,6 @@ spec:
         storage: 200Gi
   osImages:
     - cpuArchitecture: x86_64
-      openshiftVersion: 4.15
+      openshiftVersion: '4.15'
       url: 'https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/39.20240407.3.0/x86_64/fedora-coreos-39.20240407.3.0-live.x86_64.iso'
       version: '39.20240407.3.0'
