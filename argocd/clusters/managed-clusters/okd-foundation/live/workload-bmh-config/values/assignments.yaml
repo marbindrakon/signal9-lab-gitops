@@ -5,15 +5,15 @@ assignments:
     #infraEnvName: infraenv
     extraLabels: {}
     extraAnnoations: {}
-# - node: okd-5.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-#   #infraEnvName: infraenv
-#   extraLabels: {}
-#   extraAnnoations: {}
-# - node: okd-6.lab.signal9.gg
-#   namespace: test-infra-env
-#   assignmentType: agent
-#   infraEnvName: test-infra-env
-#   extraLabels: {}
-#   extraAnnoations: {}
+  - node: okd-5.lab.signal9.gg
+    namespace: openshift-machine-api
+    assignmentType: metal3
+    #infraEnvName: infraenv
+    extraLabels: {}
+    extraAnnoations: {}
+  - node: okd-6.lab.signal9.gg
+    namespace: test-infra-env
+    assignmentType: agent
+    infraEnvName: test-infra-env
+    extraLabels: {}
+    extraAnnoations: {}
