@@ -11,18 +11,18 @@ assignments:
     infraEnvName: rawad-test
     extraLabels: {}
     extraAnnotations: {}
-  - node: z-52.lab.signal9.gg
-    namespace: clusters-metal-hcp-20240508
-    assignmentType: agent
-    infraEnvName: metal-hcp-20240508
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: z-53.lab.signal9.gg
-    namespace: clusters-metal-hcp-20240508
-    assignmentType: agent
-    infraEnvName: metal-hcp-20240508
-    extraLabels: {}
-    extraAnnotations: {}
+# - node: z-52.lab.signal9.gg
+#   namespace: clusters-metal-hcp-20240508
+#   assignmentType: agent
+#   infraEnvName: metal-hcp-20240508
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: z-53.lab.signal9.gg
+#   namespace: clusters-metal-hcp-20240508
+#   assignmentType: agent
+#   infraEnvName: metal-hcp-20240508
+#   extraLabels: {}
+#   extraAnnotations: {}
 # - node: z-54.lab.signal9.gg
 #   namespace: rawad-test
 #   assignmentType: agent
