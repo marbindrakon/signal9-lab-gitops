@@ -38,7 +38,7 @@
     netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
     state: absent
     data:
-      prefix: "{{ metallb_network.prefix }}"
+      prefix: "{{ metallb_network.value.prefix }}"
   when: 
     - metallb_network | length > 0
     - cluster_state == "absent"
