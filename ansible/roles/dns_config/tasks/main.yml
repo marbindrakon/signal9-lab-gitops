@@ -20,6 +20,13 @@
   when:
     - cluster_platform not in ["hcp_kubevirt", "hcp_agent"]
 
+- name: construct internal api-int record for hcp_agent
+  ansible.builtin.set_fact:
+    dns_internal_records: '{{ dns_internal_records + [(dns_int_api_name, internal_api_vip)] }}'
+  when:
+    - cluster_platform == "hcp_agent"
+    - loadbalancer_type == "internal"
+
 - name: construct internal api-int record
   ansible.builtin.set_fact:
     dns_internal_records: '{{ dns_internal_records + [(dns_int_api_name, internal_api_vip)] }}'
