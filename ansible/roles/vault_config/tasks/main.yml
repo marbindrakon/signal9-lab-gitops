@@ -74,6 +74,11 @@
         {{ cluster_trust_bundle }}
     when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
 
+  - name: use static CA cert for HCP
+    ansible.builtin.set_fact:
+      vault_k8s_ca_bundle: "{{ cluster_trust_bundle }}"
+    when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
+
   - name: write k8s auth method to vault
     community.hashi_vault.vault_write:
       url: "{{ hashicorp_vault['url'] }}"
