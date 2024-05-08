@@ -22,12 +22,12 @@ assignments:
 #   assignmentType: metal3
 #   extraLabels: {}
 #   extraAnnotations: {}
-  - node: z-54.lab.signal9.gg
-    namespace: rawad-test
-    assignmentType: agent
-    infraEnvName: rawad-test
-    extraLabels: {}
-    extraAnnotations: {}
+# - node: z-54.lab.signal9.gg
+#   namespace: rawad-test
+#   assignmentType: agent
+#   infraEnvName: rawad-test
+#   extraLabels: {}
+#   extraAnnotations: {}
   - node: z-55.lab.signal9.gg
     namespace: rawad-test
     assignmentType: agent
