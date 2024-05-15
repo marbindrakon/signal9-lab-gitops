@@ -28,5 +28,5 @@ spec:
     path: 'charts/metal-node-assignment'
     helm:
       valueFiles:
-        - ../../argocd/clusters/managed-clusters/okd-foundation/live/workload-bmh-config/values/nodes.yaml
-        - ../../argocd/clusters/managed-clusters/okd-foundation/live/workload-bmh-config/values/assignments.yaml
+        - ../../argocd/clusters/managed-clusters/4ctl-kvm/live/workload-bmh-config/values/nodes.yaml
+        - ../../argocd/clusters/managed-clusters/4ctl-kvm/live/workload-bmh-config/values/assignments.yaml
