@@ -9,7 +9,7 @@ monitoring:
   storageClass: ocs-external-storagecluster-ceph-rbd
 
 odfStorage:
-  enabled: true
+  enabled: false
   external: true
   version: '4.15'
   externalSecret:
