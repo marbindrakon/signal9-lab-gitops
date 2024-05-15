@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svc-external-dns
+  namespace: external-dns
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: svc-external-dns
+  template:
+    metadata:
+      labels:
+        app: svc-external-dns
+    spec:
+      serviceAccountName: external-dns
+      containers:
+      - name: external-dns
+        image: registry.k8s.io/external-dns/external-dns:v0.14.0
+        envFrom:
+        - secretRef:
+            name: rfc2136-secret
+        args:
+        - --registry=txt
+        - --txt-prefix=external-dns-
+        - --txt-owner-id=4ctl-svc
+        - --provider=rfc2136
+        - --rfc2136-host=172.18.42.10
+        - --rfc2136-port=53
+        - --rfc2136-zone=lab.signal9.gg
+        - --rfc2136-tsig-axfr
+        - --source=service
+        - --domain-filter=lab.signal9.gg
+        - --service-type-filter=LoadBalancer
