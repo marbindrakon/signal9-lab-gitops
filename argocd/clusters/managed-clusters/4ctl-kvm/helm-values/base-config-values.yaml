@@ -6,7 +6,7 @@ cluster:
 
 monitoring:
   enabled: true
-  storageClass: ocs-external-storagecluster-ceph-rbd
+  storageClass: lvms-vg1
 
 odfStorage:
   enabled: false
