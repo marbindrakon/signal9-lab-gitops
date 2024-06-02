@@ -54,19 +54,19 @@ assignments:
     extraLabels:
       app: openstack
     extraAnnotations: {}
-# - node: z-59.lab.signal9.gg
-#   namespace: metal-infra-env
-#   assignmentType: agent
-#   infraEnvName: metal-infra-env
-#   extraLabels:
-#     app: openstack
-#   extraAnnotations: {}
-# - node: z-60.lab.signal9.gg
-#   namespace: metal-infra-env
-#   assignmentType: agent
-#   infraEnvName: metal-infra-env
-#   extraLabels:
-#     app: openstack
+  - node: z-59.lab.signal9.gg
+    namespace: metal-infra-env
+    assignmentType: agent
+    infraEnvName: metal-infra-env
+    extraLabels:
+      app: openstack
+    extraAnnotations: {}
+  - node: z-60.lab.signal9.gg
+    namespace: metal-infra-env
+    assignmentType: agent
+    infraEnvName: metal-infra-env
+    extraLabels:
+      app: openstack
     extraAnnotations: {}
   - node: z-61.lab.signal9.gg
     namespace: openshift-machine-api
