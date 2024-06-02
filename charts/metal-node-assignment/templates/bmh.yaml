@@ -26,7 +26,7 @@ metadata:
     {{ toYaml .extraLabels | nindent 4 }}
     {{ end }}
 spec:
-  automatedCleaningMode: metadata
+  automatedCleaningMode: {{ $nodeConfig.cleaningMode | default "metadata" }}
   bootMode: {{ $nodeConfig.bootMode | default "legacy" }}
   bootMACAddress: "{{ $nodeConfig.bootMac }}"
   {{- if eq .assignmentType "metal3" }}

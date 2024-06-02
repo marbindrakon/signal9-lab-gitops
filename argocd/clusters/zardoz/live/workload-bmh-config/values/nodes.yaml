@@ -865,6 +865,7 @@ nodes:
     labels:
       compute-model: r720
     bootMac: bc:30:5b:f1:d7:14
+    cleaningMode: disabled
     bmc:
       url: ipmi://r720-2-drac.oob.signal9.gg
       externalSecret:
@@ -963,6 +964,7 @@ nodes:
     labels:
       compute-model: r720
     bootMac: 18:66:da:ea:27:ee
+    cleaningMode: disabled
     bmc:
       url: ipmi://r720-3-drac.oob.signal9.gg
       externalSecret:
