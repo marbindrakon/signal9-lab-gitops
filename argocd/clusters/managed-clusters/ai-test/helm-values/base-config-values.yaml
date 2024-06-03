@@ -11,7 +11,7 @@ monitoring:
 odfStorage:
   enabled: true
   external: true
-  version: '4.14'
+  version: '4.15'
   externalSecret:
     name: rook-ceph-external-cluster-details
     vaultName: ai-test-rook-data
