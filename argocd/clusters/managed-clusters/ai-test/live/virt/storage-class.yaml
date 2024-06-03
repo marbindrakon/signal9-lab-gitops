@@ -1,0 +1,25 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ocs-storagecluster-ceph-rbd-virtualization
+  annotations:
+    description: Provides RWO and RWX Block volumes suitable for Virtual Machine disks
+    storageclass.kubevirt.io/is-default-virt-class: 'true'
+provisioner: openshift-storage.rbd.csi.ceph.com
+parameters:
+  mapOptions: 'krbd:rxbounce'
+  mounter: rbd
+  csi.storage.k8s.io/fstype: ext4
+  csi.storage.k8s.io/provisioner-secret-namespace: openshift-storage
+  csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+  csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+  csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+  imageFormat: '2'
+  clusterID: openshift-storage
+  imageFeatures: 'layering,deep-flatten,exclusive-lock,object-map,fast-diff'
+  csi.storage.k8s.io/controller-expand-secret-namespace: openshift-storage
+  pool: zardoz-odf
+  csi.storage.k8s.io/node-stage-secret-namespace: openshift-storage
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: Immediate

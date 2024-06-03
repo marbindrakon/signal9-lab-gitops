@@ -1,0 +1,38 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: lab-inf-bridge
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  nodeSelector: 
+    node-role.kubernetes.io/worker: "" 
+  maxUnavailable: 3 
+  desiredState:
+    interfaces:
+      - name: bond1.10
+        type: vlan
+        state: up
+        mtu: 1500
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        vlan:
+          base-iface: bond1
+          id: 10
+      - name: br-lab-inf
+        description: VLAN 10 bridge
+        type: linux-bridge
+        state: up
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: bond1.10
