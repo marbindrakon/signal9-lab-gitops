@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-edge-pkg-ctr
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+---
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: amq-broker
+  namespace: demo-edge-pkg-ctr
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  acceptors:
+    - port: 5672
+      verifyHost: false
+      wantClientAuth: false
+      expose: true
+      needClientAuth: false
+      multicastPrefix: /topic/
+      name: amqp
+      sslEnabled: false
+      sniHost: localhost
+      enabledProtocols: 'TLSv1,TLSv1.1,TLSv1.2'
+      protocols: amqp
+      sslProvider: JDK
+      anycastPrefix: jms.queue.
+    - port: 1883
+      verifyHost: false
+      wantClientAuth: false
+      expose: true
+      needClientAuth: false
+      multicastPrefix: /topic/
+      name: mqtt
+      sslEnabled: false
+      sniHost: localhost
+      enabledProtocols: 'TLSv1,TLSv1.1,TLSv1.2'
+      protocols: mqtt
+      sslProvider: JDK
+      anycastPrefix: jms.queue.      
+  adminPassword: admin
+  adminUser: admin
+  console:
+    expose: true
+  deploymentPlan:
+    size: 1
+    persistenceEnabled: true
+    storage:
+      size: 2Gi    
+    requireLogin: false
+    resources:
+      limits:
+        cpu: 2
+        memory: 4096Mi
+      requests:
+        cpu: 500m
+        memory: 1024Mi
+    messageMigration: false
+    managementRBACEnabled: true
+    journalType: nio
+    enableMetricsPlugin: true
+    jolokiaAgentEnabled: false
+    image: placeholder
+  upgrades:
+    enabled: false
+    minor: false
+  version: 7.12.0
+
+---
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemisAddress
+metadata:
+  name: ex-aaoaddress
+  namespace: demo-edge-pkg-ctr
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"  
+spec:
+  addressName: sampleaddress
+  queueName: sampleaddress
+  routingType: Multicast
