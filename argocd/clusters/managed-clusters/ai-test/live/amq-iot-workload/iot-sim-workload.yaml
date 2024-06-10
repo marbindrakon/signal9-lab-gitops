@@ -62,7 +62,7 @@ spec:
     spec:
       containers:
         - name: container
-          image: quay.io/naveenkendyala/camel-sboot-rest-amq:7.10.0
+          image: quay.io/naveenkendyala/camel-sboot-rest-amq:7.12.0
           ports:
             - containerPort: 8080
               protocol: TCP
