@@ -7,6 +7,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
+  permittedHostDevices: 
+    pciHostDevices: 
+    - pciDeviceSelector: "10DE:1BB3"
+      resourceName: "nvidia.com/GP104GL_Tesla_P4"
   liveMigrationConfig:
     network: live-migration
     allowPostCopy: true
