@@ -15,6 +15,7 @@ spec:
     name: {{ .Values.cluster.trustBundleConfigMap }}
 {{ end }}
   controllerAvailabilityPolicy: HighlyAvailable
+  olmCatalogPlacement: guest
   dns:
 {{- if and (eq .Values.cluster.type "kubevirt") (.Values.cluster.kubevirt.baseDomainPassthrough) }}
     baseDomain: "{{ .Values.cluster.foundationIngressBaseDomaion }}"
