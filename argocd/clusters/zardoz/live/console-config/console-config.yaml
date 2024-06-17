@@ -5,4 +5,8 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: 'ServerSideApply=True'
 spec:
-  customization: {}
+  customization:
+    customLogoFile:
+      key: custom-logo.png
+      name: console-custom-logo 
+    customProductName: Zardoz
