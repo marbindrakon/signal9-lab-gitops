@@ -80,3 +80,4 @@ spec:
   addressName: sampleaddress
   queueName: sampleaddress
   routingType: Multicast
+  removeFromBrokerOnDelete: false
