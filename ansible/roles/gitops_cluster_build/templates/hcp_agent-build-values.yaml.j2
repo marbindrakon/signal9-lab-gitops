@@ -13,9 +13,9 @@ cluster:
   trustBundleConfigMap: user-ca-bundle
   sshPubKey: "{{ cluster_ssh_pubkey }}"
   agent:
-    createInfraEnv: true
+    createInfraEnv: false
     # Defaults to a new per-cluster namespace
-    agentNamespaceOverride: null
+    agentNamespaceOverride: metal-infra-env
 
 certManager:
   manageApiCert: false
