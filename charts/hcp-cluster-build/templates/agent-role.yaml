@@ -1,4 +1,4 @@
-{{- if eq .Values.cluster.type "agent" -}}
+{{- if and (eq .Values.cluster.type "agent") (.Values.cluster.agent.createInfraEnv) -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
