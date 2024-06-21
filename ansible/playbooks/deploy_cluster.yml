@@ -44,7 +44,7 @@
 
     - name: pause to allow secret creation
       ansible.builtin.pause:
-        minutes: 1
+        minutes: 2
         prompt: "Waiting one minute for kubeconfig secret creation"
 
     - name: include vault_config role
