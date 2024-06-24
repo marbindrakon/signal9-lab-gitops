@@ -29,8 +29,8 @@ spec:
   automatedCleaningMode: {{ $nodeConfig.cleaningMode | default "metadata" }}
   bootMode: {{ $nodeConfig.bootMode | default "legacy" }}
   bootMACAddress: "{{ $nodeConfig.bootMac }}"
-  {{- if eq .assignmentType "metal3" }}
   preprovisioningNetworkDataName: {{ .node }}-net-config
+  {{- if eq .assignmentType "metal3" }}
   online: false
   {{ else }}
   online: true
