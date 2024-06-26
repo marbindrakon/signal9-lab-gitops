@@ -20,4 +20,4 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-        - "../../argocd/clusters/managed-clusters/ai-test/helm-values/base-config-values.yaml"
+        - "../../argocd/clusters/managed-clusters/jon-test/helm-values/base-config-values.yaml"
