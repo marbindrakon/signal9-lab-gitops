@@ -1,4 +1,5 @@
 {{- range .Values.assignments -}}
+{{- if eq .assignmentType "metal3" -}}
 {{- $nodeConfig := (get $.Values.nodes .node) -}}
 ---
 apiVersion: v1 
@@ -13,4 +14,5 @@ stringData:
   nmstate: |
     {{- toYaml $nodeConfig.network.nmstateConfig | nindent 4 }}
 ---
+{{ end }}
 {{ end }}
