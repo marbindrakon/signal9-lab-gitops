@@ -5,15 +5,15 @@
     vault_jwt: "{{ lookup('ansible.builtin.file', hashicorp_vault['jwt_location']) }}"
   when: vault_jwt is not defined
 
-- name: construct redirect uri (standalone ingress)
+- name: construct redirect uri (Standalone)
   ansible.builtin.set_fact:
     sso_redirect_uri: "https://oauth-openshift.apps.{{ cluster_name }}.{{ base_domain }}/oauth2callback/{{ cluster_sso['console_sso_label'] }}"
-  when: cluster_platform not in ["hcp_kubevirt"]
+  when: cluster_platform not in ["hcp_kubevirt", "hcp_agent"]
 
-- name: construct redirect uri (shared ingress)
+- name: construct redirect uri (HCP)
   ansible.builtin.set_fact:
     sso_redirect_uri: "https://oauth-clusters-{{ cluster_name }}.{{ foundation_ingress_base_domain }}:443/oauth2callback/{{ cluster_sso['console_sso_label'] }}"
-  when: cluster_platform in ["hcp_kubevirt"]
+  when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
 
 - name: ensure sso client state
   community.general.keycloak_client:
