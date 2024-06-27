@@ -24,7 +24,7 @@
   ansible.builtin.set_fact:
     dns_internal_records: '{{ dns_internal_records + [(dns_int_api_name, internal_api_vip)] }}'
   when:
-    - cluster_platform == "hcp_agent"
+    - cluster_platform in ["hcp_agent", "agent"]
     - loadbalancer_type == "internal"
 
 - name: construct internal api-int record
