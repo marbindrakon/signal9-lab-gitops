@@ -1,0 +1,55 @@
+# This will allocate the metallb prefix for the new cluster and calculate the VIP and ASN
+- name: fetch existing networks
+  ansible.builtin.set_fact:
+    metallb_network: "{{ lookup('netbox.netbox.nb_lookup', 'prefixes', api_filter='description=' + cluster_name + '-MetalLB') }}"
+
+- name: debug existing network
+  ansible.builtin.debug:
+    msg: "{{ metallb_network }}"
+
+- name: allocate new network
+  netbox.netbox.netbox_prefix:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+    state: present
+    first_available: true
+    data:
+      parent: "{{ metallb_network_container }}"
+      description: "{{ cluster_name }}-MetalLB"
+      is_pool: true
+      prefix_length: 25
+  register: network_create
+  when: 
+    - metallb_network | length == 0
+    - cluster_state == "present"
+
+- name: re-fetch existing networks
+  ansible.builtin.set_fact:
+    metallb_network: "{{ lookup('netbox.netbox.nb_lookup', 'prefixes', api_filter='description=' + cluster_name + '-MetalLB') }}"
+  when: network_create is changed
+
+- name: debug new or existing network
+  ansible.builtin.debug:
+    msg: "{{ metallb_network }}"
+
+- name: handle existing network
+  netbox.netbox.netbox_prefix:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+    state: absent
+    data:
+      prefix: "{{ metallb_network.value.prefix }}"
+  when: 
+    - metallb_network | length > 0
+    - cluster_state == "absent"
+
+- name: get third octet for ASN generation
+  ansible.builtin.set_fact:
+    third_octet: "{{ metallb_network.value.prefix.split('.')[2] }}"
+
+- name: determine ASN
+  ansible.builtin.set_fact:
+    metallb_asn: '64{{ third_octet }}{{ "1" if "128" in metallb_network.value.prefix else "0" }}'
+
+- name: allocate vips from netbox
+  ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"

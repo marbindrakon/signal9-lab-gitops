@@ -1,2 +1,5 @@
+- name: allocate metallb network
+  ansible.builtin.include_tasks: "include/_allocate_metallb_network.yml"
+
 - name: allocate vips from netbox
   ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"
