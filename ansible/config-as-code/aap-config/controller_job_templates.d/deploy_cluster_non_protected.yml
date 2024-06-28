@@ -93,7 +93,7 @@ controller_templates:
             - openstack
             - hcp_kubevirt
             - hcp_agent
-            - infra_env_hybrid
+            - agent
             - vsphere
         - question_name: Version
           question_description: ""
@@ -105,9 +105,9 @@ controller_templates:
           new_question: False
           default: '4.14'
           choices:
+            - '4.16'
             - '4.15'
             - '4.14'
-            - '4.13'
             - '4.12'
         - question_name: Use External or Internal LB
           question_description: ""
