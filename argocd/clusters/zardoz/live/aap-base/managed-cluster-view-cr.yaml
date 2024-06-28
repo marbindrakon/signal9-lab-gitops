@@ -21,6 +21,7 @@ rules:
       - get
       - list
       - update
+      - patch
     apiGroups:
       - 'agent-install.openshift.io'
     resources:
