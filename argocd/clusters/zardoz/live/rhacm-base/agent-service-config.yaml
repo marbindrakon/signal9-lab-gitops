@@ -25,15 +25,15 @@ spec:
       requests:
         storage: 100Gi
   osImages:
-    - openshiftVersion: 4.15
+    - openshiftVersion: "4.15"
       cpuArchitecture: x86_64
       url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/pre-release/4.15.0-rc.0/rhcos-4.15.0-rc.0-x86_64-live.x86_64.iso
       version: 415.92.202311241643-0
-    - openshiftVersion: 4.14
+    - openshiftVersion: "4.14"
       cpuArchitecture: x86_64
       url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.14/4.14.0/rhcos-4.14.0-x86_64-live.x86_64.iso
       version: 414.92.202310170514-0
-    - openshiftVersion: 4.16
+    - openshiftVersion: "4.16"
       cpuArchitecture: x86_64
       url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.16/4.16.0/rhcos-4.16.0-x86_64-live.x86_64.iso
       version: 416.94.202406172220-0
