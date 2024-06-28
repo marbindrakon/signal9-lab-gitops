@@ -9,8 +9,8 @@ cluster:
   clusterImageSet: img4.16.0-x86-64-appsub
   controlPlaneCount: 1
   workerCount: 0
-  apiVIP: "172.18.16.55"
-  ingressVIP: "172.18.16.55"
+  apiVIP: "172.18.16.52"
+  ingressVIP: "172.18.16.52"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
