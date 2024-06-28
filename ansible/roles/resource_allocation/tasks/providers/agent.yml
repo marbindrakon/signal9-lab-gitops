@@ -10,7 +10,7 @@
     is_sno: false
   when:
     - cluster_platform == "agent"
-    - agent_platform_config['cluster_sizes'][cluster_size]['controller_count']  == 1
+    - agent_platform_config['cluster_sizes'][cluster_size]['controller_count']  != 1
 
 - name: allocate metallb network
   ansible.builtin.include_tasks: "include/_allocate_metallb_network.yml"
