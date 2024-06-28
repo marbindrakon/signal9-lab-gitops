@@ -51,3 +51,18 @@ certManager:
       selector:
         dnsZones:
           - {{ base_domain }}
+
+{% if metallb_network %}
+metallb:
+  enabled: true
+  localAsn: {{ metallb_asn }}
+  peers:
+    - name: lab-rtr-a
+      address: 172.18.16.2
+      asn: 65123
+    - name: lab-rtr-b
+      address: 172.18.16.3
+      asn: 65123
+  clusterIpPool: "{{ metallb_network.value.prefix }}"
+  anycastIpPool: "172.18.71.0/24"
+{% endif %}

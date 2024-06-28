@@ -1,0 +1,41 @@
+cluster:
+{% if gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
+  importToHub: false
+  useACM: false
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: true
+{% else %}
+  importToHub: true
+{% if hub_type == 'acm' %}
+  useACM: true
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: false
+{% else %}
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: true
+{% endif %}
+{% endif %}
+  name: {{ cluster_name }}
+  gitOpsRepo: "{{ gitops_repo_url }}"
+  baseDomain: {{ base_domain }}
+  clusterImageSet: {{ cluster_image_set }}
+  controlPlaneCount: {{ agent_platform_config['cluster_sizes'][cluster_size]['controller_count'] }}
+  workerCount: {{ agent_platform_config['cluster_sizes'][cluster_size]['worker_count'] }}
+  apiVIP: "{{ internal_api_vip }}"
+  ingressVIP: "{{ internal_ingress_vip }}"
+  pullSecretVault: "{{ hashicorp_vault['cluster_secrets']['pull-secret'] }}"
+  trustedCAs: |
+    {{ cluster_trust_bundle | indent(4) }}
+  sshKeyVault: "{{ hashicorp_vault['cluster_secrets']['node-ssh'] }}"
+  sshPubKey: "{{ cluster_ssh_pubkey }}"
+  dnsServers: {{ cluster_dns_servers | to_json }}
+provider:
+  type: Agent
+  agent:
+{% if not is_sno %}
+    useExternalLB: false
+{% endif %}
+    machineCIDR: {{ agent_platform_config['node_prefix'] }}
+    sharedInfraEnv:
+      name: {{ agent_platform_config['shared_infra_env']['name'] }}
+      namespace: {{ agent_platform_config['shared_infra_env']['namespace'] }}
