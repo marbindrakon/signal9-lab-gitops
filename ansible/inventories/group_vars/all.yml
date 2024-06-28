@@ -132,9 +132,10 @@ cluster_sso:
 metallb_network_container: 172.18.72.0/21
 
 version_mapping:
-  "4.15": "4.15.3"
-  "4.14": "4.14.13"
-  "4.13": "4.13.34"
+  "4.16": "4.16.0"
+  "4.15": "4.15.19"
+  "4.14": "4.14.31"
+  "4.13": "4.13.44"
   "4.12": "4.12.50"
 
 platform_configs:
@@ -364,10 +365,9 @@ platform_configs:
     storage_interface_names:
       - "bond1.19"
       - "ens224"
-    vmware_config:
-      datastore: "CEPH-NVME"
-      node_port_group: "ocp0-infra"
-      storage_port_group: "Ceph-ODF"
+    shared_infra_env:
+      name: metal-infra-env
+      namespace: metal-infra-env
       cluster_name: "XNA-ESX-1"
     use_baremetal_operator: false
     cluster_sizes:
@@ -406,6 +406,27 @@ platform_configs:
         controller_disk_gb: 128
         worker_count: 5
         worker_type: metal
+
+  agent:
+    vip_prefix: "172.18.16.0/24"
+    node_prefix: "172.18.16.0/24"
+    shared_infra_env:
+      name: metal-infra-env
+      namespace: metal-infra-env
+    cluster_sizes:
+      sandbox:
+        controller_count: 1
+        worker_count: 0
+      small:
+        controller_count: 3
+        worker_count: 0
+      medium:
+        controller_count: 3
+        worker_count: 3
+      large:
+        controller_count: 3
+        worker_count: 5
+
   hcp_kubevirt:
     ingress_base_domain: "apps.zardoz.{{ base_domain }}"
     cluster_sizes:
