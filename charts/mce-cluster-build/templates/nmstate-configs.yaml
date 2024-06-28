@@ -1,6 +1,6 @@
-{{- if .Values.provider.infraenv.hostNetworkConfigs -}}
+{{- if and (eq .Values.provider.agent.infraEnvType "dedicated") .Values.provider.agent.infraEnvSettings.hostNetworkConfigs -}}
 ---
-{{ range $host, $netconf := .Values.provider.infraenv.hostNetworkConfigs }}
+{{ range $host, $netconf := .Values.provider.agent.infraEnvSettings.hostNetworkConfigs }}
 apiVersion: agent-install.openshift.io/v1beta1
 kind: NMStateConfig
 metadata:

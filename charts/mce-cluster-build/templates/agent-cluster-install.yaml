@@ -1,17 +1,15 @@
-{{- if eq .Values.provider.type "InfraEnv" -}}
+{{- if eq .Values.provider.type "Agent" -}}
 apiVersion: extensions.hive.openshift.io/v1beta1
 kind: AgentClusterInstall
 metadata:
   name: {{ .Values.cluster.name }}
   namespace: {{ .Values.cluster.name }}
-  finalizers:
-    - agentclusterinstall.agent-install.openshift.io/ai-deprovision
   annotations:
     argocd.argoproj.io/sync-wave: '1'
 spec:
   clusterDeploymentRef:
     name: {{ .Values.cluster.name }}
-{{ if .Values.provider.infraenv.platformType }}
+{{ if .Values.provider.agent.platformType }}
   platformType: {{ .Values.provider.infraenv.platformType }}
 {{ end }}
   imageSetRef:
@@ -20,7 +18,7 @@ spec:
 {{ else }}
     name: {{ .Values.cluster.name }}-custom
 {{ end }}
-{{ if not (eq .Values.provider.infraenv.useExternalLB true) }}
+{{ if not (eq .Values.provider.agent.useExternalLB true) }}
   apiVIP: {{ .Values.cluster.apiVIP }}
   ingressVIP: {{ .Values.cluster.ingressVIP }}
 {{ end }}
@@ -29,10 +27,10 @@ spec:
       - cidr: 10.128.0.0/14
         hostPrefix: 23
     machineNetwork:
-      - cidr: {{ .Values.provider.infraenv.machineCIDR }}
+      - cidr: {{ .Values.provider.agent.machineCIDR }}
     serviceNetwork:
       - 172.30.0.0/16
-    userManagedNetworking: {{ .Values.provider.infraenv.useExternalLB }}
+    userManagedNetworking: {{ .Values.provider.agent.useExternalLB }}
   provisionRequirements:
     controlPlaneAgents: {{ .Values.cluster.controlPlaneCount }}
 {{ if .Values.cluster.workerCount }}

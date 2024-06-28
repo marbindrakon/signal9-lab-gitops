@@ -24,7 +24,7 @@ provider:
   providerCAs: ""
   # Only used for vSphere IPI
   installConfigVault: ""
-  # Can be OpenStack, InfraEnv, or vSphere
+  # Can be OpenStack, Agent, or vSphere
   type: OpenStack
   vsphere:
     datacenter: ""
@@ -39,14 +39,19 @@ provider:
     computeAZs: []
     controlPlaneFlavor: m1.xlarge
     workerFlavor: m1.large
-  infraenv:
+  agent:
     # Override provider type on AgentClusterInstall (i.e. agent install on VSphere)
+    infraEnvType: shared
+    infraEnvSettings:
+      networkType: static
+      hostNetworkConfigs: {}
+      ntpServers:
+        - 172.18.0.79
+        - 172.18.42.10
+        - 172.18.42.11
+    sharedInfraEnv:
+      namespace: metal-infra-env
+      name: metal-infra-env
     platformType: null
-    networkType: static
     useExternalLB: true
     machineCIDR: ""
-    ntpServers:
-      - 172.18.0.79
-      - 172.18.42.10
-      - 172.18.42.11
-    hostNetworkConfigs: {}

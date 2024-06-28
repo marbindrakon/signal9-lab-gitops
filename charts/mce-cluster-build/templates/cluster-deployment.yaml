@@ -9,7 +9,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: '1'
 spec:
-{{ if eq .Values.provider.type "InfraEnv" }}
+{{ if eq .Values.provider.type "Agent" }}
   clusterInstallRef:
     group: extensions.hive.openshift.io
     kind: AgentClusterInstall
@@ -23,7 +23,7 @@ spec:
   installAttemptsLimit: 3
   installed: false
   platform:
-{{ if eq .Values.provider.type "InfraEnv" }}
+{{ if and (eq .Values.provider.type "Agent") (eq .Values.provider.agent.infraEnvType "dedicated") }}
     agentBareMetal:
       agentSelector:
         matchLabels:
@@ -52,7 +52,7 @@ spec:
         name: {{ .Values.cluster.name }}-provider-creds
       cloud: openstack
 {{ end }}
-{{ if not (eq .Values.provider.type "InfraEnv") }}
+{{ if not (eq .Values.provider.type "Agent") }}
   provisioning:
     installConfigSecretRef:
       name: {{ .Values.cluster.name }}-install-config

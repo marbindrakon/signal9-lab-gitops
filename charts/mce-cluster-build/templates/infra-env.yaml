@@ -1,23 +1,21 @@
-{{- if eq .Values.provider.type "InfraEnv" -}}
+{{- if and (eq .Values.provider.type "Agent") (eq .Values.agent.infraEnvType "dedicated") -}}
 apiVersion: agent-install.openshift.io/v1beta1
 kind: InfraEnv
 metadata:
   name: {{ .Values.cluster.name }}
   namespace: {{ .Values.cluster.name }}
-  finalizers:
-    - infraenv.agent-install.openshift.io/ai-deprovision
   annotations:  
     argocd.argoproj.io/sync-wave: '0'
   labels:
     agentclusterinstalls.extensions.hive.openshift.io/location: {{ .Values.cluster.name }}
-    networkType: {{ .Values.provider.infraenv.networkType }}
+    networkType: {{ .Values.provider.agent.infraEnvSettings.networkType }}
 spec:
   clusterRef:
     name: {{ .Values.cluster.name }}
     namespace: {{ .Values.cluster.name }}
-{{ if .Values.provider.infraenv.ntpServers }}
+{{ if .Values.provider.agent.infraEnvSettings.ntpServers }}
   additionalNTPSources:
-{{ range .Values.provider.infraenv.ntpServers }}
+{{ range .Values.provider.agent.infraEnvSettings.ntpServers }}
     - {{ . }}
 {{ end }}
 {{ end }}
