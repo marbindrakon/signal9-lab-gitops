@@ -1,4 +1,4 @@
-{{- if and (eq .Values.provider.type "Agent") (eq .Values.agent.infraEnvType "dedicated") -}}
+{{- if and (eq .Values.provider.type "Agent") (eq .Values.provider.agent.infraEnvType "dedicated") -}}
 apiVersion: agent-install.openshift.io/v1beta1
 kind: InfraEnv
 metadata:
