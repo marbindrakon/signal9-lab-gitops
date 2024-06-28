@@ -24,7 +24,8 @@ spec:
   installed: false
   platform:
 {{ if eq .Values.provider.type "Agent" }}
-    agentBareMetal: {}
+    agentBareMetal:
+      agentSelector: {}
 {{ end }}
 {{ if eq .Values.provider.type "vSphere" }}
     vsphere:
