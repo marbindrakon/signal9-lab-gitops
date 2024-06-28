@@ -1,5 +1,74 @@
+- name: set SNO flag true
+  ansible.builtin.set_fact:
+    is_sno: true
+  when:
+    - cluster_platform == "agent"
+    - agent_platform_config['cluster_sizes'][cluster_size]['controller_count']  == 1
+
+- name: set SNO flag false
+  ansible.builtin.set_fact:
+    is_sno: false
+  when:
+    - cluster_platform == "agent"
+    - agent_platform_config['cluster_sizes'][cluster_size]['controller_count']  == 1
+
 - name: allocate metallb network
   ansible.builtin.include_tasks: "include/_allocate_metallb_network.yml"
 
 - name: allocate vips from netbox
   ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"
+  when:
+    - is_sno == false
+
+- name: get agents
+  kubernetes.core.k8s_info:
+    api_version: agent-install.openshift.io/v1beta1
+    kind: agent
+  register: agent_list
+
+- name: list unbound agents only
+  ansible.builtin.set_fact:
+    unbound_agents: "{{ agent_list | community.general.json_query(query) }}"
+  vars:
+    query: "resources[?status.debugInfo.state==`known-unbound`]"
+
+- name: initialize agent list
+  ansible.builtin.set_fact:
+    candidate_agents: []
+    desired_agents: "{{ agent_platform_config['cluster_sizes'][cluster_size]['controller_count'] + agent_platform_config['cluster_sizes'][cluster_size]['compute_count'] }}"
+
+- name: populate info for unbound agents
+  ansible.builtin.set_fact:
+    candidate_agents: "{{ candidate_agents + [{'name': agent_name, 'ip': agent_ip}] }}"
+  vars:
+    agent_name: "{{ item.metadata.name }}"
+    agent_ip: "{{ item | community.general.json_query('status.inventory.interfaces[?name==`bond1.16`].ipV4Addresses | [0][0]') | ansible.utils.ipaddr('address')}}"
+  loop: "{{ unbound_agents }}"
+
+- name: select agents
+  ansible.builtin.set_fact:
+    selected_agents: "{{ candidate_agents[0:desired_agents] }}"
+
+- name: debug agent list
+  ansible.builtin.debug:
+    msg: "{{ selected_agents }}"
+
+- name: claim selected agents
+  kubernetes.core.k8s:
+    api_version: agent-install.openshift.io/v1beta1
+    kind: agent
+    namespace: metal-infra-env
+    name: "{{ item.name }}"
+    state: patched
+    definition:
+      spec:
+        clusterDeploymentName:
+          namespace: "{{ cluster_name }}"
+          name: "{{ cluster_name }}"
+  loop: "{{ selected_agents }}"
+
+- name: set SNO VIP data
+  ansible.builtin.set_fact:
+    internal_api_vip: "{{ selected_agents[0].ip }}"
+    internal_ingress_vip: "{{ selected_agents[0].ip }}"
+  when: is_sno == true
