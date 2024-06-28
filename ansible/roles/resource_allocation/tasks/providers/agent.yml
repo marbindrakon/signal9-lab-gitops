@@ -30,7 +30,7 @@
 - name: initialize agent list
   ansible.builtin.set_fact:
     candidate_agents: []
-    desired_agents: "{{ agent_platform_config['cluster_sizes'][cluster_size]['controller_count'] + agent_platform_config['cluster_sizes'][cluster_size]['compute_count'] }}"
+    desired_agents: "{{ agent_platform_config['cluster_sizes'][cluster_size]['controller_count'] + agent_platform_config['cluster_sizes'][cluster_size]['worker_count'] }}"
 
 - name: populate info for unbound agents
   ansible.builtin.set_fact:
