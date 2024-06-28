@@ -23,11 +23,8 @@ spec:
   installAttemptsLimit: 3
   installed: false
   platform:
-{{ if and (eq .Values.provider.type "Agent") (eq .Values.provider.agent.infraEnvType "dedicated") }}
-    agentBareMetal:
-      agentSelector:
-        matchLabels:
-          agentclusterinstalls.extensions.hive.openshift.io/location: {{ .Values.cluster.name }}
+{{ if eq .Values.provider.type "Agent" }}
+    agentBareMetal: {}
 {{ end }}
 {{ if eq .Values.provider.type "vSphere" }}
     vsphere:
