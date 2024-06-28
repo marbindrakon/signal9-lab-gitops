@@ -15,11 +15,6 @@
 - name: allocate metallb network
   ansible.builtin.include_tasks: "include/_allocate_metallb_network.yml"
 
-- name: allocate vips from netbox
-  ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"
-  when:
-    - is_sno == false
-
 - name: get agents
   kubernetes.core.k8s_info:
     api_version: agent-install.openshift.io/v1beta1
@@ -72,3 +67,8 @@
     internal_api_vip: "{{ selected_agents[0].ip }}"
     internal_ingress_vip: "{{ selected_agents[0].ip }}"
   when: is_sno == true
+
+- name: allocate vips from netbox
+  ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"
+  when: is_sno == false
+
