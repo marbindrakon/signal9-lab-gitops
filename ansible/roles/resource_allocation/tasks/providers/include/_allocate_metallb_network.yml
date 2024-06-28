@@ -50,6 +50,3 @@
 - name: determine ASN
   ansible.builtin.set_fact:
     metallb_asn: '64{{ third_octet }}{{ "1" if "128" in metallb_network.value.prefix else "0" }}'
-
-- name: allocate vips from netbox
-  ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"
