@@ -10,6 +10,14 @@ monitoring:
 externalSecrets:
   vaultAuthPath: "k8s-mgd-jon-test"
 
+odfStorage:
+  enabled: true
+  external: true
+  version: '4.15'
+  externalSecret:
+    name: rook-ceph-external-cluster-details
+    vaultName: ai-test-rook-data
+
 timesync:
   enabled: true
   ntpServers: ['172.18.42.10', '172.18.42.11']
