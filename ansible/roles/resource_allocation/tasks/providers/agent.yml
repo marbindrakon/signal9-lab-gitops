@@ -20,16 +20,26 @@
     api_version: agent-install.openshift.io/v1beta1
     kind: agent
   register: agent_list
+  when: cluster_state == "present"
 
 - name: list unbound agents only
   ansible.builtin.set_fact:
     unbound_agents: "{{ agent_list | community.general.json_query(query) }}"
   vars:
     query: "resources[?status.debugInfo.state==`known-unbound`]"
+  when: cluster_state == "present"
+
+- name: list bound agents only
+  ansible.builtin.set_fact:
+    bound_agents: "{{ agent_list | community.general.json_query(query) }}"
+  vars:
+    query: "resources[?spec.clusterDeploymentName.name==`{{ cluster_name }}`]"
+  when: cluster_state == "absent"
 
 - name: initialize agent list
   ansible.builtin.set_fact:
     candidate_agents: []
+    current_agents: []
     desired_agents: "{{ agent_platform_config['cluster_sizes'][cluster_size]['controller_count'] + agent_platform_config['cluster_sizes'][cluster_size]['worker_count'] }}"
 
 - name: populate info for unbound agents
@@ -39,14 +49,30 @@
     agent_name: "{{ item.metadata.name }}"
     agent_ip: "{{ item | community.general.json_query('status.inventory.interfaces[?name==`bond1.16`].ipV4Addresses | [0][0]') | ansible.utils.ipaddr('address')}}"
   loop: "{{ unbound_agents }}"
+  when: cluster_state == "present"
+
+- name: populate info for bound agents
+  ansible.builtin.set_fact:
+    current_agents: "{{ current_agents + [{'name': agent_name, 'ip': agent_ip}] }}"
+  vars:
+    agent_name: "{{ item.metadata.name }}"
+    agent_ip: "{{ item | community.general.json_query('status.inventory.interfaces[?name==`bond1.16`].ipV4Addresses | [0][0]') | ansible.utils.ipaddr('address')}}"
+  loop: "{{ bound_agents }}"
+  when: cluster_state == "absent"
 
 - name: select agents
   ansible.builtin.set_fact:
     selected_agents: "{{ candidate_agents[0:desired_agents|int] }}"
+  when: cluster_state == "present"
 
 - name: debug agent list
   ansible.builtin.debug:
     msg: "{{ selected_agents }}"
+  when: cluster_state == "present"
+
+- name: debug current agent list
+  ansible.builtin.debug:
+    msg: "{{ current_agents }}"
 
 - name: claim selected agents
   kubernetes.core.k8s:
@@ -61,11 +87,20 @@
           namespace: "{{ cluster_name }}"
           name: "{{ cluster_name }}"
   loop: "{{ selected_agents }}"
+  when: cluster_state == "present"
 
-- name: set SNO VIP data
+- name: set SNO VIP data (create)
   ansible.builtin.set_fact:
     internal_api_vip: "{{ selected_agents[0].ip }}"
     internal_ingress_vip: "{{ selected_agents[0].ip }}"
+  when: cluster_state == "present"
+  when: is_sno == true
+
+- name: set SNO VIP data (destroy)
+  ansible.builtin.set_fact:
+    internal_api_vip: "{{ current_agents[0].ip }}"
+    internal_ingress_vip: "{{ current_agents[0].ip }}"
+  when: cluster_state == "present"
   when: is_sno == true
 
 - name: allocate vips from netbox
