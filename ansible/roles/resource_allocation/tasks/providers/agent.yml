@@ -33,7 +33,6 @@
     bound_agents: "{{ agent_list | community.general.json_query(query) }}"
   vars:
     query: "resources[?spec.clusterDeploymentName.name==`{{ cluster_name }}`]"
-  when: cluster_state == "absent"
 
 - name: initialize agent list
   ansible.builtin.set_fact:
@@ -60,7 +59,7 @@
 
 - name: calculate needed agents
   ansible.builtin.set_fact:
-    needed_agents: "{{ desired_agents|int - bound_agents|length }}"
+    needed_agents: "{{ desired_agents|int - current_agents|length }}"
   when: cluster_state == "present"
 
 - name: select agents new
