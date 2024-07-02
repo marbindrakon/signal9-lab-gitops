@@ -72,7 +72,7 @@
     selected_agents: "{{ candidate_agents[0:needed_agents|int] }}"
   when: 
     - cluster_state == "present"
-    - bound_agents | int > 0
+    - needed_agents | int > 0
 
 - name: extend selected agent list with existing agents
   ansible.builtin.set_fact:
