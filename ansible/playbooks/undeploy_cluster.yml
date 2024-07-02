@@ -38,6 +38,11 @@
       ansible.builtin.include_role:
         name: sso_client
 
+    - name: include ceph_config role
+      ansible.builtin.include_role:
+        name: ceph_config
+      when: "odf-external" in cluster_special_feature
+
     - name: include resource_allocation role
       ansible.builtin.include_role:
         name: resource_allocation

@@ -52,6 +52,7 @@ hashicorp_vault:
   secret_base_path: lab/rht-shared
   # Vault secrets to be referenced when generating cluster configurations
   cluster_secrets:
+    odf: "{{ cluster_name }}-rook-data"
     oidc: "{{ cluster_name }}-openid"
     cert-manager-dns: signal9-route53
     cert-manager-acme-acct: rhte-le-account

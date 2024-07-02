@@ -1,0 +1,4 @@
+---
+# tasks file for ceph_config
+- name: include tasks for cluster state
+  ansible.builtin.include_tasks: "{{ cluster_state }}.yml"

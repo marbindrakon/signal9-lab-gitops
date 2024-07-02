@@ -1,0 +1,26 @@
+---
+- name: configure ceph cluster
+  ansible.builtin.shell: |
+    {{ lookup('template', 'pool-create.sh.j2' }}
+  delegate_to: "{{ groups['cephclients'][0] }}"
+  become: true
+
+- name: grab secret data
+  ansible.builtin.slurp:
+    src: "/root/{{ cluster_name}}-odf.json"
+  register: odf_secret_data
+  become: true
+
+- name: write secret data to vault
+  community.hashi_vault.vault_write:
+    url: "{{ hashicorp_vault['url'] }}"
+    auth_method: jwt
+    mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+    role_id: "{{ hashicorp_vault['auth_role'] }}"
+    jwt: "{{ vault_jwt }}"
+    path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['odf'] }}"
+    data:
+      data:
+        external_cluster_details: "{{ odf_secret_data['content'] | b64decode }}"
+  no_log: true
+

@@ -1,0 +1,22 @@
+---
+- name: configure ceph cluster
+  ansible.builtin.shell: "ceph osd pool delete {{ cluster_name }}-odf {{ cluster_name }}-odf --yes-i-really-really-mean-it"
+  delegate_to: "{{ groups['cephclients'][0] }}"
+  become: true
+
+- name: remove secret data file
+  ansible.builtin.file:
+    path: "/root/{{ cluster_name}}-odf.json"
+    state: absent
+  delegate_to: "{{ groups['cephclients'][0] }}"
+  become: true
+
+- name: delete secret data from vault
+  community.hashi_vault.vault_delete:
+    url: "{{ hashicorp_vault['url'] }}"
+    auth_method: jwt
+    mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+    role_id: "{{ hashicorp_vault['auth_role'] }}"
+    jwt: "{{ vault_jwt }}"
+    path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['odf'] }}"
+  no_log: true

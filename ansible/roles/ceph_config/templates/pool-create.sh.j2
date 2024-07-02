@@ -1,0 +1,7 @@
+ceph osd pool create {{ cluster_name }}-odf
+ceph osd pool set {{ cluster_name }}-odf min_size 1
+ceph osd pool set {{ cluster_name }}-odf size 2
+ceph osd pool set {{ cluster_name }}-odf crush_rule rack_replicated
+ceph osd pool application enable {{ cluster_name }}-odf rbd
+
+python3 /root/ceph-exporter-4.14.py --rbd-data-pool-name {{ cluster_name }}-odf --rgw-endpoint 172.18.0.75:8080 > /root/{{ cluster_name}}-odf.json
