@@ -99,7 +99,7 @@
   ansible.builtin.set_fact:
     internal_api_vip: "{{ current_agents[0].ip }}"
     internal_ingress_vip: "{{ current_agents[0].ip }}"
-  when: cluster_state == "present"
+  when: cluster_state == "absent"
   when: is_sno == true
 
 - name: allocate vips from netbox
