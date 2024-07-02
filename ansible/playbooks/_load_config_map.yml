@@ -4,7 +4,7 @@
     kind: ConfigMap
     name: "{{ cluster_name }}"
     namespace: aap
-  register: "{{ existing_settings_configmaps }}"
+  register: existing_settings_configmaps
 
 - name: load settings from configmap
   ansible.builtin.set_fact:
