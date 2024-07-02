@@ -116,6 +116,7 @@
     internal_api_vip: "{{ current_agents[0].ip }}"
     internal_ingress_vip: "{{ current_agents[0].ip }}"
   when: 
+    - internal_ingress_vip is not defined
     - cluster_state == "absent"
     - is_sno == true
 

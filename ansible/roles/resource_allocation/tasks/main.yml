@@ -4,3 +4,8 @@
 
 - name: Handle external VIP allocation
   include_tasks: "external_vips.yml"
+
+- name: write cluster settings to configmap for aap
+  kubernetes.core.k8s:
+    state: "{{ cluster_state }}"
+    definition: "{{ lookup('template', 'cluster-config-map.yaml.j2') | from_yaml }}"
