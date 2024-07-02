@@ -11,7 +11,8 @@ assignments:
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-52.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
@@ -24,19 +25,22 @@ assignments:
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-54.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-55.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-56.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
@@ -49,45 +53,53 @@ assignments:
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-58.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels:
       app: openstack
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-59.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels:
       app: openstack
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-60.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels:
       app: openstack
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-61.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-62.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-63.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations: 
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-64.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
     extraLabels: {}
-    extraAnnotations: {}
+    extraAnnotations: 
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
