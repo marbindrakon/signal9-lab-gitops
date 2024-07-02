@@ -57,12 +57,18 @@
     agent_name: "{{ item.metadata.name }}"
     agent_ip: "{{ item | community.general.json_query('status.inventory.interfaces[?name==`bond1.16`].ipV4Addresses | [0][0]') | ansible.utils.ipaddr('address')}}"
   loop: "{{ bound_agents }}"
-  when: cluster_state == "absent"
 
-- name: select agents
+- name: calculate needed agents
   ansible.builtin.set_fact:
-    selected_agents: "{{ candidate_agents[0:desired_agents|int] }}"
+    needed_agents: "{{ desired_agents|int - bound_agents|length }}"
   when: cluster_state == "present"
+
+- name: select agents new
+  ansible.builtin.set_fact:
+    selected_agents: "{{ candidate_agents[0:needed_agents|int] }}"
+  when: 
+    - cluster_state == "present"
+    - bound_agents | int > 0
 
 - name: debug agent list
   ansible.builtin.debug:
@@ -92,15 +98,17 @@
   ansible.builtin.set_fact:
     internal_api_vip: "{{ selected_agents[0].ip }}"
     internal_ingress_vip: "{{ selected_agents[0].ip }}"
-  when: cluster_state == "present"
-  when: is_sno == true
+  when: 
+    - cluster_state == "present"
+    - is_sno == true
 
 - name: set SNO VIP data (destroy)
   ansible.builtin.set_fact:
     internal_api_vip: "{{ current_agents[0].ip }}"
     internal_ingress_vip: "{{ current_agents[0].ip }}"
-  when: cluster_state == "absent"
-  when: is_sno == true
+  when: 
+    - cluster_state == "absent"
+    - is_sno == true
 
 - name: allocate vips from netbox
   ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"
