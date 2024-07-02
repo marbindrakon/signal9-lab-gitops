@@ -62,12 +62,22 @@
     needed_agents: "{{ desired_agents|int - current_agents|length }}"
   when: cluster_state == "present"
 
-- name: select agents new
+- name: initialize selected agent list
+  ansible.builtin.set_fact:
+    selected_agents: []
+  when: cluster_state == "present"
+
+- name: select any new agents
   ansible.builtin.set_fact:
     selected_agents: "{{ candidate_agents[0:needed_agents|int] }}"
   when: 
     - cluster_state == "present"
     - bound_agents | int > 0
+
+- name: extend selected agent list with existing agents
+  ansible.builtin.set_fact:
+    selected_agents: "{{ selected_agents + current_agents }}"
+  when: cluster_state == "present"
 
 - name: debug agent list
   ansible.builtin.debug:
