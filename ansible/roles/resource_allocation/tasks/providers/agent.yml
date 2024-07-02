@@ -20,7 +20,6 @@
     api_version: agent-install.openshift.io/v1beta1
     kind: agent
   register: agent_list
-  when: cluster_state == "present"
 
 - name: list unbound agents only
   ansible.builtin.set_fact:
