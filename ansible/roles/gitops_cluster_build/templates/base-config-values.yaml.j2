@@ -8,8 +8,21 @@ monitoring:
 {% if cluster_platform == "openstack" %}
   enabled: true
   storageClass: standard-csi
+{% elif "odf-external" in cluster_special_feature|lower %}
+  enabled: true
+  storageClass: ocs-external-storagecluster-ceph-rbd
 {% else %}
   enabled: false
+{% endif %}
+
+{% if "odf-external" in cluster_special_feature|lower  %}
+odfStorage:
+  enabled: true
+  external: true
+  version: '{{ cluster_version }}'
+  externalSecret:
+    name: rook-ceph-external-cluster-details
+    vaultName: {{ cluster_name }}-rook-data
 {% endif %}
 
 externalSecrets:
