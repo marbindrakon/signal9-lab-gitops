@@ -1,16 +1,16 @@
 cluster:
-  importToHub: false
-  useACM: false
+  importToHub: true
+  useACM: true
   createGitopsManifestWorks: false
-  createGitopsSyncSet: true
+  createGitopsSyncSet: false
   name: jon-test
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
   clusterImageSet: img4.15.19-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 0
-  apiVIP: "172.18.16.89"
-  ingressVIP: "172.18.16.90"
+  apiVIP: "172.18.16.91"
+  ingressVIP: "172.18.16.92"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
