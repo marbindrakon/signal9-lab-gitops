@@ -23,6 +23,9 @@ odfStorage:
   externalSecret:
     name: rook-ceph-external-cluster-details
     vaultName: {{ cluster_name }}-rook-data
+
+network:
+  hostRouting: true
 {% endif %}
 
 externalSecrets:
