@@ -1,7 +1,7 @@
 ---
 - name: configure ceph cluster
   ansible.builtin.shell: |
-    {{ lookup('template', 'pool-create.sh.j2' }}
+    {{ lookup('template', 'pool-create.sh.j2') }}
   delegate_to: "{{ groups['cephclients'][0] }}"
   become: true
 
