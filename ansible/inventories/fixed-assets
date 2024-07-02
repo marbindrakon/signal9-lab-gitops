@@ -8,3 +8,6 @@ all:
         xna-haproxy-a.lab.signal9.gg: {}
         xna-haproxy-b.lab.signal9.gg: {}
         xna-haproxy-c.home.signal9.gg: {}
+    cephclients:
+      hosts:
+        ceph-0.lab.signal9.gg: {}
