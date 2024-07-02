@@ -18,6 +18,9 @@ odfStorage:
     name: rook-ceph-external-cluster-details
     vaultName: ai-test-rook-data
 
+network:
+  hostRouting: true
+
 timesync:
   enabled: true
   ntpServers: ['172.18.42.10', '172.18.42.11']
