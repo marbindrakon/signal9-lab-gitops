@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ cluster_name }}
+  namespace: aap
+data:
+  cluster_size: "{{ cluster_size }}"
+  cluster_platform: "{{ cluster_platform }}"
+  cluster_version: "{{ cluster_version }}"
+  loadbalancer_type: "{{ loadbalancer_type }}"
+  cluster_special_feature: "{{ cluster_special_feature }}"
+  gitops_import_to_hub: "{{ gitops_import_to_hub }}"
