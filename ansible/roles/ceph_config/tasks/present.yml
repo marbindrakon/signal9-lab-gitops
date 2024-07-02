@@ -8,6 +8,7 @@
 - name: grab secret data
   ansible.builtin.slurp:
     src: "/root/{{ cluster_name}}-odf.json"
+  delegate_to: "{{ groups['cephclients'][0] }}"
   register: odf_secret_data
   become: true
 
