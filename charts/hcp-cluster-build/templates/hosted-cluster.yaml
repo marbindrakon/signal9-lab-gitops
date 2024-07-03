@@ -104,7 +104,7 @@ spec:
   - service: APIServer
     servicePublishingStrategy:
       loadBalancer:
-        hostname: api.cluster1.lab.signal9.gg
+        hostname: api.{{ .Values.cluster.name }}.lab.signal9.gg
       type: LoadBalancer
   - service: OAuthServer
     servicePublishingStrategy:
