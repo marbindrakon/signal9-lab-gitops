@@ -81,6 +81,7 @@
   when:
     - cluster_state == "absent"
     - internal_api_vip is defined
+    - internal_api_cidr is defined
 
 - name: deallocate internal ingress VIP
   netbox.netbox.netbox_ip_address:
@@ -93,3 +94,4 @@
   when:
     - cluster_state == "absent"
     - internal_ingress_vip is defined
+    - internal_ingress_cidr is defined
