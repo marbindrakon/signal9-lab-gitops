@@ -23,20 +23,24 @@ spec:
     baseDomain: {{ .Values.cluster.baseDomain }}
 {{ end }}
   configuration:
-    {{- if .Values.certManager.manageApiCert }}
+    {{- if or .Values.certManager.manageApiCert .Values.certManager.manageOauthCert }}
     apiServer:
       audit:
         profile: Default
       servingCerts:
         namedCertificates:
+    {{- if .Values.certManager.manageApiCert  }}
         - names:
           - api.{{ .Values.cluster.name }}.{{ .Values.cluster.baseDomain }}
           servingCertificate:
             name: {{ .Values.cluster.name }}-api-crt
+    {{ end }}
+    {{- if .Values.certManager.manageOauthCert  }}
         - names:
           - oauth-clusters-{{ .Values.cluster.name}}.{{ .Values.cluster.foundationIngressBaseDomain }}
           servingCertificate:
             name: {{ .Values.cluster.name }}-api-crt
+    {{ end }}
     {{ end }}
     oauth:
       identityProviders:
@@ -99,9 +103,9 @@ spec:
   services:
   - service: APIServer
     servicePublishingStrategy:
-      loadBalancer:
-        hostname: api.{{ .Values.cluster.name }}.{{ .Values.cluster.baseDomain }}
-      type: LoadBalancer
+      nodePort:
+        address: api.cluster1.lab.signal9.gg
+      type: NodePort
   - service: OAuthServer
     servicePublishingStrategy:
       type: Route
