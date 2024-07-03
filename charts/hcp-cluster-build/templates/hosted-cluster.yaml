@@ -103,9 +103,9 @@ spec:
   services:
   - service: APIServer
     servicePublishingStrategy:
-      nodePort:
-        address: api.cluster1.lab.signal9.gg
-      type: NodePort
+      loadBalancer:
+        hostname: api.cluster1.lab.signal9.gg
+      type: LoadBalancer
   - service: OAuthServer
     servicePublishingStrategy:
       type: Route
