@@ -14,6 +14,6 @@
     cluster_size: "{{ existing_settings_configmaps.resources.0.data.cluster_size }}"
     cluster_special_feature: "{{ existing_settings_configmaps.resources.0.data.cluster_special_feature }}"
     gitops_import_to_hub: "{{ existing_settings_configmaps.resources.0.data.gitops_import_to_hub }}"
-    internal_api_vip: "{{ existing_settings_configmaps.resources.0.data.internal_api_vip }}"
-    internal_ingress_vip: "{{ existing_settings_configmaps.resources.0.data.internal_ingress_vip }}"
+    internal_api_vip: "{{ existing_settings_configmaps.resources.0.data.internal_api_vip | default (omit) }}"
+    internal_ingress_vip: "{{ existing_settings_configmaps.resources.0.data.internal_ingress_vip | default(omit) }}"
   when: existing_settings_configmaps.resources | length > 0
