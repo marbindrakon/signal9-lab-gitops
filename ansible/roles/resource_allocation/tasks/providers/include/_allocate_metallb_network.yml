@@ -46,7 +46,11 @@
 - name: get third octet for ASN generation
   ansible.builtin.set_fact:
     third_octet: "{{ metallb_network.value.prefix.split('.')[2] }}"
+  when:
+    - cluster_state == "present"
 
 - name: determine ASN
   ansible.builtin.set_fact:
     metallb_asn: '64{{ third_octet }}{{ "1" if "128" in metallb_network.value.prefix else "0" }}'
+  when:
+    - cluster_state == "present"
