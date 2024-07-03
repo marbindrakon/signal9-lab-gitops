@@ -23,10 +23,10 @@ spec:
     - server auth
     - client auth
   dnsNames:
-{{- if .Values.certManager.manageApiCert -}}
+{{ if .Values.certManager.manageApiCert }}
     - 'api.{{ .Values.cluster.name }}.{{ .Values.cluster.baseDomain }}'
 {{ end }}
-{{- if .Values.certManager.manageOauthCert -}}
+{{ if .Values.certManager.manageOauthCert }}
     - 'oauth-clusters-{{ .Values.cluster.name}}.{{ .Values.cluster.foundationIngressBaseDomain }}'
 {{ end }}
   issuerRef:
