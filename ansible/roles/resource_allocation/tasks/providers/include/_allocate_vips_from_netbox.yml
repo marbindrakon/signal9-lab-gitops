@@ -17,7 +17,7 @@
     internal_ingress_cidr: "{{ nb_existing_int_ingress_query.values() | map(attribute='address') | first }}"
   when:
     # internal_ingress_vip could be set by HCP agent provider
-    - internal_ingress_vip is not defined
+    - internal_ingress_vip is not defined and "hcp" in cluster_platform
     - nb_existing_int_ingress_query is defined 
     - nb_existing_int_ingress_query | length > 0
 
