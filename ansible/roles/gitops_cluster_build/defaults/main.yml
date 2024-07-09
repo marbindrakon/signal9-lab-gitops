@@ -18,3 +18,5 @@ gitops_retain_cluster_configs: true
 
 # Do we create a ManagedCluster resource
 gitops_import_to_hub: true
+
+metallb_network: null
