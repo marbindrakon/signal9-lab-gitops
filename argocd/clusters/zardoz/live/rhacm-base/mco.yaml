@@ -76,6 +76,7 @@ spec:
       resources:
         limits:
           memory: 400Mi
+          cpu: 4
     rbacQueryProxy:
       replicas: 1
       resources:
