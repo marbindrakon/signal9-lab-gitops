@@ -1,0 +1,12 @@
+apiVersion: updateservice.operator.openshift.io/v1
+kind: UpdateService
+metadata:
+  name: signal9
+  namespace: openshift-update-service
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  graphDataImage: quay.signal9.gg/mirror/openshift/graph-image:latest
+  releases: quay.signal9.gg/mirror/openshift-release-dev/ocp-release
+  replicas: 2
