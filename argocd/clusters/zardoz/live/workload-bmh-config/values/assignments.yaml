@@ -63,6 +63,7 @@ assignments:
       app: openstack
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
   - node: z-59.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
@@ -71,6 +72,7 @@ assignments:
       app: openstack
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
   - node: z-60.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
@@ -79,6 +81,7 @@ assignments:
       app: openstack
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
   - node: z-61.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
