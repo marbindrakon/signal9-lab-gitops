@@ -1128,6 +1128,58 @@ nodes:
               address:
                 - ip: 172.18.19.61
                   prefix-length: 24
+          - name: bond0.101
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 101
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.101.8
+                  prefix-length: 24
+          - name: bond0.104
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 104
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.104.8
+                  prefix-length: 24
+          - name: bond1.102
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 102
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.102.8
+                  prefix-length: 24
+          - name: bond1.103
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 103
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.103.8
+                  prefix-length: 24
         dns-resolver:
           config:
             server:
@@ -1223,6 +1275,58 @@ nodes:
               dhcp: false
               address:
                 - ip: 172.18.19.62
+                  prefix-length: 24
+          - name: bond0.101
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 101
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.101.9
+                  prefix-length: 24
+          - name: bond0.104
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 104
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.104.9
+                  prefix-length: 24
+          - name: bond1.102
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 102
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.102.9
+                  prefix-length: 24
+          - name: bond1.103
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 103
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.103.9
                   prefix-length: 24
         dns-resolver:
           config:
@@ -1320,6 +1424,58 @@ nodes:
               address:
                 - ip: 172.18.19.63
                   prefix-length: 24
+          - name: bond0.101
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 101
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.101.10
+                  prefix-length: 24
+          - name: bond0.104
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 104
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.104.10
+                  prefix-length: 24
+          - name: bond1.102
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 102
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.102.10
+                  prefix-length: 24
+          - name: bond1.103
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 103
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.103.10
+                  prefix-length: 24
         dns-resolver:
           config:
             server:
@@ -1415,6 +1571,58 @@ nodes:
               dhcp: false
               address:
                 - ip: 172.18.19.64
+                  prefix-length: 24
+          - name: bond0.101
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 101
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.101.11
+                  prefix-length: 24
+          - name: bond0.104
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 104
+              base-iface: bond0
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.104.11
+                  prefix-length: 24
+          - name: bond1.102
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 102
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.102.11
+                  prefix-length: 24
+          - name: bond1.103
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 103
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.103.11
                   prefix-length: 24
         dns-resolver:
           config:
