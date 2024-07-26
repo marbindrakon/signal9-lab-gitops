@@ -98,3 +98,6 @@ metallb:
       asn: 65123
   clusterIpPool: "172.18.70.0/25"
   anycastIpPool: "172.18.71.0/24"
+
+mirrorRegistry:
+  enabled: false
