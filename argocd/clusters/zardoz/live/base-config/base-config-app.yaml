@@ -64,6 +64,8 @@ spec:
           externalSecret:
             name: rook-ceph-external-cluster-details
             vaultName: zardoz-rook-data
+        mirrorRegistry:
+          enabled: true
         network:
           hostRouting: true
         certManager:
