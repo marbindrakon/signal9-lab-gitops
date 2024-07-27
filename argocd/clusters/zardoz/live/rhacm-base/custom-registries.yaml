@@ -108,7 +108,7 @@ data:
 
     [[registry]]
     prefix = ""
-    location = "quay.io/openshift-release-dev/ocp-v4.0-art-dev"
+    location = "quay.io/openshift-release-dev/ocp-release"
     mirror-by-digest-only = true
 
     [[registry.mirror]]
