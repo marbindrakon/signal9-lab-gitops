@@ -3,6 +3,8 @@ nodes:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:da:18
+    rootDeviceHints:
+      deviceName: "/dev/sda"
     bmc:
       url: ipmi://ilo-hp-blade-4.oob.signal9.gg
       externalSecret:
@@ -99,6 +101,8 @@ nodes:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:d2:64
+    rootDeviceHints:
+      deviceName: "/dev/sda"
     bmc:
       url: ipmi://ilo-hp-blade-5.oob.signal9.gg
       externalSecret:
@@ -195,6 +199,8 @@ nodes:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:d3:90
+    rootDeviceHints:
+      deviceName: "/dev/sda"
     bmc:
       url: ipmi://ilo-hp-blade-6.oob.signal9.gg
       externalSecret:
@@ -291,6 +297,8 @@ nodes:
     labels:
       compute-model: sl230
     bootMac: e8:39:35:f0:32:2c
+    rootDeviceHints:
+      deviceName: "/dev/sda"
     bmc:
       url: ipmi://ilo-hp-blade-7.oob.signal9.gg
       externalSecret:
@@ -387,6 +395,8 @@ nodes:
     labels:
       compute-model: sl230
     bootMac: 2c:41:38:eb:d3:2c
+    rootDeviceHints:
+      deviceName: "/dev/sda"
     bmc:
       url: ipmi://ilo-hp-blade-8.oob.signal9.gg
       externalSecret:
