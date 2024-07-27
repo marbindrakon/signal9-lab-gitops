@@ -6,6 +6,8 @@ metadata:
     argocd.argoproj.io/sync-wave: '3'
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
+  mirrorRegistryRef:
+    name: custom-registries
   databaseStorage:
     accessModes:
     - ReadWriteOnce
