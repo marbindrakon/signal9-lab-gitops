@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: custom-registries
-  namespace: multicluster-engine
+  namespace: rhacm-hub
   labels:
     app: assisted-service
 data:
