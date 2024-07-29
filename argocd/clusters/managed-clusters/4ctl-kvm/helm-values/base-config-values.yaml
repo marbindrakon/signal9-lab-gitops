@@ -10,7 +10,7 @@ monitoring:
 
 odfStorage:
   enabled: false
-  external: true
+  external: false
   version: '4.15'
   externalSecret:
     name: rook-ceph-external-cluster-details
