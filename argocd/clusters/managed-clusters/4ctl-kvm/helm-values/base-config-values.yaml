@@ -5,7 +5,7 @@ cluster:
   gitOpsBasePath: argocd/clusters/managed-clusters
 
 monitoring:
-  enabled: true
+  enabled: false
   storageClass: lvms-vg1
 
 odfStorage:
@@ -28,10 +28,10 @@ timesync:
 
 auth:
   enabled: true
-  oidcClientID: "ai-test-openshift"
+  oidcClientID: "openshift"
   externalSecret:
     name: oauth-signal9-client-secret
-    vaultName: ai-test-openid
+    vaultName: 4ctl-kvm-openid
 
 certManager:
   externalSecret:
