@@ -18,6 +18,8 @@ spec:
     repoURL: "{{ gitops_repo_url }}"
 {% if cluster_platform in ["hcp_kubevirt", "hcp_agent"] %}
     path: "charts/hcp-base-config"
+{% elif 'okd' in cluster_version %}
+    path: "charts/okd-base-config"
 {% else %}
     path: "charts/ocp-base-config"
 {% endif %}

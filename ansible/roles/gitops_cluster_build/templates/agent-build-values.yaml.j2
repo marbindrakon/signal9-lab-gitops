@@ -1,4 +1,7 @@
 cluster:
+{% if 'okd' in cluster_version %}
+  type: okd
+{% endif %}
 {% if gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
   importToHub: false
   useACM: false
