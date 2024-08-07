@@ -10,7 +10,7 @@ cluster:
   controlPlaneCount: 3
   workerCount: 3
   apiVIP: "172.18.16.99"
-  ingressVIP: "172.18.16.151"
+  ingressVIP: "172.18.16.152"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
