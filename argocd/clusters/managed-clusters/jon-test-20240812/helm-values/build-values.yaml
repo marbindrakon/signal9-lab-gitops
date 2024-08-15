@@ -6,11 +6,11 @@ cluster:
   name: jon-test-20240812
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
-  clusterImageSet: img4.15.22-x86-64-appsub
+  clusterImageSet: img4.16.3-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 3
-  apiVIP: "172.18.16.99"
-  ingressVIP: "172.18.16.154"
+  apiVIP: "172.18.16.89"
+  ingressVIP: "172.18.16.99"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
