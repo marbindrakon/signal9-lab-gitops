@@ -1,8 +1,0 @@
-apiVersion: operators.coreos.com/v1alpha1
-kind: CatalogSource
-metadata:
-  name: openstack-operator-index
-  namespace: openstack-operators
-spec:
-  sourceType: grpc
-  image: quay.signal9.gg/rhoso-beta/openstack-operator-index:1.0.0
