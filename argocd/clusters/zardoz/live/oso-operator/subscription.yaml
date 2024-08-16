@@ -16,4 +16,12 @@ spec:
   name: openstack-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  config:
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "10m"
+      limits:
+        memory: "1Gi"
+        cpu: "8"
 ---
