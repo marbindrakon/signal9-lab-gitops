@@ -55,6 +55,7 @@ spec:
         monitoring:
           enabled: true
           storageClass: ocs-external-storagecluster-ceph-rbd
+          prometheusSize: 100Gi
         externalSecrets:
           vaultAuthPath: 'k8s-zardoz'
         odfStorage:
