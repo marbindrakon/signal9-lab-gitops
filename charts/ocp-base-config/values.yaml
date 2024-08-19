@@ -50,6 +50,8 @@ providerConfig:
 monitoring:
   enabled: true
   storageClass: standard
+  alertManagerSize: 10Gi
+  prometheusSize: 50Gi
 
 network:
   hostRouting: false

@@ -12,7 +12,7 @@ data:
          storageClassName: {{ .Values.monitoring.storageClass }}
          resources:
            requests:
-             storage: 10Gi
+             storage: {{ .Values.monitoring.alertManagerSize }}
     prometheusK8s:
       retention: 7d
       volumeClaimTemplate:
@@ -20,5 +20,5 @@ data:
          storageClassName: {{ .Values.monitoring.storageClass }}
          resources:
            requests:
-             storage: 50Gi
+             storage: {{ .Values.monitoring.prometheusSize }}
 {{ end }}
