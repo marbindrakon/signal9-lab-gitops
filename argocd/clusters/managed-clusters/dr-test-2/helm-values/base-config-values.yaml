@@ -8,7 +8,7 @@ monitoring:
   enabled: false
 
 network:
-  hostRouting: true
+  hostRouting: false
 
 externalSecrets:
   vaultAuthPath: "k8s-mgd-dr-test-2"
