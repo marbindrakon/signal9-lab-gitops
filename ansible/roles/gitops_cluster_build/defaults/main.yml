@@ -20,3 +20,4 @@ gitops_retain_cluster_configs: true
 gitops_import_to_hub: true
 
 metallb_network: null
+acme_ca: 'internal'
