@@ -56,6 +56,11 @@ auth:
     vaultName: {{ hashicorp_vault['cluster_secrets']['oidc'] }}
 
 certManager:
+{% if acme_ca == 'letsencrypt' %}
+  acmeBase: 'https://acme-v02.api.letsencrypt.org/directory'
+{% else %}
+  acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
+{% endif %}
   externalSecret:
     name: route53-key
     vaultName: {{ hashicorp_vault['cluster_secrets']['cert-manager-dns'] }}
