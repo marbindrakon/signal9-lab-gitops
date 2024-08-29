@@ -58,11 +58,13 @@ auth:
 certManager:
 {% if acme_ca == 'letsencrypt' %}
   acmeBase: 'https://acme-v02.api.letsencrypt.org/directory'
+  validationNameserver: "8.8.8.8:53"
   externalSecret:
     name: route53-key
     vaultName: {{ hashicorp_vault['cluster_secrets']['cert-manager-route53'] }}
 {% else %}
   acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
+  validationNameserver: "172.18.42.10:53"
   externalSecret:
     name: tsig-key
     vaultName: {{ hashicorp_vault['cluster_secrets']['cert-manager-tsig'] }}
