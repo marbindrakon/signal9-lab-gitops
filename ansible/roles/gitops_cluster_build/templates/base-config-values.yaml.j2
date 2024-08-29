@@ -3,7 +3,8 @@ cluster:
   baseDomain: "{{ base_domain }}"
   gitOpsRepo: "{{ gitops_repo_url }}"
   gitOpsBasePath: argocd/clusters/managed-clusters
-
+  trustedCABundle: |
+    {{ cluster_trust_bundle | indent(4) }}
 monitoring:
 {% if cluster_platform == "openstack" %}
   enabled: true
