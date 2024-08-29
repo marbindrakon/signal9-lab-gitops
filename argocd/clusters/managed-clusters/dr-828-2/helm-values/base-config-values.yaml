@@ -1,0 +1,59 @@
+cluster:
+  name: "dr-828-2"
+  baseDomain: "lab.signal9.gg"
+  gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
+  gitOpsBasePath: argocd/clusters/managed-clusters
+
+monitoring:
+  enabled: false
+
+
+externalSecrets:
+  vaultAuthPath: "k8s-mgd-dr-828-2"
+
+mirrorRegistry:
+  enabled: true
+
+timesync:
+  enabled: true
+  ntpServers: ['172.18.42.10', '172.18.42.11']
+
+auth:
+  oidcClientID: "dr-828-2-openshift"
+  externalSecret:
+    name: oauth-signal9-client-secret
+    vaultName: dr-828-2-openid
+
+certManager:
+  acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
+  validationNameserver: "172.18.42.10:53"
+  externalSecret:
+    name: tsig-key
+    vaultName: ipa-tsig
+  solvers:
+    - http01:
+        ingress: {}
+    - dns01:
+        rfc2136:
+          nameserver: 172.18.42.10
+          tsigKeyName: cert-manager
+          tsigAlgorithm: HMACSHA256
+          tsigSecretSecretRef:
+            name: tsig-key
+            key: key
+      selector:
+        dnsZones:
+          - lab.signal9.gg
+
+metallb:
+  enabled: true
+  localAsn: 64751
+  peers:
+    - name: lab-rtr-a
+      address: 172.18.16.2
+      asn: 65123
+    - name: lab-rtr-b
+      address: 172.18.16.3
+      asn: 65123
+  clusterIpPool: "172.18.75.128/25"
+  anycastIpPool: "172.18.71.0/24"
