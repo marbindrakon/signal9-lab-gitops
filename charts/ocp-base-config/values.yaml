@@ -17,6 +17,7 @@ certManager:
   apiCert: true
   defaultIngressCert: true
   acmeBase: 'https://acme-v02.api.letsencrypt.org/directory'
+  validationNameserver: "8.8.8.8:53"
   externalSecret:
     name: route53-key
     vaultName: signal9-route53
