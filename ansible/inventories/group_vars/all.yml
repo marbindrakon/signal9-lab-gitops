@@ -54,7 +54,8 @@ hashicorp_vault:
   cluster_secrets:
     odf: "{{ cluster_name }}-rook-data"
     oidc: "{{ cluster_name }}-openid"
-    cert-manager-dns: signal9-route53
+    cert-manager-route53: signal9-route53
+    cert-manager-tsig: ipa-tsig
     cert-manager-acme-acct: rhte-le-account
     pull-secret: ocp-pull-secret
     openstack-cloud: opensnack-cloud-config

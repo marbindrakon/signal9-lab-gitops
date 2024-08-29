@@ -58,24 +58,37 @@ auth:
 certManager:
 {% if acme_ca == 'letsencrypt' %}
   acmeBase: 'https://acme-v02.api.letsencrypt.org/directory'
-{% else %}
-  acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
-{% endif %}
   externalSecret:
     name: route53-key
-    vaultName: {{ hashicorp_vault['cluster_secrets']['cert-manager-dns'] }}
+    vaultName: {{ hashicorp_vault['cluster_secrets']['cert-manager-route53'] }}
+{% else %}
+  acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
+  externalSecret:
+    name: tsig-key
+    vaultName: {{ hashicorp_vault['cluster_secrets']['cert-manager-tsig'] }}
+{% endif %}
   solvers:
     - http01:
         ingress: {}
     - dns01:
+{% if acme_ca == 'letsencrypt' %}
         route53:
-          # Required prior to 1.9 when this can be moved to a 
-          # secret and pulled from vault like the secret key
-          accessKeyID: AKIAR3Z7ELN7VLNNHZHZ
           region: us-east-1
+          accessKeyIDSecretRef:
+            key: access-key
+            name: route53-key
           secretAccessKeySecretRef:
             key: secret-access-key
             name: route53-key
+{% else %}
+        rfc2136:
+          nameserver: 172.18.42.10
+          tsigKeyName: cert-manager
+          tsigAlgorithm: HMACSHA256
+          tsigSecretSecretRef:
+            name: tsig-key
+            key: key
+{% endif %}
       selector:
         dnsZones:
           - {{ base_domain }}
