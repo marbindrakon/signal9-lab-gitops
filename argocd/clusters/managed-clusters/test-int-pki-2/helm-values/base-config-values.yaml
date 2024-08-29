@@ -27,20 +27,19 @@ auth:
 certManager:
   acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
   externalSecret:
-    name: route53-key
-    vaultName: signal9-route53
+    name: tsig-key
+    vaultName: ipa-tsig
   solvers:
     - http01:
         ingress: {}
     - dns01:
-        route53:
-          # Required prior to 1.9 when this can be moved to a 
-          # secret and pulled from vault like the secret key
-          accessKeyID: AKIAR3Z7ELN7VLNNHZHZ
-          region: us-east-1
-          secretAccessKeySecretRef:
-            key: secret-access-key
-            name: route53-key
+        rfc2136:
+          nameserver: 172.18.42.10
+          tsigKeyName: cert-manager
+          tsigAlgorithm: HMACSHA256
+          tsigSecretSecretRef:
+            name: tsig-key
+            key: key
       selector:
         dnsZones:
           - lab.signal9.gg
