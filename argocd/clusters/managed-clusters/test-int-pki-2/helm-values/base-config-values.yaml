@@ -26,6 +26,7 @@ auth:
 
 certManager:
   acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
+  validationNameserver: "172.18.42.10:53"
   externalSecret:
     name: tsig-key
     vaultName: ipa-tsig
