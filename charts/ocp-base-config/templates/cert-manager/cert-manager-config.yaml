@@ -14,6 +14,6 @@ spec:
         - '--v=2'
         - '--cluster-resource-namespace=$(POD_NAMESPACE)'
         - '--leader-election-namespace=kube-system'
-        - '--dns01-recursive-nameservers={{ .Values.cert-manager.validationNameserver }}'
+        - '--dns01-recursive-nameservers={{ .Values.certManager.validationNameserver }}'
         - '--dns01-recursive-nameservers-only'
 {{ end }}
