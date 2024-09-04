@@ -56,7 +56,7 @@ assignments:
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
   - node: z-58.lab.signal9.gg
-    namespace: openshift-machine-api
+    namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels:
@@ -66,7 +66,7 @@ assignments:
       bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
       bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
   - node: z-59.lab.signal9.gg
-    namespace: openshift-machine-api
+    namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels:
@@ -76,7 +76,7 @@ assignments:
       bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
       bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
   - node: z-60.lab.signal9.gg
-    namespace: openshift-machine-api
+    namespace: metal-infra-env
     assignmentType: agent
     infraEnvName: metal-infra-env
     extraLabels:
