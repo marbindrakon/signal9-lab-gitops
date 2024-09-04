@@ -103,3 +103,20 @@ spec:
 
           [Install]
           WantedBy=multi-user.target graphical.target
+      - name: restorecon-var-lib-containers.service
+        enabled: true
+        contents: |
+          [Unit]
+          Description=Restore recursive SELinux security contexts
+          DefaultDependencies=no
+          After=var-lib-containers.mount
+          Before=crio.service
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=/sbin/restorecon -R /var/lib/containers
+          TimeoutSec=0
+
+          [Install]
+          WantedBy=multi-user.target graphical.target
