@@ -1,0 +1,96 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: master
+  name: 98-master-disk-partition
+spec:
+  config:
+    ignition:
+      config: {}
+      security:
+        tls: {}
+      timeouts: {}
+      version: 3.1.0
+    storage:
+      disks:
+      - device: /dev/nvme0n1
+        partitions:
+        - sizeMiB: 10240
+          startMib: 0
+          label: etcd-data
+        - sizeMiB: 1048576
+          startMib: 10241
+          label: var-lib-containers
+      filesystems:
+        - path: /var/lib/etcd
+          device: /dev/disk/by-partlabel/etcd-data
+          format: xfs
+        - path: /var/lib/containers
+          device: /dev/disk/by-partlabel/var-lib-containers
+          format: xfs
+    systemd:
+      units:
+      - contents: |
+          [Unit]
+          Description=Mount /dev/sdb to /var/lib/containers
+          Before=local-fs.target
+          [Mount]
+          What=/dev/disk/by-partlabel/var-lib-containers
+          Where=/var/lib/containers
+          [Install]
+          WantedBy=local-fs.target
+        enabled: true
+        name: var-lib-containers.mount
+      - name: var-lib-etcd.mount
+        enabled: true
+        contents: |
+          [Unit]
+          Before=local-fs.target
+
+          [Mount]
+          What=/dev/disk/by-partlabel/etcd-data
+          Where=/var/lib/etcd
+          Type=xfs
+          TimeoutSec=120s
+
+          [Install]
+          RequiredBy=local-fs.target
+      - name: sync-var-lib-etcd-to-etcd.service
+        enabled: true
+        contents: |
+          [Unit]
+          Description=Sync etcd data if new mount is empty
+          DefaultDependencies=no
+          After=var-lib-etcd.mount var.mount
+          Before=crio.service
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecCondition=/usr/bin/test ! -d /var/lib/etcd/member
+          ExecStart=/usr/sbin/setsebool -P rsync_full_access 1
+          ExecStart=/bin/rsync -ar /sysroot/ostree/deploy/rhcos/var/lib/etcd/ /var/lib/etcd/
+          ExecStart=/usr/sbin/semanage fcontext -a -t container_var_lib_t '/var/lib/etcd(/.*)?'
+          ExecStart=/usr/sbin/setsebool -P rsync_full_access 0
+          TimeoutSec=0
+
+          [Install]
+          WantedBy=multi-user.target graphical.target
+      - name: restorecon-var-lib-etcd.service
+        enabled: true
+        contents: |
+          [Unit]
+          Description=Restore recursive SELinux security contexts
+          DefaultDependencies=no
+          After=var-lib-etcd.mount
+          Before=crio.service
+
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=/sbin/restorecon -R /var/lib/etcd/
+          TimeoutSec=0
+
+          [Install]
+          WantedBy=multi-user.target graphical.target
