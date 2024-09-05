@@ -53,8 +53,19 @@ cluster:
     -----END CERTIFICATE-----
 
 monitoring:
-  enabled: false
+  enabled: true
+  storageClass: ocs-external-storagecluster-ceph-rbd
 
+odfStorage:
+  enabled: true
+  external: true
+  version: '4.16'
+  externalSecret:
+    name: rook-ceph-external-cluster-details
+    vaultName: test-ten-node-rook-data
+
+network:
+  hostRouting: true
 
 externalSecrets:
   vaultAuthPath: "k8s-mgd-test-ten-node"
