@@ -103,6 +103,21 @@
   loop: "{{ selected_agents }}"
   when: cluster_state == "present"
 
+- name: set agent role for SNO
+  kubernetes.core.k8s:
+    api_version: agent-install.openshift.io/v1beta1
+    kind: agent
+    namespace: metal-infra-env
+    name: "{{ item.name }}"
+    state: patched
+    definition:
+      spec:
+        role: "master"
+  loop: "{{ selected_agents }}"
+  when: 
+    - cluster_state == "present"
+    - is_sno == true
+
 - name: set SNO VIP data (create)
   ansible.builtin.set_fact:
     internal_api_vip: "{{ selected_agents[0].ip }}"
