@@ -73,7 +73,7 @@ auth:
   oidcIssuer: https://adfs.lab.signal9.gg/adfs
   externalSecret:
     name: oauth-signal9-client-secret
-    vaultName: signal9-openid
+    vaultName: test-adfs-416-openid
 
 certManager:
   acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
