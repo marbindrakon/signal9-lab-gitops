@@ -67,10 +67,13 @@ timesync:
   ntpServers: ['172.18.42.10', '172.18.42.11']
 
 auth:
-  oidcClientID: "test-adfs-416-openshift"
+  enabled: true
+  oidcDisplayName: Signal9-ADFS
+  oidcClientID: 03cfaa3d-2294-43ff-9ab3-29ab9a9a96ad
+  oidcIssuer: https://adfs.lab.signal9.gg/adfs
   externalSecret:
     name: oauth-signal9-client-secret
-    vaultName: test-adfs-416-openid
+    vaultName: signal9-openid
 
 certManager:
   acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
