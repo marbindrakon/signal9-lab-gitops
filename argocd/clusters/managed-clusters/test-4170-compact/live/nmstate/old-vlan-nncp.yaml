@@ -7,7 +7,7 @@ spec:
     interfaces:
       - name: bond0.10
         type: vlan
-        state: up
+        state: absent
         ipv4:
           enabled: false
         ipv6:
