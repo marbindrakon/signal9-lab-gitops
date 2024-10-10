@@ -10,6 +10,7 @@ spec:
             "name": "vlan10", 
             "type": "ovn-k8s-cni-overlay", 
             "topology":"localnet", 
-            "mtu": 1500, 
+            "mtu": 1500,
+            "vlanID": 10,
             "netAttachDefName": "default/vlan10"
     }
