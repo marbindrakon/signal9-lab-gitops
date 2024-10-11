@@ -7,7 +7,7 @@ spec:
     interfaces:
     - name: br-bond0
       type: ovs-bridge
-      state: up
+      state: absent
       bridge:
         allow-extra-patch-ports: true
         options:
@@ -18,4 +18,4 @@ spec:
       bridge-mappings:
       - localnet: vlan10
         bridge: br-bond0
-        state: present 
+        state: absent
