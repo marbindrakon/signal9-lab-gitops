@@ -14,7 +14,8 @@ spec:
         enabled: false
       bridge:
         options:
-          stp: false
+          stp:
+            enabled: false
         port:
         - name: bond0
           vlan:
