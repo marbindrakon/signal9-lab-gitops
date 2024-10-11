@@ -13,5 +13,5 @@ spec:
     "bridge": "br-bond0", 
     "macspoofchk": false, 
     "vlan": 16, 
-    "disableContainerInterface": "true"
+    "disableContainerInterface": true
   }'
