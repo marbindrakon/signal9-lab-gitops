@@ -6,16 +6,21 @@ spec:
   desiredState:
     interfaces:
     - name: br-bond0
-      type: ovs-bridge
-      state: absent
+      type: linux-bridge
+      state: up
+      ipv4:
+        enabled: false
+      ipv6:
+        enabled: false
       bridge:
-        allow-extra-patch-ports: true
         options:
           stp: false
         port:
         - name: bond0
-    ovn:
-      bridge-mappings:
-      - localnet: vlan10
-        bridge: br-bond0
-        state: absent
+          vlan:
+            mode: trunk
+            trunk-tags:
+              - id: 10
+              - id: 5
+              - id: 16
+            enable-native: false
