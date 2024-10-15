@@ -106,7 +106,7 @@ certManager:
 
 metallb:
   enabled: true
-  localAsn: 64741
+  localAsn: 64751
   peers:
     - name: lab-rtr-a
       address: 172.18.16.2
@@ -114,5 +114,5 @@ metallb:
     - name: lab-rtr-b
       address: 172.18.16.3
       asn: 65123
-  clusterIpPool: "172.18.74.128/25"
+  clusterIpPool: "172.18.75.128/25"
   anycastIpPool: "172.18.71.0/24"
