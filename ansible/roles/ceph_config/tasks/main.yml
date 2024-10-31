@@ -1,4 +1,9 @@
 ---
 # tasks file for ceph_config
+- name: determine if we are setting up iscsi
+  ansible.builtin.set_fact:
+    ceph_iscsi_setup: true
+  when: '"odf-internal" in cluster_special_feature'
+
 - name: include tasks for cluster state
   ansible.builtin.include_tasks: "{{ cluster_state }}.yml"

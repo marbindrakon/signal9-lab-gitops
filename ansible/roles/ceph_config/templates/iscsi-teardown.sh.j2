@@ -1,0 +1,20 @@
+#!/bin/bash
+
+POOL_NAME={{ cluster_name }}-odf
+ISCSI_POD=$(podman ps | grep iscsi | grep -v tcmu | awk '{print $9;}')
+
+# Delete targets
+for node in {1..3}; do
+        for disk in {1..3}; do
+                podman exec $ISCSI_POD gwcli /iscsi-targets/iqn.2021-08.gg.signal9.iscsi-gw:$POOL_NAME-node$node/disks delete disk=$POOL_NAME/node$node-disk$disk
+        done
+        podman exec $ISCSI_POD gwcli /iscsi-targets delete target_iqn=iqn.2021-08.gg.signal9.iscsi-gw:$POOL_NAME-node$node
+done
+
+# Delete disks
+for node in {1..3}; do
+        for disk in {1..3}; do
+                podman exec $ISCSI_POD gwcli /disks delete image_id=$POOL_NAME/node$node-disk$disk
+        done
+done
+

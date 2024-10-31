@@ -1,4 +1,11 @@
 ---
+- name: configure ceph iscsi
+  ansible.builtin.shell: |
+    {{ lookup('template', 'iscsi-teardown.sh.j2') }}
+  delegate_to: "{{ groups['cephclients'][0] }}"
+  when: ceph_iscsi_setup == true
+  become: true
+
 - name: configure ceph cluster
   ansible.builtin.shell: "ceph osd pool delete {{ cluster_name }}-odf {{ cluster_name }}-odf --yes-i-really-really-mean-it"
   delegate_to: "{{ groups['cephclients'][0] }}"

@@ -41,7 +41,7 @@
     - name: include ceph_config role
       ansible.builtin.include_role:
         name: ceph_config
-      when: '"odf-external" in cluster_special_feature'
+      when: '"odf" in cluster_special_feature'
 
     - name: include gitops_cluster_build role
       ansible.builtin.include_role:

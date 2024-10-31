@@ -5,6 +5,13 @@
   delegate_to: "{{ groups['cephclients'][0] }}"
   become: true
 
+- name: configure ceph iscsi
+  ansible.builtin.shell: |
+    {{ lookup('template', 'iscsi-create.sh.j2') }}
+  delegate_to: "{{ groups['cephclients'][0] }}"
+  when: ceph_iscsi_setup == true
+  become: true
+
 - name: grab secret data
   ansible.builtin.slurp:
     src: "/root/{{ cluster_name}}-odf.json"
