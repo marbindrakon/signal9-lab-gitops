@@ -130,6 +130,8 @@ controller_templates:
           new_question: False
           default: none
           choices:
+            - odf-external
+            - odf-internal
             - gpu
             - none
         - question_name: Glance Image Override
