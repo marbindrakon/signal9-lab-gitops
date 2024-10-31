@@ -1,0 +1,31 @@
+apiVersion: nmstate.io/v1beta1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: bond0-bridge
+spec:
+  desiredState:
+    interfaces:
+    - name: br-bond0
+      type: ovs-bridge
+      state: up
+      ipv4:
+        enabled: false
+      ipv6:
+        enabled: false
+      bridge:
+        allow-extra-patch-ports: true
+        options:
+          stp: false
+        port:
+        - name: bond0
+    ovn:
+      bridge-mappings:
+        - localnet: vlan10
+          bridge: br-bond0
+          state: present
+        - localnet: vlan5
+          bridge: br-bond0
+          state: present
+        - localnet: vlan16
+          bridge: br-bond0
+          state: present
