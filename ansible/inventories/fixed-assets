@@ -10,4 +10,4 @@ all:
         xna-haproxy-c.home.signal9.gg: {}
     cephclients:
       hosts:
-        ceph-0.lab.signal9.gg: {}
+        ceph-1.lab.signal9.gg: {}
