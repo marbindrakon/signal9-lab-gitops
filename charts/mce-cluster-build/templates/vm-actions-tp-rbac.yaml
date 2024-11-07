@@ -1,0 +1,35 @@
+apiVersion: authentication.open-cluster-management.io/v1beta1
+kind: ManagedServiceAccount
+metadata:
+  name: vm-actor
+  namespace: {{ .Values.cluster.name }}
+  labels:
+    app: search
+spec:
+  rotation: {}
+---
+apiVersion: rbac.open-cluster-management.io/v1alpha1
+kind: ClusterPermission
+metadata:
+  name: vm-actions
+  namespace: {{ .Values.cluster.name }}
+  labels:
+    app: search
+spec:
+  clusterRole:
+    rules:
+      - apiGroups:
+          - subresources.kubevirt.io
+        resources:
+          - virtualmachines/start
+          - virtualmachines/stop
+          - virtualmachines/restart
+          - virtualmachineinstances/pause
+          - virtualmachineinstances/unpause
+        verbs:
+          - update
+  clusterRoleBinding:
+    subject:
+      kind: ServiceAccount
+      name: vm-actor
+      namespace: open-cluster-management-agent-addon
