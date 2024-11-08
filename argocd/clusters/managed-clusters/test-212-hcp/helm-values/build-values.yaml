@@ -6,7 +6,7 @@ cluster:
   # This namespace must already exist on the cluster
   hcpNamespace: clusters
   controlPlaneOperatorImageOverride: null
-  releaseImage: quay.io/openshift-release-dev/ocp-release:4.17.1-x86_64
+  releaseImage: quay.io/openshift-release-dev/ocp-release:4.17.4-x86_64
   importToACM: true
   etcdSize: 8Gi
   pullSecretVault: "ocp-pull-secret"
