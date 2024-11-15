@@ -14,10 +14,13 @@ spec:
       backoff:
         maxDuration: 1m
       limit: -1
-  source:
-    repoURL: "https://github.com/marbindrakon/signal9-lab-gitops.git"
-    path: "charts/ocp-base-config"
-    targetRevision: HEAD
-    helm:
-      valueFiles:
-        - "../../argocd/clusters/managed-clusters/tagging-test-alpha/helm-values/base-config-values.yaml"
+  sources:
+    - repoURL: "https://github.com/marbindrakon/signal9-lab-gitops.git"
+      ref: values
+      targetRevision: HEAD
+    - repoURL: "https://github.com/marbindrakon/signal9-helm.git"
+      path: "ocp-base-config"
+      targetRevision: ocp-base-config-1.0.0
+      helm:
+        valueFiles:
+          - "$values/argocd/clusters/managed-clusters/tagging-test-alpha/helm-values/base-config-values.yaml"
