@@ -20,7 +20,7 @@ spec:
       targetRevision: HEAD
     - repoURL: "https://github.com/marbindrakon/signal9-helm.git"
       path: "ocp-base-config"
-      targetRevision: ocp-base-config-1.0.0
+      targetRevision: ocp-base-config-1.0.1
       helm:
         valueFiles:
           - "$values/argocd/clusters/managed-clusters/tagging-test-charlie/helm-values/base-config-values.yaml"
