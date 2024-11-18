@@ -1,8 +1,8 @@
 cluster:
-  importToHub: true
-  useACM: true
+  importToHub: false
+  useACM: false
   createGitopsManifestWorks: false
-  createGitopsSyncSet: false
+  createGitopsSyncSet: true
   name: jonsnow-20241114
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
