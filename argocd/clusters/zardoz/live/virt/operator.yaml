@@ -27,7 +27,11 @@ spec:
   config:
     env:
       - name: SMBIOS
-        value: "Family: Red HatProduct: KVMManufacturer: Red HatVersion: 4.16.4"
+        value: |-
+          Family: Red Hat
+          Product: KVM
+          Manufacturer: Red Hat
+          Version: 4.16.4
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   name: kubevirt-hyperconverged
