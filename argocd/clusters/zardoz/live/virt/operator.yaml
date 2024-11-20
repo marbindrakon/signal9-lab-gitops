@@ -24,6 +24,10 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
+  config:
+    env:
+      - name: SMBIOS
+        value: "Family: Red HatProduct: KVMManufacturer: Red HatVersion: 4.16.4"
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   name: kubevirt-hyperconverged
