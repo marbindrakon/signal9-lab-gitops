@@ -3,7 +3,7 @@ kind: ConsoleNotification
 metadata:
   name: config-version
 spec:
-  text: "The cluster is customized"
+  text: "The cluster is very customized"
   location: BannerTop 
   color: '#333'
   backgroundColor: '#0088ce'
