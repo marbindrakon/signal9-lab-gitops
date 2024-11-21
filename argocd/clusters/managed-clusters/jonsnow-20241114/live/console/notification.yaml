@@ -1,0 +1,9 @@
+apiVersion: console.openshift.io/v1
+kind: ConsoleNotification
+metadata:
+  name: config-version
+spec:
+  text: "The cluster is customized"
+  location: BannerTop 
+  color: '#333'
+  backgroundColor: '#0088ce'
