@@ -53,19 +53,8 @@ cluster:
     -----END CERTIFICATE-----
 
 monitoring:
-  enabled: true
-  storageClass: ocs-external-storagecluster-ceph-rbd
+  enabled: false
 
-odfStorage:
-  enabled: true
-  external: true
-  version: '4.16'
-  externalSecret:
-    name: rook-ceph-external-cluster-details
-    vaultName: jon-snotest20241126-rook-data
-
-network:
-  hostRouting: true
 
 externalSecrets:
   vaultAuthPath: "k8s-mgd-jon-snotest20241126"
@@ -107,7 +96,7 @@ certManager:
 
 metallb:
   enabled: true
-  localAsn: 64750
+  localAsn: 64741
   peers:
     - name: lab-rtr-a
       address: 172.18.16.2
@@ -115,5 +104,5 @@ metallb:
     - name: lab-rtr-b
       address: 172.18.16.3
       asn: 65123
-  clusterIpPool: "172.18.75.0/25"
+  clusterIpPool: "172.18.74.128/25"
   anycastIpPool: "172.18.71.0/24"

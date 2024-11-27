@@ -7,10 +7,10 @@ cluster:
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
   clusterImageSet: img4.16.20-x86-64-appsub
-  controlPlaneCount: 1
+  controlPlaneCount: 3
   workerCount: 0
-  apiVIP: "172.18.16.56"
-  ingressVIP: "172.18.16.56"
+  apiVIP: "172.18.16.176"
+  ingressVIP: "172.18.16.191"
   pullSecretVault: "ocp-pull-secret"
   trustedCAs: |
     -----BEGIN CERTIFICATE-----
@@ -67,6 +67,7 @@ cluster:
 provider:
   type: Agent
   agent:
+    useExternalLB: false
     machineCIDR: 172.18.16.0/24
     sharedInfraEnv:
       name: metal-infra-env
