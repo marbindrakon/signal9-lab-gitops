@@ -55,33 +55,33 @@ assignments:
     extraLabels: {}
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-# - node: z-58.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-#   extraLabels:
-#     app: openstack
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-#     bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
-#     bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
-# - node: z-59.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-#   extraLabels:
-#     app: openstack
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-#     bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
-#     bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
-# - node: z-60.lab.signal9.gg
-#   namespace: openshift-machine-api
-#   assignmentType: metal3
-#   extraLabels:
-#     app: openstack
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-#     bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
-#     bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
+  - node: z-58.lab.signal9.gg
+    namespace: openstack
+    assignmentType: metal3
+    extraLabels:
+      app: openstack
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
+  - node: z-59.lab.signal9.gg
+    namespace: openstack
+    assignmentType: metal3
+    extraLabels:
+      app: openstack
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
+  - node: z-60.lab.signal9.gg
+    namespace: openstack
+    assignmentType: metal3
+    extraLabels:
+      app: openstack
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/gpu: ''
+      bmac.agent-install.openshift.io.agent-label.special-feature.signal9.gg/nvme: ''
   - node: z-61.lab.signal9.gg
     namespace: openshift-machine-api
     assignmentType: metal3
