@@ -10,53 +10,55 @@ spec:
   networks:
   - name: CtlPlane
     dnsDomain: ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.ctlplane.mtu }}
     subnets:
     - name: subnet1
       allocationRanges:
-      - end: 172.18.62.200
-        start: 172.18.62.125
-      cidr: 172.18.62.0/24
-      gateway: 172.18.62.1
+      - end: "{{ .Values.networks.ctlplane.nodeRange.end }}"
+        start: "{{ .Values.networks.ctlplane.nodeRange.start }}"
+      cidr: "{{ .Values.networks.ctlplane.subnet }}"
+      gateway: "{{ .Values.networks.ctlplane.gateway }}"
   - name: InternalApi
     dnsDomain: internalapi.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    mtu: 9000
+    mtu: {{ .Values.networks.internalapi.mtu }}
     subnets:
     - name: subnet1
       allocationRanges:
-      - end: 172.18.64.200
-        start: 172.18.64.100
-      cidr: 172.18.64.0/24
-      vlan: 604
+      - end: "{{ .Values.networks.internalapi.nodeRange.end }}"
+        start: "{{ .Values.networks.internalapi.nodeRange.start }}"
+      cidr: "{{ .Values.networks.internalapi.subnet }}"
+      vlan: {{ .Values.networks.internalapi.vlan }}
   - name: External
     dnsDomain: external.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.public.mtu }}
     subnets:
     - name: subnet1
       allocationRanges:
-      - end: 172.18.67.125
-        start: 172.18.67.100
-      cidr: 172.18.67.0/24
-      gateway: 172.18.67.1
-      vlan: 607
+      - end: "{{ .Values.networks.public.nodeRange.end }}"
+        start: "{{ .Values.networks.public.nodeRange.start }}"
+      cidr: "{{ .Values.networks.public.subnet }}"
+      gateway: "{{ .Values.networks.public.gateway }}"
+      vlan: {{ .Values.networks.public.vlan }}
   - name: Storage
     dnsDomain: storage.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    mtu: 9000
+    mtu: {{ .Values.networks.storage.mtu }}
     subnets:
     - name: subnet1
       allocationRanges:
-      - end: 172.18.66.199
-        start: 172.18.66.150
-      cidr: 172.18.66.0/24
-      vlan: 606
+      - end: "{{ .Values.networks.storage.nodeRange.end }}"
+        start: "{{ .Values.networks.storage.nodeRange.start }}"
+      cidr: "{{ .Values.networks.storage.subnet }}"
+      vlan: {{ .Values.networks.storage.vlan }}
       routes:
         - destination: 172.18.14.0/24
-          nexthop: 172.18.66.1
+          nexthop: 172.18.19.1
   - name: Tenant
     dnsDomain: tenant.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    mtu: 9000
+    mtu: {{ .Values.networks.tunnel.mtu }}
     subnets:
     - name: subnet1
       allocationRanges:
-      - end: 172.18.65.200
-        start: 172.18.65.100
-      cidr: 172.18.65.0/24
-      vlan: 605
+      - end: "{{ .Values.networks.tunnel.nodeRange.end }}"
+        start: "{{ .Values.networks.tunnel.nodeRange.start }}"
+      cidr: "{{ .Values.networks.tunnel.subnet }}"
+      vlan: {{ .Values.networks.tunnel.vlan }}

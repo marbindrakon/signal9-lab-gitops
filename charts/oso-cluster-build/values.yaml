@@ -17,6 +17,7 @@ ceph:
 
 networks:
   ctlplane:
+    gateway: 172.18.101.1
     nodeInterface: bond0.101
     subnet: 172.18.101.0/24
     containerRange:
@@ -76,6 +77,7 @@ networks:
     mtu: 9000
   public:
     nodeInterface: bond0.104
+    gateway: 172.18.104.1
     subnet: 172.18.104.0/24
     containerRange:
       start: 172.18.104.201
