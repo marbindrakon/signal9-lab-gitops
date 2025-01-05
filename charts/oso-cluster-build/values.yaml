@@ -41,7 +41,7 @@ networks:
       start: 172.18.19.175
       end: 172.18.19.200
     routes:
-      - prefix: 172.18.14.0/24
+      - dst: 172.18.14.0/24
         gw: 172.18.19.1
     vlan: 19
     mtu: 9000
@@ -96,9 +96,9 @@ metallbInterfaces:
 
 metallbRanges:
   internalapi: 
-    - 172.18.64.80-172.18.64.90
+    - 172.18.102.80-172.18.102.90
   ctlplane:
-    - 172.18.62.250-172.18.62.254
+    - 172.18.101.250-172.18.101.254
 
 customCaBundle: |
   -----BEGIN CERTIFICATE-----

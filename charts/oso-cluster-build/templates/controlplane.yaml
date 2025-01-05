@@ -46,27 +46,19 @@ spec:
       - key: server
         values:
         - 172.18.42.10
+      - key: server
+        values:
+        - 172.18.42.11
       replicas: 2
   cinder:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-cinder.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
+      route: {}
 
     template:
       databaseInstance: openstack
       secret: {{ .Values.cloudName }}-password-secret
       cinderAPI:
         override:
-          service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-cinder.{{ .Values.foundationIngressBase }}"
             internal:
               metadata:
                 annotations:
@@ -85,7 +77,7 @@ spec:
           backup_ceph_user = {{ .Values.ceph.client }}
         networkAttachments:
         - storage
-        replicas: 1 # backend needs to be configured
+        replicas: 1
       cinderVolumes:
         ceph:
           customServiceConfig: |
@@ -101,17 +93,10 @@ spec:
             rbd_secret_uuid={{ .Values.ceph.fsid }}
           networkAttachments:
           - storage
-          replicas: 1 # backend needs to be configured
+          replicas: 1
   glance:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-glance.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
+      route: {}
 
     template:
       databaseInstance: openstack
@@ -127,42 +112,31 @@ spec:
         store_description = "RBD backend"
         rbd_store_pool = {{ .Values.ceph.pools.glance }}
         rbd_store_user = {{ .Values.ceph.client }}
-      glanceAPIInternal:
-        override:
-          service:
-            metadata:
-              annotations:
-                metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
-                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
-                metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
-            spec:
-              type: LoadBalancer
-        networkAttachments:
-        - storage
-      glanceAPIExternal:
-        override:
-          service:
-            endpointURL: "https://{{ .Values.cloudName }}-glance.{{ .Values.foundationIngressBase }}"
-        networkAttachments:
-        - storage
+      keystoneEndpoint: default
+      glanceAPIs:
+        default:
+          replicas: 3
+          override:
+            service:
+              internal:
+                metadata:
+                  annotations:
+                    metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                    metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                    metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+                spec:
+                  type: LoadBalancer
+          networkAttachments:
+          - storage
+
   keystone:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-keystone.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
+      route: {}
 
     template:
-      replicas: 2
+      replicas: 3
       override:
         service:
-          public:
-            endpointURL: "https://{{ .Values.cloudName }}-keystone.{{ .Values.foundationIngressBase }}"
           internal:
             metadata:
               annotations:
@@ -192,25 +166,17 @@ spec:
         secret: {{ .Values.cloudName }}-password-secret
         replicas: 3
   memcached:
+    enabled: true
     templates:
       memcached:
         replicas: 3
   neutron:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
+      route: {}
 
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-neutron.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
     template:
       override:
         service:
-          public:
-            endpointURL: "https://{{ .Values.cloudName }}-neutron.{{ .Values.foundationIngressBase }}"
           internal:
             metadata:
               annotations:
@@ -226,37 +192,18 @@ spec:
   horizon:
     enabled: true
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}.{{ .Values.baseDomain }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
-
+      route: {}
     template:
-      replicas: 2
+      replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
   nova:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-nova.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
-
+      route: {}
     template:
       apiServiceTemplate:
+        replicas: 3
         override:
           service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-nova.{{ .Values.foundationIngressBase }}"
             internal:
               metadata:
                 annotations:
@@ -266,6 +213,7 @@ spec:
               spec:
                 type: LoadBalancer
       metadataServiceTemplate:
+        replicas: 3
         override:
           service:
             metadata:
@@ -275,28 +223,36 @@ spec:
                 metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
             spec:
               type: LoadBalancer
+      schedulerServiceTemplate:
+        replicas: 3
+      cellTemplates:
+        cell0:
+          cellDatabaseAccount: nova-cell0
+          cellDatabaseInstance: openstack
+          cellMessageBusInstance: rabbitmq
+          hasAPIAccess: true
+        cell1:
+          cellDatabaseAccount: nova-cell1
+          cellDatabaseInstance: openstack-cell1
+          cellMessageBusInstance: rabbitmq-cell1
+          noVNCProxyServiceTemplate:
+            enabled: true
+            networkAttachments:
+            - internalapi
+            - ctlplane
+          hasAPIAccess: true
       secret: {{ .Values.cloudName }}-password-secret
   manila:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-manila.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
-
+      route: {}
     template:
+      secret: {{ .Values.cloudName }}-password-secret
       manilaAPI:
-        replicas: 2
+        replicas: 3
         networkAttachments:
         - internalapi
         override:
           service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-manila.{{ .Values.foundationIngressBase }}"
             internal:
               metadata:
                 annotations:
@@ -338,33 +294,39 @@ spec:
           dbType: SB
           storageRequest: 10G
           networkAttachment: internalapi
-      ovnNorthd:
+      ovnNorthd: {}
+
+  barbican:
+    apiOverride:
+      route: {}
+    template:
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      simpleCryptoBackendSecret: {{ .Values.cloudName }}-password-secret
+      barbicanAPI:
         replicas: 3
-        networkAttachment: internalapi
-      ovnController:
-        external-ids:
-          system-id: "random"
-          ovn-bridge: "br-int"
-          ovn-encap-type: "geneve"
-        networkAttachment: tunnel
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-internalapi
+                  metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
+              spec:
+                type: LoadBalancer
+      barbicanWorker:
+        replicas: 3
+      barbicanKeystoneListener:
+        replicas: 1
+
   placement:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-nova-placement.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
-
+      route: {}
     template:
       replicas: 2
       override:
         service:
-          public:
-            endpointURL: "https://{{ .Values.cloudName }}-nova-placement.{{ .Values.foundationIngressBase }}"
           internal:
             metadata:
               annotations:
@@ -399,32 +361,15 @@ spec:
               type: LoadBalancer
   heat:
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-heat.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
-
+      route: {}
     cnfAPIOverride:
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-heat-cfn.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
-
+      route: {}
     enabled: true
     template:
       databaseInstance: openstack
       heatAPI:
         override:
           service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-heat.{{ .Values.foundationIngressBase }}"
             internal:
               metadata:
                 annotations:
@@ -433,12 +378,10 @@ spec:
                   metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
               spec:
                 type: LoadBalancer
-        replicas: 2
+        replicas: 3
       heatCfnAPI:
         override:
           service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-heat-cfn.{{ .Values.foundationIngressBase }}"
             internal:
               metadata:
                 annotations:
@@ -447,80 +390,75 @@ spec:
                   metallb.universe.tf/loadBalancerIPs: {{ index .Values.networks.internalapi.loadbalancerIPs 0 }}
               spec:
                 type: LoadBalancer
-        replicas: 2
+        replicas: 3
 
       heatEngine:
-        replicas: 2
+        replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
   ironic:
-    enabled: true
+    enabled: false
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-ironic-api.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
-    inspectorOverride:
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-inspector.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
+      route: {}
+    inspectorOverride: {}
     template:
       databaseInstance: openstack
       ironicAPI:
-        override:
-          service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-ironic-api.{{ .Values.foundationIngressBase }}"
-        replicas: 2
+        replicas: 3
       ironicConductors:
-      - replicas: 1
-        storageClass: "ocs-external-storagecluster-ceph-rbd"
+      - replicas: 3
+        storageClass: "ocs-external-storagecluster-cephfs"
         storageRequest: 150G
       ironicInspector:
-        override:
-          service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-inspector.{{ .Values.foundationIngressBase }}"
         replicas: 1
       ironicNeutronAgent:
         replicas: 1
       secret: {{ .Values.cloudName }}-password-secret
-  ceilometer:
-    enabled: false
-    template:
-      passwordSelector:
-        service: CeilometerPassword
-      secret: {{ .Values.cloudName }}-password-secret
-      serviceUser: ceilometer
   swift:
     enabled: false
   octavia:
-    enabled: true
+    enabled: false
     apiOverride:
-      tls:
-        secretName: {{ .Values.cloudName }}-public-cert
-
-      route:
-        spec:
-          host: {{ .Values.cloudName }}-octavia.{{ .Values.foundationIngressBase }}
-          tls:
-            insecureEdgeTerminationPolicy: Redirect
-            termination: edge
+      route: {}
     template:
       databaseInstance: openstack
       octaviaAPI:
-        override:
-          service:
-            public:
-              endpointURL: "https://{{ .Values.cloudName }}-octavia.{{ .Values.foundationIngressBase }}"
-        replicas: 2
+        replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
   redis:
     enabled: true
+  openstackclient:
+    template:
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+  telemetry:
+    enabled: true
+    template:
+      metricStorage:
+        enabled: true
+        dashboardsEnabled: true
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 20G
+      autoscaling: 
+        enabled: true
+        aodh:
+          databaseAccount: aodh
+          databaseInstance: openstack
+          passwordSelector:
+            aodhService: AodhPassword
+          rabbitMqClusterName: rabbitmq
+          serviceUser: aodh
+          secret: {{ .Values.cloudName }}-password-secret
+        heatInstance: heat
+      ceilometer:
+        enabled: true
+        secret: {{ .Values.cloudName }}-password-secret
+      logging:
+        enabled: false
+        ipaddr: 172.17.0.80
+

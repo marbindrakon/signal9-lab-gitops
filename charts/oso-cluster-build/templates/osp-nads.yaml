@@ -77,9 +77,8 @@ spec:
         "range_start": "{{ .Values.networks.storage.containerRange.start }}",
         "range_end": "{{ .Values.networks.storage.containerRange.end }}"
         {{ if .Values.networks.storage.routes }}
-        "routes": [
+        ,"routes": 
           {{ toPrettyJson .Values.networks.storage.routes | nindent 10}}
-        ]
         {{ end }}
       }
     }
