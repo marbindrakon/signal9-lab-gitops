@@ -54,8 +54,9 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.cinder }}
 
     template:
       databaseInstance: openstack
@@ -102,7 +103,9 @@ spec:
       default:
         tls:
           secretName: {{ .Values.cloudName }}-manual-cert
-      route: {}
+        route:
+          spec:
+            host: {{ .Values.apiEndpointNames.glance }}
 
     template:
       databaseInstance: openstack
@@ -139,7 +142,9 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.keystone }}
 
     template:
       region: {{ .Values.keystone.region }}
@@ -183,8 +188,9 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.neutron }}
 
     template:
       override:
@@ -204,10 +210,11 @@ spec:
   horizon:
     enabled: true
     apiOverride:
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.horizon }}
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
     template:
       replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
@@ -215,13 +222,18 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.nova }}
     cellOverride:
       cell1:
         noVNCProxy:
           tls:
             secretName: {{ .Values.cloudName }}-manual-cert
+          route:
+            spec:
+              host: {{ .Values.apiEndpointNames.cell1Vnc }}
+
     template:
       apiServiceTemplate:
         replicas: 3
@@ -266,11 +278,13 @@ spec:
           hasAPIAccess: true
       secret: {{ .Values.cloudName }}-password-secret
   manila:
+    enabled: true
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.manila }}
     template:
       secret: {{ .Values.cloudName }}-password-secret
       manilaAPI:
@@ -300,7 +314,7 @@ spec:
             share_backend_name=cephfs
             share_driver=manila.share.drivers.cephfs.driver.CephFSDriver
             cephfs_conf_path=/etc/ceph/ceph.conf
-            cephfs_auth_id=manila
+            cephfs_auth_id=openstack
             cephfs_cluster_name=ceph
             cephfs_volume_mode=0755
             cephfs_protocol_helper_type=CEPHFS
@@ -326,8 +340,9 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.barbican }}
     template:
       databaseInstance: openstack
       secret: {{ .Values.cloudName }}-password-secret
@@ -353,8 +368,9 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.placement }}
     template:
       replicas: 2
       override:
@@ -395,13 +411,15 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.heat }}
     cnfAPIOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.heatCfn }}
     enabled: true
     template:
       databaseInstance: openstack
@@ -434,12 +452,13 @@ spec:
         replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
   ironic:
-    enabled: false
+    enabled: true
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.ironic }}
     inspectorOverride: {}
     template:
       databaseInstance: openstack
@@ -461,8 +480,9 @@ spec:
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
-
-      route: {}
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.octavia }}
     template:
       databaseInstance: openstack
       octaviaAPI:
@@ -476,6 +496,9 @@ spec:
         node-role.kubernetes.io/worker: ""
   telemetry:
     aodhApiOverride:
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.aodh }}
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
     prometheusOverride:

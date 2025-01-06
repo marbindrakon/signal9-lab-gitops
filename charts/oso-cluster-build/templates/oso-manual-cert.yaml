@@ -16,4 +16,4 @@ spec:
     creationPolicy: Owner
   dataFrom:
   - extract:
-      key: oso-manual-cert
+      key: {{ .Values.externalPublicCertificateSecret }}
