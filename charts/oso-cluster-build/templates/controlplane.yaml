@@ -52,6 +52,9 @@ spec:
       replicas: 2
   cinder:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
 
     template:
@@ -95,7 +98,10 @@ spec:
           - storage
           replicas: 1
   glance:
-    apiOverride:
+    apiOverrides:
+      default:
+        tls:
+          secretName: {{ .Values.cloudName }}-manual-cert
       route: {}
 
     template:
@@ -131,9 +137,12 @@ spec:
 
   keystone:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
       route: {}
 
     template:
+      region: {{ .Values.keystone.region }}
       replicas: 3
       override:
         service:
@@ -172,6 +181,9 @@ spec:
         replicas: 3
   neutron:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
 
     template:
@@ -192,13 +204,24 @@ spec:
   horizon:
     enabled: true
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     template:
       replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
   nova:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
+    cellOverride:
+      cell1:
+        noVNCProxy:
+          tls:
+            secretName: {{ .Values.cloudName }}-manual-cert
     template:
       apiServiceTemplate:
         replicas: 3
@@ -244,6 +267,9 @@ spec:
       secret: {{ .Values.cloudName }}-password-secret
   manila:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     template:
       secret: {{ .Values.cloudName }}-password-secret
@@ -298,6 +324,9 @@ spec:
 
   barbican:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     template:
       databaseInstance: openstack
@@ -322,6 +351,9 @@ spec:
 
   placement:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     template:
       replicas: 2
@@ -361,8 +393,14 @@ spec:
               type: LoadBalancer
   heat:
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     cnfAPIOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     enabled: true
     template:
@@ -398,6 +436,9 @@ spec:
   ironic:
     enabled: false
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     inspectorOverride: {}
     template:
@@ -418,6 +459,9 @@ spec:
   octavia:
     enabled: false
     apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+
       route: {}
     template:
       databaseInstance: openstack
@@ -431,6 +475,12 @@ spec:
       nodeSelector:
         node-role.kubernetes.io/worker: ""
   telemetry:
+    aodhApiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+    prometheusOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
     enabled: true
     template:
       metricStorage:

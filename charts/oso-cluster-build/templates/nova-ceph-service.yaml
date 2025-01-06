@@ -8,8 +8,13 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   label: dataplane-deployment-nova-custom-ceph
-  configMaps:
-    - ceph-nova
-  secrets:
-    - nova-cell1-compute-config
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova
+  dataSources:
+   - configMapRef:
+       name: ceph-nova
+   - secretRef:
+       name: nova-cell1-compute-config
+   - secretRef:
+       name: nova-migration-ssh-key
   playbook: osp.edpm.nova

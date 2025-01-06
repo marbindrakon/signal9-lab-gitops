@@ -3,6 +3,12 @@ baseDomain: lab.signal9.gg
 foundationIngressBase: apps.zardoz.lab.signal9.gg
 
 externalPasswordsSecret: "oso-passwords"
+externalRegistrySecret: "oso-registry-secret"
+externalSubscriptionSecret: "oso-subscription-secret"
+
+keystone:
+  # As of 18.0.3, this must be regionOne to work due to hardcoded config templates in operators
+  region: regionOne
 
 ceph:
   fsid: 14e37f3d-9026-46c3-a503-82fa0acbac3f
