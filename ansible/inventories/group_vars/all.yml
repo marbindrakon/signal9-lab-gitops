@@ -178,34 +178,34 @@ version_mapping:
 
 platform_configs:
   openstack:
-    vip_network: "{{ osp_ext_net_override if osp_ext_net_override is defined and osp_ext_net_override != '' else 'lab-net' }}"
-    use_existing_image: true
+    vip_network: "{{ osp_ext_net_override if osp_ext_net_override is defined and osp_ext_net_override != '' else 'ext-net' }}"
+    use_existing_image: false
     glance_image: "{{ glance_image_override|default('rhcos-4.12.17') }}"
     cluster_sizes:
       sandbox:
         controller_count: 3
         worker_count: 3
-        worker_flavor: m1.large
-        controller_flavor: m5.xlarge
+        worker_flavor: b1.xlarge
+        controller_flavor: g1.xlarge
         gpu_flavor: g1.2xlarge
       small:
         controller_count: 3
         worker_count: 3
-        controller_flavor: m5.xlarge
-        worker_flavor: m5.xlarge
-        gpu_flavor: g1.large
+        controller_flavor: g1.2xlarge
+        worker_flavor: s1.xlarge
+        gpu_flavor: g1.slarge
       medium:
         controller_count: 3
         worker_count: 3
-        controller_flavor: m1.xlarge
-        worker_flavor: m1.xlarge
+        controller_flavor: g1.2xlarge
+        worker_flavor: s1.xlarge
         gpu_flavor: g1.xlarge
       large:
         controller_count: 3
         worker_count: 3
-        controller_flavor: m1.2xlarge
-        worker_flavor: m1.2xlarge
-        gpu_flavor: g1.2xlarge
+        controller_flavor: g1.2xlarge
+        worker_flavor: g1.2xlarge
+        gpu_flavor: g1.sxlarge
     platform_ca_bundle: |
       -----BEGIN CERTIFICATE-----
       MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
