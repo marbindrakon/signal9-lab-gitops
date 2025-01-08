@@ -1,0 +1,16 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: remove-vlan104
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  nodeSelector: 
+    node-role.kubernetes.io/worker: "" 
+  maxUnavailable: 3 
+  desiredState:
+    interfaces:
+      - name: bond0.104
+        type: vlan
+        state: absent
