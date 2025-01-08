@@ -28,6 +28,7 @@ apiEndpointNames:
   placement: compute-placement.opensnack.lab.signal9.gg
   cell1Vnc: console-cell1.opensnack.lab.signal9.gg
   aodh: alarms.opensnack.lab.signal9.gg
+  prometheus: int-metrics.opensnack.lab.signal9.gg
 
 ceph:
   fsid: 14e37f3d-9026-46c3-a503-82fa0acbac3f

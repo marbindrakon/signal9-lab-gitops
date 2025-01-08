@@ -63,6 +63,7 @@ spec:
       secret: {{ .Values.cloudName }}-password-secret
       cinderAPI:
         override:
+          service:
             internal:
               metadata:
                 annotations:
@@ -504,10 +505,14 @@ spec:
     prometheusOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.prometheus }}
     enabled: true
     template:
       metricStorage:
         enabled: true
+        dataplaneNetwork: ctlplane
         dashboardsEnabled: true
         monitoringStack:
           alertingEnabled: true
