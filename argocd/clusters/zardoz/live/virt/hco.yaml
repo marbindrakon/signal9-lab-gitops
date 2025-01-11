@@ -20,5 +20,5 @@ spec:
       - LiveMigration
   permittedHostDevices:
     pciHostDevices:
-      - pciDeviceSelector: "10de:1bb3"
+      - pciDeviceSelector: "10DE:1BB3"
         resourceName: "nvidia.com/GP104GL"
