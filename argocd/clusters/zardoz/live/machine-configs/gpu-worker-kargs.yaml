@@ -1,0 +1,14 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: gpu-worker
+  name: 100-gpu-worker-kargs
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+  kernelArguments:
+      - intel_iommu=on
+      - mitigations=off
+      - mce=ignore_ce
