@@ -18,3 +18,7 @@ spec:
   workloadUpdateStrategy:
     workloadUpdateMethods:
       - LiveMigration
+  permittedHostDevices:
+    pciHostDevices:
+      - pciDeviceSelector: "10DE:1BB3"
+        resourceName: "nvidia.com/GP104GL"
