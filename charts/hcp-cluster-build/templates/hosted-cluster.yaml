@@ -68,7 +68,7 @@ spec:
               name: {{ .Values.cluster.name }}-oauth-client-secret
             extraScopes:
             - profile
-            issuer: https://login.home.signal9.gg/auth/realms/Signal9-RHT
+            issuer: https://login.home.signal9.gg/realms/Signal9-RHT
           type: OpenID
   etcd:
     managed:
