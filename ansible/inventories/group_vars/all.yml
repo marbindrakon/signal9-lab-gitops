@@ -158,7 +158,7 @@ cluster_ntp_sources: "{{ cluster_dns_servers }}"
 
 cluster_sso:
   client_id: "{{ cluster_name }}-openshift"
-  sso_url: https://login.home.signal9.gg/auth
+  sso_url: https://login.home.signal9.gg
   admin_realm: master
   role_source_client: openshift
   client_realm: "Signal9-RHT"
