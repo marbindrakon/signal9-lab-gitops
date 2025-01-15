@@ -24,8 +24,19 @@ provider:
   providerCAs: ""
   # Only used for vSphere IPI
   installConfigVault: ""
-  # Can be OpenStack, Agent, or vSphere
+  # Can be OpenStack, Agent, AWS, or vSphere
   type: OpenStack
+  aws:
+    region: us-east-2
+    controllerFlavor: m1.xlarge
+    workerFlavor: m1.large
+    credentialsMode: Manual
+    publishMode: External
+    assumeRole:
+      roleARN: ""
+      externalID: ""
+    serviceAccountSignerSecret: ""
+    extraManifestsSecret: ""
   vsphere:
     datacenter: ""
     cluster: ""

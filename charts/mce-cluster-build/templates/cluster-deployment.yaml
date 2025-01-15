@@ -16,6 +16,13 @@ spec:
     name: {{ .Values.cluster.name }}
     version: v1beta1
 {{ end }}
+{{ if eq .Values.provider.type "AWS" }}
+  manageDNS: true
+{{ end }}
+{{ if .Values.provider.aws.serviceAccountSignerSecret }}
+  boundServiceAccountSigningKeySecretRef:
+    name: {{ .Values.cluster.name }}-svc-signer
+{{ end }}
   baseDomain: {{ .Values.cluster.baseDomain }}
   clusterName: {{ .Values.cluster.name }}
   controlPlaneConfig:
@@ -42,6 +49,13 @@ spec:
       folder: {{ .Values.provider.vsphere.folder }}
 {{ end }}
 {{ end }}
+{{ if eq .Values.provider.type "AWS" }}
+    aws:
+      region: {{ .Values.provider.aws.region }}
+      credentialsAssumeRole:
+        roleARN: {{ .Values.provider.aws.assumeRole.roleARN }}
+        externalID: {{ .Values.provider.aws.assumeRole.externalID }}
+{{ end }}
 {{ if eq .Values.provider.type "OpenStack" }}
     openstack:
       certificatesSecretRef:
@@ -56,6 +70,10 @@ spec:
       name: {{ .Values.cluster.name }}-install-config
     sshPrivateKeySecretRef:
       name: {{ .Values.cluster.name }}-ssh-key
+{{ if .Values.provider.aws.extraManifestsSecret }}
+    manifestsSecretRef:
+      name: {{ .Values.cluster.name }}-manifests
+{{ end }}
 {{ if .Values.cluster.clusterImageSet }}
     imageSetRef:
       name: {{ .Values.cluster.clusterImageSet }}
