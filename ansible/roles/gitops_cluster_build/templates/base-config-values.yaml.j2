@@ -46,6 +46,8 @@ timesync:
     enabled: true
     loadKvmModule: true
   ntpServers: []
+{% elif cluster_platform == "aws" %}
+  ntpServers: ["169.254.169.123"]
 {% else %}
   ntpServers: {{ cluster_ntp_sources }}
 {% endif %}

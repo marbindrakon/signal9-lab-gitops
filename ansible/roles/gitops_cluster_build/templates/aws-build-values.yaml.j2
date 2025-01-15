@@ -1,0 +1,39 @@
+cluster:
+{% if gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
+  importToHub: false
+  useACM: false
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: true
+{% else %}
+  importToHub: true
+{% if hub_type == 'acm' %}
+  useACM: true
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: false
+{% else %}
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: true
+{% endif %}
+{% endif %}
+  name: {{ cluster_name }}
+  gitOpsRepo: "{{ gitops_repo_url }}"
+  baseDomain: {{ base_domain }}
+  clusterImageSet: {{ cluster_image_set }}
+  controlPlaneCount: {{ platform_configs['aws']['cluster_sizes'][cluster_size]['controller_count'] }}
+  workerCount: {{ platform_configs['aws']['cluster_sizes'][cluster_size]['worker_count'] }}
+  pullSecretVault: "{{ hashicorp_vault['cluster_secrets']['pull-secret'] }}"
+  trustedCAs: |
+    {{ cluster_trust_bundle | indent(4) }}
+  sshKeyVault: "{{ hashicorp_vault['cluster_secrets']['node-ssh'] }}"
+  sshPubKey: "{{ cluster_ssh_pubkey }}"
+provider:
+  type: AWS
+  aws:
+    controllerFlavor: "{{ platform_configs['aws']['cluster_sizes'][cluster_size]['controller_flavor'] }}"
+    workerFlavor: "{{ platform_configs['aws']['cluster_sizes'][cluster_size]['worker_flavor'] }}"
+    region: "{{ aws_region }}"
+    credentialsMode: Manual
+    assumeRole:
+      roleARN: "{{ platform_configs['aws']['sts_role_arn'] }}"
+      externalID: "{{ platform_configs['aws']['sts_external_id'] }}"
+    serviceAccountSignerSecret: "{{ hashicorp_vault['cluster_secrets']['service-signing-key'] }}"

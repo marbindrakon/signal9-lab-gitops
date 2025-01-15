@@ -4,6 +4,7 @@
 
 - name: Handle external VIP allocation
   include_tasks: "external_vips.yml"
+  when: cluster_platform not in ["aws", "azure", "gcp"]
 
 - name: write cluster settings to configmap for aap
   kubernetes.core.k8s:

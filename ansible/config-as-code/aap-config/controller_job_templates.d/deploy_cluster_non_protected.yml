@@ -95,6 +95,7 @@ controller_templates:
             - hcp_agent
             - agent
             - vsphere
+            - aws
         - question_name: Version
           question_description: ""
           required: True
@@ -103,8 +104,9 @@ controller_templates:
           min: 0
           max: 1024
           new_question: False
-          default: '4.14'
+          default: '4.16'
           choices:
+            - '4.17'
             - '4.16'
             - '4.15'
             - '4.14'

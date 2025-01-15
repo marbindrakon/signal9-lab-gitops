@@ -54,6 +54,7 @@ hashicorp_vault:
   cluster_secrets:
     odf: "{{ cluster_name }}-rook-data"
     oidc: "{{ cluster_name }}-openid"
+    service-signing-key: "{{ cluster_name }}-svc-signer"
     cert-manager-route53: signal9-route53
     cert-manager-tsig: ipa-tsig
     cert-manager-acme-acct: rhte-le-account
@@ -177,6 +178,36 @@ version_mapping:
   "4.12": "4.12.60"
 
 platform_configs:
+  aws:
+    sts_trusted_role_arn: "arn:aws:iam::128444554111:role/openshift-automation"
+    sts_idp_issuer_base: "https://ocp-idp.aws.signal9.gg"
+    sts_role_arn: "arn:aws:iam::{{ aws_target_account }}:role/signal9-automation"
+    sts_external_id: "signal9-{{ aws_target_account }}"
+    sts_session_name: "Signal9Automation"
+    sts_idp_bucket: "signal9-aws-idp"
+    sts_idp_bucket_region: us-east-2
+    cluster_sizes:
+      sandbox:
+        controller_count: 3
+        worker_count: 3
+        controller_flavor: m5.xlarge
+        worker_flavor: m5.xlarge
+      small:
+        controller_count: 3
+        worker_count: 3
+        controller_flavor: m6i.xlarge
+        worker_flavor: m6i.xlarge
+      medium:
+        controller_count: 3
+        worker_count: 3
+        controller_flavor: m6i.2xlarge
+        worker_flavor: m6i.2xlarge
+      large:
+        controller_count: 3
+        worker_count: 3
+        controller_flavor: m6i.4xlarge
+        worker_flavor: m6i.4xlarge
+
   openstack:
     vip_network: "{{ osp_ext_net_override if osp_ext_net_override is defined and osp_ext_net_override != '' else 'ext-net' }}"
     use_existing_image: false

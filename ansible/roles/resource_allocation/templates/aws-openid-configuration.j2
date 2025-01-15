@@ -1,0 +1,22 @@
+{
+    "issuer": "{{ platform_configs.aws.sts_idp_issuer_base }}/{{ cluster_name }}",
+    "jwks_uri": "{{ platform_configs.aws.sts_idp_issuer_base }}/{{ cluster_name }}/keys.json",
+    "response_types_supported": [
+        "id_token"
+    ],
+    "subject_types_supported": [
+        "public"
+    ],
+    "id_token_signing_alg_values_supported": [
+        "RS256"
+    ],
+    "claims_supported": [
+        "aud",
+        "exp",
+        "sub",
+        "iat",
+        "iss",
+        "sub"
+    ]
+}
+

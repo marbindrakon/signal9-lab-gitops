@@ -33,6 +33,7 @@
     - name: include dns role
       ansible.builtin.include_role:
         name: dns_config
+      when: cluster_platform not in ["aws", "azure", "gcp"]
 
     - name: include sso_client role
       ansible.builtin.include_role:
@@ -81,5 +82,4 @@
     - name: include lb_config role
       ansible.builtin.include_role:
         name: lb_config
-
-
+      when: cluster_platform not in ["aws", "azure", "gcp"]
