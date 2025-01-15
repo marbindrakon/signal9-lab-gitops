@@ -6,5 +6,9 @@ metadata:
     argocd.argoproj.io/sync-wave: '3'
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
+  serviceProviderCredentialsConfig:
+    aws:
+      credentialsSecretRef:
+        name: hive-aws-secret
   additionalCertificateAuthoritiesSecretRef:
     - name: signal9-ca-bundle
