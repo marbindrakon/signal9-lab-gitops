@@ -3,6 +3,12 @@
     msg: "aws_target_account must be provided to deploy to AWS"
   when: aws_target_account is not defined or aws_target_account == ""
 
+- name: read serviceaccount token
+  no_log: true
+  ansible.builtin.set_fact:
+    vault_jwt: "{{ lookup('ansible.builtin.file', hashicorp_vault['jwt_location']) }}"
+  when: vault_jwt is not defined
+
 - name: assume trusted automation role in central account
   amazon.aws.sts_assume_role:
     role_arn: "{{ platform_configs.aws.sts_trusted_role_arn }}"
