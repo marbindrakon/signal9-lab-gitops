@@ -97,6 +97,11 @@
       ansible.builtin.command:
         cmd: "/usr/local/bin/aws iam create-open-id-connect-provider --cli-input-json file://{{ aws_ccoctl_tempdir.path }}/aws-idp-input.json"
       register: aws_idp_cli_output
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.sts_creds.access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_assumed_role.sts_creds.secret_key }}"
+        AWS_SESSION_TOKEN: "{{ aws_assumed_role.sts_creds.session_token }}"
+        AWS_DEFAULT_REGION: "{{ aws_region }}"
 
     - name: Save ARN of new IDP
       ansible.builtin.set_fact:
