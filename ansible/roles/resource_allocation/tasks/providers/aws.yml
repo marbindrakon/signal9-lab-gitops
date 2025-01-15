@@ -51,6 +51,11 @@
       ansible.builtin.command:
         cmd: "/usr/local/bin/ccoctl aws create-identity-provider --dry-run --region {{ aws_region }} --public-key-file serviceaccount-signer.public --name {{ cluster_name }} --create-private-s3-bucket"
         chdir: "{{ aws_ccoctl_tempdir.path }}"
+
+    - name: Add cert-manager credential request
+      ansible.builtin.template:
+        src: "aws-cert-manager-request.yam.j2"
+        dest: "{{ aws_ccoctl_tempdir.path }}/cred-reqs/cert-manager.yaml"
     
     - name: Store openid idp metadata in S3
       amazon.aws.s3_object:
