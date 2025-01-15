@@ -32,7 +32,7 @@ network:
 externalSecrets:
   vaultAuthPath: "{{ hashicorp_vault['vault_managed_auth_name'] }}"
 
-{% if 'okd' not in cluster_version %}
+{% if 'okd' not in cluster_version and 'aws' not in cluster_platform %}
 {% if cluster_version is version_compare('4.12', 'gt') %}
 mirrorRegistry:
   enabled: true
@@ -59,12 +59,16 @@ auth:
     vaultName: {{ hashicorp_vault['cluster_secrets']['oidc'] }}
 
 certManager:
-{% if acme_ca == 'letsencrypt' %}
+{% if acme_ca == 'letsencrypt' or cluster_platform == 'aws' %}
   acmeBase: 'https://acme-v02.api.letsencrypt.org/directory'
   validationNameserver: "8.8.8.8:53"
+{% if cluster_platform == 'aws' %}
+  externalSecret: {}
+{% else %}
   externalSecret:
     name: route53-key
     vaultName: {{ hashicorp_vault['cluster_secrets']['cert-manager-route53'] }}
+{% endif %}
 {% else %}
   acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
   validationNameserver: "172.18.42.10:53"
@@ -76,15 +80,23 @@ certManager:
     - http01:
         ingress: {}
     - dns01:
-{% if acme_ca == 'letsencrypt' %}
+{% if acme_ca == 'letsencrypt' or cluster_platform == 'aws' %}
         route53:
           region: us-east-1
+{% if cluster_platform == 'aws' %}
+          role: {{ cluster_name }}-cert-manager
+          auth:
+            kubernetes:
+              serviceAccountRef:
+                name: cert-manager
+{% else %}
           accessKeyIDSecretRef:
             key: access-key
             name: route53-key
           secretAccessKeySecretRef:
             key: secret-access-key
             name: route53-key
+{% endif %}
 {% else %}
         rfc2136:
           nameserver: 172.18.42.10
