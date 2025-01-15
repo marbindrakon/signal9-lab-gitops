@@ -6,9 +6,9 @@
  
 - name: assume role in target aws account
   amazon.aws.sts_assume_role:
-    access_key: "{{ aws_trusted_role.creds.access_key }}"
-    secret_key: "{{ aws_trusted_role.creds.secret_key }}"
-    session_token: "{{ aws_trusted_role.creds.session_token }}"
+    access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+    secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+    session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
     role_arn: "{{ platform_configs.aws.sts_role_arn }}"
     external_id: "{{ platform_configs.aws.sts_external_id }}"
     role_session_name: "{{ platform_configs.aws.sts_session_name }}"
@@ -43,9 +43,9 @@
     
     - name: Store openid idp metadata in S3
       amazon.aws.s3_object:
-        access_key: "{{ aws_trusted_role.creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.creds.session_token }}"
+        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
         mode: put
         overwrite: different
         region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
@@ -55,9 +55,9 @@
 
     - name: Store openid jwks in S3
       amazon.aws.s3_object:
-        access_key: "{{ aws_trusted_role.creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.creds.session_token }}"
+        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
         mode: put
         overwrite: different
         region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
@@ -97,9 +97,9 @@
         cmd: "/usr/local/bin/ccoctl aws create-iam-roles --dry-run --credentials-requests-dir cred-reqs --name {{ cluster_name }} --identity-provider-arn {{ aws_idp_output_parsed.OpenIDConnectProviderArn }}"
         chdir: "{{ aws_ccoctl_tempdir.path }}"
       environment:
-        AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.creds.access_key }}"
-        AWS_SECRET_ACCESS_KEY: "{{ aws_assumed_role.creds.secret_key }}"
-        AWS_SESSION_TOKEN: "{{ aws_assumed_role.creds.session_token }}"
+        AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.sts_creds.access_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_assumed_role.sts_creds.secret_key }}"
+        AWS_SESSION_TOKEN: "{{ aws_assumed_role.sts_creds.session_token }}"
         AWS_DEFAULT_REGION: "{{ aws_region }}"
 
     - name: Patch cluster authentication manifest for custom issuer
@@ -143,9 +143,9 @@
     - name: Delete openid idp metadata in S3
       amazon.aws.s3_object:
         mode: delobj
-        access_key: "{{ aws_trusted_role.creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.creds.session_token }}"
+        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
         region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
         bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
         object: "{{ cluster_name }}/.well-known/openid-configuration"
@@ -153,9 +153,9 @@
     - name: Store openid jwks in S3
       amazon.aws.s3_object:
         mode: delobj
-        access_key: "{{ aws_trusted_role.creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.creds.session_token }}"
+        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
         region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
         bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
         object: "{{ cluster_name }}/keys.json"
