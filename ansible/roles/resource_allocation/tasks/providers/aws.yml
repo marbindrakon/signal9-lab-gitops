@@ -141,7 +141,7 @@
       ansible.builtin.file:
         path: "{{ aws_ccoctl_tempdir.path }}"
         state: absent
-  when: cluster_state == present
+  when: cluster_state == "present"
 
 - name: clean up identity provider for sts
   block:
@@ -193,4 +193,4 @@
     
     #- name: Delete identity provider in IAM
     
-  when: cluster_state == absent
+  when: cluster_state == "absent"
