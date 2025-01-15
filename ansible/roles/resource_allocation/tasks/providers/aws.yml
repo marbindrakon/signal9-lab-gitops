@@ -180,12 +180,12 @@
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
       no_log: true
    
-    - name: Get IAM roles for cluster
+    #- name: Get IAM roles for cluster
 
-    - name: Delete IAM roles for cluster
+    #- name: Delete IAM roles for cluster
     
-    - name: Get identity provider in IAM
+    #- name: Get identity provider in IAM
     
-    - name: Delete identity provider in IAM
+    #- name: Delete identity provider in IAM
     
   when: cluster_state == absent
