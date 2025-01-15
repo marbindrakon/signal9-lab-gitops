@@ -1,6 +1,6 @@
 cluster:
   name: "test-aws-ocp"
-  baseDomain: "aws.signal9.gg"
+  baseDomain: "389776244348.aws.signal9.gg"
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   gitOpsBasePath: argocd/clusters/managed-clusters
   trustedCABundle: |
@@ -124,5 +124,5 @@ certManager:
             key: key
       selector:
         dnsZones:
-          - aws.signal9.gg
+          - 389776244348.aws.signal9.gg
 
