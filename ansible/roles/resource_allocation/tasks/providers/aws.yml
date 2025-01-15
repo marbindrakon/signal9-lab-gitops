@@ -125,7 +125,7 @@
 
     - name: Generate manifest bundle for cluster deployment with STS
       ansible.builtin.shell:
-        cmd: "/usr/local/bin/oc create cm generic foo --dry-run=client -o yaml --from-file=manifests"
+        cmd: "/usr/local/bin/oc create cm foo --dry-run=client -o yaml --from-file=manifests"
         chdir: "{{ aws_ccoctl_tempdir.path }}"
       register: aws_manifest_oc_output
 
@@ -143,7 +143,6 @@
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
         data:
           data: "{{ aws_extra_manifests.data }}"
-      no_log: true
 
 
   always:
