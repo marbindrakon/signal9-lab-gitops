@@ -1,3 +1,8 @@
+- name: Fail if target account is not provided
+  ansible.builtin.fail:
+    msg: "aws_target_account must be provided to deploy to AWS"
+  when: aws_target_account is not defined or aws_target_account == ""
+
 - name: assume trusted automation role in central account
   amazon.aws.sts_assume_role:
     role_arn: "{{ platform_configs.aws.sts_trusted_role_arn }}"
