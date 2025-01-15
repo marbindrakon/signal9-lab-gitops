@@ -3,6 +3,7 @@ cluster:
   baseDomain: "389776244348.aws.signal9.gg"
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   gitOpsBasePath: argocd/clusters/managed-clusters
+  platform: aws
   trustedCABundle: |
     -----BEGIN CERTIFICATE-----
     MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
@@ -107,21 +108,19 @@ auth:
 
 certManager:
   acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
-  validationNameserver: "172.18.42.10:53"
-  externalSecret:
-    name: tsig-key
-    vaultName: ipa-tsig
+  validationNameserver: "8.8.8.8:53"
+  externalSecret: {}
   solvers:
     - http01:
         ingress: {}
     - dns01:
-        rfc2136:
-          nameserver: 172.18.42.10
-          tsigKeyName: cert-manager
-          tsigAlgorithm: HMACSHA256
-          tsigSecretSecretRef:
-            name: tsig-key
-            key: key
+        route53:
+          region: us-east-1
+          role: test-aws-ocp-cert-manager
+          auth:
+            kubernetes:
+              serviceAccountRef:
+                name: cert-manager
       selector:
         dnsZones:
           - 389776244348.aws.signal9.gg
