@@ -55,6 +55,7 @@ hashicorp_vault:
     odf: "{{ cluster_name }}-rook-data"
     oidc: "{{ cluster_name }}-openid"
     service-signing-key: "{{ cluster_name }}-svc-signer"
+    aws-extra-manifests: "{{ cluster_name }}-extra-manifests"
     cert-manager-route53: signal9-route53
     cert-manager-tsig: ipa-tsig
     cert-manager-acme-acct: rhte-le-account

@@ -102,6 +102,35 @@
         AWS_SESSION_TOKEN: "{{ aws_assumed_role.creds.session_token }}"
         AWS_DEFAULT_REGION: "{{ aws_region }}"
 
+    - name: Patch cluster authentication manifest for custom issuer
+      ansible.builtin.lineinfile:
+        search_string: "serviceAccountIssuer"
+        line: "  serviceAccountIssuer: {{ platform_configs.aws.sts_idp_issuer_base }}/{{ cluster_name }}"
+        path: "{{ aws_ccoctl_tempdir.path }}/manifests/cluster-authentication-02-config.yaml"
+
+    - name: Generate manifest bundle for cluster deployment with STS
+      ansible.builtin.shell:
+        cmd: "/usr/local/bin/oc create cm generic foo --dry-run=client -o yaml --from-file=manifests"
+        chdir: "{{ aws_ccoctl_tempdir.path }}"
+      register: aws_manifest_oc_output
+
+    - name: Save file contents for cluster build
+      ansible.builtin.set_fact:
+        aws_extra_manifests: "{{ aws_manifest_oc_output.stdout | from_yaml }}"
+
+    - name: Store extra manifests in Vault
+      community.hashi_vault.vault_write:
+        url: "{{ hashicorp_vault['url'] }}"
+        auth_method: jwt
+        mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+        role_id: "{{ hashicorp_vault['auth_role'] }}"
+        jwt: "{{ vault_jwt }}"
+        path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
+        data:
+          data: "{{ aws_extra_manifests.data }}"
+      no_log: true
+
+
   always:
     - name: clean up temporary directory for ccoctl
       ansible.builtin.file:
@@ -140,7 +169,17 @@
         jwt: "{{ vault_jwt }}"
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['service-signing-key'] }}"
       no_log: true
-    
+
+    - name: Delete extra manifests in Vault
+      community.hashi_vault.vault_delete:
+        url: "{{ hashicorp_vault['url'] }}"
+        auth_method: jwt
+        mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+        role_id: "{{ hashicorp_vault['auth_role'] }}"
+        jwt: "{{ vault_jwt }}"
+        path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
+      no_log: true
+   
     - name: Get IAM roles for cluster
 
     - name: Delete IAM roles for cluster
