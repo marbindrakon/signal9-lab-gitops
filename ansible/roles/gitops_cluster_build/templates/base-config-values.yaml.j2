@@ -84,12 +84,6 @@ certManager:
 {% if acme_ca == 'letsencrypt' or cluster_platform == 'aws' %}
         route53:
           region: us-east-1
-{% if cluster_platform == 'aws' %}
-          role: {{ cluster_name }}-cert-manager
-          auth:
-            kubernetes:
-              serviceAccountRef:
-                name: cert-manager
 {% else %}
           accessKeyIDSecretRef:
             key: access-key
