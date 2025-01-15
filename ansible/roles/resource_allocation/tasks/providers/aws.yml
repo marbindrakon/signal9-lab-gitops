@@ -109,7 +109,7 @@
     
     - name: Use ccoctl to create IAM roles for cluster
       ansible.builtin.command:
-        cmd: "/usr/local/bin/ccoctl aws create-iam-roles --dry-run --credentials-requests-dir cred-reqs --name {{ cluster_name }} --identity-provider-arn {{ aws_idp_output_parsed.OpenIDConnectProviderArn }}"
+        cmd: "/usr/local/bin/ccoctl aws create-iam-roles --credentials-requests-dir cred-reqs --name {{ cluster_name }} --identity-provider-arn {{ aws_idp_output_parsed.OpenIDConnectProviderArn }}"
         chdir: "{{ aws_ccoctl_tempdir.path }}"
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.sts_creds.access_key }}"
