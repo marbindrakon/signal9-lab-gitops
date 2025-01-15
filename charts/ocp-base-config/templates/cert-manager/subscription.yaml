@@ -12,4 +12,10 @@ spec:
   name: openshift-cert-manager-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+{{ if eq .Values.cluster.platform "aws" }}
+  config:
+    env:
+      - name: CLOUD_CREDENTIALS_SECRET_NAME
+        value: "aws-creds"
+{{ end }}
 {{ end }}

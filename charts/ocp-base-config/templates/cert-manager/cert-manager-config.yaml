@@ -12,6 +12,7 @@ spec:
     controller:
       args:
         - '--v=2'
+        - '--issuer-ambient-credentials'
         - '--cluster-resource-namespace=$(POD_NAMESPACE)'
         - '--leader-election-namespace=kube-system'
         - '--dns01-recursive-nameservers={{ .Values.certManager.validationNameserver }}'
