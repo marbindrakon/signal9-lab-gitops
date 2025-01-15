@@ -62,7 +62,7 @@
         region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
         bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
         object: "{{ cluster_name }}/.well-known/openid-configuration"
-        content: "{{ lookup('template', 'aws-openid-configuration.j2') }}"
+        content: "{{ lookup('template', 'aws-openid-configuration.j2') | to_nice_json }}"
 
     - name: Store openid jwks in S3
       amazon.aws.s3_object:
