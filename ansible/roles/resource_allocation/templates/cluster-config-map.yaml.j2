@@ -12,3 +12,5 @@ data:
   gitops_import_to_hub: "{{ gitops_import_to_hub }}"
   internal_ingress_vip: "{{ internal_ingress_vip | default(omit) }}"
   internal_api_vip: "{{ internal_api_vip | default(omit) }}"
+  aws_target_account: "{{ aws_target_account | default(omit) }}"
+  aws_region: "{{ aws_region | default(omit) }}"
