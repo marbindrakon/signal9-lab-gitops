@@ -54,7 +54,7 @@
 
     - name: Add cert-manager credential request
       ansible.builtin.template:
-        src: "aws-cert-manager-request.yam.j2"
+        src: "aws-cert-manager-request.yaml.j2"
         dest: "{{ aws_ccoctl_tempdir.path }}/cred-reqs/cert-manager.yaml"
     
     - name: Store openid idp metadata in S3
