@@ -84,7 +84,7 @@ certManager:
 {% if acme_ca == 'letsencrypt' or cluster_platform == 'aws' %}
         route53:
           region: us-east-1
-{% else %}
+{% if cluster_platform != 'aws' %}
           accessKeyIDSecretRef:
             key: access-key
             name: route53-key
