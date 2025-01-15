@@ -6,6 +6,12 @@ metadata:
     argocd.argoproj.io/sync-wave: '3'
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
+  managedDomains:
+    - domains:
+        - aws.signal9.gg
+      aws:
+        credentialsSecretRef:
+          name: hive-route53-secret
   serviceProviderCredentialsConfig:
     aws:
       credentialsSecretRef:
