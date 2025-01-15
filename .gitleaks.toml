@@ -7,3 +7,9 @@
     '''\/oauth_entity_a685e6952f306110d3fc4ae72799b65a.xml''',
     '''\/oauth_entity_ab0436892fb02110d3fc4ae72799b6d9.xml''',
   ]
+
+  regexes = [
+    # Two helm value variable names that are triggering detection
+    '''serviceAccountSignerSecret''',
+    '''extraManifestsSecret''',
+  ]
