@@ -1,0 +1,26 @@
+{{- if eq .Values.cluster.platform "aws" -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cert-manager-tokenrequest
+  namespace: cert-manager
+rules:
+  - apiGroups: ['']
+    resources: ['serviceaccounts/token']
+    resourceNames: ['cert-manager']
+    verbs: ['create']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cert-manager-tokenrequest
+  namespace: cert-manager
+subjects:
+  - kind: ServiceAccount
+    name: cert-manager
+    namespace: cert-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cert-manager-tokenrequest
+{{ end }}

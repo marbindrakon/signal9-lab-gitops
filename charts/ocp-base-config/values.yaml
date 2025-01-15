@@ -5,6 +5,7 @@ cluster:
   gitOpsBasePath: argocd/clusters
   trustedCABundle: ""
   openshiftVersion: "4.12"
+  platform: agent
 
 externalSecrets:
   enabled: true
