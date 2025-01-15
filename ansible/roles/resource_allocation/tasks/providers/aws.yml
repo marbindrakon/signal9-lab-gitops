@@ -81,7 +81,6 @@
         data:
           data:
             bound-service-account-signing-key.key: "{{ lookup('file', aws_ccoctl_tempdir.path + '/serviceaccount-signer.private') }}"
-      no_log: true
 
     - name: Template identity provider CLI input
       ansible.builtin.template:
