@@ -27,6 +27,22 @@
 
 - name: set up identity provider for sts
   block:
+  module_defaults:
+    amazon.aws.s3_object:
+      access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+      secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+      session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
+      region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
+      bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
+    ansible.builtin.command:
+      chdir: "{{ aws_ccoctl_tempdir.path }}"
+    community.hashi_vault.vault_write:
+      url: "{{ hashicorp_vault['url'] }}"
+      auth_method: jwt
+      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+      role_id: "{{ hashicorp_vault['auth_role'] }}"
+      jwt: "{{ vault_jwt }}"
+
     - name: create temporary directory for ccoctl
       ansible.builtin.tempfile:
         state: directory
@@ -45,12 +61,10 @@
     - name: Use ccoctl to create openid identity provider keys
       ansible.builtin.command:
         cmd: "/usr/local/bin/ccoctl aws create-key-pair"
-        chdir: "{{ aws_ccoctl_tempdir.path }}"
     
     - name: Use ccoctl to create openid identity provider definition
       ansible.builtin.command:
         cmd: "/usr/local/bin/ccoctl aws create-identity-provider --dry-run --region {{ aws_region }} --public-key-file serviceaccount-signer.public --name {{ cluster_name }} --create-private-s3-bucket"
-        chdir: "{{ aws_ccoctl_tempdir.path }}"
 
     - name: Add cert-manager credential request
       ansible.builtin.template:
@@ -59,35 +73,20 @@
     
     - name: Store openid idp metadata in S3
       amazon.aws.s3_object:
-        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
         mode: put
         overwrite: different
-        region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
-        bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
         object: "{{ cluster_name }}/.well-known/openid-configuration"
         content: "{{ lookup('template', 'aws-openid-configuration.j2') | to_nice_json }}"
 
     - name: Store openid jwks in S3
       amazon.aws.s3_object:
-        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
         mode: put
         overwrite: different
-        region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
-        bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
         object: "{{ cluster_name }}/keys.json"
         src: "{{ aws_ccoctl_tempdir.path }}/03-keys.json"
    
     - name: Store openid private key in Vault
       community.hashi_vault.vault_write:
-        url: "{{ hashicorp_vault['url'] }}"
-        auth_method: jwt
-        mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-        role_id: "{{ hashicorp_vault['auth_role'] }}"
-        jwt: "{{ vault_jwt }}"
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['service-signing-key'] }}"
         data:
           data:
@@ -115,7 +114,6 @@
     - name: Use ccoctl to create IAM roles for cluster
       ansible.builtin.command:
         cmd: "/usr/local/bin/ccoctl aws create-iam-roles --credentials-requests-dir cred-reqs --name {{ cluster_name }} --identity-provider-arn {{ aws_idp_output_parsed.OpenIDConnectProviderArn }}"
-        chdir: "{{ aws_ccoctl_tempdir.path }}"
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.sts_creds.access_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_assumed_role.sts_creds.secret_key }}"
@@ -131,7 +129,6 @@
     - name: Generate manifest bundle for cluster deployment with STS
       ansible.builtin.shell:
         cmd: "/usr/local/bin/oc create cm foo --dry-run=client -o yaml --from-file=manifests"
-        chdir: "{{ aws_ccoctl_tempdir.path }}"
       register: aws_manifest_oc_output
 
     - name: Save file contents for cluster build
@@ -140,15 +137,9 @@
 
     - name: Store extra manifests in Vault
       community.hashi_vault.vault_write:
-        url: "{{ hashicorp_vault['url'] }}"
-        auth_method: jwt
-        mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-        role_id: "{{ hashicorp_vault['auth_role'] }}"
-        jwt: "{{ vault_jwt }}"
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
         data:
           data: "{{ aws_extra_manifests.data }}"
-
 
   always:
     - name: clean up temporary directory for ccoctl
@@ -159,43 +150,31 @@
 
 - name: clean up identity provider for sts
   block:
+  module_defaults:
+    community.hashi_vault.vault_delete:
+      url: "{{ hashicorp_vault['url'] }}"
+      auth_method: jwt
+      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+      role_id: "{{ hashicorp_vault['auth_role'] }}"
+      jwt: "{{ vault_jwt }}"
+
     - name: Delete openid idp metadata in S3
       amazon.aws.s3_object:
         mode: delobj
-        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
-        region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
-        bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
         object: "{{ cluster_name }}/.well-known/openid-configuration"
 
     - name: Store openid jwks in S3
       amazon.aws.s3_object:
         mode: delobj
-        access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
-        secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
-        session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
-        region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
-        bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
         object: "{{ cluster_name }}/keys.json"
    
     - name: delete openid private key in Vault
       community.hashi_vault.vault_delete:
-        url: "{{ hashicorp_vault['url'] }}"
-        auth_method: jwt
-        mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-        role_id: "{{ hashicorp_vault['auth_role'] }}"
-        jwt: "{{ vault_jwt }}"
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['service-signing-key'] }}"
       no_log: true
 
     - name: Delete extra manifests in Vault
       community.hashi_vault.vault_delete:
-        url: "{{ hashicorp_vault['url'] }}"
-        auth_method: jwt
-        mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-        role_id: "{{ hashicorp_vault['auth_role'] }}"
-        jwt: "{{ vault_jwt }}"
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
       no_log: true
    
