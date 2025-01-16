@@ -12,6 +12,7 @@
     cluster_platform: "{{ existing_settings_configmaps.resources.0.data.cluster_platform }}"
     cluster_version: "{{ existing_settings_configmaps.resources.0.data.cluster_version }}"
     cluster_size: "{{ existing_settings_configmaps.resources.0.data.cluster_size }}"
+    base_domain: "{{ existing_settings_configmaps.resources.0.data.base_domain | default(omit) }}"
     cluster_special_feature: "{{ existing_settings_configmaps.resources.0.data.cluster_special_feature }}"
     gitops_import_to_hub: "{{ existing_settings_configmaps.resources.0.data.gitops_import_to_hub }}"
     internal_api_vip: "{{ existing_settings_configmaps.resources.0.data.internal_api_vip | default (omit) }}"

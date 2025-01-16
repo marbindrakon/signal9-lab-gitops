@@ -38,3 +38,8 @@ provider:
       externalID: "{{ platform_configs['aws']['sts_external_id'] }}"
     serviceAccountSignerSecret: "{{ hashicorp_vault['cluster_secrets']['service-signing-key'] }}"
     extraManifestsSecret: "{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
+{% if loadbalancer_type == "internal" %}
+    publishMode: Internal
+{% else %}
+    publishMode: External
+{% endif %}
