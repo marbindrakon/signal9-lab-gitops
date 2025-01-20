@@ -183,8 +183,8 @@ platform_configs:
   aws:
     sts_trusted_role_arn: "arn:aws:iam::128444554111:role/openshift-automation"
     sts_idp_issuer_base: "https://ocp-idp.aws.signal9.gg"
-    sts_role_arn: "arn:aws:iam::{{ aws_target_account }}:role/signal9-automation"
-    sts_external_id: "signal9-{{ aws_target_account }}"
+    sts_role_arn: "arn:aws:iam::{{ aws_target_account | default('') }}:role/signal9-automation"
+    sts_external_id: "signal9-{{ aws_target_account | default('') }}"
     sts_session_name: "Signal9Automation"
     sts_idp_bucket: "signal9-aws-idp"
     sts_idp_bucket_region: us-east-2
