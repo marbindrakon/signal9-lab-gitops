@@ -6,8 +6,6 @@
   tasks:
     - name: load variables from configmap if present
       ansible.builtin.include_tasks: _load_config_map.yml
-      delegate_to: localhost
-      run_once: true
 
     - name: set platform config fact
       ansible.builtin.set_fact:
