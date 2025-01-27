@@ -11,7 +11,7 @@
         name: lb_config
         apply:
           become: true
-      when: cluster_platform not in ["aws", "azure", "gcp"]
+      when: hostvars['localhost']['cluster_platform'] not in ["aws", "azure", "gcp"]
 
 - hosts: localhost
   gather_facts: false
