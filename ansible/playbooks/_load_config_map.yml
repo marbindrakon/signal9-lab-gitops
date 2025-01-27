@@ -23,4 +23,5 @@
     aws_region: "{{ existing_settings_configmaps.resources.0.data.aws_region | default(omit) }}"
   when: existing_settings_configmaps.resources | length > 0
   delegate_to: localhost
+  delegate_facts: true
   run_once: true
