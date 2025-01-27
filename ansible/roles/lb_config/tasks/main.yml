@@ -5,6 +5,8 @@
     internal_api_vip: "{{ hostvars['localhost']['internal_api_vip'] | default(omit) }}"
     external_ingress_vip: "{{ hostvars['localhost']['external_ingress_vip'] | default(omit) }}"
     internal_ingress_vip: "{{ hostvars['localhost']['internal_ingress_vip'] | default(omit) }}"
+    cluster_platform: "{{ hostvars['localhost']['cluster_platform'] | default(omit) }}"
+    loadbalancer_type: "{{ hostvars['localhost']['loadbalancer_type'] | default(omit) }}"
 
 - name: handle external shared frontend config
   block:
