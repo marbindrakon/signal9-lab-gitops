@@ -6,12 +6,6 @@
     - name: load variables from configmap if present
       ansible.builtin.include_tasks: _load_config_map.yml
 
-    - name: set platform config fact
-      ansible.builtin.set_fact:
-        "{{ cluster_platform }}_platform_config": "{{ platform_configs[cluster_platform] }}"
-      delegate_to: localhost
-      run_once: true
-
     - name: include lb_config role
       ansible.builtin.include_role:
         name: lb_config
