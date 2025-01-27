@@ -1,6 +1,5 @@
 - hosts: loadbalancers
-  gather_facts: true
-  become: true
+  gather_facts: false
   vars:
     cluster_state: absent
   tasks:
@@ -16,6 +15,8 @@
     - name: include lb_config role
       ansible.builtin.include_role:
         name: lb_config
+        apply:
+          become: true
       when: cluster_platform not in ["aws", "azure", "gcp"]
 
 - hosts: localhost
