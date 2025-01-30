@@ -19,6 +19,7 @@
   kubernetes.core.k8s_info:
     api_version: agent-install.openshift.io/v1beta1
     kind: agent
+    namespace: "{{ agent_platform_config['shared_infra_env']['namespace'] }}"
   register: agent_list
 
 - name: list unbound agents only
