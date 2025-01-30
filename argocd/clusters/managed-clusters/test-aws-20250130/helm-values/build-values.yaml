@@ -5,7 +5,7 @@ cluster:
   createGitopsSyncSet: false
   name: test-aws-20250130
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
-  baseDomain: xcqbswftjj.aws.signal9.gg
+  baseDomain: uwsgecgevh.aws.signal9.gg
   clusterImageSet: img4.16.20-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 3
@@ -106,4 +106,4 @@ provider:
       externalID: "signal9-305109114654"
     serviceAccountSignerSecret: "test-aws-20250130-svc-signer"
     extraManifestsSecret: "test-aws-20250130-extra-manifests"
-    publishMode: Internal
+    publishMode: External

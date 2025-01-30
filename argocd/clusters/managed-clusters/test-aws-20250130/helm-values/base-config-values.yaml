@@ -1,7 +1,7 @@
 cluster:
   name: "test-aws-20250130"
   platform: "aws"
-  baseDomain: "zrgjnkqewb.aws.signal9.gg"
+  baseDomain: "vjeyjttwsb.aws.signal9.gg"
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   gitOpsBasePath: argocd/clusters/managed-clusters
   trustedCABundle: |
@@ -116,5 +116,5 @@ certManager:
           region: us-east-1
       selector:
         dnsZones:
-          - zrgjnkqewb.aws.signal9.gg
+          - vjeyjttwsb.aws.signal9.gg
 
