@@ -8,7 +8,7 @@ spec:
   watchAllNamespaces: true
   virtualMediaViaExternalNetwork: true
   provisioningNetwork: Managed
-  disableVirtualMediaTLS: true
+  disableVirtualMediaTLS: false
   provisioningInterface: bond0.101
   provisioningIP: "172.18.101.5"
   provisioningDHCPRange: "172.18.101.50,172.18.101.75"
