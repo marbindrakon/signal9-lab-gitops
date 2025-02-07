@@ -5,8 +5,8 @@ cluster:
   createGitopsSyncSet: false
   name: test-aws-vault
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
-  baseDomain: rshnjuzggu.aws.signal9.gg
-  clusterImageSet: img4.17.14-x86-64-appsub
+  baseDomain: srtmehunju.aws.signal9.gg
+  clusterImageSet: img4.16.32-x86-64-appsub
   controlPlaneCount: 3
   workerCount: 3
   pullSecretVault: "ocp-pull-secret"

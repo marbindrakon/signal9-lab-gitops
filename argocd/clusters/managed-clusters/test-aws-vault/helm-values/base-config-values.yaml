@@ -1,7 +1,7 @@
 cluster:
   name: "test-aws-vault"
   platform: "aws"
-  baseDomain: "uvtttujcge.aws.signal9.gg"
+  baseDomain: "srtmehunju.aws.signal9.gg"
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   gitOpsBasePath: argocd/clusters/managed-clusters
   trustedCABundle: |
@@ -116,5 +116,5 @@ certManager:
           region: us-east-1
       selector:
         dnsZones:
-          - uvtttujcge.aws.signal9.gg
+          - srtmehunju.aws.signal9.gg
 
