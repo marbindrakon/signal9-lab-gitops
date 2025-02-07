@@ -3,6 +3,11 @@
   vars:
     cluster_state: present
   tasks:
+    - name: generate domain slug for cloud providers
+      ansible.builtin.set_fact:
+        domain_slug: "{{ lookup("community.general.random_string", upper=false, length=10, numbers=false, ignore_similar_chars=true, special=false) }}"
+      when: cluster_platform in ["aws", "azure", "gcp"]
+
     - name: set platform config fact
       ansible.builtin.set_fact:
         "{{ cluster_platform }}_platform_config": "{{ platform_configs[cluster_platform] }}"

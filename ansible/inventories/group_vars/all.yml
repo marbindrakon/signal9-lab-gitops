@@ -1,7 +1,6 @@
 # High-level variables used in cluster provisioning
 
 # DNS domain where all managed OCP clusters will be created
-domain_slug: '{{ lookup("community.general.random_string", upper=false, length=10, numbers=false, ignore_similar_chars=true, special=false) }}'
 base_domain: '{% if cluster_platform == "aws" %}{{ domain_slug }}.aws.signal9.gg{% else %}lab.signal9.gg{% endif %}'
 foundation_ingress_base_domain: "apps.zardoz.lab.signal9.gg"
 gitops_repo_url: "https://github.com/marbindrakon/signal9-lab-gitops.git"
