@@ -1,0 +1,26 @@
+{{- if has .Values.provider.type (list "OpenStack" "AWS") -}}
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  name: {{ .Values.cluster.name }}-infra
+  namespace: {{ .Values.cluster.name }}
+spec:
+  clusterDeploymentRef:
+    name: {{ .Values.cluster.name }}
+  name: infra
+  platform:
+{{- if eq .Values.provider.type "AWS" }}
+    aws:
+      type: {{ .Values.provider.aws.workerFlavor }}
+{{- end }}
+{{- if eq .Values.provider.type "OpenStack" }}
+    openstack:
+      falvor: {{ .Values.provider.openstack.workerFlavor }}
+{{- end }}
+  labels:
+    node-role.kubernetes.io/infra: ''
+  taints:
+    - key: node-role.kubernetes.io/infra
+      effect: NoSchedule
+  replicas: {{ .Values.cluster.infraCount }}
+{{ end }}

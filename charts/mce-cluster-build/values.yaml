@@ -11,6 +11,7 @@ cluster:
   releaseImage: null
   controlPlaneCount: 3
   workerCount: 3
+  infraCount: 0
   apiVIP: ""
   ingressVIP: ""
   pullSecretVault: ""

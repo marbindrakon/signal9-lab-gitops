@@ -1,0 +1,21 @@
+{{- if has .Values.provider.type (list "OpenStack" "AWS") -}}
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  name: {{ .Values.cluster.name }}-worker
+  namespace: {{ .Values.cluster.name }}
+spec:
+  clusterDeploymentRef:
+    name: {{ .Values.cluster.name }}
+  name: worker
+  platform:
+{{- if eq .Values.provider.type "AWS" }}
+    aws:
+      type: {{ .Values.provider.aws.workerFlavor }}
+{{- end }}
+{{- if eq .Values.provider.type "OpenStack" }}
+    openstack:
+      falvor: {{ .Values.provider.openstack.workerFlavor }}
+{{- end }}
+  replicas: {{ .Values.cluster.workerCount }}
+{{ end }}
