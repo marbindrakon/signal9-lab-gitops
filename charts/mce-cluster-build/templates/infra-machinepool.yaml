@@ -4,6 +4,8 @@ kind: MachinePool
 metadata:
   name: {{ .Values.cluster.name }}-infra
   namespace: {{ .Values.cluster.name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
 spec:
   clusterDeploymentRef:
     name: {{ .Values.cluster.name }}
@@ -15,7 +17,7 @@ spec:
 {{- end }}
 {{- if eq .Values.provider.type "OpenStack" }}
     openstack:
-      falvor: {{ .Values.provider.openstack.workerFlavor }}
+      flavor: {{ .Values.provider.openstack.workerFlavor }}
 {{- end }}
   labels:
     node-role.kubernetes.io/infra: ''
