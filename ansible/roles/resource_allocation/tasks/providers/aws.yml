@@ -150,7 +150,6 @@
 
 - name: clean up identity provider for sts
   block:
-
     - name: Delete openid idp metadata in S3
       amazon.aws.s3_object:
         mode: delobj
@@ -179,11 +178,11 @@
     
     #- name: Delete identity provider in IAM
    module_defaults:
-    community.hashi_vault.vault_delete:
-      url: "{{ hashicorp_vault['url'] }}"
-      auth_method: jwt
-      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-      role_id: "{{ hashicorp_vault['auth_role'] }}"
-      jwt: "{{ vault_jwt }}"
+     community.hashi_vault.vault_delete:
+       url: "{{ hashicorp_vault['url'] }}"
+       auth_method: jwt
+       mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+       role_id: "{{ hashicorp_vault['auth_role'] }}"
+       jwt: "{{ vault_jwt }}"
    
   when: cluster_state == "absent"
