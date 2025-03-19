@@ -117,6 +117,7 @@
     - name: Generate manifest bundle for cluster deployment with STS
       ansible.builtin.shell:
         cmd: "/usr/local/bin/oc create cm foo --dry-run=client -o yaml --from-file=manifests"
+        chdir: "{{ aws_ccoctl_tempdir.path }}"
       register: aws_manifest_oc_output
 
     - name: Save file contents for cluster build
