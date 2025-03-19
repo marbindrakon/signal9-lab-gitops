@@ -27,7 +27,6 @@
 
 - name: set up identity provider for sts
   block:
-
     - name: create temporary directory for ccoctl
       ansible.builtin.tempfile:
         state: directory
@@ -46,10 +45,12 @@
     - name: Use ccoctl to create openid identity provider keys
       ansible.builtin.command:
         cmd: "/usr/local/bin/ccoctl aws create-key-pair"
+        chdir: "{{ aws_ccoctl_tempdir.path }}"
     
     - name: Use ccoctl to create openid identity provider definition
       ansible.builtin.command:
         cmd: "/usr/local/bin/ccoctl aws create-identity-provider --dry-run --region {{ aws_region }} --public-key-file serviceaccount-signer.public --name {{ cluster_name }} --create-private-s3-bucket"
+        chdir: "{{ aws_ccoctl_tempdir.path }}"
 
     - name: Add cert-manager credential request
       ansible.builtin.template:
@@ -85,6 +86,7 @@
     - name: Create identity provider in IAM
       ansible.builtin.command:
         cmd: "/usr/local/bin/aws iam create-open-id-connect-provider --cli-input-json file://{{ aws_ccoctl_tempdir.path }}/aws-idp-input.json"
+        chdir: "{{ aws_ccoctl_tempdir.path }}"
       register: aws_idp_cli_output
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.sts_creds.access_key }}"
@@ -99,6 +101,7 @@
     - name: Use ccoctl to create IAM roles for cluster
       ansible.builtin.command:
         cmd: "/usr/local/bin/ccoctl aws create-iam-roles --credentials-requests-dir cred-reqs --name {{ cluster_name }} --identity-provider-arn {{ aws_idp_output_parsed.OpenIDConnectProviderArn }}"
+        chdir: "{{ aws_ccoctl_tempdir.path }}"
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.sts_creds.access_key }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_assumed_role.sts_creds.secret_key }}"
@@ -132,8 +135,6 @@
       session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
       region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
       bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
-    ansible.builtin.command:
-      chdir: "{{ aws_ccoctl_tempdir.path }}"
     community.hashi_vault.vault_write:
       url: "{{ hashicorp_vault['url'] }}"
       auth_method: jwt
