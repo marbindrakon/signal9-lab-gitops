@@ -27,21 +27,6 @@
 
 - name: set up identity provider for sts
   block:
-  module_defaults:
-    amazon.aws.s3_object:
-      access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
-      secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
-      session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
-      region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
-      bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
-    ansible.builtin.command:
-      chdir: "{{ aws_ccoctl_tempdir.path }}"
-    community.hashi_vault.vault_write:
-      url: "{{ hashicorp_vault['url'] }}"
-      auth_method: jwt
-      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-      role_id: "{{ hashicorp_vault['auth_role'] }}"
-      jwt: "{{ vault_jwt }}"
 
     - name: create temporary directory for ccoctl
       ansible.builtin.tempfile:
@@ -140,6 +125,21 @@
         path: "{{ hashicorp_vault['secret_base_path'] }}/data/{{ hashicorp_vault['cluster_secrets']['aws-extra-manifests'] }}"
         data:
           data: "{{ aws_extra_manifests.data }}"
+  module_defaults:
+    amazon.aws.s3_object:
+      access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+      secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+      session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
+      region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
+      bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
+    ansible.builtin.command:
+      chdir: "{{ aws_ccoctl_tempdir.path }}"
+    community.hashi_vault.vault_write:
+      url: "{{ hashicorp_vault['url'] }}"
+      auth_method: jwt
+      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+      role_id: "{{ hashicorp_vault['auth_role'] }}"
+      jwt: "{{ vault_jwt }}"
 
   always:
     - name: clean up temporary directory for ccoctl
@@ -150,13 +150,6 @@
 
 - name: clean up identity provider for sts
   block:
-  module_defaults:
-    community.hashi_vault.vault_delete:
-      url: "{{ hashicorp_vault['url'] }}"
-      auth_method: jwt
-      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-      role_id: "{{ hashicorp_vault['auth_role'] }}"
-      jwt: "{{ vault_jwt }}"
 
     - name: Delete openid idp metadata in S3
       amazon.aws.s3_object:
@@ -185,5 +178,12 @@
     #- name: Get identity provider in IAM
     
     #- name: Delete identity provider in IAM
-    
+   module_defaults:
+    community.hashi_vault.vault_delete:
+      url: "{{ hashicorp_vault['url'] }}"
+      auth_method: jwt
+      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+      role_id: "{{ hashicorp_vault['auth_role'] }}"
+      jwt: "{{ vault_jwt }}"
+   
   when: cluster_state == "absent"
