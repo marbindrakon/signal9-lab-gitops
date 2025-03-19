@@ -186,5 +186,12 @@
       mount_point: "{{ hashicorp_vault['auth_mount'] }}"
       role_id: "{{ hashicorp_vault['auth_role'] }}"
       jwt: "{{ vault_jwt }}"
-   
+
+    amazon.aws.s3_object:
+      access_key: "{{ aws_trusted_role.sts_creds.access_key }}"
+      secret_key: "{{ aws_trusted_role.sts_creds.secret_key }}"
+      session_token: "{{ aws_trusted_role.sts_creds.session_token }}"
+      region: "{{ platform_configs.aws.sts_idp_bucket_region }}"
+      bucket: "{{ platform_configs.aws.sts_idp_bucket }}"
+  
   when: cluster_state == "absent"
