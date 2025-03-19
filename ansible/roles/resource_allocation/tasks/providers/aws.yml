@@ -177,12 +177,12 @@
     #- name: Get identity provider in IAM
     
     #- name: Delete identity provider in IAM
-   module_defaults:
-     community.hashi_vault.vault_delete:
-       url: "{{ hashicorp_vault['url'] }}"
-       auth_method: jwt
-       mount_point: "{{ hashicorp_vault['auth_mount'] }}"
-       role_id: "{{ hashicorp_vault['auth_role'] }}"
-       jwt: "{{ vault_jwt }}"
+  module_defaults:
+    community.hashi_vault.vault_delete:
+      url: "{{ hashicorp_vault['url'] }}"
+      auth_method: jwt
+      mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+      role_id: "{{ hashicorp_vault['auth_role'] }}"
+      jwt: "{{ vault_jwt }}"
    
   when: cluster_state == "absent"
