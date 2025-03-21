@@ -87,6 +87,7 @@
       ansible.builtin.command:
         cmd: "/usr/local/bin/aws iam create-open-id-connect-provider --cli-input-json file://{{ aws_ccoctl_tempdir.path }}/aws-idp-input.json"
         chdir: "{{ aws_ccoctl_tempdir.path }}"
+      ignore_errors: true
       register: aws_idp_cli_output
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_assumed_role.sts_creds.access_key }}"
