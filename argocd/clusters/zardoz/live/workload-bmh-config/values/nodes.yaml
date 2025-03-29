@@ -1662,7 +1662,7 @@ nodes:
   turtle-1b.lab.signal9.gg:
     labels:
       compute-model: tyan
-    bootMac: 
+    bootMac: a0:42:3f:42:1b:3a 
     bmc:
       url: redfish-virtualmedia://turtle-1b.oob.signal9.gg/redfish/v1/Systems/1
       externalSecret:
@@ -1777,7 +1777,7 @@ nodes:
   turtle-1a.lab.signal9.gg:
     labels:
       compute-model: tyan
-    bootMac: 
+    bootMac: a0:42:3f:42:1a:7a
     bmc:
       url: redfish-virtualmedia://turtle-1a.oob.signal9.gg/redfish/v1/Systems/1
       externalSecret:
