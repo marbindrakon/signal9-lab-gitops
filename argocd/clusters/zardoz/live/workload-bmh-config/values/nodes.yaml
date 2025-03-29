@@ -1744,7 +1744,7 @@ nodes:
                 miimon: '100'
               port:
                 - enp65s0f0np0
-                - enp65s0f0np0
+                - enp65s0f1np1
         dns-resolver:
           config:
             server:
@@ -1859,7 +1859,7 @@ nodes:
                 miimon: '100'
               port:
                 - enp65s0f0np0
-                - enp65s0f0np0
+                - enp65s0f1np1
         dns-resolver:
           config:
             server:
