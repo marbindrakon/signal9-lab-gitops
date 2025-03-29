@@ -1664,7 +1664,7 @@ nodes:
       compute-model: tyan
     bootMac: a0:42:3f:42:1b:3a 
     bmc:
-      url: redfish-virtualmedia://turtle-1b.oob.signal9.gg/redfish/v1/Systems/Self
+      url: redfish://turtle-1b.oob.signal9.gg/redfish/v1/Systems/Self
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: amiredfish_user
@@ -1779,7 +1779,7 @@ nodes:
       compute-model: tyan
     bootMac: a0:42:3f:42:1a:7a
     bmc:
-      url: redfish-virtualmedia://turtle-1a.oob.signal9.gg/redfish/v1/Systems/Self
+      url: redfish://turtle-1a.oob.signal9.gg/redfish/v1/Systems/Self
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: amiredfish_user
