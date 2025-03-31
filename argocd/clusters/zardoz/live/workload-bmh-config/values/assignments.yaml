@@ -55,20 +55,6 @@ assignments:
     extraLabels: {}
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-  - node: turtle-1a.lab.signal9.gg
-    namespace: metal-infra-env
-    assignmentType: agent
-    infraEnvName: metal-infra-env
-    extraLabels: {}
-    extraAnnotations:
-      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-  - node: turtle-1b.lab.signal9.gg
-    namespace: metal-infra-env
-    assignmentType: agent
-    infraEnvName: metal-infra-env
-    extraLabels: {}
-    extraAnnotations:
-      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
 
 # - node: z-58.lab.signal9.gg
 #   namespace: openstack
