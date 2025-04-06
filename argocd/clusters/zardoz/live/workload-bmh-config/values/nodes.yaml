@@ -1659,22 +1659,24 @@ nodes:
         - name: enp130s0f1
           macAddress:	00:8c:fa:53:c8:b5
 
-  turtle-1b.lab.signal9.gg:
+  az1-ctlplane-0.lab.signal9.gg:
+    namespace: openshift-machine-api
     labels:
-      compute-model: tyan
-    bootMac: a0:42:3f:42:1b:3a 
+      compute-model: virtual
+    bootMac: fa:16:3e:27:5a:36
     bmc:
-      url: redfish://turtle-1b.oob.signal9.gg/redfish/v1/Systems/Self
+      url: redfish-virtualmedia+http://172.18.158.30:8000/redfish/v1/Systems/08bd09f0-5261-47b5-a4bd-3b040569afdb
       externalSecret:
         vaultName: openshift-ldap
-        usernameKey: amiredfish_user
-        passwordKey: amiredfish_pass
+        usernameKey: username
+        passwordKey: ipmi_password
     network:
       nmstateConfig:
         interfaces:
           - name: bond0
             type: bond
             state: up
+            mtu: 9000
             ipv4:
               enabled: false
               dhcp: false
@@ -1685,8 +1687,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - enp8s0f0
-                - enp8s0f1
+                - eth0
+                - eth1
           - name: bond1
             type: bond
             mtu: 9000
@@ -1701,21 +1703,21 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - ens3f0np0
-                - ens3f1np1
-          - name: bond1.16
+                - eth2
+                - eth3
+          - name: bond0.581
             type: vlan
             state: up
-            mtu: 9000
+            mtu: 1500
             vlan:
-              id: 16
+              id: 581
               base-iface: bond1
             ipv4:
               enabled: true
               dhcp: false
               address:
-                - ip: 172.18.16.101
-                  prefix-length: 24
+                - ip: 172.18.158.5
+                  prefix-length: 26
           - name: bond1.19
             type: vlan
             state: up
@@ -1729,22 +1731,6 @@ nodes:
               address:
                 - ip: 172.18.19.101
                   prefix-length: 24
-          - name: bond2
-            type: bond
-            mtu: 9000
-            state: up
-            ipv4:
-              enabled: false
-              dhcp: false
-            ipv6:
-              enabled: false
-            link-aggregation:
-              mode: active-backup
-              options:
-                miimon: '100'
-              port:
-                - enp65s0f0np0
-                - enp65s0f1np1
         dns-resolver:
           config:
             server:
@@ -1753,43 +1739,40 @@ nodes:
         routes:
           config:
             - destination: 0.0.0.0/0
-              next-hop-address: 172.18.16.1
-              next-hop-interface: bond1.16
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
               table-id: 254
             - destination: 172.18.14.0/24
               next-hop-address: 172.18.19.1
               next-hop-interface: bond1.19
               table-id: 254
       interfaceMap:
-        - name: enp8s0f0
-          macAddress: a0:42:3f:42:1b:3a
-        - name: enp8s0f1
-          macAddress: a0:42:3f:42:1b:3b
-        - name: ens3f0np0
-          macAddress: b8:59:9f:da:9b:d6
-        - name: ens3f1np1
-          macAddress: b8:59:9f:da:9b:d7
-        - name: enp65s0f0np0
-          macAddress: b8:59:9f:bd:be:42
-        - name: enp65s0f1np1
-          macAddress: b8:59:9f:bd:be:43
-
-  turtle-1a.lab.signal9.gg:
+        - name: eth0
+          macAddress: fa:16:3e:27:5a:36
+        - name: eth1
+          macAddress: fa:16:3e:84:44:76 
+        - name: eth2
+          macAddress: fa:16:3e:a7:9e:b0
+        - name: eth3
+          macAddress: fa:16:3e:e6:6b:e8
+  az2-ctlplane-0.lab.signal9.gg:
+    namespace: openshift-machine-api
     labels:
-      compute-model: tyan
-    bootMac: a0:42:3f:42:1a:7a
+      compute-model: virtual
+    bootMac: fa:16:3e:8d:5c:1c
     bmc:
-      url: redfish://turtle-1a.oob.signal9.gg/redfish/v1/Systems/Self
+      url: redfish-virtualmedia+http://172.18.158.30:8000/redfish/v1/Systems/e3b1ac6a-cf21-446a-bcb1-831874084a45
       externalSecret:
         vaultName: openshift-ldap
-        usernameKey: amiredfish_user
-        passwordKey: amiredfish_pass
+        usernameKey: username
+        passwordKey: ipmi_password
     network:
       nmstateConfig:
         interfaces:
           - name: bond0
             type: bond
             state: up
+            mtu: 9000
             ipv4:
               enabled: false
               dhcp: false
@@ -1800,8 +1783,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - enp8s0f0
-                - enp8s0f1
+                - eth0
+                - eth1
           - name: bond1
             type: bond
             mtu: 9000
@@ -1816,21 +1799,21 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - ens3f0np0
-                - ens3f1np1
-          - name: bond1.16
+                - eth2
+                - eth3
+          - name: bond0.582
             type: vlan
             state: up
-            mtu: 9000
+            mtu: 1500
             vlan:
-              id: 16
+              id: 582
               base-iface: bond1
             ipv4:
               enabled: true
               dhcp: false
               address:
-                - ip: 172.18.16.100
-                  prefix-length: 24
+                - ip: 172.18.158.71
+                  prefix-length: 26
           - name: bond1.19
             type: vlan
             state: up
@@ -1842,9 +1825,63 @@ nodes:
               enabled: true
               dhcp: false
               address:
-                - ip: 172.18.19.100
+                - ip: 172.18.19.102
                   prefix-length: 24
-          - name: bond2
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.65
+              next-hop-interface: bond0.582
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: bond1.19
+              table-id: 254
+      interfaceMap:
+        - name: eth0
+          macAddress: fa:16:3e:8d:5c:1c
+        - name: eth1
+          macAddress: fa:16:3e:0f:8c:e8 
+        - name: eth2
+          macAddress: fa:16:3e:59:af:b1
+        - name: eth3
+          macAddress: fa:16:3e:90:95:52
+  az3-ctlplane-0.lab.signal9.gg:
+    namespace: openshift-machine-api
+    labels:
+      compute-model: virtual
+    bootMac: fa:16:3e:a8:ef:ec
+    bmc:
+      url: redfish-virtualmedia+http://172.18.158.30:8000/redfish/v1/Systems/51f73f85-4a67-4bb1-b816-79334efafe23
+      externalSecret:
+        vaultName: openshift-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            mtu: 9000
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eth0
+                - eth1
+          - name: bond1
             type: bond
             mtu: 9000
             state: up
@@ -1858,8 +1895,34 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - enp65s0f0np0
-                - enp65s0f1np1
+                - eth2
+                - eth3
+          - name: bond0.583
+            type: vlan
+            state: up
+            mtu: 1500
+            vlan:
+              id: 583
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.158.133
+                  prefix-length: 26
+          - name: bond1.19
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 19
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.103
+                  prefix-length: 24
         dns-resolver:
           config:
             server:
@@ -1868,24 +1931,20 @@ nodes:
         routes:
           config:
             - destination: 0.0.0.0/0
-              next-hop-address: 172.18.16.1
-              next-hop-interface: bond1.16
+              next-hop-address: 172.18.158.129
+              next-hop-interface: bond0.583
               table-id: 254
             - destination: 172.18.14.0/24
               next-hop-address: 172.18.19.1
               next-hop-interface: bond1.19
               table-id: 254
       interfaceMap:
-        - name: enp8s0f0
-          macAddress: a0:42:3f:42:1a:7a
-        - name: enp8s0f1
-          macAddress: a0:42:3f:42:1a:7b
-        - name: ens3f0np0
-          macAddress: b8:59:9f:da:8e:5e
-        - name: ens3f1np1
-          macAddress: b8:59:9f:da:8e:5f
-        - name: enp65s0f0np0
-          macAddress: b8:59:9f:bd:bc:ca
-        - name: enp65s0f1np1
-          macAddress: b8:59:9f:bd:bc:cb
+        - name: eth0
+          macAddress: fa:16:3e:a8:ef:ec
+        - name: eth1
+          macAddress: fa:16:3e:d5:aa:4b 
+        - name: eth2
+          macAddress: fa:16:3e:4d:16:68
+        - name: eth3
+          macAddress: fa:16:3e:fe:c2:af
 
