@@ -1665,11 +1665,10 @@ nodes:
       compute-model: virtual
     rootDeviceHints:
       deviceName: "/dev/vda"
-
     bootMode: UEFI
-    bootMac: fa:16:3e:d1:1e:4f
+    bootMac: fa:16:3e:5c:9b:3f
     bmc:
-      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/f57c8a36-f92b-4189-b4ec-f262b6a29583
+      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/8b32a184-630a-4cf2-8774-5d738d409236
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: username
@@ -1752,24 +1751,23 @@ nodes:
               table-id: 254
       interfaceMap:
         - name: eth0
-          macAddress: fa:16:3e:d1:1e:4f
+          macAddress: fa:16:3e:5c:9b:3f
         - name: eth1
-          macAddress: fa:16:3e:04:e8:96 
+          macAddress: fa:16:3e:f8:4c:fb 
         - name: eth2
-          macAddress: fa:16:3e:3a:1f:8b
+          macAddress: fa:16:3e:b7:4c:f6
         - name: eth3
-          macAddress: fa:16:3e:5e:4f:b9
+          macAddress: fa:16:3e:1d:80:f1
   az2-ctlplane-0.lab.signal9.gg:
     namespace: openshift-machine-api
     labels:
       compute-model: virtual
     rootDeviceHints:
       deviceName: "/dev/vda"
-
     bootMode: UEFI
-    bootMac: fa:16:3e:22:94:35
+    bootMac: fa:16:3e:fb:2f:e7
     bmc:
-      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/468ebf8a-50d2-4358-94bb-5351a65d2d3c
+      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/f95cd833-ffb7-4484-a28c-75a38dbee596
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: username
@@ -1852,13 +1850,13 @@ nodes:
               table-id: 254
       interfaceMap:
         - name: eth0
-          macAddress: fa:16:3e:22:94:35
+          macAddress: fa:16:3e:fb:2f:e7
         - name: eth1
-          macAddress: fa:16:3e:b2:59:b2 
+          macAddress: fa:16:3e:06:74:00
         - name: eth2
-          macAddress: fa:16:3e:8e:0f:61
+          macAddress: fa:16:3e:9d:26:26
         - name: eth3
-          macAddress: fa:16:3e:95:7e:a0
+          macAddress: fa:16:3e:24:d0:49
   az3-ctlplane-0.lab.signal9.gg:
     namespace: openshift-machine-api
     labels:
@@ -1866,9 +1864,9 @@ nodes:
     rootDeviceHints:
       deviceName: "/dev/vda"
     bootMode: UEFI
-    bootMac: fa:16:3e:55:94:54
+    bootMac: fa:16:3e:24:36:ed
     bmc:
-      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/d9538d55-345f-4ec6-a148-f4a4c28c3f2c
+      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/d64d0244-a50f-460a-9ba8-ded71712e4ae
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: username
@@ -1951,11 +1949,10 @@ nodes:
               table-id: 254
       interfaceMap:
         - name: eth0
-          macAddress: fa:16:3e:55:94:54
+          macAddress: fa:16:3e:24:36:ed
         - name: eth1
-          macAddress: fa:16:3e:91:5f:61 
+          macAddress: fa:16:3e:b9:a8:04
         - name: eth2
-          macAddress: fa:16:3e:50:0a:6e
+          macAddress: fa:16:3e:39:1f:aa
         - name: eth3
-          macAddress: fa:16:3e:4b:46:11
-
+          macAddress: fa:16:3e:37:c3:d3

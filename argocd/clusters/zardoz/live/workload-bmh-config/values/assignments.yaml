@@ -55,27 +55,27 @@ assignments:
     extraLabels: {}
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-# - node: az1-ctlplane-0.lab.signal9.gg
-#   namespace: dzoso-infra-env
-#   assignmentType: agent
-#   infraEnvName: dzoso-infra-env
-#   extraLabels: {}
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-# - node: az2-ctlplane-0.lab.signal9.gg
-#   namespace: dzoso-infra-env
-#   assignmentType: agent
-#   infraEnvName: dzoso-infra-env
-#   extraLabels: {}
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-# - node: az3-ctlplane-0.lab.signal9.gg
-#   namespace: dzoso-infra-env
-#   assignmentType: agent
-#   infraEnvName: dzoso-infra-env
-#   extraLabels: {}
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+  - node: az1-ctlplane-0.lab.signal9.gg
+    namespace: dzoso-infra-env
+    assignmentType: agent
+    infraEnvName: dzoso-infra-env
+    extraLabels: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+  - node: az2-ctlplane-0.lab.signal9.gg
+    namespace: dzoso-infra-env
+    assignmentType: agent
+    infraEnvName: dzoso-infra-env
+    extraLabels: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+  - node: az3-ctlplane-0.lab.signal9.gg
+    namespace: dzoso-infra-env
+    assignmentType: agent
+    infraEnvName: dzoso-infra-env
+    extraLabels: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
 
 # - node: z-58.lab.signal9.gg
 #   namespace: openstack
