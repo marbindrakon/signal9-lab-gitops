@@ -1668,7 +1668,7 @@ nodes:
     bootMode: UEFI
     bootMac: fa:16:3e:5c:9b:3f
     bmc:
-      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/8b32a184-630a-4cf2-8774-5d738d409236
+      url: redfish-virtualmedia+http://172.18.158.40:8000/redfish/v1/Systems/8b32a184-630a-4cf2-8774-5d738d409236
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: username
@@ -1767,7 +1767,7 @@ nodes:
     bootMode: UEFI
     bootMac: fa:16:3e:fb:2f:e7
     bmc:
-      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/f95cd833-ffb7-4484-a28c-75a38dbee596
+      url: redfish-virtualmedia+http://172.18.158.40:8000/redfish/v1/Systems/f95cd833-ffb7-4484-a28c-75a38dbee596
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: username
@@ -1866,7 +1866,7 @@ nodes:
     bootMode: UEFI
     bootMac: fa:16:3e:24:36:ed
     bmc:
-      url: redfish-virtualmedia+http://172.18.158.29:8000/redfish/v1/Systems/d64d0244-a50f-460a-9ba8-ded71712e4ae
+      url: redfish-virtualmedia+http://172.18.158.40:8000/redfish/v1/Systems/d64d0244-a50f-460a-9ba8-ded71712e4ae
       externalSecret:
         vaultName: openshift-ldap
         usernameKey: username
