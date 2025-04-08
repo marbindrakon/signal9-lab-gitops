@@ -1,0 +1,8 @@
+kind: OpenStack
+apiVersion: operator.openstack.org/v1beta1
+metadata:
+  name: openstack
+  namespace: openstack-operators
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
