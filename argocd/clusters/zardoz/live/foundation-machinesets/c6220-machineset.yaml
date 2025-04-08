@@ -8,7 +8,7 @@ metadata:
   name: c6220-worker
   namespace: openshift-machine-api
 spec:
-  replicas: 4
+  replicas: 0
   selector:
     matchLabels:
       machine.openshift.io/cluster-api-cluster: zardoz-kggrg
