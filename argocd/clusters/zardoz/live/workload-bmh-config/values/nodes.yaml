@@ -1665,7 +1665,7 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://:8000/redfish/v1/Systems/oso-test-az1-ctlplane-0-dn6cy7j6bmqq
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/oso-test-az1-ctlplane-0-dn6cy7j6bmqq
     bootMac: fa:16:3e:1a:f6:98
     bootMode: UEFI
     labels:
@@ -1866,7 +1866,7 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://:8000/redfish/v1/Systems/oso-test-az2-ctlplane-0-6lmcfcda5f7y
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/oso-test-az2-ctlplane-0-6lmcfcda5f7y
     bootMac: fa:16:3e:ba:b5:01
     bootMode: UEFI
     labels:
@@ -2067,7 +2067,7 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://:8000/redfish/v1/Systems/oso-test-az3-ctlplane-0-45ob5it2osmb
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/oso-test-az3-ctlplane-0-45ob5it2osmb
     bootMac: fa:16:3e:f0:3b:b7
     bootMode: UEFI
     labels:
