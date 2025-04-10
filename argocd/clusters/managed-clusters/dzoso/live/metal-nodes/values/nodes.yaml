@@ -1,0 +1,1009 @@
+nodes:
+  az1-compute-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/db6f3d2a-5571-4fbc-9d77-363709aad9be
+    bootMac: fa:16:3e:99:3a:07
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az1
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:99:3a:07
+        name: eth0
+      - macAddress: fa:16:3e:b9:e0:68
+        name: eth1
+      - macAddress: fa:16:3e:03:d2:5d
+        name: eth2
+      - macAddress: fa:16:3e:3d:1e:1f
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.6
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.581
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 581
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.1
+            next-hop-interface: bond0.581
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az1-compute-1.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/6ff96955-8b67-4e94-abde-71ba1c0938e3
+    bootMac: fa:16:3e:9f:df:88
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az1
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:9f:df:88
+        name: eth0
+      - macAddress: fa:16:3e:de:54:68
+        name: eth1
+      - macAddress: fa:16:3e:3f:a7:10
+        name: eth2
+      - macAddress: fa:16:3e:e3:7c:01
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.7
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.581
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 581
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.1
+            next-hop-interface: bond0.581
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az1-networker-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/a020f98d-8196-4889-afa7-403eb8fd64b1
+    bootMac: fa:16:3e:84:97:36
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: networker
+      oso-zone: az1
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:84:97:36
+        name: eth0
+      - macAddress: fa:16:3e:8f:2b:93
+        name: eth1
+      - macAddress: fa:16:3e:59:3b:01
+        name: eth2
+      - macAddress: fa:16:3e:61:e5:ed
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.8
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.581
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 581
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.1
+            next-hop-interface: bond0.581
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az1-networker-1.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/ee5ac71c-034b-4dcf-becc-20fbd85c5c33
+    bootMac: fa:16:3e:1f:6d:85
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: networker
+      oso-zone: az1
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:1f:6d:85
+        name: eth0
+      - macAddress: fa:16:3e:ab:a3:7d
+        name: eth1
+      - macAddress: fa:16:3e:3b:1c:86
+        name: eth2
+      - macAddress: fa:16:3e:6b:66:5f
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.9
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.581
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 581
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.1
+            next-hop-interface: bond0.581
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az2-compute-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/cfa6a3b4-83e9-47a7-b250-4719290ba893
+    bootMac: fa:16:3e:6c:e4:49
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az2
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:6c:e4:49
+        name: eth0
+      - macAddress: fa:16:3e:85:1d:85
+        name: eth1
+      - macAddress: fa:16:3e:24:45:9c
+        name: eth2
+      - macAddress: fa:16:3e:fe:37:4f
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.72
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.582
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 582
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.65
+            next-hop-interface: bond0.582
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az2-compute-1.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/db188345-90a1-4dd8-aeaa-d62ed9642b91
+    bootMac: fa:16:3e:ca:2c:04
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az2
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:ca:2c:04
+        name: eth0
+      - macAddress: fa:16:3e:09:4b:fa
+        name: eth1
+      - macAddress: fa:16:3e:bc:c0:19
+        name: eth2
+      - macAddress: fa:16:3e:41:bf:e2
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.73
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.582
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 582
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.65
+            next-hop-interface: bond0.582
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az2-networker-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/1584f644-4baf-4625-b6b1-e954149f5f81
+    bootMac: fa:16:3e:8c:e9:ae
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: networker
+      oso-zone: az2
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:8c:e9:ae
+        name: eth0
+      - macAddress: fa:16:3e:9f:00:f5
+        name: eth1
+      - macAddress: fa:16:3e:48:2f:2b
+        name: eth2
+      - macAddress: fa:16:3e:d2:ac:e3
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.74
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.582
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 582
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.65
+            next-hop-interface: bond0.582
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az2-networker-1.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/733b9ef2-5a88-4bf6-80a2-ba5fdd686b89
+    bootMac: fa:16:3e:dc:12:17
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: networker
+      oso-zone: az2
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:dc:12:17
+        name: eth0
+      - macAddress: fa:16:3e:34:93:08
+        name: eth1
+      - macAddress: fa:16:3e:02:99:7d
+        name: eth2
+      - macAddress: fa:16:3e:85:30:a3
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.75
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.582
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 582
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.65
+            next-hop-interface: bond0.582
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az3-compute-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/b7d207e3-622c-47a1-a5bf-07194191d051
+    bootMac: fa:16:3e:5b:36:0e
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az3
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:5b:36:0e
+        name: eth0
+      - macAddress: fa:16:3e:b2:66:a7
+        name: eth1
+      - macAddress: fa:16:3e:ef:85:10
+        name: eth2
+      - macAddress: fa:16:3e:c9:53:9d
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.134
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.583
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 583
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.129
+            next-hop-interface: bond0.583
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az3-compute-1.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/98ab69eb-50bf-41d6-bd7b-74cb50d16810
+    bootMac: fa:16:3e:df:7b:59
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az3
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:df:7b:59
+        name: eth0
+      - macAddress: fa:16:3e:f0:ec:a7
+        name: eth1
+      - macAddress: fa:16:3e:2a:74:c9
+        name: eth2
+      - macAddress: fa:16:3e:af:3c:ba
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.135
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.583
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 583
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.129
+            next-hop-interface: bond0.583
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az3-networker-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/29f50d79-3fbe-48ba-afcb-e697583e81b7
+    bootMac: fa:16:3e:f3:23:06
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: networker
+      oso-zone: az3
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:f3:23:06
+        name: eth0
+      - macAddress: fa:16:3e:8f:91:85
+        name: eth1
+      - macAddress: fa:16:3e:4f:d1:56
+        name: eth2
+      - macAddress: fa:16:3e:8e:84:53
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.136
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.583
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 583
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.129
+            next-hop-interface: bond0.583
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+  az3-networker-1.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.158.57:8000/redfish/v1/Systems/a34999e4-5d72-42a4-b80e-95f961791d2a
+    bootMac: fa:16:3e:2e:48:5d
+    bootMode: UEFI
+    labels:
+      compute-model: virtual
+      oso-role: networker
+      oso-zone: az3
+    namespace: openstack
+    network:
+      interfaceMap:
+      - macAddress: fa:16:3e:2e:48:5d
+        name: eth0
+      - macAddress: fa:16:3e:cb:fa:13
+        name: eth1
+      - macAddress: fa:16:3e:32:b6:79
+        name: eth2
+      - macAddress: fa:16:3e:66:0c:c7
+        name: eth3
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+            - 172.18.42.10
+            - 172.18.42.11
+        interfaces:
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth0
+            - eth1
+          mtu: 9000
+          name: bond0
+          state: up
+          type: bond
+        - ipv4:
+            dhcp: false
+            enabled: false
+          ipv6:
+            enabled: false
+          link-aggregation:
+            mode: active-backup
+            options:
+              miimon: '100'
+            port:
+            - eth2
+            - eth3
+          mtu: 9000
+          name: bond1
+          state: up
+          type: bond
+        - ipv4:
+            address:
+            - ip: 172.18.158.137
+              prefix-length: 26
+            dhcp: false
+            enabled: true
+          mtu: 1500
+          name: bond0.583
+          state: up
+          type: vlan
+          vlan:
+            base-iface: bond1
+            id: 583
+        routes:
+          config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 172.18.158.129
+            next-hop-interface: bond0.583
+            table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
