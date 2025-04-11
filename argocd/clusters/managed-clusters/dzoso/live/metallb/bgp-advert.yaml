@@ -1,0 +1,20 @@
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: external
+  namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peers:
+  - az1-peering-switch-a
+  - az1-peering-switch-b
+  - az2-peering-switch-a
+  - az2-peering-switch-b
+  - az3-peering-switch-a
+  - az3-peering-switch-b
+  ipAddressPools:
+  - public-vip-pool
+  - ctlplane-pool
+  - intapi-pool

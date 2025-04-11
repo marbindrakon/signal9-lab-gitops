@@ -1,0 +1,102 @@
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: az1-peering-switch-a
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelectors:
+    - matchLabels:
+        topology.kubernetes.io/zone: 'az1'
+  peerAddress: 172.18.153.1
+  peerASN: 65003
+  myASN: 65006
+  peerPort: 179
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: az1-peering-switch-b
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peerAddress: 172.18.153.2
+  peerASN: 65003
+  myASN: 65006
+  peerPort: 179
+  nodeSelectors:
+    - matchLabels:
+        topology.kubernetes.io/zone: 'az1'
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: az2-peering-switch-a
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelectors:
+    - matchLabels:
+        topology.kubernetes.io/zone: 'az2'
+  peerAddress: 172.18.153.65
+  peerASN: 65003
+  myASN: 65006
+  peerPort: 179
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: az2-peering-switch-b
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peerAddress: 172.18.153.66
+  peerASN: 65003
+  myASN: 65006
+  peerPort: 179
+  nodeSelectors:
+    - matchLabels:
+        topology.kubernetes.io/zone: 'az2'
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: az3-peering-switch-a
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  nodeSelectors:
+    - matchLabels:
+        topology.kubernetes.io/zone: 'az3'
+  peerAddress: 172.18.153.129
+  peerASN: 65003
+  myASN: 65006
+  peerPort: 179
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  namespace: metallb-system
+  name: az3-peering-switch-b
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peerAddress: 172.18.153.130
+  peerASN: 65003
+  myASN: 65006
+  peerPort: 179
+  nodeSelectors:
+    - matchLabels:
+        topology.kubernetes.io/zone: 'az3'
