@@ -4,7 +4,7 @@ baseDomain: lab.signal9.gg
 externalPasswordsSecret: "oso-passwords"
 externalRegistrySecret: "oso-registry-secret"
 externalSubscriptionSecret: "oso-subscription-secret"
-externalPublicCertificateSecret: "oso-new-manual-cert"
+externalPublicCertificateSecret: "dzcloud-manual-cert"
 
 keystone:
   # As of 18.0.3, this must be regionOne to work due to hardcoded config templates in operators
