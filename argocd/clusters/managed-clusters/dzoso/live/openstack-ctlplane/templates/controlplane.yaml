@@ -1,0 +1,526 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: {{ .Values.cloudName }}
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  secret: {{ .Values.cloudName }}-password-secret
+  tls:
+    caBundleSecretName: {{ .Values.cloudName }}-ca-secret
+  storageClass: ocs-external-storagecluster-ceph-rbd
+  extraMounts:
+    - name: v1
+      region: r1
+      extraVol:
+        - propagation:
+          - CinderVolume
+          - CinderBackup
+          - GlanceAPI
+          - ManilaShare
+          extraVolType: Ceph
+          volumes:
+          - name: ceph
+            projected:
+              sources:
+              - secret:
+                  name: ceph-conf-files
+          mounts:
+          - name: ceph
+            mountPath: "/etc/ceph"
+            readOnly: true
+  dns:
+    template:
+      override:
+        service:
+          metadata:
+            annotations:
+              metallb.universe.tf/address-pool: oso-ctlplane-pool
+              metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+              metallb.universe.tf/loadBalancerIPs: 172.18.150.200
+          spec:
+            type: LoadBalancer
+      options:
+      - key: server
+        values:
+        - 172.18.42.10
+      - key: server
+        values:
+        - 172.18.42.11
+      replicas: 2
+  cinder:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.cinder }}
+
+    template:
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      cinderAPI:
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+              spec:
+                type: LoadBalancer
+      cinderScheduler:
+        replicas: 2
+      cinderBackup:
+        customServiceConfig: |
+          [DEFAULT]
+          backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+          backup_ceph_pool = {{ .Values.ceph.pools.cinderBackup }}
+          backup_ceph_user = {{ .Values.ceph.client }}
+        replicas: 1
+      cinderVolumes:
+        ceph:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph
+            [ceph]
+            volume_backend_name=ceph
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user={{ .Values.ceph.client }}
+            rbd_pool={{ .Values.ceph.pools.cinder }}
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid={{ .Values.ceph.fsid }}
+          replicas: 1
+  glance:
+    apiOverrides:
+      default:
+        tls:
+          secretName: {{ .Values.cloudName }}-manual-cert
+        route:
+          spec:
+            host: {{ .Values.apiEndpointNames.glance }}
+
+    template:
+      databaseInstance: openstack
+      storageClass: "ocs-external-storagecluster-ceph-rbd"
+      storageRequest: 150G
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = default_backend:rbd
+        [glance_store]
+        default_backend = default_backend
+        [default_backend]
+        rbd_store_ceph_conf = /etc/ceph/ceph.conf
+        store_description = "RBD backend"
+        rbd_store_pool = {{ .Values.ceph.pools.glance }}
+        rbd_store_user = {{ .Values.ceph.client }}
+      keystoneEndpoint: default
+      glanceAPIs:
+        default:
+          replicas: 3
+          override:
+            service:
+              internal:
+                metadata:
+                  annotations:
+                    metallb.universe.tf/address-pool: oso-intapi-pool
+                    metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                    metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                spec:
+                  type: LoadBalancer
+
+  keystone:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.keystone }}
+
+    template:
+      region: {{ .Values.keystone.region }}
+      replicas: 3
+      override:
+        service:
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+  mariadb:
+    enabled: false
+    templates:
+      openstack:
+        storageRequest: 500M
+      openstack-cell1:
+        storageRequest: 500M
+  galera:
+    enabled: true
+    templates:
+      openstack:
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+      openstack-cell1:
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+  memcached:
+    enabled: true
+    templates:
+      memcached:
+        replicas: 3
+  neutron:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.neutron }}
+
+    template:
+      override:
+        service:
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+  horizon:
+    enabled: true
+    apiOverride:
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.horizon }}
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+    template:
+      replicas: 3
+      secret: {{ .Values.cloudName }}-password-secret
+  nova:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.nova }}
+    cellOverride:
+      cell1:
+        noVNCProxy:
+          tls:
+            secretName: {{ .Values.cloudName }}-manual-cert
+          route:
+            spec:
+              host: {{ .Values.apiEndpointNames.cell1Vnc }}
+
+    template:
+      apiServiceTemplate:
+        replicas: 3
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+              spec:
+                type: LoadBalancer
+      metadataServiceTemplate:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+            spec:
+              type: LoadBalancer
+      schedulerServiceTemplate:
+        replicas: 3
+      cellTemplates:
+        cell0:
+          cellDatabaseAccount: nova-cell0
+          cellDatabaseInstance: openstack
+          cellMessageBusInstance: rabbitmq
+          hasAPIAccess: true
+        cell1:
+          cellDatabaseAccount: nova-cell1
+          cellDatabaseInstance: openstack-cell1
+          cellMessageBusInstance: rabbitmq-cell1
+          noVNCProxyServiceTemplate:
+            enabled: true
+          hasAPIAccess: true
+      secret: {{ .Values.cloudName }}-password-secret
+  manila:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.manila }}
+    template:
+      secret: {{ .Values.cloudName }}-password-secret
+      manilaAPI:
+        replicas: 3
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+              spec:
+                type: LoadBalancer
+      manilaScheduler:
+        replicas: 2
+      manilaShares:
+        share1:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends=cephfs
+            enabled_share_protocols=cephfs
+            [cephfs]
+            driver_handles_share_servers=False
+            share_backend_name=cephfs
+            share_driver=manila.share.drivers.cephfs.driver.CephFSDriver
+            cephfs_conf_path=/etc/ceph/ceph.conf
+            cephfs_auth_id=openstack
+            cephfs_cluster_name=ceph
+            cephfs_volume_mode=0755
+            cephfs_protocol_helper_type=CEPHFS
+          replicas: 1
+  ovn:
+    template:
+      ovnDBCluster:
+        ovndbcluster-nb:
+          replicas: 3
+          dbType: NB
+          storageRequest: 10G
+        ovndbcluster-sb:
+          replicas: 3
+          dbType: SB
+          storageRequest: 10G
+      ovnNorthd: {}
+
+  barbican:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.barbican }}
+    template:
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      simpleCryptoBackendSecret: {{ .Values.cloudName }}-password-secret
+      barbicanAPI:
+        replicas: 3
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+              spec:
+                type: LoadBalancer
+      barbicanWorker:
+        replicas: 3
+      barbicanKeystoneListener:
+        replicas: 1
+
+  placement:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.placement }}
+    template:
+      replicas: 2
+      override:
+        service:
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+  rabbitmq:
+    templates:
+      rabbitmq:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.201
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell1:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.202
+            spec:
+              type: LoadBalancer
+  heat:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.heat }}
+    cnfAPIOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.heatCfn }}
+    enabled: true
+    template:
+      databaseInstance: openstack
+      heatAPI:
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+              spec:
+                type: LoadBalancer
+        replicas: 3
+      heatCfnAPI:
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+              spec:
+                type: LoadBalancer
+        replicas: 3
+
+      heatEngine:
+        replicas: 3
+      secret: {{ .Values.cloudName }}-password-secret
+  ironic:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.ironic }}
+    inspectorOverride: {}
+    template:
+      databaseInstance: openstack
+      ironicAPI:
+        replicas: 3
+      ironicConductors:
+      - replicas: 3
+        storageClass: "ocs-external-storagecluster-cephfs"
+        storageRequest: 150G
+      ironicInspector:
+        replicas: 1
+      ironicNeutronAgent:
+        replicas: 1
+      secret: {{ .Values.cloudName }}-password-secret
+  swift:
+    enabled: false
+  octavia:
+    enabled: false
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.octavia }}
+    template:
+      databaseInstance: openstack
+      octaviaAPI:
+        replicas: 3
+      secret: {{ .Values.cloudName }}-password-secret
+  redis:
+    enabled: true
+  openstackclient:
+    template:
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+  telemetry:
+    aodhApiOverride:
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.aodh }}
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+    prometheusOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.prometheus }}
+    enabled: true
+    template:
+      metricStorage:
+        enabled: true
+        dataplaneNetwork: ctlplane
+        dashboardsEnabled: true
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 20G
+      autoscaling: 
+        enabled: true
+        aodh:
+          databaseAccount: aodh
+          databaseInstance: openstack
+          passwordSelector:
+            aodhService: AodhPassword
+          rabbitMqClusterName: rabbitmq
+          serviceUser: aodh
+          secret: {{ .Values.cloudName }}-password-secret
+        heatInstance: heat
+      ceilometer:
+        enabled: true
+        secret: {{ .Values.cloudName }}-password-secret
+      logging:
+        enabled: false
+        ipaddr: 172.17.0.80
+

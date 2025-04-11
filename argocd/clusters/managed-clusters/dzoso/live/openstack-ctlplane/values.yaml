@@ -1,0 +1,96 @@
+cloudName: dzcloud
+baseDomain: lab.signal9.gg
+
+externalPasswordsSecret: "oso-passwords"
+externalRegistrySecret: "oso-registry-secret"
+externalSubscriptionSecret: "oso-subscription-secret"
+externalPublicCertificateSecret: "oso-new-manual-cert"
+
+keystone:
+  # As of 18.0.3, this must be regionOne to work due to hardcoded config templates in operators
+  region: regionOne
+
+apiEndpointNames:
+  keystone: identity.dzoso.lab.signal9.gg
+  nova: compute.dzoso.lab.signal9.gg
+  neutron: network.dzoso.lab.signal9.gg
+  horizon: dzoso.lab.signal9.gg
+  heat: orchestration.dzoso.lab.signal9.gg
+  heatCfn: orch-cfn.dzoso.lab.signal9.gg
+  ironic: metal.dzoso.lab.signal9.gg
+  cinder: blockstorage.dzoso.lab.signal9.gg
+  manila: filestorage.dzoso.lab.signal9.gg
+  glance1: images-zone1.dzoso.lab.signal9.gg
+  glance2: images-zone2.dzoso.lab.signal9.gg
+  glance3: images-zone3.dzoso.lab.signal9.gg
+  designate: dns.dzoso.lab.signal9.gg
+  octavia: loadbalancer.dzoso.lab.signal9.gg
+  barbican: keyvault.dzoso.lab.signal9.gg
+  placement: compute-placement.dzoso.lab.signal9.gg
+  cell1Vnc: console-zone1.dzoso.lab.signal9.gg
+  cell2Vnc: console-zone2.dzoso.lab.signal9.gg
+  cell3Vnc: console-zone3.dzoso.lab.signal9.gg
+  aodh: alarms.dzoso.lab.signal9.gg
+  prometheus: dzcloud-metrics.apps.dzoso.lab.signal9.gg
+
+ceph:
+  fsid: 14e37f3d-9026-46c3-a503-82fa0acbac3f
+  externalConfigSecret: "oso-ceph-config"
+  client: openstack
+  pools:
+    glance: images
+    nova: vms
+    cinder: volumes
+    cinderBackup: backups
+    metrics: metrics
+
+customCaBundle: |
+  -----BEGIN CERTIFICATE-----
+  MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
+  dzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYDVQQHDAZSb2dl
+  cnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5BMR8wHQYDVQQD
+  DBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MB4XDTIxMDMwMTA0MDMwNFoXDTQxMDIy
+  NDA0MDMwNFowdzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYD
+  VQQHDAZSb2dlcnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5B
+  MR8wHQYDVQQDDBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MHYwEAYHKoZIzj0CAQYF
+  K4EEACIDYgAE5w5BHLiaagf5eSNkQYuDIdyWe7ULLY2z2qAP1fKXM+RrSHQQb5x1
+  Q9+IhQRhf7exw/pJS5Vs1R8IyQ3B8r6xz885w6+Fk6iyMAlFn979RU6V5lbxMRGG
+  Vxq/CEL/iorVo2MwYTAdBgNVHQ4EFgQUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwHwYD
+  VR0jBBgwFoAUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwDwYDVR0TAQH/BAUwAwEB/zAO
+  BgNVHQ8BAf8EBAMCAYYwCgYIKoZIzj0EAwIDaQAwZgIxAJLOIPP9J1/mttvGdQtM
+  Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
+  vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
+  -----END CERTIFICATE-----
+  -----BEGIN CERTIFICATE-----
+  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
+  -----END CERTIFICATE-----
