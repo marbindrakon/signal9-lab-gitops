@@ -15,5 +15,6 @@ spec:
   - az3-peering-switch-a
   - az3-peering-switch-b
   ipAddressPools:
+  - public-vip-pool
   - oso-ctlplane-pool
   - oso-intapi-pool
