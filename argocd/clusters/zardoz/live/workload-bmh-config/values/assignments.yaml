@@ -62,6 +62,7 @@ assignments:
     extraLabels: {}
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.node-label.topology.kubernetes.io/zone: 'az1'
   - node: az2-ctlplane-0.lab.signal9.gg
     namespace: dzoso-infra-env
     assignmentType: agent
@@ -69,6 +70,7 @@ assignments:
     extraLabels: {}
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.node-label.topology.kubernetes.io/zone: 'az2'
   - node: az3-ctlplane-0.lab.signal9.gg
     namespace: dzoso-infra-env
     assignmentType: agent
@@ -76,6 +78,7 @@ assignments:
     extraLabels: {}
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+      bmac.agent-install.openshift.io.node-label.topology.kubernetes.io/zone: 'az3'
 
 # - node: z-58.lab.signal9.gg
 #   namespace: openstack
