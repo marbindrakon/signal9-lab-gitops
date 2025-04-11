@@ -16,13 +16,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:99:3a:07
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:b9:e0:68
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:03:d2:5d
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:3d:1e:1f
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -40,8 +40,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -56,8 +56,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -100,13 +100,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:9f:df:88
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:de:54:68
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:3f:a7:10
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:e3:7c:01
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -124,8 +124,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -140,8 +140,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -184,13 +184,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:84:97:36
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:8f:2b:93
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:59:3b:01
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:61:e5:ed
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -208,8 +208,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -224,8 +224,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -268,13 +268,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:1f:6d:85
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:ab:a3:7d
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:3b:1c:86
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:6b:66:5f
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -292,8 +292,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -308,8 +308,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -352,13 +352,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:6c:e4:49
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:85:1d:85
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:24:45:9c
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:fe:37:4f
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -376,8 +376,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -392,8 +392,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -436,13 +436,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:ca:2c:04
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:09:4b:fa
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:bc:c0:19
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:41:bf:e2
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -460,8 +460,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -476,8 +476,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -520,13 +520,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:8c:e9:ae
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:9f:00:f5
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:48:2f:2b
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:d2:ac:e3
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -544,8 +544,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -560,8 +560,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -604,13 +604,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:dc:12:17
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:34:93:08
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:02:99:7d
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:85:30:a3
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -628,8 +628,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -644,8 +644,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -688,13 +688,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:5b:36:0e
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:b2:66:a7
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:ef:85:10
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:c9:53:9d
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -712,8 +712,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -728,8 +728,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -772,13 +772,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:df:7b:59
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:f0:ec:a7
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:2a:74:c9
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:af:3c:ba
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -796,8 +796,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -812,8 +812,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -856,13 +856,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:f3:23:06
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:8f:91:85
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:4f:d1:56
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:8e:84:53
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -880,8 +880,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -896,8 +896,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
@@ -940,13 +940,13 @@ nodes:
     network:
       interfaceMap:
       - macAddress: fa:16:3e:2e:48:5d
-        name: eth0
+        name: enp5s0
       - macAddress: fa:16:3e:cb:fa:13
-        name: eth1
+        name: enp6s0
       - macAddress: fa:16:3e:32:b6:79
-        name: eth2
+        name: enp7s0
       - macAddress: fa:16:3e:66:0c:c7
-        name: eth3
+        name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
@@ -964,8 +964,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth0
-            - eth1
+            - enp5s0
+            - enp6s0
           mtu: 9000
           name: bond0
           state: up
@@ -980,8 +980,8 @@ nodes:
             options:
               miimon: '100'
             port:
-            - eth2
-            - eth3
+            - enp7s0
+            - enp8s0
           mtu: 9000
           name: bond1
           state: up
