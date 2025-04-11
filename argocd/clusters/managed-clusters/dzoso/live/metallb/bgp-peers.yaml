@@ -11,7 +11,7 @@ spec:
   nodeSelectors:
     - matchLabels:
         topology.kubernetes.io/zone: 'az1'
-  peerAddress: 172.18.153.1
+  peerAddress: 172.18.154.1
   peerASN: 65003
   myASN: 65006
   peerPort: 179
@@ -25,7 +25,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  peerAddress: 172.18.153.2
+  peerAddress: 172.18.154.2
   peerASN: 65003
   myASN: 65006
   peerPort: 179
@@ -45,7 +45,7 @@ spec:
   nodeSelectors:
     - matchLabels:
         topology.kubernetes.io/zone: 'az2'
-  peerAddress: 172.18.153.65
+  peerAddress: 172.18.154.65
   peerASN: 65003
   myASN: 65006
   peerPort: 179
@@ -59,7 +59,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  peerAddress: 172.18.153.66
+  peerAddress: 172.18.154.66
   peerASN: 65003
   myASN: 65006
   peerPort: 179
@@ -79,7 +79,7 @@ spec:
   nodeSelectors:
     - matchLabels:
         topology.kubernetes.io/zone: 'az3'
-  peerAddress: 172.18.153.129
+  peerAddress: 172.18.154.129
   peerASN: 65003
   myASN: 65006
   peerPort: 179
@@ -93,7 +93,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  peerAddress: 172.18.153.130
+  peerAddress: 172.18.154.130
   peerASN: 65003
   myASN: 65006
   peerPort: 179
