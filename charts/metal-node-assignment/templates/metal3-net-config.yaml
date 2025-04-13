@@ -1,6 +1,6 @@
 {{- range .Values.assignments -}}
-{{- if eq .assignmentType "metal3" -}}
 {{- $nodeConfig := (get $.Values.nodes .node) -}}
+{{- if or (eq .assignmentType "metal3") ($nodeConfig.agentPreprovisioningConfig | default false) -}}
 ---
 apiVersion: v1 
 kind: Secret
