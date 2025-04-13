@@ -1735,58 +1735,6 @@ nodes:
             id: 581
         - ipv4:
             address:
-            - ip: 172.18.150.5
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond0.501
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 501
-        - ipv4:
-            address:
-            - ip: 172.18.151.5
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond0.511
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 511
-        - ipv4:
-            address:
-            - ip: 172.18.154.5
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.541
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 541
-        - ipv4:
-            address:
-            - ip: 172.18.157.5
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.571
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 571
-        - ipv4:
-            address:
             - ip: 172.18.19.101
               prefix-length: 24
             dhcp: false
@@ -1800,30 +1748,17 @@ nodes:
             id: 19
         - ipv4:
             address:
-            - ip: 172.18.152.5
+            - ip: 172.18.154.5
               prefix-length: 26
             dhcp: false
             enabled: true
           mtu: 9000
-          name: bond1.521
+          name: bond1.541
           state: up
           type: vlan
           vlan:
             base-iface: bond1
-            id: 521
-        - ipv4:
-            address:
-            - ip: 172.18.155.5
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond1.551
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 551
+            id: 541
         routes:
           config:
           - destination: 0.0.0.0/0
@@ -1833,30 +1768,6 @@ nodes:
           - destination: 172.18.14.0/24
             next-hop-address: 172.18.19.1
             next-hop-interface: bond1.19
-            table-id: 254
-          - destination: 172.18.150.0/24
-            next-hop-address: 172.18.150.1
-            next-hop-interface: bond0.501
-            table-id: 254
-          - destination: 172.18.151.0/24
-            next-hop-address: 172.18.151.1
-            next-hop-interface: bond0.511
-            table-id: 254
-          - destination: 172.18.156.0/24
-            next-hop-address: 172.18.151.1
-            next-hop-interface: bond0.511
-            table-id: 254
-          - destination: 172.18.152.0/24
-            next-hop-address: 172.18.152.1
-            next-hop-interface: bond1.521
-            table-id: 254
-          - destination: 172.18.155.0/24
-            next-hop-address: 172.18.155.1
-            next-hop-interface: bond1.551
-            table-id: 254
-          - destination: 172.18.157.0/24
-            next-hop-address: 172.18.157.1
-            next-hop-interface: bond0.571
             table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
@@ -1936,58 +1847,6 @@ nodes:
             id: 582
         - ipv4:
             address:
-            - ip: 172.18.150.71
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond0.502
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 502
-        - ipv4:
-            address:
-            - ip: 172.18.151.71
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond0.512
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 512
-        - ipv4:
-            address:
-            - ip: 172.18.154.71
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.542
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 542
-        - ipv4:
-            address:
-            - ip: 172.18.157.71
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.572
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 572
-        - ipv4:
-            address:
             - ip: 172.18.19.102
               prefix-length: 24
             dhcp: false
@@ -2001,30 +1860,17 @@ nodes:
             id: 19
         - ipv4:
             address:
-            - ip: 172.18.152.71
+            - ip: 172.18.154.71
               prefix-length: 26
             dhcp: false
             enabled: true
           mtu: 9000
-          name: bond1.522
+          name: bond1.542
           state: up
           type: vlan
           vlan:
             base-iface: bond1
-            id: 522
-        - ipv4:
-            address:
-            - ip: 172.18.155.71
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond1.552
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 552
+            id: 542
         routes:
           config:
           - destination: 0.0.0.0/0
@@ -2034,30 +1880,6 @@ nodes:
           - destination: 172.18.14.0/24
             next-hop-address: 172.18.19.1
             next-hop-interface: bond1.19
-            table-id: 254
-          - destination: 172.18.150.0/24
-            next-hop-address: 172.18.150.65
-            next-hop-interface: bond0.502
-            table-id: 254
-          - destination: 172.18.151.0/24
-            next-hop-address: 172.18.151.65
-            next-hop-interface: bond0.512
-            table-id: 254
-          - destination: 172.18.156.0/24
-            next-hop-address: 172.18.151.65
-            next-hop-interface: bond0.512
-            table-id: 254
-          - destination: 172.18.152.0/24
-            next-hop-address: 172.18.152.65
-            next-hop-interface: bond1.522
-            table-id: 254
-          - destination: 172.18.155.0/24
-            next-hop-address: 172.18.155.65
-            next-hop-interface: bond1.552
-            table-id: 254
-          - destination: 172.18.157.0/24
-            next-hop-address: 172.18.157.65
-            next-hop-interface: bond0.572
             table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
@@ -2137,58 +1959,6 @@ nodes:
             id: 583
         - ipv4:
             address:
-            - ip: 172.18.150.133
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond0.503
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 503
-        - ipv4:
-            address:
-            - ip: 172.18.151.133
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond0.513
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 513
-        - ipv4:
-            address:
-            - ip: 172.18.154.133
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.543
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 543
-        - ipv4:
-            address:
-            - ip: 172.18.157.133
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.573
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond0
-            id: 573
-        - ipv4:
-            address:
             - ip: 172.18.19.103
               prefix-length: 24
             dhcp: false
@@ -2202,30 +1972,17 @@ nodes:
             id: 19
         - ipv4:
             address:
-            - ip: 172.18.152.133
+            - ip: 172.18.154.133
               prefix-length: 26
             dhcp: false
             enabled: true
           mtu: 9000
-          name: bond1.523
+          name: bond1.543
           state: up
           type: vlan
           vlan:
             base-iface: bond1
-            id: 523
-        - ipv4:
-            address:
-            - ip: 172.18.155.133
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 9000
-          name: bond1.553
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 553
+            id: 543
         routes:
           config:
           - destination: 0.0.0.0/0
@@ -2235,30 +1992,6 @@ nodes:
           - destination: 172.18.14.0/24
             next-hop-address: 172.18.19.1
             next-hop-interface: bond1.19
-            table-id: 254
-          - destination: 172.18.150.0/24
-            next-hop-address: 172.18.150.129
-            next-hop-interface: bond0.503
-            table-id: 254
-          - destination: 172.18.151.0/24
-            next-hop-address: 172.18.151.129
-            next-hop-interface: bond0.513
-            table-id: 254
-          - destination: 172.18.156.0/24
-            next-hop-address: 172.18.151.129
-            next-hop-interface: bond0.513
-            table-id: 254
-          - destination: 172.18.152.0/24
-            next-hop-address: 172.18.152.129
-            next-hop-interface: bond1.523
-            table-id: 254
-          - destination: 172.18.155.0/24
-            next-hop-address: 172.18.155.129
-            next-hop-interface: bond1.553
-            table-id: 254
-          - destination: 172.18.157.0/24
-            next-hop-address: 172.18.157.129
-            next-hop-interface: bond0.573
             table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
