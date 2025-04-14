@@ -65,7 +65,7 @@ spec:
                 ge: 24
   nodeSelector:
     matchLabels:
-      topology.kuberenetes.io/zone: az1
+      topology.kubernetes.io/zone: az1
 ---
 apiVersion: frrk8s.metallb.io/v1beta1
 kind: FRRConfiguration
@@ -133,7 +133,7 @@ spec:
                 ge: 24
   nodeSelector:
     matchLabels:
-      topology.kuberenetes.io/zone: az2
+      topology.kubernetes.io/zone: az2
 ---
 apiVersion: frrk8s.metallb.io/v1beta1
 kind: FRRConfiguration
@@ -201,5 +201,5 @@ spec:
                 ge: 24
   nodeSelector:
     matchLabels:
-      topology.kuberenetes.io/zone: az3
+      topology.kubernetes.io/zone: az3
 ---
