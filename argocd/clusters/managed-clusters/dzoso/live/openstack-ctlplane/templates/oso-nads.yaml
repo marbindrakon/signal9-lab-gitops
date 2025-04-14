@@ -6,24 +6,24 @@ metadata:
   namespace: openstack
 spec:
   config: |
-	{
-  	"cniVersion": "0.3.1",
-  	"name": "internalapi",
-  	"type": "bridge",
-  	"isDefaultGateway": true,
-  	"isGateway": true,
-  	"forceAddress": false,
-  	"ipMasq": true,
-  	"hairpinMode": true,
-  	"bridge": "br-internalapi",
-  	"ipam": {
+    {
+        "cniVersion": "0.3.1",
+        "name": "internalapi",
+        "type": "bridge",
+        "isDefaultGateway": true,
+        "isGateway": true,
+        "forceAddress": false,
+        "ipMasq": true,
+        "hairpinMode": true,
+        "bridge": "br-internalapi",
+        "ipam": {
           "type": "whereabouts",
           "range": "172.18.151.192/26",
           "range_start": "172.18.151.194",
           "range_end": "172.18.151.239",
           "gateway": "172.18.151.193"
         }
-        }
+    }
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
@@ -32,24 +32,24 @@ metadata:
   namespace: openstack
 spec:
   config: |
-	{
-  	"cniVersion": "0.3.1",
-  	"name": "storage",
-  	"type": "bridge",
-  	"isDefaultGateway": true,
-  	"isGateway": true,
-  	"forceAddress": false,
-  	"ipMasq": true,
-  	"hairpinMode": true,
-  	"bridge": "br-storage",
-  	"ipam": {
-          "type": "whereabouts",
-          "range": "172.18.155.192/26",
-          "range_start": "172.18.155.194",
-          "range_end": "172.18.155.239",
-          "gateway": "172.18.155.193"
-        }
-        }
+    {
+      "cniVersion": "0.3.1",
+      "name": "storage",
+      "type": "bridge",
+      "isDefaultGateway": true,
+      "isGateway": true,
+      "forceAddress": false,
+      "ipMasq": true,
+      "hairpinMode": true,
+      "bridge": "br-storage",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "172.18.155.192/26",
+        "range_start": "172.18.155.194",
+        "range_end": "172.18.155.239",
+        "gateway": "172.18.155.193"
+      }
+    }
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
@@ -58,24 +58,24 @@ metadata:
   namespace: openstack
 spec:
   config: |
-	{
-  	"cniVersion": "0.3.1",
-  	"name": "tenant",
-  	"type": "bridge",
-  	"isDefaultGateway": true,
-  	"isGateway": true,
-  	"forceAddress": false,
-  	"ipMasq": true,
-  	"hairpinMode": true,
-  	"bridge": "br-tenant",
-  	"ipam": {
-          "type": "whereabouts",
-          "range": "172.18.152.192/26",
-          "range_start": "172.18.152.194",
-          "range_end": "172.18.152.239",
-          "gateway": "172.18.152.193"
-        }
-        }
+    {
+      "cniVersion": "0.3.1",
+      "name": "tenant",
+      "type": "bridge",
+      "isDefaultGateway": true,
+      "isGateway": true,
+      "forceAddress": false,
+      "ipMasq": true,
+      "hairpinMode": true,
+      "bridge": "br-tenant",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "172.18.152.192/26",
+        "range_start": "172.18.152.194",
+        "range_end": "172.18.152.239",
+        "gateway": "172.18.152.193"
+      }
+    }
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
@@ -84,24 +84,24 @@ metadata:
   namespace: openstack
 spec:
   config: |
-	{
-  	"cniVersion": "0.3.1",
-  	"name": "ctlplane",
-  	"type": "bridge",
-  	"isDefaultGateway": true,
-  	"isGateway": true,
-  	"forceAddress": false,
-  	"ipMasq": true,
-  	"hairpinMode": true,
-  	"bridge": "br-ctlplane",
-  	"ipam": {
-          "type": "whereabouts",
-          "range": "172.18.150.192/26",
-          "range_start": "172.18.150.194",
-          "range_end": "172.18.150.239",
-          "gateway": "172.18.150.193"
-        }
-        }
+    {
+      "cniVersion": "0.3.1",
+      "name": "ctlplane",
+      "type": "bridge",
+      "isDefaultGateway": true,
+      "isGateway": true,
+      "forceAddress": false,
+      "ipMasq": true,
+      "hairpinMode": true,
+      "bridge": "br-ctlplane",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "172.18.150.192/26",
+        "range_start": "172.18.150.194",
+        "range_end": "172.18.150.239",
+        "gateway": "172.18.150.193"
+      }
+    }
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
@@ -110,22 +110,22 @@ metadata:
   namespace: openstack
 spec:
   config: |
-	{
-  	"cniVersion": "0.3.1",
-  	"name": "octavia",
-  	"type": "bridge",
-  	"isDefaultGateway": true,
-  	"isGateway": true,
-  	"forceAddress": false,
-  	"ipMasq": true,
-  	"hairpinMode": true,
-  	"bridge": "br-octavia",
-  	"ipam": {
-          "type": "whereabouts",
-          "range": "172.18.157.192/26",
-          "range_start": "172.18.157.194",
-          "range_end": "172.18.157.239",
-          "gateway": "172.18.157.193"
-        }
-        }
+    {
+      "cniVersion": "0.3.1",
+      "name": "octavia",
+      "type": "bridge",
+      "isDefaultGateway": true,
+      "isGateway": true,
+      "forceAddress": false,
+      "ipMasq": true,
+      "hairpinMode": true,
+      "bridge": "br-octavia",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "172.18.157.192/26",
+        "range_start": "172.18.157.194",
+        "range_end": "172.18.157.239",
+        "gateway": "172.18.157.193"
+      }
+    }
 ---
