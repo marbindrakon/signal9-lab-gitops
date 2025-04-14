@@ -39,7 +39,7 @@ spec:
             annotations:
               metallb.universe.tf/address-pool: oso-ctlplane-pool
               metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-              metallb.universe.tf/loadBalancerIPs: 172.18.150.200
+              metallb.universe.tf/loadBalancerIPs: 172.18.150.240
           spec:
             type: LoadBalancer
       options:
@@ -69,7 +69,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: oso-intapi-pool
                   metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
       cinderScheduler:
@@ -80,6 +80,8 @@ spec:
           backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
           backup_ceph_pool = {{ .Values.ceph.pools.cinderBackup }}
           backup_ceph_user = {{ .Values.ceph.client }}
+        networkAttachments:
+        - storage
         replicas: 1
       cinderVolumes:
         ceph:
@@ -94,6 +96,8 @@ spec:
             rbd_pool={{ .Values.ceph.pools.cinder }}
             rbd_flatten_volume_from_snapshot=False
             rbd_secret_uuid={{ .Values.ceph.fsid }}
+          networkAttachments:
+          - storage
           replicas: 1
   glance:
     apiOverrides:
@@ -129,9 +133,11 @@ spec:
                   annotations:
                     metallb.universe.tf/address-pool: oso-intapi-pool
                     metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                    metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                    metallb.universe.tf/loadBalancerIPs: 172.18.151.240
                 spec:
                   type: LoadBalancer
+          networkAttachments:
+          - storage
 
   keystone:
     apiOverride:
@@ -151,7 +157,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: oso-intapi-pool
                 metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
 
             spec:
               type: LoadBalancer
@@ -196,11 +202,14 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: oso-intapi-pool
                 metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
             spec:
               type: LoadBalancer
       databaseInstance: openstack
       secret: {{ .Values.cloudName }}-password-secret
+      networkAttachments:
+      - internalapi
+
   horizon:
     enabled: true
     apiOverride:
@@ -238,7 +247,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: oso-intapi-pool
                   metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
       metadataServiceTemplate:
@@ -249,7 +258,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: oso-intapi-pool
                 metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
             spec:
               type: LoadBalancer
       schedulerServiceTemplate:
@@ -266,6 +275,9 @@ spec:
           cellMessageBusInstance: rabbitmq-cell1
           noVNCProxyServiceTemplate:
             enabled: true
+            networkAttachments:
+            - internalapi
+            - ctlplane
           hasAPIAccess: true
       secret: {{ .Values.cloudName }}-password-secret
   manila:
@@ -280,6 +292,8 @@ spec:
       secret: {{ .Values.cloudName }}-password-secret
       manilaAPI:
         replicas: 3
+        networkAttachments:
+        - internalapi
         override:
           service:
             internal:
@@ -287,7 +301,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: oso-intapi-pool
                   metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
       manilaScheduler:
@@ -308,6 +322,8 @@ spec:
             cephfs_volume_mode=0755
             cephfs_protocol_helper_type=CEPHFS
           replicas: 1
+          networkAttachments:
+          - storage
   ovn:
     template:
       ovnDBCluster:
@@ -315,10 +331,12 @@ spec:
           replicas: 3
           dbType: NB
           storageRequest: 10G
+          networkAttachment: internalapi
         ovndbcluster-sb:
           replicas: 3
           dbType: SB
           storageRequest: 10G
+          networkAttachment: internalapi
       ovnNorthd: {}
 
   barbican:
@@ -341,7 +359,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: oso-intapi-pool
                   metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
       barbicanWorker:
@@ -365,7 +383,7 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: oso-intapi-pool
                 metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
             spec:
               type: LoadBalancer
       databaseInstance: openstack
@@ -379,7 +397,7 @@ spec:
             metadata:
               annotations:
                 metallb.universe.tf/address-pool: oso-intapi-pool
-                metallb.universe.tf/loadBalancerIPs: 172.18.151.201
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.241
             spec:
               type: LoadBalancer
       rabbitmq-cell1:
@@ -389,7 +407,7 @@ spec:
             metadata:
               annotations:
                 metallb.universe.tf/address-pool: oso-intapi-pool
-                metallb.universe.tf/loadBalancerIPs: 172.18.151.202
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.242
             spec:
               type: LoadBalancer
   heat:
@@ -416,7 +434,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: oso-intapi-pool
                   metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
         replicas: 3
@@ -428,7 +446,7 @@ spec:
                 annotations:
                   metallb.universe.tf/address-pool: oso-intapi-pool
                   metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
-                  metallb.universe.tf/loadBalancerIPs: 172.18.151.200
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
         replicas: 3

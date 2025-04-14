@@ -7,23 +7,29 @@ spec:
     interfaces:
     - description: internalapi bridge
       mtu: 9000
-      name: internalapi
+      name: br-internalapi
       state: up
       type: linux-bridge
     - description: storage bridge
       mtu: 9000
-      name: storage
+      name: br-storage
       state: up
       type: linux-bridge
     - description: tenant bridge
       mtu: 9000
-      name: tenant
+      name: br-tenant
       state: up
       type: linux-bridge
     - description: ctlplane bridge
       mtu: 9000
-      name: ospbr
+      name: br-ctlplane
       state: up
       type: linux-bridge
+    - description: octavia bridge
+      mtu: 1500
+      name: br-octavia
+      state: up
+      type: linux-bridge
+
   nodeSelector:
     node-role.kubernetes.io/master: ""
