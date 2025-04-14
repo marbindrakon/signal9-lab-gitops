@@ -9,7 +9,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   addresses:
-    - 172.18.150.200-172.18.150.210
+    - 172.18.150.245-172.18.150.254
   autoAssign: false
 ---
 apiVersion: metallb.io/v1beta1
@@ -22,6 +22,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   addresses:
-    - 172.18.151.200-172.18.151.210
+    - 172.18.151.245-172.18.151.254
   autoAssign: false
 ---
