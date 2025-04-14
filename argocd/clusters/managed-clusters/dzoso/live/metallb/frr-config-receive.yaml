@@ -1,0 +1,160 @@
+---
+apiVersion: frrk8s.metallb.io/v1beta1
+kind: FRRConfiguration
+metadata:
+  name: az1-receive-internal
+  namespace: metallb-system
+spec:
+  bgp:
+    routers:
+    - asn: 65006
+      neighbors:
+      - address: 172.18.154.1
+        asn: 65003
+        disableMP: false
+        passwordSecret: {}
+        port: 179
+        toAdvertise:
+          allowed:
+            mode: filtered
+            prefixes: []
+        toReceive:
+          allowed:
+            mode: filtered
+            prefixes:
+              - 172.18.150.0/24
+              - 172.18.151.0/24
+              - 172.18.152.0/24
+              - 172.18.154.0/24
+              - 172.18.155.0/24
+              - 172.18.157.0/24
+              - 172.18.156.0/24
+      - address: 172.18.154.2
+        asn: 65003
+        disableMP: false
+        passwordSecret: {}
+        port: 179
+        toAdvertise:
+          allowed:
+            mode: filtered
+            prefixes: []
+        toReceive:
+          allowed:
+            mode: filtered
+              - 172.18.150.0/24
+              - 172.18.151.0/24
+              - 172.18.152.0/24
+              - 172.18.154.0/24
+              - 172.18.155.0/24
+              - 172.18.157.0/24
+              - 172.18.156.0/24
+  nodeSelector:
+    matchLabels:
+      topology.kuberenetes.io/zone: az1
+---
+apiVersion: frrk8s.metallb.io/v1beta1
+kind: FRRConfiguration
+metadata:
+  name: az2-receive-internal
+  namespace: metallb-system
+spec:
+  bgp:
+    routers:
+    - asn: 65006
+      neighbors:
+      - address: 172.18.154.65
+        asn: 65003
+        disableMP: false
+        passwordSecret: {}
+        port: 179
+        toAdvertise:
+          allowed:
+            mode: filtered
+            prefixes: []
+        toReceive:
+          allowed:
+            mode: filtered
+            prefixes:
+              - 172.18.150.0/24
+              - 172.18.151.0/24
+              - 172.18.152.0/24
+              - 172.18.154.0/24
+              - 172.18.155.0/24
+              - 172.18.157.0/24
+              - 172.18.156.0/24
+      - address: 172.18.154.66
+        asn: 65003
+        disableMP: false
+        passwordSecret: {}
+        port: 179
+        toAdvertise:
+          allowed:
+            mode: filtered
+            prefixes: []
+        toReceive:
+          allowed:
+            mode: filtered
+              - 172.18.150.0/24
+              - 172.18.151.0/24
+              - 172.18.152.0/24
+              - 172.18.154.0/24
+              - 172.18.155.0/24
+              - 172.18.157.0/24
+              - 172.18.156.0/24
+  nodeSelector:
+    matchLabels:
+      topology.kuberenetes.io/zone: az2
+---
+apiVersion: frrk8s.metallb.io/v1beta1
+kind: FRRConfiguration
+metadata:
+  name: az3-receive-internal
+  namespace: metallb-system
+spec:
+  bgp:
+    routers:
+    - asn: 65006
+      neighbors:
+      - address: 172.18.154.129
+        asn: 65003
+        disableMP: false
+        passwordSecret: {}
+        port: 179
+        toAdvertise:
+          allowed:
+            mode: filtered
+            prefixes: []
+        toReceive:
+          allowed:
+            mode: filtered
+            prefixes:
+              - 172.18.150.0/24
+              - 172.18.151.0/24
+              - 172.18.152.0/24
+              - 172.18.154.0/24
+              - 172.18.155.0/24
+              - 172.18.157.0/24
+              - 172.18.156.0/24
+      - address: 172.18.154.130
+        asn: 65003
+        disableMP: false
+        passwordSecret: {}
+        port: 179
+        toAdvertise:
+          allowed:
+            mode: filtered
+            prefixes: []
+        toReceive:
+          allowed:
+            mode: filtered
+              - 172.18.150.0/24
+              - 172.18.151.0/24
+              - 172.18.152.0/24
+              - 172.18.154.0/24
+              - 172.18.155.0/24
+              - 172.18.157.0/24
+              - 172.18.156.0/24
+  nodeSelector:
+    matchLabels:
+      topology.kuberenetes.io/zone: az3
+
