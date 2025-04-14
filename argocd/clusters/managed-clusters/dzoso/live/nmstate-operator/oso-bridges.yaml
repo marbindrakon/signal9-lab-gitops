@@ -1,0 +1,29 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: oso-bridges
+spec:
+  desiredState:
+    interfaces:
+    - description: internalapi bridge
+      mtu: 9000
+      name: internalapi
+      state: up
+      type: linux-bridge
+    - description: storage bridge
+      mtu: 9000
+      name: storage
+      state: up
+      type: linux-bridge
+    - description: tenant bridge
+      mtu: 9000
+      name: tenant
+      state: up
+      type: linux-bridge
+    - description: ctlplane bridge
+      mtu: 9000
+      name: ospbr
+      state: up
+      type: linux-bridge
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
