@@ -4,6 +4,9 @@ kind: FRRConfiguration
 metadata:
   name: az1-receive-internal
   namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   bgp:
     routers:
@@ -72,6 +75,10 @@ kind: FRRConfiguration
 metadata:
   name: az2-receive-internal
   namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
+
 spec:
   bgp:
     routers:
@@ -140,6 +147,10 @@ kind: FRRConfiguration
 metadata:
   name: az3-receive-internal
   namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
+
 spec:
   bgp:
     routers:
