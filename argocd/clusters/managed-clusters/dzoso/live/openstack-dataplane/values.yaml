@@ -1,0 +1,376 @@
+cloudName: opensnack
+baseDomain: lab.signal9.gg
+foundationIngressBase: apps.zardoz.lab.signal9.gg
+
+externalPasswordsSecret: "oso-passwords"
+externalRegistrySecret: "oso-registry-secret"
+externalSubscriptionSecret: "oso-subscription-secret"
+externalPublicCertificateSecret: "oso-new-manual-cert"
+
+keystone:
+  # As of 18.0.3, this must be regionOne to work due to hardcoded config templates in operators
+  region: regionOne
+
+apiEndpointNames:
+  keystone: identity.opensnack.lab.signal9.gg
+  nova: compute.opensnack.lab.signal9.gg
+  neutron: network.opensnack.lab.signal9.gg
+  horizon: opensnack.lab.signal9.gg
+  heat: orchestration.opensnack.lab.signal9.gg
+  heatCfn: orch-cfn.opensnack.lab.signal9.gg
+  ironic: metal.opensnack.lab.signal9.gg
+  cinder: blockstorage.opensnack.lab.signal9.gg
+  manila: filestorage.opensnack.lab.signal9.gg
+  glance: images.opensnack.lab.signal9.gg
+  designate: dns.opensnack.lab.signal9.gg
+  octavia: loadbalancer.opensnack.lab.signal9.gg
+  barbican: keyvault.opensnack.lab.signal9.gg
+  placement: compute-placement.opensnack.lab.signal9.gg
+  cell1Vnc: console-cell1.opensnack.lab.signal9.gg
+  aodh: alarms.opensnack.lab.signal9.gg
+  prometheus: int-metrics.opensnack.lab.signal9.gg
+
+ceph:
+  fsid: 14e37f3d-9026-46c3-a503-82fa0acbac3f
+  externalConfigSecret: "oso-ceph-config"
+  client: openstack
+  pools:
+    glance: images
+    nova: vms
+    cinder: volumes
+    cinderBackup: backups
+    metrics: metrics
+
+networks:
+  ctlplane:
+    mtu: 9000
+    supernets:
+      - 172.18.150.0/24
+    controlPlaneSegment:
+      subnet: 172.18.150.192/26
+      containerRange:
+        start: 172.18.150.194
+        end: 172.18.150.239
+      loadbalancerRange:
+        start: 172.18.150.240
+        end: 172.18.150.254
+      loadbalancerIPs:
+        - 172.18.150.240
+    nodeSegments:
+      - name: az1-subnet
+        allocationRanges:
+          - start: 172.18.150.30
+            end: 172.18.150.49
+        cidr: 172.18.150.0/26
+        vlan: 501
+        routes:
+          - destination: 172.18.150.0/24
+            nexthop: 172.18.150.1
+      - name: az2-subnet
+        allocationRanges:
+          - start: 172.18.150.94
+            end: 172.18.150.113
+        cidr: 172.18.150.64/26
+        vlan: 502
+        routes:
+          - destination: 172.18.150.0/24
+            nexthop: 172.18.150.65
+
+      - name: az3-subnet
+        allocationRanges:
+          - start: 172.18.150.158
+            end: 172.18.150.177
+        cidr: 172.18.150.128/26
+        vlan: 503
+        routes:
+          - destination: 172.18.150.0/24
+            nexthop: 172.18.150.129
+  storage:
+    mtu: 9000
+    supernets:
+      - 172.18.155.0/24
+    controlPlaneSegment:
+      subnet: 172.18.155.192/26
+      containerRange:
+        start: 172.18.155.194
+        end: 172.18.155.239
+      loadbalancerRange: null
+      loadbalancerIPs: []
+    nodeSegments:
+      - name: az1-subnet
+        allocationRanges:
+          - start: 172.18.155.30
+            end: 172.18.155.49
+        cidr: 172.18.155.0/26
+        vlan: 551
+        routes:
+          - destination: 172.18.155.0/24
+            nexthop: 172.18.155.1
+          - destination: 172.18.14.0/24
+            nexthop: 172.18.155.1
+      - name: az2-subnet
+        allocationRanges:
+          - start: 172.18.155.94
+            end: 172.18.155.113
+        cidr: 172.18.155.64/26
+        vlan: 552
+        routes:
+          - destination: 172.18.155.0/24
+            nexthop: 172.18.155.65
+          - destination: 172.18.14.0/24
+            nexthop: 172.18.155.65
+      - name: az3-subnet
+        allocationRanges:
+          - start: 172.18.155.158
+            end: 172.18.155.177
+        cidr: 172.18.155.128/26
+        vlan: 553
+        routes:
+          - destination: 172.18.155.0/24
+            nexthop: 172.18.155.129
+          - destination: 172.18.14.0/24
+            nexthop: 172.18.155.129
+  internalapi:
+    mtu: 9000
+    supernets:
+      - 172.18.151.0/24
+    controlPlaneSegment:
+      subnet: 172.18.151.192/26
+      containerRange:
+        start: 172.18.151.194
+        end: 172.18.151.239
+      loadbalancerRange:
+        start: 172.18.151.240
+        end: 172.18.151.254
+      loadbalancerIPs:
+        - 172.18.151.240
+        - 172.18.151.241
+        - 172.18.151.242
+        - 172.18.151.243
+        - 172.18.151.244
+    nodeSegments:
+      - name: az1-subnet
+        allocationRanges:
+          - start: 172.18.151.30
+            end: 172.18.151.49
+        cidr: 172.18.151.0/26
+        vlan: 511
+        routes:
+          - destination: 172.18.151.0/24
+            nexthop: 172.18.151.1
+      - name: az2-subnet
+        allocationRanges:
+          - start: 172.18.151.94
+            end: 172.18.151.113
+        cidr: 172.18.151.64/26
+        vlan: 512
+        routes:
+          - destination: 172.18.151.0/24
+            nexthop: 172.18.151.65
+      - name: az3-subnet
+        allocationRanges:
+          - start: 172.18.151.158
+            end: 172.18.151.177
+        cidr: 172.18.151.128/26
+        vlan: 513
+        routes:
+          - destination: 172.18.151.0/24
+            nexthop: 172.18.151.129
+  tunnel:
+    mtu: 9000
+    supernets:
+      - 172.18.152.0/24
+    controlPlaneSegment:
+      subnet: 172.18.152.192/26
+      containerRange:
+        start: 172.18.152.194
+        end: 172.18.152.239
+      loadbalancerRange:
+        start: 172.18.152.240
+        end: 172.18.152.254
+      loadbalancerIPs: []
+    nodeSegments:
+      - name: az1-subnet
+        allocationRanges:
+          - start: 172.18.152.30
+            end: 172.18.152.49
+        cidr: 172.18.152.0/26
+        vlan: 521
+        routes:
+          - destination: 172.18.152.0/24
+            nexthop: 172.18.152.1
+      - name: az2-subnet
+        allocationRanges:
+          - start: 172.18.152.94
+            end: 172.18.152.113
+        cidr: 172.18.152.64/26
+        vlan: 522
+        routes:
+          - destination: 172.18.152.0/24
+            nexthop: 172.18.152.65
+      - name: az3-subnet
+        allocationRanges:
+          - start: 172.18.152.158
+            end: 172.18.152.177
+        cidr: 172.18.152.128/26
+        vlan: 523
+        routes:
+          - destination: 172.18.152.0/24
+            nexthop: 172.18.152.129
+
+  management:
+    mtu: 1500
+    supernets:
+      - 172.18.158.0/24
+    controlPlaneSegment:
+      subnet: 172.18.158.192/26
+      containerRange:
+        start: 172.18.158.194
+        end: 172.18.158.239
+      loadbalancerRange:
+        start: 172.18.158.240
+        end: 172.18.158.254
+      loadbalancerIPs: []
+    nodeSegments:
+      - name: az1-subnet
+        allocationRanges:
+          - start: 172.18.158.30
+            end: 172.18.158.49
+        cidr: 172.18.158.0/26
+        gateway: 172.18.158.1
+        vlan: 581
+        routes:
+          - destination: 172.18.158.0/24
+            nexthop: 172.18.158.1
+      - name: az2-subnet
+        allocationRanges:
+          - start: 172.18.158.94
+            end: 172.18.158.113
+        cidr: 172.18.158.64/26
+        gateway: 172.18.158.65
+        vlan: 582
+        routes:
+          - destination: 172.18.158.0/24
+            nexthop: 172.18.158.65
+      - name: az3-subnet
+        allocationRanges:
+          - start: 172.18.158.158
+            end: 172.18.158.177
+        cidr: 172.18.158.128/26
+        gateway: 172.18.158.129
+        vlan: 583
+        routes:
+          - destination: 172.18.158.0/24
+            nexthop: 172.18.158.129
+  tenantPeering:
+    mtu: 9000
+    supernets:
+      - 172.18.153.0/24
+    controlPlaneSegment:
+      subnet: 172.18.153.192/26
+      containerRange:
+        start: 172.18.153.194
+        end: 172.18.153.239
+      loadbalancerRange:
+        start: 172.18.153.240
+        end: 172.18.153.254
+      loadbalancerIPs: []
+    nodeSegments:
+      - name: az1-subnet
+        allocationRanges:
+          - start: 172.18.153.30
+            end: 172.18.153.49
+        cidr: 172.18.153.0/26
+        vlan: 531
+        routes:
+          - destination: 172.18.153.0/24
+            nexthop: 172.18.153.1
+      - name: az2-subnet
+        allocationRanges:
+          - start: 172.18.153.94
+            end: 172.18.153.113
+        cidr: 172.18.153.64/26
+        vlan: 532
+        routes:
+          - destination: 172.18.153.0/24
+            nexthop: 172.18.153.65
+      - name: az3-subnet
+        allocationRanges:
+          - start: 172.18.153.158
+            end: 172.18.153.177
+        cidr: 172.18.153.128/26
+        vlan: 533
+        routes:
+          - destination: 172.18.153.0/24
+            nexthop: 172.18.153.129
+
+dataplaneBgpPeers:
+  az1:
+    localAs: 65007
+    remoteAs: 65003
+    peers:
+    - 172.18.153.1
+    - 172.18.153.2
+  az2:
+    localAs: 65007
+    remoteAs: 65003
+    peers:
+    - 172.18.153.65
+    - 172.18.153.66
+  az3:
+    localAs: 65007
+    remoteAs: 65003
+    peers:
+    - 172.18.153.129
+    - 172.18.153.130
+
+customCaBundle: |
+  -----BEGIN CERTIFICATE-----
+  MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
+  dzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYDVQQHDAZSb2dl
+  cnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5BMR8wHQYDVQQD
+  DBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MB4XDTIxMDMwMTA0MDMwNFoXDTQxMDIy
+  NDA0MDMwNFowdzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYD
+  VQQHDAZSb2dlcnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5B
+  MR8wHQYDVQQDDBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MHYwEAYHKoZIzj0CAQYF
+  K4EEACIDYgAE5w5BHLiaagf5eSNkQYuDIdyWe7ULLY2z2qAP1fKXM+RrSHQQb5x1
+  Q9+IhQRhf7exw/pJS5Vs1R8IyQ3B8r6xz885w6+Fk6iyMAlFn979RU6V5lbxMRGG
+  Vxq/CEL/iorVo2MwYTAdBgNVHQ4EFgQUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwHwYD
+  VR0jBBgwFoAUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwDwYDVR0TAQH/BAUwAwEB/zAO
+  BgNVHQ8BAf8EBAMCAYYwCgYIKoZIzj0EAwIDaQAwZgIxAJLOIPP9J1/mttvGdQtM
+  Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
+  vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
+  -----END CERTIFICATE-----
+  -----BEGIN CERTIFICATE-----
+  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
+  -----END CERTIFICATE-----

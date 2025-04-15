@@ -1,0 +1,40 @@
+apiVersion: network.openstack.org/v1beta1
+kind: NetConfig
+metadata:
+  name: {{ .Values.cloudName }}-netconfig
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  networks:
+  - name: CtlPlane
+    dnsDomain: ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.ctlplane.mtu }}
+    subnets:
+{{ toYaml .Values.networks.ctlplane.nodeSegments | indent 6 }}
+  - name: InternalApi
+    dnsDomain: internalapi.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.internalapi.mtu }}
+    subnets:
+{{ toYaml .Values.networks.internalapi.nodeSegments | indent 6 }}
+  - name: Storage
+    dnsDomain: storage.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.storage.mtu }}
+    subnets:
+{{ toYaml .Values.networks.internalapi.nodeSegments | indent 6 }}
+  - name: Tenant
+    dnsDomain: tenant.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.tunnel.mtu }}
+    subnets:
+{{ toYaml .Values.networks.tunnel.nodeSegments | indent 6 }}
+  - name: Management
+    dnsDomain: mgmt.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.management.mtu }}
+    subnets:
+{{ toYaml .Values.networks.management.nodeSegments | indent 6 }}
+  - name: TenantPeering
+    dnsDomain: tenant-peering.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.tenantPeering.mtu }}
+    subnets:
+{{ toYaml .Values.networks.tenantPeering.nodeSegments | indent 6 }}

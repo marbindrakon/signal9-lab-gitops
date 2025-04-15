@@ -1,0 +1,64 @@
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ceph-az1
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  label: dataplane-deployment-nova-custom-ceph
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova
+  dataSources:
+   - configMapRef:
+       name: ceph-nova
+   - secretRef:
+       name: nova-cell1-compute-config
+   - secretRef:
+       name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ceph-az2
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  label: dataplane-deployment-nova-custom-ceph
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova
+  dataSources:
+   - configMapRef:
+       name: ceph-nova
+   - secretRef:
+       name: nova-cell2-compute-config
+   - secretRef:
+       name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+---
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneService
+metadata:
+  name: nova-custom-ceph-az3
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  label: dataplane-deployment-nova-custom-ceph
+  caCerts: combined-ca-bundle
+  edpmServiceType: nova
+  dataSources:
+   - configMapRef:
+       name: ceph-nova
+   - secretRef:
+       name: nova-cell3-compute-config
+   - secretRef:
+       name: nova-migration-ssh-key
+  playbook: osp.edpm.nova
+---
