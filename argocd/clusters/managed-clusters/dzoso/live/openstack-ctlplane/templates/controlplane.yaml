@@ -304,9 +304,9 @@ spec:
             - ctlplane
           hasAPIAccess: true
         cell3:
-          cellDatabaseAccount: nova-cell2
-          cellDatabaseInstance: openstack-cell2
-          cellMessageBusInstance: rabbitmq-cell2
+          cellDatabaseAccount: nova-cell3
+          cellDatabaseInstance: openstack-cell3
+          cellMessageBusInstance: rabbitmq-cell3
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
