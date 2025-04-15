@@ -22,7 +22,7 @@ spec:
     dnsDomain: storage.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
     mtu: {{ .Values.networks.storage.mtu }}
     subnets:
-{{ toYaml .Values.networks.internalapi.nodeSegments | indent 6 }}
+{{ toYaml .Values.networks.storage.nodeSegments | indent 6 }}
   - name: Tenant
     dnsDomain: tenant.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
     mtu: {{ .Values.networks.tunnel.mtu }}
