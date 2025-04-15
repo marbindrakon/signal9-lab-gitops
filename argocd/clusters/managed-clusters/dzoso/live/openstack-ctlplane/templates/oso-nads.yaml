@@ -13,7 +13,7 @@ spec:
         "isDefaultGateway": false,
         "isGateway": true,
         "forceAddress": false,
-        "ipMasq": true,
+        "ipMasq": false,
         "hairpinMode": true,
         "bridge": "br-internalapi",
         "ipam": {
@@ -42,7 +42,7 @@ spec:
       "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
-      "ipMasq": true,
+      "ipMasq": false,
       "hairpinMode": true,
       "bridge": "br-storage",
       "ipam": {
@@ -72,7 +72,7 @@ spec:
       "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
-      "ipMasq": true,
+      "ipMasq": false,
       "hairpinMode": true,
       "bridge": "br-tenant",
       "ipam": {
@@ -101,7 +101,7 @@ spec:
       "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
-      "ipMasq": true,
+      "ipMasq": false,
       "hairpinMode": true,
       "bridge": "br-ctlplane",
       "ipam": {
@@ -131,7 +131,7 @@ spec:
       "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
-      "ipMasq": true,
+      "ipMasq": false,
       "hairpinMode": true,
       "bridge": "br-octavia",
       "ipam": {
