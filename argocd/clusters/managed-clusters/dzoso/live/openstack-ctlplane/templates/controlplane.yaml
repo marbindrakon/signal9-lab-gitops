@@ -163,13 +163,6 @@ spec:
               type: LoadBalancer
       databaseInstance: openstack
       secret: {{ .Values.cloudName }}-password-secret
-  mariadb:
-    enabled: false
-    templates:
-      openstack:
-        storageRequest: 500M
-      openstack-cell1:
-        storageRequest: 500M
   galera:
     enabled: true
     templates:
@@ -181,6 +174,15 @@ spec:
         storageRequest: 5Gi
         secret: {{ .Values.cloudName }}-password-secret
         replicas: 3
+      openstack-cell2:
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+      openstack-cell3:
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+
   memcached:
     enabled: true
     templates:
@@ -236,6 +238,20 @@ spec:
           route:
             spec:
               host: {{ .Values.apiEndpointNames.cell1Vnc }}
+      cell2:
+        noVNCProxy:
+          tls:
+            secretName: {{ .Values.cloudName }}-manual-cert
+          route:
+            spec:
+              host: {{ .Values.apiEndpointNames.cel21Vnc }}
+      cell3:
+        noVNCProxy:
+          tls:
+            secretName: {{ .Values.cloudName }}-manual-cert
+          route:
+            spec:
+              host: {{ .Values.apiEndpointNames.cel31Vnc }}
 
     template:
       apiServiceTemplate:
@@ -273,6 +289,24 @@ spec:
           cellDatabaseAccount: nova-cell1
           cellDatabaseInstance: openstack-cell1
           cellMessageBusInstance: rabbitmq-cell1
+          noVNCProxyServiceTemplate:
+            enabled: true
+            networkAttachments:
+            - ctlplane
+          hasAPIAccess: true
+        cell2:
+          cellDatabaseAccount: nova-cell2
+          cellDatabaseInstance: openstack-cell2
+          cellMessageBusInstance: rabbitmq-cell2
+          noVNCProxyServiceTemplate:
+            enabled: true
+            networkAttachments:
+            - ctlplane
+          hasAPIAccess: true
+        cell3:
+          cellDatabaseAccount: nova-cell2
+          cellDatabaseInstance: openstack-cell2
+          cellMessageBusInstance: rabbitmq-cell2
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
@@ -407,6 +441,26 @@ spec:
               annotations:
                 metallb.universe.tf/address-pool: oso-intapi-pool
                 metallb.universe.tf/loadBalancerIPs: 172.18.151.242
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell2:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.243
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell3:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.244
             spec:
               type: LoadBalancer
   heat:
