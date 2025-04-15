@@ -10,7 +10,7 @@ spec:
         "cniVersion": "0.3.1",
         "name": "internalapi",
         "type": "bridge",
-        "isDefaultGateway": true,
+        "isDefaultGateway": false,
         "isGateway": true,
         "forceAddress": false,
         "ipMasq": true,
@@ -21,7 +21,10 @@ spec:
           "range": "172.18.151.192/26",
           "range_start": "172.18.151.194",
           "range_end": "172.18.151.239",
-          "gateway": "172.18.151.193"
+          "gateway": "172.18.151.193",
+          "routes": [
+            {"dst": "172.18.151.0/24"}
+          ]
         }
     }
 ---
@@ -36,7 +39,7 @@ spec:
       "cniVersion": "0.3.1",
       "name": "storage",
       "type": "bridge",
-      "isDefaultGateway": true,
+      "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
       "ipMasq": true,
@@ -47,7 +50,11 @@ spec:
         "range": "172.18.155.192/26",
         "range_start": "172.18.155.194",
         "range_end": "172.18.155.239",
-        "gateway": "172.18.155.193"
+        "gateway": "172.18.155.193",
+         "routes": [
+            {"dst": "172.18.155.0/24"}
+          ]
+
       }
     }
 ---
@@ -62,7 +69,7 @@ spec:
       "cniVersion": "0.3.1",
       "name": "tenant",
       "type": "bridge",
-      "isDefaultGateway": true,
+      "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
       "ipMasq": true,
@@ -73,7 +80,10 @@ spec:
         "range": "172.18.152.192/26",
         "range_start": "172.18.152.194",
         "range_end": "172.18.152.239",
-        "gateway": "172.18.152.193"
+        "gateway": "172.18.152.193",
+         "routes": [
+            {"dst": "172.18.152.0/24"}
+          ]
       }
     }
 ---
@@ -88,7 +98,7 @@ spec:
       "cniVersion": "0.3.1",
       "name": "ctlplane",
       "type": "bridge",
-      "isDefaultGateway": true,
+      "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
       "ipMasq": true,
@@ -99,7 +109,11 @@ spec:
         "range": "172.18.150.192/26",
         "range_start": "172.18.150.194",
         "range_end": "172.18.150.239",
-        "gateway": "172.18.150.193"
+        "gateway": "172.18.150.193",
+         "routes": [
+            {"dst": "172.18.150.0/24"}
+          ]
+
       }
     }
 ---
@@ -114,7 +128,7 @@ spec:
       "cniVersion": "0.3.1",
       "name": "octavia",
       "type": "bridge",
-      "isDefaultGateway": true,
+      "isDefaultGateway": false,
       "isGateway": true,
       "forceAddress": false,
       "ipMasq": true,
@@ -125,7 +139,10 @@ spec:
         "range": "172.18.157.192/26",
         "range_start": "172.18.157.194",
         "range_end": "172.18.157.239",
-        "gateway": "172.18.157.193"
+        "gateway": "172.18.157.193",
+         "routes": [
+            {"dst": "172.18.157.0/24"}
+          ]
       }
     }
 ---
