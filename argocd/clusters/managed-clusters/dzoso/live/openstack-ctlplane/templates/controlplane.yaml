@@ -276,7 +276,6 @@ spec:
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
-            - internalapi
             - ctlplane
           hasAPIAccess: true
       secret: {{ .Values.cloudName }}-password-secret
@@ -515,6 +514,8 @@ spec:
       metricStorage:
         enabled: true
         dataplaneNetwork: ctlplane
+        networkAttachments:
+          - ctlplane
         dashboardsEnabled: true
         monitoringStack:
           alertingEnabled: true
