@@ -1,0 +1,60 @@
+---
+apiVersion: topology.openstack.org/v1beta1
+kind: Topology
+metadata:
+  name: spread-pods
+  namespace: openstack
+spec:
+  topologySpreadConstraint:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: ScheduleAnyway
+---
+apiVersion: topology.openstack.org/v1beta1
+kind: Topology
+metadata:
+  name: prefer-az1
+  namespace: openstack
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                  - az1
+---
+apiVersion: topology.openstack.org/v1beta1
+kind: Topology
+metadata:
+  name: prefer-az2
+  namespace: openstack
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                  - az2
+---
+apiVersion: topology.openstack.org/v1beta1
+kind: Topology
+metadata:
+  name: prefer-az3
+  namespace: openstack
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                  - az3
+---
