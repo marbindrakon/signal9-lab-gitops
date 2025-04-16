@@ -16,4 +16,4 @@ spec:
     creationPolicy: Owner
   dataFrom:
   - extract:
-      key: {{ .Values.cloudName }}-node-ssh-key
+      key: {{ .Values.externalSshKeySecret }}
