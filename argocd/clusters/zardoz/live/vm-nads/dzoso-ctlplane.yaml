@@ -1,0 +1,49 @@
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: dzoso-az1-ctlplane
+  namespace: default
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br-az1-ctlplane
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "dzoso-az1-ctlplane", 
+    "type": "cnv-bridge", 
+    "bridge": "br-az1-ctlplane", 
+    "macspoofchk": true 
+  }'
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: dzoso-az2-ctlplane
+  namespace: default
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br-az2-ctlplane
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "dzoso-az2-ctlplane", 
+    "type": "cnv-bridge", 
+    "bridge": "br-az2-ctlplane", 
+    "macspoofchk": true 
+  }'
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: dzoso-az3-ctlplane
+  namespace: default
+  annotations:
+    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br-az3-ctlplane
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "dzoso-az3-ctlplane", 
+    "type": "cnv-bridge", 
+    "bridge": "br-az3-ctlplane", 
+    "macspoofchk": true 
+  }'
+---

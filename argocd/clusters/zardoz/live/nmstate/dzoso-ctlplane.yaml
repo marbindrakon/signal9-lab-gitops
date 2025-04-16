@@ -1,0 +1,118 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: dzoso-az1-ctlplane
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  nodeSelector: 
+    node-role.kubernetes.io/worker: "" 
+  maxUnavailable: 3 
+  desiredState:
+    interfaces:
+      - name: bond1.501
+        type: vlan
+        state: up
+        mtu: 1500
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        vlan:
+          base-iface: bond1
+          id: 501
+      - name: br-az1-ctlplane
+        description: VLAN 501 bridge
+        type: linux-bridge
+        state: up
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: bond1.501
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: dzoso-az2-ctlplane
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  nodeSelector: 
+    node-role.kubernetes.io/worker: "" 
+  maxUnavailable: 3 
+  desiredState:
+    interfaces:
+      - name: bond1.502
+        type: vlan
+        state: up
+        mtu: 1500
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        vlan:
+          base-iface: bond1
+          id: 502
+      - name: br-az2-ctlplane
+        description: VLAN 502 bridge
+        type: linux-bridge
+        state: up
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: bond1.502
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: dzoso-az3-ctlplane
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  nodeSelector: 
+    node-role.kubernetes.io/worker: "" 
+  maxUnavailable: 3 
+  desiredState:
+    interfaces:
+      - name: bond1.503
+        type: vlan
+        state: up
+        mtu: 1500
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        vlan:
+          base-iface: bond1
+          id: 503
+      - name: br-az3-ctlplane
+        description: VLAN 503 bridge
+        type: linux-bridge
+        state: up
+        ipv4:
+          enabled: false
+        ipv6:
+          enabled: false
+        bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: bond1.503
+---
