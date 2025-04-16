@@ -19,12 +19,13 @@ spec:
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
+        - preference:
+            matchExpressions:
               - key: topology.kubernetes.io/zone
                 operator: In
                 values:
                   - az1
+          weight: 100
 ---
 apiVersion: topology.openstack.org/v1beta1
 kind: Topology
@@ -35,12 +36,13 @@ spec:
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
+        - preference:
+            matchExpressions:
               - key: topology.kubernetes.io/zone
                 operator: In
                 values:
-                  - az2
+                  - az1
+          weight: 100
 ---
 apiVersion: topology.openstack.org/v1beta1
 kind: Topology
@@ -51,10 +53,11 @@ spec:
   affinity:
     nodeAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
+        - preference:
+            matchExpressions:
               - key: topology.kubernetes.io/zone
                 operator: In
                 values:
-                  - az3
+                  - az1
+          weight: 100
 ---
