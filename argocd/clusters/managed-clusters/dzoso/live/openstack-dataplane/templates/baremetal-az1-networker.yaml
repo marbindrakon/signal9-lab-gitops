@@ -28,7 +28,7 @@ spec:
   baremetalSetTemplate:
     bmhNamespace: openstack
     bmhLabelSelector:
-      oso-role: compute
+      oso-role: networker
       oso-zone: az1
     ctlplaneInterface: enp5s0
     cloudUserName: cloud-admin
@@ -36,10 +36,10 @@ spec:
       name: {{ .Values.cloudName }}-password-secret
       namespace: openstack
   nodes:
-    az1-compute-0:
-      hostName: az1-compute-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    az1-compute-1:
-      hostName: az1-compute-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    az1-networker-0:
+      hostName: az1-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    az1-networker-1:
+      hostName: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
   networkAttachments:
     - ctlplane
   nodeTemplate:
