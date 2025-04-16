@@ -1,34 +1,37 @@
-cloudName: opensnack
+cloudName: dzcloud
 baseDomain: lab.signal9.gg
-foundationIngressBase: apps.zardoz.lab.signal9.gg
 
 externalPasswordsSecret: "oso-passwords"
 externalRegistrySecret: "oso-registry-secret"
 externalSubscriptionSecret: "oso-subscription-secret"
-externalPublicCertificateSecret: "oso-new-manual-cert"
+externalPublicCertificateSecret: "dzcloud-manual-cert"
 
 keystone:
   # As of 18.0.3, this must be regionOne to work due to hardcoded config templates in operators
   region: regionOne
 
 apiEndpointNames:
-  keystone: identity.opensnack.lab.signal9.gg
-  nova: compute.opensnack.lab.signal9.gg
-  neutron: network.opensnack.lab.signal9.gg
-  horizon: opensnack.lab.signal9.gg
-  heat: orchestration.opensnack.lab.signal9.gg
-  heatCfn: orch-cfn.opensnack.lab.signal9.gg
-  ironic: metal.opensnack.lab.signal9.gg
-  cinder: blockstorage.opensnack.lab.signal9.gg
-  manila: filestorage.opensnack.lab.signal9.gg
-  glance: images.opensnack.lab.signal9.gg
-  designate: dns.opensnack.lab.signal9.gg
-  octavia: loadbalancer.opensnack.lab.signal9.gg
-  barbican: keyvault.opensnack.lab.signal9.gg
-  placement: compute-placement.opensnack.lab.signal9.gg
-  cell1Vnc: console-cell1.opensnack.lab.signal9.gg
-  aodh: alarms.opensnack.lab.signal9.gg
-  prometheus: int-metrics.opensnack.lab.signal9.gg
+  keystone: identity.dzcloud.lab.signal9.gg
+  nova: compute.dzcloud.lab.signal9.gg
+  neutron: network.dzcloud.lab.signal9.gg
+  horizon: dzcloud.lab.signal9.gg
+  heat: orchestration.dzcloud.lab.signal9.gg
+  heatCfn: orch-cfn.dzcloud.lab.signal9.gg
+  ironic: metal.dzcloud.lab.signal9.gg
+  cinder: blockstorage.dzcloud.lab.signal9.gg
+  manila: filestorage.dzcloud.lab.signal9.gg
+  glance1: images-zone1.dzcloud.lab.signal9.gg
+  glance2: images-zone2.dzcloud.lab.signal9.gg
+  glance3: images-zone3.dzcloud.lab.signal9.gg
+  designate: dns.dzcloud.lab.signal9.gg
+  octavia: loadbalancer.dzcloud.lab.signal9.gg
+  barbican: keyvault.dzcloud.lab.signal9.gg
+  placement: compute-placement.dzcloud.lab.signal9.gg
+  cell1Vnc: console-zone1.dzcloud.lab.signal9.gg
+  cell2Vnc: console-zone2.dzcloud.lab.signal9.gg
+  cell3Vnc: console-zone3.dzcloud.lab.signal9.gg
+  aodh: alarms.dzcloud.lab.signal9.gg
+  prometheus: dzcloud-metrics.apps.dzoso.lab.signal9.gg
 
 ceph:
   fsid: 14e37f3d-9026-46c3-a503-82fa0acbac3f
