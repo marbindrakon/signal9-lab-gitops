@@ -86,7 +86,14 @@ spec:
           subscription-manager release --set=9.4
           subscription-manager repos --disable=*
           subscription-manager repos --enable=rhel-9-for-x86_64-baseos-eus-rpms --enable=rhel-9-for-x86_64-appstream-eus-rpms --enable=rhel-9-for-x86_64-highavailability-eus-rpms --enable=fast-datapath-for-rhel-9-x86_64-rpms --enable=rhoso-18.0-for-rhel-9-x86_64-rpms --enable=rhceph-7-tools-for-rhel-9-x86_64-rpms
-        edpm_enable_chassis_gw: false
+        edpm_enable_chassis_gw: true
+        edpm_ovn_availability_zones: ['az2']
+        edpm_ovn_bgp_agent_expose_tenant_networks: false
+        edpm_frr_bgp_uplinks_scope: external
+        edpm_frr_bgp_asn: 65006
+        edpm_frr_bgp_peers:
+          - 172.18.153.65
+          - 172.18.153.66
         edpm_chrony_ntp_servers:
           - 172.18.0.79
           - 172.18.42.10
