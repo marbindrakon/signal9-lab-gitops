@@ -1,0 +1,207 @@
+apiVersion: dataplane.openstack.org/v1beta1
+kind: OpenStackDataPlaneNodeSet
+metadata:
+  name: {{ .Values.cloudName }}-az3-networker
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-wave: '4'
+spec:
+  tlsEnabled: true
+  services:
+    - download-cache
+    - bootstrap
+    - configure-network
+    - validate-network
+    - install-os
+    - configure-os
+    - frr
+    - ssh-known-hosts
+    - run-os
+    - reboot-os
+    - install-certs
+    - ovn
+    - neutron-metadata
+    - ovn-bgp-agent
+  env:
+    - name: ANSIBLE_FORCE_COLOR
+      value: "True"
+  baremetalSetTemplate:
+    bmhNamespace: openstack
+    bmhLabelSelector:
+      oso-role: networker
+      oso-zone: az3
+    ctlplaneInterface: enp5s0
+    cloudUserName: cloud-admin
+    passwordSecret:
+      name: {{ .Values.cloudName }}-password-secret
+      namespace: openstack
+  nodes:
+    az3-networker-0:
+      hostName: az3-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    az3-networker-1:
+      hostName: az3-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+  networkAttachments:
+    - ctlplane
+  nodeTemplate:
+    ansibleSSHPrivateKeySecret: {{ .Values.cloudName }}-node-ssh-key
+    extraMounts:
+    - extraVolType: Ceph
+      mounts:
+      - mountPath: /etc/ceph
+        name: ceph
+        readOnly: true
+      volumes:
+      - name: ceph
+        secret:
+          secretName: ceph-conf-files
+    networks:
+      - name: CtlPlane
+        subnetName: az3-subnet
+      - name: InternalApi
+        subnetName: az3-subnet
+      - name: Management
+        subnetName: az3-subnet
+        defaultRoute: true
+      - name: Storage
+        subnetName: az3-subnet
+      - name: Tenant
+        subnetName: az3-subnet
+      - name: TenantPeering
+        subnetName: az3-subnet
+    managementNetwork: ctlplane
+    ansible:
+      ansibleUser: cloud-admin
+      ansiblePort: 22
+      ansibleVarsFrom:
+        - prefix: subscription_manager_
+          secretRef:
+            name: {{ .Values.cloudName }}-subscription-secret
+        - secretRef:
+            name: {{ .Values.cloudName }}-registry-secret
+      ansibleVars:
+        edpm_bootstrap_release_version_package: "rhoso-release"
+        edpm_bootstrap_command: |
+          dnf install -y http://satellite.lab.signal9.gg/pub/katello-ca-consumer-latest.noarch.rpm
+          subscription-manager register --org {{ "{{ subscription_manager_org }}" }} --activationkey {{ "{{ subscription_manager_activation_key }}" }}
+          subscription-manager release --set=9.4
+          subscription-manager repos --disable=*
+          subscription-manager repos --enable=rhel-9-for-x86_64-baseos-eus-rpms --enable=rhel-9-for-x86_64-appstream-eus-rpms --enable=rhel-9-for-x86_64-highavailability-eus-rpms --enable=fast-datapath-for-rhel-9-x86_64-rpms --enable=rhoso-18.0-for-rhel-9-x86_64-rpms --enable=rhceph-7-tools-for-rhel-9-x86_64-rpms
+        edpm_enable_chassis_gw: false
+        edpm_chrony_ntp_servers:
+          - 172.18.0.79
+          - 172.18.42.10
+          - 172.18.42.11
+        # edpm_network_config
+        # Default nic config template for a EDPM compute node
+        # These vars are edpm_network_config role vars
+        edpm_network_config_hide_sensitive_logs: false
+        edpm_network_config_override: ""
+        ctlplane_dns_nameservers:
+          - {{ index .Values.networks.ctlplane.controlPlaneSegment.loadbalancerIPs 0 }}
+        dns_search_domains:
+          - ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+          - {{ .Values.baseDomain }}
+        edpm_network_config_nmstate: false
+        edpm_network_config_template: |
+          ---
+          {% set mtu_list = [ctlplane_mtu] %}
+          {% set bond1_nets = ['Tenant', 'TenantPeering'] %}
+          {% for network in role_networks %}
+          {{ "{{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}" }}
+          {%- endfor %}
+          {% set min_viable_mtu = mtu_list | max %}
+          network_config:
+          - type: linux_bond
+            name: bond0
+            mtu: {{ "{{ min_viable_mtu }}" }}
+            use_dhcp: false
+            bonding_options: "mode=active-backup"
+            dns_servers: {{ "{{ ctlplane_dns_nameservers }}" }}
+            domain: {{ "{{ dns_search_domains }}" }}
+            addresses:
+            - ip_netmask: {{ "{{ ctlplane_ip }}/{{ ctlplane_cidr }}" }}
+            members:
+            - type: interface
+              name: enp5s0
+              mtu: {{ "{{ min_viable_mtu }}" }}
+              primary: true
+            - type: interface
+              name: enp6s0
+              mtu: {{ "{{ min_viable_mtu }}" }}
+          - type: vlan
+            device: bond0
+            mtu: {{ "{{ ctlplane_mtu }}" }}
+            vlan_id: {{ "{{ ctlplane_vlan_id }}" }}
+            addresses:
+            - ip_netmask: {{ "{{ ctlplane_ip }}/{{ ctlplane_cidr }}" }}
+            routes: {{ "{{ ctlplane_host_routes }}" }}
+
+          {% for network in role_networks %}
+          {% if network not in bond1_nets %}
+          - type: vlan
+            device: bond0
+            mtu: {{ "{{ lookup('vars', networks_lower[network] ~ '_mtu') }}" }}
+            vlan_id: {{ "{{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}" }}
+            addresses:
+            - ip_netmask: {{ "{{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}" }}
+          {% if network == 'Management' %}
+            routes:
+            - ip_netmask: 0.0.0.0/0
+              next_hop: {{ "{{ management_gateway_ip }}" }}
+              default: true
+          {% else %}
+            routes: {{ "{{ lookup('vars', networks_lower[network] ~ '_host_routes') }}" }}
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+          - type: ovs_bridge
+            name: br-ex
+            members:
+            - type: linux_bond
+              name: bond1
+              mtu: 9000
+              bonding_options: "mode=active-backup"
+              members:
+              - type: interface
+                name: enp7s0
+                mtu: 9000
+                primary: true
+              - type: interface
+                name: enp8s0
+                mtu: 9000
+          {% for network in role_networks %}
+          {% if network in bond1_nets %}
+            - type: vlan
+              mtu: {{ "{{ lookup('vars', networks_lower[network] ~ '_mtu') }}" }}
+              vlan_id: {{ "{{ lookup('vars', networks_lower[network] ~ '_vlan_id') }}" }}
+              addresses:
+              - ip_netmask: {{ "{{ lookup('vars', networks_lower[network] ~ '_ip') }}/{{ lookup('vars', networks_lower[network] ~ '_cidr') }}" }}
+              routes: {{ "{{ lookup('vars', networks_lower[network] ~ '_host_routes') }}" }}
+          {% endif %}
+          {% endfor %}
+        # These vars are for the network config templates themselves and are
+        # considered EDPM network defaults.
+        neutron_physical_bridge_name: br-ex
+        neutron_public_interface_name: vlan{{ "{{ tenant_peering_vlan_id }}" }}
+        role_networks:
+        - InternalApi
+        - Storage
+        - Management
+        - Tenant
+        - TenantPeering
+        networks_lower:
+          Management: management
+          InternalApi: internal_api
+          Storage: storage
+          Tenant: tenant
+          TenantPeering: tenant_peering
+        # edpm_nodes_validation
+        edpm_nodes_validation_validate_controllers_icmp: false
+        edpm_nodes_validation_validate_gateway_icmp: false
+        gather_facts: false
+        enable_debug: true
+        # edpm firewall, change the allowed CIDR if needed
+        edpm_sshd_configure_firewall: true
+        edpm_sshd_allowed_ranges: ['172.18.0.0/16']
+        # SELinux module
+        edpm_selinux_mode: enforcing
