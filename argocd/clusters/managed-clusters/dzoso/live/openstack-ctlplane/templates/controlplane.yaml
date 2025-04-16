@@ -7,6 +7,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "3"
 spec:
+  topologyRef:
+    name: spread-pods
   secret: {{ .Values.cloudName }}-password-secret
   tls:
     caBundleSecretName: {{ .Values.cloudName }}-ca-secret
@@ -124,6 +126,22 @@ spec:
         rbd_store_user = {{ .Values.ceph.client }}
       keystoneEndpoint: default
       glanceAPIs:
+        az1:
+          topologyRef:
+            name: prefer-az1
+          replicas: 2
+          type: edge
+        az2:
+          topologyRef:
+            name: prefer-az2
+          replicas: 2
+          type: edge
+        az3:
+          topologyRef:
+            name: prefer-az3
+          replicas: 2
+          type: edge
+
         default:
           replicas: 3
           override:
@@ -171,14 +189,20 @@ spec:
         secret: {{ .Values.cloudName }}-password-secret
         replicas: 3
       openstack-cell1:
+        topologyRef:
+          name: prefer-az1
         storageRequest: 5Gi
         secret: {{ .Values.cloudName }}-password-secret
         replicas: 3
       openstack-cell2:
+        topologyRef:
+          name: prefer-az2
         storageRequest: 5Gi
         secret: {{ .Values.cloudName }}-password-secret
         replicas: 3
       openstack-cell3:
+        topologyRef:
+          name: prefer-az3
         storageRequest: 5Gi
         secret: {{ .Values.cloudName }}-password-secret
         replicas: 3
@@ -187,6 +211,18 @@ spec:
     enabled: true
     templates:
       memcached:
+        replicas: 3
+      memcached-az1:
+        topologyRef:
+          name: prefer-az1
+        replicas: 3
+      memcached-az2:
+        topologyRef:
+          name: prefer-az2
+        replicas: 3
+      memcached-az3:
+        topologyRef:
+          name: prefer-az3
         replicas: 3
   neutron:
     apiOverride:
@@ -286,27 +322,36 @@ spec:
           cellMessageBusInstance: rabbitmq
           hasAPIAccess: true
         cell1:
+          topologyRef:
+            name: prefer-az1
           cellDatabaseAccount: nova-cell1
           cellDatabaseInstance: openstack-cell1
           cellMessageBusInstance: rabbitmq-cell1
+          memcachedInstance: memcached-az1
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
             - ctlplane
           hasAPIAccess: true
         cell2:
+          topologyRef:
+            name: prefer-az1
           cellDatabaseAccount: nova-cell2
           cellDatabaseInstance: openstack-cell2
           cellMessageBusInstance: rabbitmq-cell2
+          memcachedInstance: memcached-az2
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
             - ctlplane
           hasAPIAccess: true
         cell3:
+          topologyRef:
+            name: prefer-az1
           cellDatabaseAccount: nova-cell3
           cellDatabaseInstance: openstack-cell3
           cellMessageBusInstance: rabbitmq-cell3
+          memcachedInstance: memcached-az3
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
@@ -434,6 +479,8 @@ spec:
             spec:
               type: LoadBalancer
       rabbitmq-cell1:
+        topologyRef:
+          name: prefer-az1
         replicas: 3
         override:
           service:
@@ -444,6 +491,8 @@ spec:
             spec:
               type: LoadBalancer
       rabbitmq-cell2:
+        topologyRef:
+          name: prefer-az1
         replicas: 3
         override:
           service:
@@ -454,6 +503,8 @@ spec:
             spec:
               type: LoadBalancer
       rabbitmq-cell3:
+        topologyRef:
+          name: prefer-az1
         replicas: 3
         override:
           service:
