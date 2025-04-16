@@ -141,7 +141,6 @@ spec:
             name: prefer-az3
           replicas: 2
           type: edge
-
         default:
           replicas: 3
           override:
@@ -280,14 +279,14 @@ spec:
             secretName: {{ .Values.cloudName }}-manual-cert
           route:
             spec:
-              host: {{ .Values.apiEndpointNames.cel21Vnc }}
+              host: {{ .Values.apiEndpointNames.cel2Vnc }}
       cell3:
         noVNCProxy:
           tls:
             secretName: {{ .Values.cloudName }}-manual-cert
           route:
             spec:
-              host: {{ .Values.apiEndpointNames.cel31Vnc }}
+              host: {{ .Values.apiEndpointNames.cel3Vnc }}
 
     template:
       apiServiceTemplate:

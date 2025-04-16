@@ -20,9 +20,7 @@ apiEndpointNames:
   ironic: metal.dzcloud.lab.signal9.gg
   cinder: blockstorage.dzcloud.lab.signal9.gg
   manila: filestorage.dzcloud.lab.signal9.gg
-  glance1: images-zone1.dzcloud.lab.signal9.gg
-  glance2: images-zone2.dzcloud.lab.signal9.gg
-  glance3: images-zone3.dzcloud.lab.signal9.gg
+  glance: images.dzcloud.lab.signal9.gg
   designate: dns.dzcloud.lab.signal9.gg
   octavia: loadbalancer.dzcloud.lab.signal9.gg
   barbican: keyvault.dzcloud.lab.signal9.gg
