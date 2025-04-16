@@ -4,6 +4,7 @@ baseDomain: lab.signal9.gg
 externalPasswordsSecret: "oso-passwords"
 externalRegistrySecret: "oso-registry-secret"
 externalSubscriptionSecret: "oso-subscription-secret"
+externalSshKeySecret: "opensnack-node-ssh-key"
 externalPublicCertificateSecret: "dzcloud-manual-cert"
 
 keystone:
