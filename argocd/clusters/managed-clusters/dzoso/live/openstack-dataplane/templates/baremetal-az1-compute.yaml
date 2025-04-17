@@ -119,7 +119,7 @@ spec:
         dns_search_domains:
           - ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
           - {{ .Values.baseDomain }}
-        edpm_network_config_nmstate: true
+        edpm_network_config_nmstate: false
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
