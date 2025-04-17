@@ -71,6 +71,9 @@ networks:
         routes:
           - destination: 172.18.150.0/24
             nexthop: 172.18.150.1
+          - destination: 172.18.154.0/24
+            nexthop: 172.18.150.1
+
       - name: az2-subnet
         allocationRanges:
           - start: 172.18.150.94
@@ -80,6 +83,8 @@ networks:
         vlan: 502
         routes:
           - destination: 172.18.150.0/24
+            nexthop: 172.18.150.65
+          - destination: 172.18.154.0/24
             nexthop: 172.18.150.65
 
       - name: az3-subnet
@@ -92,6 +97,9 @@ networks:
         routes:
           - destination: 172.18.150.0/24
             nexthop: 172.18.150.129
+          - destination: 172.18.154.0/24
+            nexthop: 172.18.150.129
+
   storage:
     mtu: 9000
     supernets:
