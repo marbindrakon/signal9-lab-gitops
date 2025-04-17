@@ -40,6 +40,8 @@ spec:
       hostName: az1-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
     az1-networker-1:
       hostName: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+  networkAttachments:
+    - ctlplane
   nodeTemplate:
     ansibleSSHPrivateKeySecret: {{ .Values.cloudName }}-node-ssh-key
     extraMounts:
