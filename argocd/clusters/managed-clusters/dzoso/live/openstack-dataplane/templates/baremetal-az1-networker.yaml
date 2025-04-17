@@ -25,6 +25,13 @@ spec:
   env:
     - name: ANSIBLE_FORCE_COLOR
       value: "True"
+    - name: ANSIBLE_TIMEOUT
+      value: "60"
+    - name: ANSIBLE_SSH_TIMEOUT
+      value: "60"
+    - name: ANSIBLE_SSH_RETRIES
+      value: "60"
+
   baremetalSetTemplate:
     bmhNamespace: openstack
     bmhLabelSelector:
@@ -108,7 +115,7 @@ spec:
         dns_search_domains:
           - ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
           - {{ .Values.baseDomain }}
-        edpm_network_config_nmstate: false
+        edpm_network_config_nmstate: true
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}

@@ -29,6 +29,12 @@ spec:
   env:
     - name: ANSIBLE_FORCE_COLOR
       value: "True"
+    - name: ANSIBLE_TIMEOUT
+      value: "60"
+    - name: ANSIBLE_SSH_TIMEOUT
+      value: "60"
+    - name: ANSIBLE_SSH_RETRIES
+      value: "60"
   baremetalSetTemplate:
     bmhNamespace: openstack
     bmhLabelSelector:
