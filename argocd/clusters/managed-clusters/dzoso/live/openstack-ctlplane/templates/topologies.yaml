@@ -41,7 +41,7 @@ spec:
               - key: topology.kubernetes.io/zone
                 operator: In
                 values:
-                  - az1
+                  - az2
           weight: 100
 ---
 apiVersion: topology.openstack.org/v1beta1
@@ -58,6 +58,6 @@ spec:
               - key: topology.kubernetes.io/zone
                 operator: In
                 values:
-                  - az1
+                  - az3
           weight: 100
 ---
