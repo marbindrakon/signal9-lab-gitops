@@ -1,0 +1,33 @@
+apiVersion: observability.open-cluster-management.io/v1beta2
+kind: MultiClusterObservability
+metadata:
+  name: observability
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  imagePullSecret: multiclusterhub-operator-pull-secret
+  enableDownsampling: true
+  advanced:
+    retentionConfig:
+      blockDuration: 3h
+      deleteDelay: 50h
+      retentionInLocal: 5d
+      retentionResolution1h: 31d
+      retentionResolution5m: 15d
+      retentionResolutionRaw: 6d
+  nodeSelector:
+    kubernetes.io/os: linux
+  observabilityAddonSpec:
+    enableMetrics: true
+    interval: 30
+  storageConfig:
+    alertmanagerStorageSize: 1Gi
+    compactStorageSize: 50Gi
+    metricObjectStorage:
+      key: thanos.yaml
+      name: thanos-object-storage
+    receiveStorageSize: 50Gi
+    ruleStorageSize: 1Gi
+    storageClass: ocs-external-storagecluster-ceph-rbd
+    storeStorageSize: 5Gi

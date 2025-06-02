@@ -1,0 +1,53 @@
+apiVersion: agent-install.openshift.io/v1beta1
+kind: AgentServiceConfig
+metadata:
+  name: agent
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  mirrorRegistryRef:
+    name: custom-registries
+  databaseStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 50Gi
+  filesystemStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Gi
+  imageStorage:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Gi
+# osImages:
+#   - openshiftVersion: "4.12"
+#     version: "412.86.202308081039-0"
+#     url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.12/4.12.30/rhcos-4.12.30-x86_64-live.x86_64.iso"
+#     cpuArchitecture: "x86_64"
+#   - openshiftVersion: "4.14"
+#     version: "414.92.202407091253-0"
+#     url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.14/4.14.34/rhcos-4.14.34-x86_64-live.x86_64.iso"
+#     cpuArchitecture: "x86_64"
+#   - openshiftVersion: "4.15"
+#     version: "415.92.202407091355-0"
+#     url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.15/4.15.23/rhcos-4.15.23-x86_64-live.x86_64.iso"
+#     cpuArchitecture: "x86_64"
+#   - openshiftVersion: "4.16"
+#     version: "416.94.202410211619-0"
+#     url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.16/4.16.21/rhcos-4.16.21-x86_64-live.x86_64.iso"
+#     cpuArchitecture: "x86_64"
+#   - openshiftVersion: "4.17"
+#     version: "417.94.202410090854-0"
+#     url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.17/4.17.2/rhcos-4.17.2-x86_64-live.x86_64.iso"
+#     cpuArchitecture: "x86_64"
+#   - openshiftVersion: "4.18"
+#     version: "418.94.202411221729-0"
+#     url: "https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/pre-release/4.18.0-rc.2/rhcos-4.18.0-rc.2-x86_64-live.x86_64.iso"
+#     cpuArchitecture: "x86_64"

@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: hypershift-operator-install-flags
+  namespace: local-cluster
+data:
+  installFlagsToAdd: "--monitoring-dashboards"
+  installFlagsToRemove: ""

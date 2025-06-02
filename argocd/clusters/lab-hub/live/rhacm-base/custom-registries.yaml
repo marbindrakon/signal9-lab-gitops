@@ -1,0 +1,210 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: custom-registries
+  namespace: rhacm-hub
+  labels:
+    app: assisted-service
+data:
+  ca-bundle.crt: |
+    -----BEGIN CERTIFICATE-----                                     
+    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
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIICkTCCAhagAwIBAgIUX1Cm8VWt4ki4+8XH7oKsYYKJM+QwCgYIKoZIzj0EAwIw
+    dzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYDVQQHDAZSb2dl
+    cnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5BMR8wHQYDVQQD
+    DBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MB4XDTIxMDMwMTA0MDMwNFoXDTQxMDIy
+    NDA0MDMwNFowdzELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYD
+    VQQHDAZSb2dlcnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEMMAoGA1UECwwDWE5B
+    MR8wHQYDVQQDDBZTaWduYWw5IFJvb3QgQXV0aG9yaXR5MHYwEAYHKoZIzj0CAQYF
+    K4EEACIDYgAE5w5BHLiaagf5eSNkQYuDIdyWe7ULLY2z2qAP1fKXM+RrSHQQb5x1
+    Q9+IhQRhf7exw/pJS5Vs1R8IyQ3B8r6xz885w6+Fk6iyMAlFn979RU6V5lbxMRGG
+    Vxq/CEL/iorVo2MwYTAdBgNVHQ4EFgQUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwHwYD
+    VR0jBBgwFoAUYfO+q+KnTtIDK5OFXsVZ/D0ziiUwDwYDVR0TAQH/BAUwAwEB/zAO
+    BgNVHQ8BAf8EBAMCAYYwCgYIKoZIzj0EAwIDaQAwZgIxAJLOIPP9J1/mttvGdQtM
+    Prnm+r+JzVu8vd0r2HxgwloEkElTr29S+DAAE8XlUpoXpQIxALEd+sYGr1qENJqr
+    vHOvuo0diFSUxjvTjowus6kM6nZi1JR4rMycICsGgujg8zwVAw==
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIDQTCCAimgAwIBAgITBmyfz5m/jAo54vB4ikPmljZbyjANBgkqhkiG9w0BAQsF
+    ADA5MQswCQYDVQQGEwJVUzEPMA0GA1UEChMGQW1hem9uMRkwFwYDVQQDExBBbWF6
+    b24gUm9vdCBDQSAxMB4XDTE1MDUyNjAwMDAwMFoXDTM4MDExNzAwMDAwMFowOTEL
+    MAkGA1UEBhMCVVMxDzANBgNVBAoTBkFtYXpvbjEZMBcGA1UEAxMQQW1hem9uIFJv
+    b3QgQ0EgMTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALJ4gHHKeNXj
+    ca9HgFB0fW7Y14h29Jlo91ghYPl0hAEvrAIthtOgQ3pOsqTQNroBvo3bSMgHFzZM
+    9O6II8c+6zf1tRn4SWiw3te5djgdYZ6k/oI2peVKVuRF4fn9tBb6dNqcmzU5L/qw
+    IFAGbHrQgLKm+a/sRxmPUDgH3KKHOVj4utWp+UhnMJbulHheb4mjUcAwhmahRWa6
+    VOujw5H5SNz/0egwLX0tdHA114gk957EWW67c4cX8jJGKLhD+rcdqsq08p8kDi1L
+    93FcXmn/6pUCyziKrlA4b9v7LWIbxcceVOF34GfID5yHI9Y/QCB/IIDEgEw+OyQm
+    jgSubJrIqg0CAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMC
+    AYYwHQYDVR0OBBYEFIQYzIU07LwMlJQuCFmcx7IQTgoIMA0GCSqGSIb3DQEBCwUA
+    A4IBAQCY8jdaQZChGsV2USggNiMOruYou6r4lK5IpDB/G/wkjUu0yKGX9rbxenDI
+    U5PMCCjjmCXPI6T53iHTfIUJrU6adTrCC2qJeHZERxhlbI1Bjjt/msv0tadQ1wUs
+    N+gDS63pYaACbvXy8MWy7Vu33PqUXHeeE6V/Uq2V8viTO96LXFvKWlJbYK8U90vv
+    o/ufQJVtMVT8QtPHRh8jrdkPSHCa2XV4cdFyQzR1bldZwgJcJmApzyMZFo6IQ6XU
+    5MsI+yMRQ+hDKXJioaldXgjUkK642M4UwtBV8ob2xJNDd2ZhwLnoQdeXeGADbkpy
+    rqXRfboQnoZsG4q5WTP468SQvvG5
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ
+    RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD
+    VQQDExlCYWx0aW1vcmUgQ3liZXJUcnVzdCBSb290MB4XDTAwMDUxMjE4NDYwMFoX
+    DTI1MDUxMjIzNTkwMFowWjELMAkGA1UEBhMCSUUxEjAQBgNVBAoTCUJhbHRpbW9y
+    ZTETMBEGA1UECxMKQ3liZXJUcnVzdDEiMCAGA1UEAxMZQmFsdGltb3JlIEN5YmVy
+    VHJ1c3QgUm9vdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAKMEuyKr
+    mD1X6CZymrV51Cni4eiVgLGw41uOKymaZN+hXe2wCQVt2yguzmKiYv60iNoS6zjr
+    IZ3AQSsBUnuId9Mcj8e6uYi1agnnc+gRQKfRzMpijS3ljwumUNKoUMMo6vWrJYeK
+    mpYcqWe4PwzV9/lSEy/CG9VwcPCPwBLKBsua4dnKM3p31vjsufFoREJIE9LAwqSu
+    XmD+tqYF/LTdB1kC1FkYmGP1pWPgkAx9XbIGevOF6uvUA65ehD5f/xXtabz5OTZy
+    dc93Uk3zyZAsuT3lySNTPx8kmCFcB5kpvcY67Oduhjprl3RjM71oGDHweI12v/ye
+    jl0qhqdNkNwnGjkCAwEAAaNFMEMwHQYDVR0OBBYEFOWdWTCCR1jMrPoIVDaGezq1
+    BE3wMBIGA1UdEwEB/wQIMAYBAf8CAQMwDgYDVR0PAQH/BAQDAgEGMA0GCSqGSIb3
+    DQEBBQUAA4IBAQCFDF2O5G9RaEIFoN27TyclhAO992T9Ldcw46QQF+vaKSm2eT92
+    9hkTI7gQCvlYpNRhcL0EYWoSihfVCr3FvDB81ukMJY2GQE/szKN+OMY3EU/t3Wgx
+    jkzSswF07r51XgdIGn9w/xZchMB5hbgF/X++ZRGjD8ACtPhSNzkE1akxehi/oCr0
+    Epn3o0WC4zxe9Z2etciefC7IpJ5OCBRLbf1wbWsaY71k5h+3zvDyny67G7fyUIhz
+    ksLi4xaNmjICq44Y3ekQEe5+NauQrz4wlHrQMz2nZQ/1/I6eYs9HRCwBXbsdtTLS
+    R9I4LtD+gdwyah617jzV/OeBHRnDJELqYzmp
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIICCTCCAY6gAwIBAgINAgPlwGjvYxqccpBQUjAKBggqhkjOPQQDAzBHMQswCQYD
+    VQQGEwJVUzEiMCAGA1UEChMZR29vZ2xlIFRydXN0IFNlcnZpY2VzIExMQzEUMBIG
+    A1UEAxMLR1RTIFJvb3QgUjQwHhcNMTYwNjIyMDAwMDAwWhcNMzYwNjIyMDAwMDAw
+    WjBHMQswCQYDVQQGEwJVUzEiMCAGA1UEChMZR29vZ2xlIFRydXN0IFNlcnZpY2Vz
+    IExMQzEUMBIGA1UEAxMLR1RTIFJvb3QgUjQwdjAQBgcqhkjOPQIBBgUrgQQAIgNi
+    AATzdHOnaItgrkO4NcWBMHtLSZ37wWHO5t5GvWvVYRg1rkDdc/eJkTBa6zzuhXyi
+    QHY7qca4R9gq55KRanPpsXI5nymfopjTX15YhmUPoYRlBtHci8nHc8iMai/lxKvR
+    HYqjQjBAMA4GA1UdDwEB/wQEAwIBhjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
+    BBSATNbrdP9JNqPV2Py1PsVq8JQdjDAKBggqhkjOPQQDAwNpADBmAjEA6ED/g94D
+    9J+uHXqnLrmvT/aDHQ4thQEd0dlq7A/Cr8deVl5c1RxYIigL9zC2L7F8AjEA8GE8
+    p/SgguMh1YQdc4acLa/KNJvxn7kjNuK8YAOdgLOaVsjh4rsUecrNIdSUtUlD
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIFvTCCA6WgAwIBAgIUANmDgsLhX6Lt4jvplsha7SLdeiEwDQYJKoZIhvcNAQEL
+    BQAwZjELMAkGA1UEBhMCVVMxETAPBgNVBAgMCEFya2Fuc2FzMQ8wDQYDVQQHDAZS
+    b2dlcnMxFTATBgNVBAoMDFNpZ25hbDkgTGFiczEcMBoGA1UEAwwTU2lnbmFsOSBS
+    U0EgUm9vdCBYMTAeFw0yNTAxMDIwNDI3NTZaFw00OTA4MjUwNDI3NTZaMGYxCzAJ
+    BgNVBAYTAlVTMREwDwYDVQQIDAhBcmthbnNhczEPMA0GA1UEBwwGUm9nZXJzMRUw
+    EwYDVQQKDAxTaWduYWw5IExhYnMxHDAaBgNVBAMME1NpZ25hbDkgUlNBIFJvb3Qg
+    WDEwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDJwYKQ/EKn7LMKfLT2
+    olW3DFtUnmsP9d82dY9ytjWWzJJdHV5q73y/nFF5k3xASx0lkIE0saeohcIrQ2xI
+    xtdSWfoMhZQAQH0fE4FBYU/8/NvQ7rehS2bvobzX6KWQIYN/LaupUDEkN5r43AuP
+    m3+4TvvJfBW3x/CY9jsegFIA1iQUupewujDFd9HDf//rVlzk084FS8kwGM5K8z9G
+    RT5ltuBSt2jRhIw2ieEMv6TsL5RwthLJePzHy0pTwZ4NPpef8YG5K3LyVxnko14k
+    W3tL7Z/xljwlKqNlyleBhszkmj1cXtnLOHcEHJizvKFwScuBwtvYaGRBFMPn03dJ
+    vMs8oiydgz6nHCzxnJtmCajrK9qdD6+tGBsVmXz1WScmYxUD/4MOpTIpHjvSKzVf
+    xW7nTKenQM8aUejZTyGqBxRzxjeQmiZhW+DYZCMtyHiLcBTTxHCn5oTaA9ZO57ED
+    n/tXrAL9P5EP1iR4n7vHUPau6LrZ1TYTQHjpiiOHaZ3IZpp8C/HvtiSBMZWAA/TR
+    vc+1I90UBU24yi2Ix4C8Ss8XDvmoVnBCLe6+i4r+jSGRLfOktxM/VrP3eZj7+x3V
+    m86IXTPeDvELhQv6/+kcBLvcRCXiV0b2zEacI+DH/JZ3XGDaVDHd5eKhn9TBz/+X
+    HMvo0lCTvdlH06olm2i6uPdyIwIDAQABo2MwYTAdBgNVHQ4EFgQUYQizalJ4rewL
+    SKdhWDf7/l7EoFEwHwYDVR0jBBgwFoAUYQizalJ4rewLSKdhWDf7/l7EoFEwDwYD
+    VR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwDQYJKoZIhvcNAQELBQADggIB
+    AMkIrpfZSckITsEqRWxxvA6gd2HIqOJzMHnR+wVkMI0pRkX0As2IenRCtyAp4fRr
+    zAFSi625RJUA+/QBtRKIOeZ1iaFBttw6qoG14ABecqygZY0lCT6iYdH6H2xp4C4b
+    gcBMXhhRrTfMXsEyRtDefCFSpb2IGtflcA5gQuTo0OiNJ8+uHNTXcvZ6J9D7LG9T
+    KpF1/KD4VehFHBuLzZLoPl4U5u8qPtsi+3lZ+CusdxmhISJ2zyqPsCB/jiSBqnQK
+    sjem+Yv/znoLESVGzNqeTuekgIHVWfpruHhAszezEnSq6QtyKYQAKuGx3Q33KAC5
+    gAgtbRnuCL+lAPoA0YQPtxwdhuXRjVFp0122wMiTT5A78Z4sdUd58pAsgfdu86Mp
+    pdHDUUZMa4vmVanp4ADEe7tlS1U56O6vi+80C0tUVJ1BJivgRIyWOUEBU/K06fK6
+    TRh1y7t+d24wbwu5RkFSPSnSX+oiCd5hL4odJRJ7LBzqC81y79EB+d0o2t2QBK6z
+    rw1K831Un7jlZbDuB+M/iO1tdE/o8Uy0uzKE7v331gE8g8xPUnWW8QBqkYEMW8Yd
+    7vLPo6XXL2JkO19C3xDAikZkv4akWGQDK7DHJMTa1fgylKK7E8zgovWIOqOG3gkj
+    8KD/USuDE+Rtc5Pj+FSltBRzNz7b3F7jUrburZ+JctBx
+    -----END CERTIFICATE-----
+
+  registries.conf: |
+    unqualified-search-registries = ["registry.access.redhat.com", "docker.io"]
+
+    [[registry]]
+    prefix = ""
+    location = "registry.redhat.io/openshift4"
+    mirror-by-digest-only = true
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/openshift4" 
+
+    [[registry]]
+    prefix = ""
+    location = "registry.redhat.io/rhacm2"
+    mirror-by-digest-only = true
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/rhacm2" 
+
+    [[registry]]
+    prefix = ""
+    location = "registry.redhat.io/openshift-gitops-1"
+    mirror-by-digest-only = true
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/openshift-gitops-1" 
+
+    [[registry]]
+    prefix = ""
+    location = "registry.redhat.io/multicluster-engine"
+    mirror-by-digest-only = true
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/multicluster-engine" 
+
+    [[registry]]
+    prefix = ""
+    location = "registry.redhat.io/cert-manager"
+    mirror-by-digest-only = true
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/cert-manager" 
+
+    [[registry]]
+    prefix = ""
+    location = "quay.io/openshift-release-dev/ocp-v4.0-art-dev"
+    mirror-by-digest-only = true
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/openshift/release"
+
+    [[registry]]
+    prefix = ""
+    location = "quay.io/openshift-release-dev/ocp-release"
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/openshift/release-images"
+
+    [[registry]]
+    prefix = ""
+    location = "ghcr.io/external-secrets"
+
+    [[registry.mirror]]
+      location = "quay.signal9.gg/mirror/external-secrets"
+
