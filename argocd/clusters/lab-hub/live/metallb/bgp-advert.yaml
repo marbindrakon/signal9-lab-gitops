@@ -1,0 +1,15 @@
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: external
+  namespace: metallb-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  peers:
+  - lab-rtr-a
+  - lab-rtr-b
+  ipAddressPools:
+  - xna-bgp-pool
+  - anycast-bgp-pool
