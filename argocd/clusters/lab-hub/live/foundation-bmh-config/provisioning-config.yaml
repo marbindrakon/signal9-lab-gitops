@@ -8,4 +8,4 @@ spec:
   watchAllNamespaces: true
   virtualMediaViaExternalNetwork: true
   provisioningNetwork: Disabled
-  disableVirtualMediaTLS: false
+  disableVirtualMediaTLS: true
