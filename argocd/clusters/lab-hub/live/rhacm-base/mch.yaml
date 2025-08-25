@@ -9,6 +9,7 @@ metadata:
 spec:
   imagePullSecret: multiclusterhub-operator-pull-secret
   availabilityConfig: Basic
+  localClusterName: lab-hub
   ingress:
     sslCiphers:
       - ECDHE-ECDSA-AES256-GCM-SHA384
