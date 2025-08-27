@@ -18,7 +18,7 @@ parameters:
   clusterID: openshift-storage
   imageFeatures: 'layering,deep-flatten,exclusive-lock,object-map,fast-diff'
   csi.storage.k8s.io/controller-expand-secret-namespace: openshift-storage
-  pool: zardoz-odf
+  pool: lab-hub-odf
   csi.storage.k8s.io/node-stage-secret-namespace: openshift-storage
 reclaimPolicy: Delete
 allowVolumeExpansion: true
