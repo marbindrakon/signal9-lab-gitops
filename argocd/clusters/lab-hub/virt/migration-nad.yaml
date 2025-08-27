@@ -1,0 +1,17 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: live-migration
+  namespace: openshift-cnv 
+spec:
+  config: '{
+    "cniVersion": "0.3.1",
+    "name": "migration-bridge",
+    "type": "macvlan",
+    "master": "bond1.19", 
+    "mode": "bridge",
+    "ipam": {
+      "type": "whereabouts", 
+      "range": "172.18.119.0/24" 
+    }
+  }'

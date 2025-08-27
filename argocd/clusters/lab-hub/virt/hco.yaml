@@ -1,0 +1,24 @@
+apiVersion: hco.kubevirt.io/v1beta1
+kind: HyperConverged
+metadata:
+  name: kubevirt-hyperconverged
+  namespace: openshift-cnv
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  liveMigrationConfig:
+    network: live-migration
+    allowPostCopy: true
+  featureGates:
+    deployTektonTaskResources: true
+    enableCommonBootImageImport: true
+    nonRoot: true
+    withHostPassthroughCPU: true
+  workloadUpdateStrategy:
+    workloadUpdateMethods:
+      - LiveMigration
+  permittedHostDevices:
+    pciHostDevices:
+      - pciDeviceSelector: "10DE:1BB3"
+        resourceName: "nvidia.com/GP104GL"
