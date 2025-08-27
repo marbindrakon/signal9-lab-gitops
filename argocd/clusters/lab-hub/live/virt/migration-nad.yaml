@@ -8,7 +8,7 @@ spec:
     "cniVersion": "0.3.1",
     "name": "migration-bridge",
     "type": "macvlan",
-    "master": "bond1.19", 
+    "master": "bond1.11", 
     "mode": "bridge",
     "ipam": {
       "type": "whereabouts", 
