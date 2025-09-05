@@ -44,10 +44,10 @@ spec:
       "bridge": "br-storage",
       "ipam": {
         "type": "whereabouts",
-        "range": "172.18.155.192/26",
-        "range_start": "172.18.155.194",
-        "range_end": "172.18.155.239",
-        "gateway": "172.18.155.193"
+        "range": "172.19.155.192/26",
+        "range_start": "172.19.155.194",
+        "range_end": "172.19.155.239",
+        "gateway": "172.19.155.193"
       }
     }
 ---
