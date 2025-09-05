@@ -82,8 +82,6 @@ spec:
           backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
           backup_ceph_pool = {{ .Values.ceph.pools.cinderBackup }}
           backup_ceph_user = {{ .Values.ceph.client }}
-        networkAttachments:
-        - storage
         replicas: 1
       cinderVolumes:
         ceph:
@@ -98,8 +96,6 @@ spec:
             rbd_pool={{ .Values.ceph.pools.cinder }}
             rbd_flatten_volume_from_snapshot=False
             rbd_secret_uuid={{ .Values.ceph.fsid }}
-          networkAttachments:
-          - storage
           replicas: 1
   glance:
     apiOverrides:
@@ -153,8 +149,6 @@ spec:
                     metallb.universe.tf/loadBalancerIPs: 172.18.151.240
                 spec:
                   type: LoadBalancer
-          networkAttachments:
-          - storage
 
   keystone:
     apiOverride:
