@@ -32,7 +32,7 @@ apiEndpointNames:
   prometheus: dzcloud-metrics.apps.dzoso.lab.signal9.gg
 
 ceph:
-  fsid: 14e37f3d-9026-46c3-a503-82fa0acbac3f
+  fsid: 7730153e-8a1f-11f0-97b2-fa163ed2fcce
   externalConfigSecret: "oso-ceph-config"
   client: openstack
   pools:
