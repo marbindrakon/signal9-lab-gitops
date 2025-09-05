@@ -5,8 +5,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/05447478-8f23-4dce-ab4a-bbaefc6bc398
-    bootMac: fa:16:3e:63:8d:f2
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/057be20b-fe2e-4aa6-9536-bf67e33ba6d9
+    bootMac: fa:16:3e:70:d8:19
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -15,72 +15,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:63:8d:f2
-        name: enp5s0
-      - macAddress: fa:16:3e:df:8e:c1
-        name: enp6s0
-      - macAddress: fa:16:3e:41:8d:91
-        name: enp7s0
-      - macAddress: fa:16:3e:f6:03:ec
-        name: enp8s0
+        - macAddress: fa:16:3e:70:d8:19
+          name: enp5s0
+        - macAddress: fa:16:3e:1e:b0:48
+          name: enp6s0
+        - macAddress: fa:16:3e:57:9d:37
+          name: enp7s0
+        - macAddress: fa:16:3e:86:16:23
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.6
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.581
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 581
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.6
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.581
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 581
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.1
-            next-hop-interface: bond0.581
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az1-compute-1.lab.signal9.gg:
@@ -89,8 +89,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/14ba8012-c881-458d-b125-719293bdcd54
-    bootMac: fa:16:3e:cf:dd:29
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/ac08882f-c969-4f0d-bdf0-304371a914b1
+    bootMac: fa:16:3e:e7:81:38
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -99,72 +99,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:cf:dd:29
-        name: enp5s0
-      - macAddress: fa:16:3e:0a:02:9f
-        name: enp6s0
-      - macAddress: fa:16:3e:cc:9f:4a
-        name: enp7s0
-      - macAddress: fa:16:3e:0e:9a:ab
-        name: enp8s0
+        - macAddress: fa:16:3e:e7:81:38
+          name: enp5s0
+        - macAddress: fa:16:3e:04:37:b5
+          name: enp6s0
+        - macAddress: fa:16:3e:3b:88:ed
+          name: enp7s0
+        - macAddress: fa:16:3e:5e:8a:35
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.7
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.581
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 581
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.7
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.581
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 581
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.1
-            next-hop-interface: bond0.581
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az1-networker-0.lab.signal9.gg:
@@ -173,8 +173,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/fd18bffe-a232-4e9e-94e8-4a47ba603a61
-    bootMac: fa:16:3e:bf:8b:99
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/9e824f57-1238-4502-b381-ade61ddf1ffb
+    bootMac: fa:16:3e:2a:53:f1
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -183,72 +183,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:bf:8b:99
-        name: enp5s0
-      - macAddress: fa:16:3e:27:ee:63
-        name: enp6s0
-      - macAddress: fa:16:3e:1e:59:72
-        name: enp7s0
-      - macAddress: fa:16:3e:73:70:3f
-        name: enp8s0
+        - macAddress: fa:16:3e:2a:53:f1
+          name: enp5s0
+        - macAddress: fa:16:3e:14:bf:5d
+          name: enp6s0
+        - macAddress: fa:16:3e:d2:22:cb
+          name: enp7s0
+        - macAddress: fa:16:3e:1d:bd:ff
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.8
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.581
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 581
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.8
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.581
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 581
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.1
-            next-hop-interface: bond0.581
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az1-networker-1.lab.signal9.gg:
@@ -257,8 +257,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/8a2892d7-c522-46dc-b62f-fb4206109340
-    bootMac: fa:16:3e:a5:b0:d6
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/5fc7af22-5158-4808-a45a-84ee776e5cf7
+    bootMac: fa:16:3e:7f:aa:2e
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -267,72 +267,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:a5:b0:d6
-        name: enp5s0
-      - macAddress: fa:16:3e:36:08:05
-        name: enp6s0
-      - macAddress: fa:16:3e:82:a6:ad
-        name: enp7s0
-      - macAddress: fa:16:3e:a4:c3:23
-        name: enp8s0
+        - macAddress: fa:16:3e:7f:aa:2e
+          name: enp5s0
+        - macAddress: fa:16:3e:7e:5e:fc
+          name: enp6s0
+        - macAddress: fa:16:3e:e7:53:b5
+          name: enp7s0
+        - macAddress: fa:16:3e:66:bc:03
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.9
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.581
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 581
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.9
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.581
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 581
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.1
-            next-hop-interface: bond0.581
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az2-compute-0.lab.signal9.gg:
@@ -341,8 +341,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/8a0ac1dc-cb20-4504-8af3-e8ee0e124433
-    bootMac: fa:16:3e:cf:63:ca
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/b0317485-33ae-417b-b17c-911e89090a50
+    bootMac: fa:16:3e:ba:e9:0c
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -351,72 +351,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:cf:63:ca
-        name: enp5s0
-      - macAddress: fa:16:3e:54:0c:35
-        name: enp6s0
-      - macAddress: fa:16:3e:e0:ca:64
-        name: enp7s0
-      - macAddress: fa:16:3e:69:42:9c
-        name: enp8s0
+        - macAddress: fa:16:3e:ba:e9:0c
+          name: enp5s0
+        - macAddress: fa:16:3e:a6:82:ed
+          name: enp6s0
+        - macAddress: fa:16:3e:7a:b1:c7
+          name: enp7s0
+        - macAddress: fa:16:3e:7b:52:9a
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.72
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.582
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 582
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.72
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.582
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 582
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.65
-            next-hop-interface: bond0.582
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.65
+              next-hop-interface: bond0.582
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az2-compute-1.lab.signal9.gg:
@@ -425,8 +425,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/a9d7fa77-2a06-40ce-b6ae-d4eb926b28af
-    bootMac: fa:16:3e:19:f9:ef
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/ddf249a3-eea1-4edb-b2ad-7274c8d25050
+    bootMac: fa:16:3e:34:9a:30
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -435,72 +435,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:19:f9:ef
-        name: enp5s0
-      - macAddress: fa:16:3e:5a:dd:95
-        name: enp6s0
-      - macAddress: fa:16:3e:e0:26:86
-        name: enp7s0
-      - macAddress: fa:16:3e:7b:cf:05
-        name: enp8s0
+        - macAddress: fa:16:3e:34:9a:30
+          name: enp5s0
+        - macAddress: fa:16:3e:ca:7d:b4
+          name: enp6s0
+        - macAddress: fa:16:3e:80:57:16
+          name: enp7s0
+        - macAddress: fa:16:3e:42:10:97
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.73
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.582
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 582
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.73
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.582
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 582
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.65
-            next-hop-interface: bond0.582
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.65
+              next-hop-interface: bond0.582
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az2-networker-0.lab.signal9.gg:
@@ -509,8 +509,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/3f543bb5-3e67-4e23-b020-3dd459b13ec4
-    bootMac: fa:16:3e:10:41:ae
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/bed1dced-47f1-4ead-9826-e68b9aa48d0c
+    bootMac: fa:16:3e:15:74:5d
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -519,72 +519,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:10:41:ae
-        name: enp5s0
-      - macAddress: fa:16:3e:5a:dc:f0
-        name: enp6s0
-      - macAddress: fa:16:3e:6e:43:cb
-        name: enp7s0
-      - macAddress: fa:16:3e:52:0f:8e
-        name: enp8s0
+        - macAddress: fa:16:3e:15:74:5d
+          name: enp5s0
+        - macAddress: fa:16:3e:a5:b3:2f
+          name: enp6s0
+        - macAddress: fa:16:3e:ad:12:c8
+          name: enp7s0
+        - macAddress: fa:16:3e:7b:9c:67
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.74
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.582
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 582
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.74
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.582
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 582
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.65
-            next-hop-interface: bond0.582
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.65
+              next-hop-interface: bond0.582
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az2-networker-1.lab.signal9.gg:
@@ -593,8 +593,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/458633ec-442b-4058-9365-d6e00dc18ceb
-    bootMac: fa:16:3e:a3:a7:e1
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/93a4cb94-9a80-49e3-a469-5bc8f69fb3ff
+    bootMac: fa:16:3e:10:c5:62
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -603,72 +603,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:a3:a7:e1
-        name: enp5s0
-      - macAddress: fa:16:3e:33:74:7f
-        name: enp6s0
-      - macAddress: fa:16:3e:74:2d:4e
-        name: enp7s0
-      - macAddress: fa:16:3e:19:45:a6
-        name: enp8s0
+        - macAddress: fa:16:3e:10:c5:62
+          name: enp5s0
+        - macAddress: fa:16:3e:57:ef:5e
+          name: enp6s0
+        - macAddress: fa:16:3e:d3:50:2f
+          name: enp7s0
+        - macAddress: fa:16:3e:78:af:aa
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.75
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.582
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 582
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.75
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.582
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 582
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.65
-            next-hop-interface: bond0.582
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.65
+              next-hop-interface: bond0.582
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az3-compute-0.lab.signal9.gg:
@@ -677,8 +677,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/71aec381-7020-4e59-98d9-0cc95d3bfe69
-    bootMac: fa:16:3e:86:b0:c4
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/179e2033-2057-4769-be5b-ffbc3d918388
+    bootMac: fa:16:3e:40:3a:8b
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -687,72 +687,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:86:b0:c4
-        name: enp5s0
-      - macAddress: fa:16:3e:89:60:5b
-        name: enp6s0
-      - macAddress: fa:16:3e:df:5f:f9
-        name: enp7s0
-      - macAddress: fa:16:3e:81:83:82
-        name: enp8s0
+        - macAddress: fa:16:3e:40:3a:8b
+          name: enp5s0
+        - macAddress: fa:16:3e:71:04:37
+          name: enp6s0
+        - macAddress: fa:16:3e:b5:07:95
+          name: enp7s0
+        - macAddress: fa:16:3e:25:4f:d3
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.134
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.583
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 583
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.134
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.583
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 583
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.129
-            next-hop-interface: bond0.583
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.129
+              next-hop-interface: bond0.583
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az3-compute-1.lab.signal9.gg:
@@ -761,8 +761,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/5d01a2ef-0f0c-48a2-8f4d-c794b2c572ee
-    bootMac: fa:16:3e:18:55:a3
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/1cb08cca-7cd1-4250-9b2f-31a076339565
+    bootMac: fa:16:3e:fe:de:04
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -771,72 +771,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:18:55:a3
-        name: enp5s0
-      - macAddress: fa:16:3e:65:21:b9
-        name: enp6s0
-      - macAddress: fa:16:3e:7f:79:c4
-        name: enp7s0
-      - macAddress: fa:16:3e:b0:aa:5f
-        name: enp8s0
+        - macAddress: fa:16:3e:fe:de:04
+          name: enp5s0
+        - macAddress: fa:16:3e:13:ae:2d
+          name: enp6s0
+        - macAddress: fa:16:3e:dd:ff:38
+          name: enp7s0
+        - macAddress: fa:16:3e:34:b3:b6
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.135
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.583
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 583
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.135
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.583
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 583
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.129
-            next-hop-interface: bond0.583
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.129
+              next-hop-interface: bond0.583
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az3-networker-0.lab.signal9.gg:
@@ -845,8 +845,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/9161d9c4-a037-4cf9-a9e0-3c63732318f7
-    bootMac: fa:16:3e:5f:03:65
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/0fb2141b-28ab-4788-841d-fff947202937
+    bootMac: fa:16:3e:47:cd:7f
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -855,72 +855,72 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:5f:03:65
-        name: enp5s0
-      - macAddress: fa:16:3e:94:3c:ee
-        name: enp6s0
-      - macAddress: fa:16:3e:7e:70:bf
-        name: enp7s0
-      - macAddress: fa:16:3e:3d:64:71
-        name: enp8s0
+        - macAddress: fa:16:3e:47:cd:7f
+          name: enp5s0
+        - macAddress: fa:16:3e:ef:9c:1c
+          name: enp6s0
+        - macAddress: fa:16:3e:7f:f9:54
+          name: enp7s0
+        - macAddress: fa:16:3e:5e:5e:67
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.136
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.583
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 583
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.136
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.583
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 583
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.129
-            next-hop-interface: bond0.583
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.129
+              next-hop-interface: bond0.583
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
   az3-networker-1.lab.signal9.gg:
@@ -929,8 +929,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: redfish-virtualmedia+http://172.18.158.58:8000/redfish/v1/Systems/2d0511ce-293b-4c11-a09d-7a40d4237e5f
-    bootMac: fa:16:3e:17:5f:bb
+      url: redfish-virtualmedia+http://172.18.158.62:8000/redfish/v1/Systems/953115a9-905e-4a9e-bed4-10c61dd4eea8
+    bootMac: fa:16:3e:1d:73:e5
     bootMode: UEFI
     labels:
       compute-model: virtual
@@ -939,71 +939,71 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-      - macAddress: fa:16:3e:17:5f:bb
-        name: enp5s0
-      - macAddress: fa:16:3e:55:93:1b
-        name: enp6s0
-      - macAddress: fa:16:3e:79:4c:de
-        name: enp7s0
-      - macAddress: fa:16:3e:aa:ee:64
-        name: enp8s0
+        - macAddress: fa:16:3e:1d:73:e5
+          name: enp5s0
+        - macAddress: fa:16:3e:9e:84:f9
+          name: enp6s0
+        - macAddress: fa:16:3e:e4:20:f4
+          name: enp7s0
+        - macAddress: fa:16:3e:b2:14:04
+          name: enp8s0
       nmstateConfig:
         dns-resolver:
           config:
             server:
-            - 172.18.42.10
-            - 172.18.42.11
+              - 172.18.42.10
+              - 172.18.42.11
         interfaces:
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp5s0
-            - enp6s0
-          mtu: 9000
-          name: bond0
-          state: up
-          type: bond
-        - ipv4:
-            dhcp: false
-            enabled: false
-          ipv6:
-            enabled: false
-          link-aggregation:
-            mode: active-backup
-            options:
-              miimon: '100'
-            port:
-            - enp7s0
-            - enp8s0
-          mtu: 9000
-          name: bond1
-          state: up
-          type: bond
-        - ipv4:
-            address:
-            - ip: 172.18.158.137
-              prefix-length: 26
-            dhcp: false
-            enabled: true
-          mtu: 1500
-          name: bond0.583
-          state: up
-          type: vlan
-          vlan:
-            base-iface: bond1
-            id: 583
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp5s0
+                - enp6s0
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp7s0
+                - enp8s0
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.137
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.583
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 583
         routes:
           config:
-          - destination: 0.0.0.0/0
-            next-hop-address: 172.18.158.129
-            next-hop-interface: bond0.583
-            table-id: 254
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.129
+              next-hop-interface: bond0.583
+              table-id: 254
     rootDeviceHints:
       deviceName: /dev/vda
