@@ -1,7 +1,7 @@
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneNodeSet
 metadata:
-  name: {{ .Values.cloudName }}-az1-compute
+  name: {{ .Values.cloudName }}-az1-networker
   namespace: openstack
   annotations:
     argocd.argoproj.io/sync-wave: '4'
@@ -15,17 +15,13 @@ spec:
     - install-os
     - configure-os
     - frr
+    - ssh-known-hosts
     - run-os
     - reboot-os
-    - ssh-known-hosts
     - install-certs
     - ovn
     - neutron-metadata
     - ovn-bgp-agent
-    - ceph-client
-    - libvirt
-    - nova-custom-ceph-az1
-    - telemetry
   env:
     - name: ANSIBLE_FORCE_COLOR
       value: "True"
@@ -35,10 +31,11 @@ spec:
       value: "60"
     - name: ANSIBLE_SSH_RETRIES
       value: "60"
+
   baremetalSetTemplate:
     bmhNamespace: openstack
     bmhLabelSelector:
-      oso-role: compute
+      oso-role: networker
       oso-zone: az1
     ctlplaneInterface: enp5s0
     cloudUserName: cloud-admin
@@ -46,10 +43,10 @@ spec:
       name: {{ .Values.cloudName }}-password-secret
       namespace: openstack
   nodes:
-    az1-compute-0:
-      hostName: az1-compute-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    az1-compute-1:
-      hostName: az1-compute-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    az1-networker-0:
+      hostName: az1-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    az1-networker-1:
+      hostName: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
   networkAttachments:
     - ctlplane
   nodeTemplate:
@@ -96,15 +93,22 @@ spec:
           subscription-manager release --set=9.4
           subscription-manager repos --disable=*
           subscription-manager repos --enable=rhel-9-for-x86_64-baseos-eus-rpms --enable=rhel-9-for-x86_64-appstream-eus-rpms --enable=rhel-9-for-x86_64-highavailability-eus-rpms --enable=fast-datapath-for-rhel-9-x86_64-rpms --enable=rhoso-18.0-for-rhel-9-x86_64-rpms --enable=rhceph-7-tools-for-rhel-9-x86_64-rpms
-        edpm_enable_chassis_gw: false
+        edpm_enable_chassis_gw: true
         edpm_ovn_availability_zones: ['az1']
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_uplinks_scope: external
         edpm_frr_bgp_asn: 65006
+        edpm_frr_bgp_ipv4_src_network: tenantpeering
+        edpm_ovn_bridge_mapping:
+          - 'datacentre:br-ex'
+          - 'az1-vlan:br-ex'
+          - 'az2-vlan:br-ex'
+          - 'az3-vlan:br-ex'
+          - 'bgp-physnet:br-bgp'
+
         edpm_frr_bgp_peers:
           - 172.18.153.1
           - 172.18.153.2
-
         edpm_chrony_ntp_servers:
           - 172.18.0.79
           - 172.18.42.10
@@ -172,6 +176,9 @@ spec:
           {% endif %}
           {% endif %}
           {% endfor %}
+          - type: ovs_bridge
+            name: br-bgp
+            mtu: 9000
           - type: ovs_bridge
             name: br-ex
             members:

@@ -101,6 +101,14 @@ spec:
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_uplinks_scope: external
         edpm_frr_bgp_asn: 65006
+        edpm_frr_bgp_ipv4_src_network: tenantpeering
+        edpm_ovn_bridge_mapping:
+          - 'datacentre:br-ex'
+          - 'az1-vlan:br-ex'
+          - 'az2-vlan:br-ex'
+          - 'az3-vlan:br-ex'
+          - 'bgp-physnet:br-bgp'
+
         edpm_frr_bgp_peers:
           - 172.18.153.129
           - 172.18.153.130
@@ -172,6 +180,9 @@ spec:
           {% endif %}
           {% endif %}
           {% endfor %}
+          - type: ovs_bridge
+            name: br-bgp
+            mtu: 9000
           - type: ovs_bridge
             name: br-ex
             members:
