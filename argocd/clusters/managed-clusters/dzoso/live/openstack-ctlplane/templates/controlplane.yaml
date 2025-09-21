@@ -393,8 +393,7 @@ spec:
             cephfs_volume_mode=0755
             cephfs_protocol_helper_type=CEPHFS
           replicas: 1
-          networkAttachments:
-          - storage
+          networkAttachments: []
   ovn:
     template:
       ovnDBCluster:
