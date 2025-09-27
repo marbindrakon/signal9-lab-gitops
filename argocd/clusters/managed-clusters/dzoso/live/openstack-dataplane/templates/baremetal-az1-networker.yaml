@@ -101,9 +101,7 @@ spec:
         edpm_frr_bgp_ipv4_src_network: tenantpeering
         edpm_ovn_bridge_mappings:
           - 'datacentre:br-ex'
-          - 'az1-vlan:br-ex'
-          - 'az2-vlan:br-ex'
-          - 'az3-vlan:br-ex'
+          - 'az1-vlan:br-az1-vlan'
           - 'bgp-physnet:br-bgp'
 
         edpm_frr_bgp_peers:
@@ -175,8 +173,22 @@ spec:
           {% endif %}
           {% endfor %}
           - type: ovs_bridge
+            name: br-az1-vlan
+            mtu: 9000
+          - type: ovs_bridge
             name: br-bgp
             mtu: 9000
+          - type: ovs_patch_port
+            name: br-ex-patch
+            bridge_name: br-az1-vlan
+            mtu: 9000
+            peer: br-az1-vlan-patch
+          - type: ovs_patch_port
+            name: br-az1-vlan-patch
+            mtu: 9000
+            bridge: br-ex
+            mtu: 9000
+            peer: br-ex-patch
           - type: ovs_bridge
             name: br-ex
             members:
