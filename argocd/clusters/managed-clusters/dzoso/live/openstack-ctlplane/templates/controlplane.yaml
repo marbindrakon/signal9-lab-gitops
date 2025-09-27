@@ -624,9 +624,17 @@ spec:
           host: {{ .Values.apiEndpointNames.octavia }}
     template:
       databaseInstance: openstack
-      octaviaNetworkAttachment: octavia
       lbMgmtNetwork:
         manageLbMgmtNetworks: false
+      octaviaHousekeeping:
+        networkAttachments:
+          - octavia
+      octaviaHealthManager:
+        networkAttachments:
+          - octavia
+      octaviaWorker:
+        networkAttachments:
+          - octavia
       secret: {{ .Values.cloudName }}-password-secret
   redis:
     enabled: true
