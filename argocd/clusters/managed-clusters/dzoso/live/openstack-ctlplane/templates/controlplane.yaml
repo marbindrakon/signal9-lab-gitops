@@ -238,6 +238,11 @@ spec:
               type: LoadBalancer
       databaseInstance: openstack
       secret: {{ .Values.cloudName }}-password-secret
+      customServiceConfig: |
+        [DEFAULT]
+        global_physnet_mtu = 9000
+        [ml2_type_vlan]
+        network_vlan_ranges = az1-vlan:1:999,az2-vlan:1:999,az3-vlan:1:999,datacentre:1:999,bgp-physnet:1:3999
       networkAttachments:
       - internalapi
 
