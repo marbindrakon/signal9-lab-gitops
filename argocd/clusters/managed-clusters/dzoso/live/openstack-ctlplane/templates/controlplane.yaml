@@ -327,6 +327,12 @@ spec:
           cellDatabaseInstance: openstack-cell1
           cellMessageBusInstance: rabbitmq-cell1
           memcachedInstance: memcached-az1
+          novaComputeTemplates:
+            az1-ironic:
+              computeDriver: ironic.IronicDriver
+              customServiceConfig: |
+                [ironic]
+                condudctor_group = az1
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
@@ -339,6 +345,13 @@ spec:
           cellDatabaseInstance: openstack-cell2
           cellMessageBusInstance: rabbitmq-cell2
           memcachedInstance: memcached-az2
+          novaComputeTemplates:
+            az2-ironic:
+              computeDriver: ironic.IronicDriver
+              customServiceConfig: |
+                [ironic]
+                condudctor_group = az2
+
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
@@ -351,6 +364,12 @@ spec:
           cellDatabaseInstance: openstack-cell3
           cellMessageBusInstance: rabbitmq-cell3
           memcachedInstance: memcached-az3
+          novaComputeTemplates:
+            az3-ironic:
+              computeDriver: ironic.IronicDriver
+              customServiceConfig: |
+                [ironic]
+                condudctor_group = az3
           noVNCProxyServiceTemplate:
             enabled: true
             networkAttachments:
@@ -570,9 +589,24 @@ spec:
       ironicAPI:
         replicas: 3
       ironicConductors:
-      - replicas: 3
-        storageClass: "ocs-external-storagecluster-cephfs"
+      - replicas: 2
+        conductorGroup: az1
+        storageClass: "ocs-external-storagecluster-ceph-rbd"
         storageRequest: 150G
+        topologyRef:
+          name: prefer-az1
+      - replicas: 2
+        conductorGroup: az2
+        storageClass: "ocs-external-storagecluster-ceph-rbd"
+        storageRequest: 150G
+        topologyRef:
+          name: prefer-az2
+      - replicas: 2
+        conductorGroup: az3
+        storageClass: "ocs-external-storagecluster-ceph-rbd"
+        storageRequest: 150G
+        topologyRef:
+          name: prefer-az3
       ironicInspector:
         replicas: 1
       ironicNeutronAgent:
@@ -581,7 +615,7 @@ spec:
   swift:
     enabled: false
   octavia:
-    enabled: false
+    enabled: true
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
@@ -590,8 +624,9 @@ spec:
           host: {{ .Values.apiEndpointNames.octavia }}
     template:
       databaseInstance: openstack
-      octaviaAPI:
-        replicas: 3
+      octaviaNetworkAttachment: octavia
+      lbMgmtNetwork:
+        manageLbMgmtNetworks: false
       secret: {{ .Values.cloudName }}-password-secret
   redis:
     enabled: true
