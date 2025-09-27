@@ -142,10 +142,6 @@ spec:
             mtu: {{ "{{ min_viable_mtu }}" }}
             use_dhcp: false
             bonding_options: "mode=active-backup"
-            dns_servers: {{ "{{ ctlplane_dns_nameservers }}" }}
-            domain: {{ "{{ dns_search_domains }}" }}
-            addresses:
-            - ip_netmask: {{ "{{ ctlplane_ip }}/{{ ctlplane_cidr }}" }}
             members:
             - type: interface
               name: enp5s0
@@ -160,6 +156,8 @@ spec:
             vlan_id: {{ "{{ ctlplane_vlan_id }}" }}
             addresses:
             - ip_netmask: {{ "{{ ctlplane_ip }}/{{ ctlplane_cidr }}" }}
+            dns_servers: {{ "{{ ctlplane_dns_nameservers }}" }}
+            domain: {{ "{{ dns_search_domains }}" }}
             routes: {{ "{{ ctlplane_host_routes }}" }}
 
           {% for network in role_networks %}
