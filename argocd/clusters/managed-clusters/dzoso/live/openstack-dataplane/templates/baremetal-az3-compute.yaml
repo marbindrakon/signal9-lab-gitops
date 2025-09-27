@@ -102,7 +102,7 @@ spec:
         edpm_frr_bgp_uplinks_scope: external
         edpm_frr_bgp_asn: 65006
         edpm_frr_bgp_ipv4_src_network: tenantpeering
-        edpm_ovn_bridge_mapping:
+        edpm_ovn_bridge_mappings:
           - 'datacentre:br-ex'
           - 'az1-vlan:br-ex'
           - 'az2-vlan:br-ex'
