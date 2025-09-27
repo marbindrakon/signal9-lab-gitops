@@ -189,7 +189,7 @@ spec:
           - type: ovs_patch_port
             name: br-az1-vlan-patch
             mtu: 9000
-            bridge: br-ex
+            bridge_name: br-ex
             mtu: 9000
             peer: br-ex-patch
           - type: ovs_bridge
