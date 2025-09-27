@@ -625,6 +625,7 @@ spec:
     template:
       databaseInstance: openstack
       lbMgmtNetwork:
+        createDefaultLbMgmtNetwork: false
         manageLbMgmtNetworks: false
       octaviaHousekeeping:
         networkAttachments:
