@@ -15,7 +15,7 @@ spec:
   storageClass: ocs-external-storagecluster-ceph-rbd
   extraMounts:
     - name: v1
-      region: r1
+      region: {{ .Values.keystone.region }}
       extraVol:
         - propagation:
           - CinderVolume
@@ -33,6 +33,23 @@ spec:
           - name: ceph
             mountPath: "/etc/ceph"
             readOnly: true
+    - name: keystone-federation
+      region: {{ .Values.keystone.region }}
+      extraVol:
+        - propagation:
+          - KeystoneAPI
+          extraVolType: oidc-config
+          volumes:
+          - name: oidc-config
+            projected:
+              sources:
+              - secret:
+                  name: keystone-federation-data
+          mounts:
+          - name: oidc-config
+            mountPath: "/etc/httpd/metadata"
+            readOnly: true
+
   dns:
     template:
       override:
