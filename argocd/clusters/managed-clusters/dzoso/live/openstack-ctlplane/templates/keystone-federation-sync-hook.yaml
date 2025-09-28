@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    argocd.argoproj.io/sync-wave: "2"
+  name: keystone-federation-sync
+  namespace: openstack
+spec:
+  backoffLimit: 6
+  completionMode: NonIndexed
+  completions: 1
+  manualSelector: false
+  parallelism: 1
+  podReplacementPolicy: TerminatingOrFailed
+  selector:
+    matchLabels:
+      job-pod: keystone-federation-sync
+  suspend: false
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        job-pod: keystone-federation-sync
+    spec:
+      containers:
+      - args:
+        - -c
+        - |
+          for file in $(ls /data/source); do
+            echo $file
+            cp /data/source/$file /data/dest/`$file | sed s/2F/%2F/g`
+          done
+        command:
+        - /bin/bash
+        image: registry.redhat.io/rhoso/openstack-keystone-rhel9@sha256:442d91659178bac1a90f7044111cab024733448c4230dc6ba64cb34cc12c6e04
+        imagePullPolicy: IfNotPresent
+        name: keystone-federation-sync
+        volumeMounts:
+        - mountPath: /data/source
+          name: keystone-federation-secret
+          readOnly: true
+        - mountPath: /data/dest
+          name: keystone-federation-files
+      volumes:
+      - name: keystone-federation-secret
+        secret:
+          defaultMode: 420
+          secretName: keystone-federation-data
+      - name: keystone-federation-files
+        persistentVolumeClaim:
+          claimName: keystone-federation-files

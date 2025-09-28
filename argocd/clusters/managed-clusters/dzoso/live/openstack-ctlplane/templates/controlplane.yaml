@@ -41,10 +41,8 @@ spec:
           extraVolType: oidc-config
           volumes:
           - name: oidc-config
-            projected:
-              sources:
-              - secret:
-                  name: keystone-federation-data
+            persistentVolumeClaim:
+              claimName: keystone-federation-files
           mounts:
           - name: oidc-config
             mountPath: "/etc/httpd/metadata"
