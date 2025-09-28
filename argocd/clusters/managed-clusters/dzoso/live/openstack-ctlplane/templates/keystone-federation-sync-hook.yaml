@@ -26,7 +26,7 @@ spec:
           rm -f /data/dest/*
           for file in $(ls /data/source); do
             echo $file
-            NEW_NAME=`$file | sed s/2F/%2F/g`
+            NEW_NAME=`echo "$file" | sed s/2F/%2F/g`
             echo "Copying from $file to $NEW_NAME"
             cp /data/source/$file /data/dest/$NEW_NAME
           done
