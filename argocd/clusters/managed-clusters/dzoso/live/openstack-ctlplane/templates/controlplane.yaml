@@ -624,6 +624,20 @@ spec:
           host: {{ .Values.apiEndpointNames.octavia }}
     template:
       databaseInstance: openstack
+      amphoraImageContainerImage: registry.redhat.io/rhoso18/octavia-amphora-image:18.0.12
+      amphoraCustomFlavors:
+        - name: lb-small
+          disk: 5
+          VCPUs: 2
+          RAM: 2048
+        - name: lb-medium
+          disk: 5
+          VCPUs: 4
+          RAM: 4096
+        - name: lb-large
+          disk: 5
+          VCPUs: 8
+          RAM: 8192
       lbMgmtNetwork:
         createDefaultLbMgmtNetwork: false
         manageLbMgmtNetworks: false
