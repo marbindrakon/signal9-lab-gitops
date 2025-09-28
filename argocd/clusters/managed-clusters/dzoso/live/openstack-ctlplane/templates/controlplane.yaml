@@ -161,6 +161,8 @@ spec:
     template:
       region: {{ .Values.keystone.region }}
       customServiceConfig: |
+        [DEFAULT]
+        debug = True
         [federation]
         trusted_dashboard=https://dzcloud.lab.signal9.gg/dashboard/auth/websso/ 
         [openid]
