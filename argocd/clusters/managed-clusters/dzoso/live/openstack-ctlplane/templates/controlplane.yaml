@@ -37,7 +37,7 @@ spec:
       region: {{ .Values.keystone.region }}
       extraVol:
         - propagation:
-          - KeystoneAPI
+          - Keystone
           extraVolType: oidc-config
           volumes:
           - name: oidc-config
@@ -293,13 +293,15 @@ spec:
 
         # Provide login options in Horizon's dropdown menu
         WEBSSO_CHOICES = (
-          ("credentials", _("Keystone Credentials")),
           ("Signal9", _("Signal9 SSO")),
+          ("Signal9 Admin", _("Signal9 SSO")),
+          ("credentials", _("Keystone Credentials")),
         )
 
         # Map Horizon's "OIDC" choice to the Keystone IDP and protocol
         WEBSSO_IDP_MAPPING = {
           "Signal9": ("signal9", "openid"), 
+          "Signal9 Admin": ("signal9-admin", "openid"), 
         }
       replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
