@@ -160,6 +160,15 @@ spec:
 
     template:
       region: {{ .Values.keystone.region }}
+      customServiceConfig: |
+        [federation]
+        trusted_dashboard=https://dzcloud.lab.signal9.gg/dashboard/auth/websso/ 
+        [openid]
+        remote_id_attribute=HTTP_OIDC_ISS
+        [auth]
+        methods = password,token,oauth1,mapped,application_credential,openid 
+      httpdCustomization:
+        customConfigSecret: keystone-httpd-override 
       replicas: 3
       override:
         service:
@@ -256,6 +265,23 @@ spec:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
     template:
+      customServiceConfig: |
+        # Point Horizon to the Keystone public endpoint
+        OPENSTACK_KEYSTONE_URL = "https://identity.dzcloud.lab.signal9.gg/v3" 
+
+        # Enable WebSSO in Horizon
+        WEBSSO_ENABLED = True
+
+        # Provide login options in Horizon's dropdown menu
+        WEBSSO_CHOICES = (
+          ("credentials", _("Keystone Credentials")),
+          ("Signal9", _("Signal9 SSO")),
+        )
+
+        # Map Horizon's "OIDC" choice to the Keystone IDP and protocol
+        WEBSSO_IDP_MAPPING = {
+          "Signal9": ("signal9", "openid"), 
+        }
       replicas: 3
       secret: {{ .Values.cloudName }}-password-secret
   nova:

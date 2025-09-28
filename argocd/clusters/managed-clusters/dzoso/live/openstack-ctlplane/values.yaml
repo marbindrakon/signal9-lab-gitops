@@ -6,6 +6,7 @@ externalRegistrySecret: "oso-registry-secret"
 externalSubscriptionSecret: "oso-subscription-secret"
 externalPublicCertificateSecret: "dzcloud-manual-cert"
 externalOctaviaCASecret: "oso-octavia-ca-password"
+externalKeystoneFederationSecret: "dzoso-keystone-federation"
 
 keystone:
   # As of 18.0.3, this must be regionOne to work due to hardcoded config templates in operators
