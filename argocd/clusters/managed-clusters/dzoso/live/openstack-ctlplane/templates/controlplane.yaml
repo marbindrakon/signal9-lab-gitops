@@ -48,7 +48,7 @@ spec:
           mounts:
           - name: oidc-config
             mountPath: "/etc/httpd/metadata"
-            readOnly: true
+            readOnly: false
 
   dns:
     template:
