@@ -624,7 +624,7 @@ spec:
           host: {{ .Values.apiEndpointNames.octavia }}
     template:
       databaseInstance: openstack
-      amphoraImageContainerImage: registry.redhat.io/rhoso18/octavia-amphora-image:18.0.12
+      amphoraImageContainerImage: registry.redhat.io/rhoso/octavia-amphora-image-rhel9:18.0.12
       amphoraCustomFlavors:
         - name: lb-small
           disk: 5
