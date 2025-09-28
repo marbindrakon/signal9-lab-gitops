@@ -14,15 +14,10 @@ spec:
   manualSelector: false
   parallelism: 1
   podReplacementPolicy: TerminatingOrFailed
-  selector:
-    matchLabels:
-      job-pod: keystone-federation-sync
   suspend: false
   template:
     metadata:
       creationTimestamp: null
-      labels:
-        job-pod: keystone-federation-sync
     spec:
       containers:
       - args:
@@ -43,6 +38,7 @@ spec:
           readOnly: true
         - mountPath: /data/dest
           name: keystone-federation-files
+        restartPolicy: Never
       volumes:
       - name: keystone-federation-secret
         secret:
