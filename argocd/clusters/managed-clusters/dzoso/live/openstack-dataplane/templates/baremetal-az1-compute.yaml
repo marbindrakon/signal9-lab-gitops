@@ -101,6 +101,7 @@ spec:
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_uplinks_scope: external
         edpm_frr_bgp_asn: 65006
+        edpm_ovn_bgp_agent_bgp_as: 65006
         edpm_frr_bgp_ipv4_src_network: tenantpeering
         edpm_ovn_bridge_mappings:
           - 'datacentre:br-ex'
