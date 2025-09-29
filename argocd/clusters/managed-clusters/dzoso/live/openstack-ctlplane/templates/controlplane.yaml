@@ -713,10 +713,10 @@ spec:
           host: {{ .Values.apiEndpointNames.designate }}
     template:
       nsRecords:
-        -hostname: ns1.dzcloud.lab.signal9.gg.
-         priority: 1
-        -hostname: ns2.dzcloud.lab.signal9.gg.
-         priority: 2
+        - hostname: ns1.dzcloud.lab.signal9.gg.
+          priority: 1
+        - hostname: ns2.dzcloud.lab.signal9.gg.
+          priority: 2
       designateAPI:
         networkAttachments:
         - internalapi
