@@ -765,6 +765,9 @@ spec:
         networkAttachments:
           - designate
         replicas: 3
+      designateWorker:
+        networkAttachments:
+          - designate
       designateProducer:
         replicas: 3
       designateUnbound:
