@@ -268,6 +268,8 @@ spec:
         [DEFAULT]
         debug = True
         global_physnet_mtu = 9000
+        [ovn]
+        dns_servers = 172.18.150.244,172.18.150.245,172.18.150.246
         [ml2_type_vlan]
         network_vlan_ranges = az1-vlan:1:999,az2-vlan:1:999,az3-vlan:1:999,datacentre:1:999,bgp-physnet:1:3999
       networkAttachments:
@@ -698,6 +700,107 @@ spec:
       secret: {{ .Values.cloudName }}-password-secret
   redis:
     enabled: true
+    templates:
+      designate-redis:
+        replicas: 3
+  designate:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.designate }}
+    template:
+      nsRecords:
+        -hostname: ns1.dzcloud.lab.signal9.gg.
+         priority: 1
+        -hostname: ns2.dzcloud.lab.signal9.gg.
+         priority: 2
+      designateAPI:
+        networkAttachments:
+        - internalapi
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+      designateBackendbind9:
+        controlNetworkName: ctlplane
+        networkAttachments:
+          - ctlplane
+        override:
+          services:
+            - metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-ctlplane-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.150.241
+              spec:
+                type: LoadBalancer
+            - metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-ctlplane-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.150.242
+              spec:
+                type: LoadBalancer
+            - metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-ctlplane-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.150.243
+              spec:
+                type: LoadBalancer
+        replicas: 3
+        serviceUser: designate
+        storageRequest: 20G
+      designateCentral:
+        replicas: 3
+      designateMdns:
+        networkAttachments:
+          - ctlplane
+        replicas: 3
+      designateProducer:
+        replicas: 3
+      designateUnbound:
+        defaultConfigOverwrite:
+          01-unbound.conf: |
+            server:
+              verbosity: 2
+              access-control: 172.18.150.0/24 allow
+              module-config: "iterator"
+          forwarders.conf: |
+            forward-zone:
+              name: "."
+              forward-addr: 172.18.42.10
+              forward-addr: 172.18.42.11
+        networkAttachments:
+          - ctlplane
+        override:
+          services:
+            - metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-ctlplane-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.150.244
+              spec:
+                type: LoadBalancer
+            - metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-ctlplane-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.150.245
+              spec:
+                type: LoadBalancer
+            - metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-ctlplane-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.150.246
+              spec:
+                type: LoadBalancer
+        replicas: 3
+        resources: {}
   openstackclient:
     template:
       nodeSelector:
