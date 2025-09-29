@@ -757,7 +757,7 @@ spec:
                 type: LoadBalancer
         replicas: 3
         serviceUser: designate
-        storageClassName: ocs-external-storagecluster-ceph-rbd
+        storageClass: ocs-external-storagecluster-ceph-rbd
         storageRequest: 20G
       designateCentral:
         replicas: 3
