@@ -17,3 +17,4 @@ spec:
   ipAddressPools:
   - oso-ctlplane-pool
   - oso-intapi-pool
+  - oso-designate-pool

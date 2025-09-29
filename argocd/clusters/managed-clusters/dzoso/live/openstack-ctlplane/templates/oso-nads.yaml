@@ -129,3 +129,29 @@ spec:
       }
     }
 ---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: designate
+  namespace: openstack
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "name": "designate",
+      "type": "bridge",
+      "isDefaultGateway": true,
+      "isGateway": true,
+      "forceAddress": false,
+      "ipMasq": true,
+      "hairpinMode": true,
+      "bridge": "br-designate",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "172.18.161.0/24",
+        "range_start": "172.18.161.10",
+        "range_end": "172.18.161.99",
+        "gateway": "172.18.161.1"
+      }
+    }
+---

@@ -712,7 +712,7 @@ spec:
         spec:
           host: {{ .Values.apiEndpointNames.designate }}
     template:
-      designateNetworkAttachment: ctlplane
+      designateNetworkAttachment: designate
       nsRecords:
         - hostname: ns1.dzcloud.lab.signal9.gg.
           priority: 1
@@ -732,27 +732,27 @@ spec:
               spec:
                 type: LoadBalancer
       designateBackendbind9:
-        controlNetworkName: ctlplane
+        controlNetworkName: designate
         networkAttachments:
-          - ctlplane
+          - designate
         override:
           services:
             - metadata:
                 annotations:
-                  metallb.universe.tf/address-pool: oso-ctlplane-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.150.241
+                  metallb.universe.tf/address-pool: oso-designate-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.161.241
               spec:
                 type: LoadBalancer
             - metadata:
                 annotations:
-                  metallb.universe.tf/address-pool: oso-ctlplane-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.150.242
+                  metallb.universe.tf/address-pool: oso-designate-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.161.242
               spec:
                 type: LoadBalancer
             - metadata:
                 annotations:
-                  metallb.universe.tf/address-pool: oso-ctlplane-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.150.243
+                  metallb.universe.tf/address-pool: oso-designate-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.161.243
               spec:
                 type: LoadBalancer
         replicas: 3
@@ -762,7 +762,7 @@ spec:
         replicas: 3
       designateMdns:
         networkAttachments:
-          - ctlplane
+          - designate
         replicas: 3
       designateProducer:
         replicas: 3
@@ -779,25 +779,25 @@ spec:
               forward-addr: 172.18.42.10
               forward-addr: 172.18.42.11
         networkAttachments:
-          - ctlplane
+          - designate
         override:
           services:
             - metadata:
                 annotations:
-                  metallb.universe.tf/address-pool: oso-ctlplane-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.150.244
+                  metallb.universe.tf/address-pool: oso-designate-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.161.244
               spec:
                 type: LoadBalancer
             - metadata:
                 annotations:
-                  metallb.universe.tf/address-pool: oso-ctlplane-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.150.245
+                  metallb.universe.tf/address-pool: oso-designate-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.161.245
               spec:
                 type: LoadBalancer
             - metadata:
                 annotations:
-                  metallb.universe.tf/address-pool: oso-ctlplane-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.150.246
+                  metallb.universe.tf/address-pool: oso-designate-pool
+                  metallb.universe.tf/loadBalancerIPs: 172.18.161.246
               spec:
                 type: LoadBalancer
         replicas: 3
