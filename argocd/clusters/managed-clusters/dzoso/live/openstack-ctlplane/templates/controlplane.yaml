@@ -662,7 +662,7 @@ spec:
   swift:
     enabled: false
   octavia:
-    enabled: false
+    enabled: true
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
@@ -686,8 +686,17 @@ spec:
           VCPUs: 8
           RAM: 8192
       lbMgmtNetwork:
-        createDefaultLbMgmtNetwork: false
-        manageLbMgmtNetworks: false
+        createDefaultLbMgmtNetwork: true
+        manageLbMgmtNetworks: true
+        availabilityZones:
+          - az1
+          - az2
+          - az3
+        availabilityZoneCIDRs:
+          az1: '10.1.0.0/16'
+          az2: '10.2.0.0/16'
+          az3: '10.3.0.0/16'
+        lbMgmtRouterGateway: 172.18.162.250
       octaviaHousekeeping:
         networkAttachments:
           - octavia
@@ -704,7 +713,7 @@ spec:
       designate-redis:
         replicas: 3
   designate:
-    enabled: false
+    enabled: true
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
