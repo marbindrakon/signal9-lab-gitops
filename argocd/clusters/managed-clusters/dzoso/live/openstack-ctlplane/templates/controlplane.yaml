@@ -662,7 +662,7 @@ spec:
   swift:
     enabled: false
   octavia:
-    enabled: true
+    enabled: false
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert
@@ -704,7 +704,7 @@ spec:
       designate-redis:
         replicas: 3
   designate:
-    enabled: true
+    enabled: false
     apiOverride:
       tls:
         secretName: {{ .Values.cloudName }}-manual-cert

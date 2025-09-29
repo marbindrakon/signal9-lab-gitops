@@ -33,11 +33,15 @@ spec:
       name: br-octavia
       state: up
       type: linux-bridge
+      port:
+        - name: bond1.571
     - description: designate bridge
       mtu: 1500
       name: br-designate
       state: up
       type: linux-bridge
+      port:
+        - name: bond1.572
 
   nodeSelector:
     node-role.kubernetes.io/master: ""

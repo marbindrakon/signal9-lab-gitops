@@ -114,18 +114,18 @@ spec:
       "cniVersion": "0.3.1",
       "name": "octavia",
       "type": "bridge",
-      "isDefaultGateway": true,
-      "isGateway": true,
+      "isDefaultGateway": false,
+      "isGateway": false,
       "forceAddress": false,
-      "ipMasq": true,
+      "ipMasq": false,
       "hairpinMode": true,
       "bridge": "br-octavia",
       "ipam": {
         "type": "whereabouts",
-        "range": "172.18.157.192/26",
-        "range_start": "172.18.157.194",
-        "range_end": "172.18.157.205",
-        "gateway": "172.18.157.193"
+        "range": "172.18.162.0/24",
+        "range_start": "172.18.162.10",
+        "range_end": "172.18.162.99",
+        "gateway": "172.18.152.1"
       }
     }
 ---
@@ -140,10 +140,10 @@ spec:
       "cniVersion": "0.3.1",
       "name": "designate",
       "type": "bridge",
-      "isDefaultGateway": true,
-      "isGateway": true,
+      "isDefaultGateway": false,
+      "isGateway": false,
       "forceAddress": false,
-      "ipMasq": true,
+      "ipMasq": false,
       "hairpinMode": true,
       "bridge": "br-designate",
       "ipam": {

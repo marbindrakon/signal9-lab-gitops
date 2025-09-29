@@ -1,0 +1,23 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: oso-stretch-vlans
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: '3'
+spec:
+  desiredState:
+    interfaces:
+    - description: octavia vlan
+      mtu: 1500
+      name: bond1.571
+      state: up
+      type: vlan
+    - description: designate vlan
+      mtu: 1500
+      name: bond1.572
+      state: up
+      type: vlan
+
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
