@@ -712,6 +712,7 @@ spec:
         spec:
           host: {{ .Values.apiEndpointNames.designate }}
     template:
+      designateNetworkAttachment: ctlplane
       nsRecords:
         - hostname: ns1.dzcloud.lab.signal9.gg.
           priority: 1
