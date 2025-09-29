@@ -27,7 +27,7 @@ spec:
         enabled: false
       vlan:
         base-iface: bond1
-        id: 571
+        id: 572
 
   nodeSelector:
     node-role.kubernetes.io/master: ""
