@@ -13,11 +13,21 @@ spec:
       name: bond1.571
       state: up
       type: vlan
+      ipv4:
+        enabled: false
+      vlan:
+        base-iface: bond1
+        id: 571
     - description: designate vlan
       mtu: 1500
       name: bond1.572
       state: up
       type: vlan
+      ipv4:
+        enabled: false
+      vlan:
+        base-iface: bond1
+        id: 571
 
   nodeSelector:
     node-role.kubernetes.io/master: ""
