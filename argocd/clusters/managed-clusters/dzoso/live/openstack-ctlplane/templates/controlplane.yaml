@@ -90,6 +90,9 @@ spec:
               spec:
                 type: LoadBalancer
       cinderScheduler:
+        customServiceConfig: |
+          [DEFAULT]
+          default_availability_zone=az1
         replicas: 2
       cinderBackup:
         customServiceConfig: |
@@ -105,7 +108,9 @@ spec:
           customServiceConfig: |
             [DEFAULT]
             enabled_backends=ceph-az1
+            default_availability_zone=az1
             [ceph-az1]
+            backend_availability_zone=az1
             volume_backend_name=ceph-az1
             volume_driver=cinder.volume.drivers.rbd.RBDDriver
             rbd_ceph_conf=/etc/ceph/ceph.conf
@@ -120,7 +125,9 @@ spec:
           customServiceConfig: |
             [DEFAULT]
             enabled_backends=ceph-az2
+            default_availability_zone=az1
             [ceph-az2]
+            backend_availability_zone=az2
             volume_backend_name=ceph-az2
             volume_driver=cinder.volume.drivers.rbd.RBDDriver
             rbd_ceph_conf=/etc/ceph/ceph.conf
@@ -135,7 +142,9 @@ spec:
           customServiceConfig: |
             [DEFAULT]
             enabled_backends=ceph-az3
+            default_availability_zone=az1
             [ceph-az3]
+            backend_availability_zone=az3
             volume_backend_name=ceph-az3
             volume_driver=cinder.volume.drivers.rbd.RBDDriver
             rbd_ceph_conf=/etc/ceph/ceph.conf
