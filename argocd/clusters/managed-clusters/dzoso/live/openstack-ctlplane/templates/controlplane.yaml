@@ -97,21 +97,54 @@ spec:
           backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
           backup_ceph_pool = {{ .Values.ceph.pools.cinderBackup }}
           backup_ceph_user = {{ .Values.ceph.client }}
-        replicas: 1
+        replicas: 0
       cinderVolumes:
-        ceph:
+        ceph-az1:
+          topologyRef:
+            name: prefer-az1
           customServiceConfig: |
             [DEFAULT]
-            enabled_backends=ceph
-            [ceph]
-            volume_backend_name=ceph
+            enabled_backends=ceph-az1
+            [ceph-az1]
+            volume_backend_name=ceph-az1
             volume_driver=cinder.volume.drivers.rbd.RBDDriver
             rbd_ceph_conf=/etc/ceph/ceph.conf
             rbd_user={{ .Values.ceph.client }}
-            rbd_pool={{ .Values.ceph.pools.cinder }}
+            rbd_pool=az1-volumes
             rbd_flatten_volume_from_snapshot=False
             rbd_secret_uuid={{ .Values.ceph.fsid }}
           replicas: 1
+        ceph-az2:
+          topologyRef:
+            name: prefer-az2
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph-az2
+            [ceph-az2]
+            volume_backend_name=ceph-az2
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user={{ .Values.ceph.client }}
+            rbd_pool=az2-volumes
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid={{ .Values.ceph.fsid }}
+          replicas: 1
+        ceph-az3:
+          topologyRef:
+            name: prefer-az3
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph-az3
+            [ceph-az3]
+            volume_backend_name=ceph-az3
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user={{ .Values.ceph.client }}
+            rbd_pool=az3-volumes
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid={{ .Values.ceph.fsid }}
+          replicas: 1
+
   glance:
     apiOverrides:
       default:
