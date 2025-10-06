@@ -20,4 +20,8 @@ spec:
   name: openstack-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
+  config:
+    env:
+      - name: RELATED_IMAGE_INFRA_OPERATOR_MANAGER_IMAGE_URL
+        value: quay.io/lmiccini/infra-operator:cm_bgp_ips-latest
 ---
