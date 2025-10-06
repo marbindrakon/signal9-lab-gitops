@@ -42,8 +42,7 @@ spec:
       state: up
       type: linux-bridge
       bridge:
-        port:
-          - name: bond1.572
+        port: []
 
   nodeSelector:
     node-role.kubernetes.io/master: ""
