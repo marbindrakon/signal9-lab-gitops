@@ -23,5 +23,5 @@ spec:
   config:
     env:
       - name: RELATED_IMAGE_INFRA_OPERATOR_MANAGER_IMAGE_URL
-        value: quay.io/lmiccini/infra-operator:cm_bgp_ips-latest
+        value: quay.io/lmiccini/infra-operator@sha256:4d512de40ef3b2a2db12df6ad05d436c62fbf47c6b92ab48b580eaa00f37b6c5
 ---
