@@ -103,6 +103,8 @@ spec:
         edpm_frr_bgp_asn: 65006
         edpm_ovn_bgp_agent_bgp_as: 65006
         edpm_frr_bgp_ipv4_src_network: tenantpeering
+        edpm_ovn_bgp_agent_exposing_method: vrf
+        edpm_ovn_bgp_agent_evpn_nic: vlan532
         edpm_ovn_bridge_mappings:
           - 'datacentre:br-ex'
           - 'az1-vlan:br-az1-vlan'
