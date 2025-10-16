@@ -777,7 +777,7 @@ spec:
         controlNetworkName: designate
         networkAttachments:
           - designate
-        replicas: 0
+        replicas: 3
         serviceUser: designate
         storageClass: ocs-external-storagecluster-ceph-rbd
         storageRequest: 20G
