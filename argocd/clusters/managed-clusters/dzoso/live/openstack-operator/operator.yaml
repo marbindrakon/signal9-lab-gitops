@@ -23,5 +23,5 @@ spec:
   config:
     env:
       - name: RELATED_IMAGE_DESIGNATE_OPERATOR_MANAGER_IMAGE_URL
-        value: quay.signal9.gg/aaustin/designate-controller-manager@sha256:06164f6a093a3749d3cc481cdd735984c360ae9736819b362bb2635624d5ec6b
+        value: quay.signal9.gg/aaustin/designate-controller-manager@sha256:fe56c5c432f4675200e093f67b292d3913939db053ca10c9d365563a7bfe7fc4
 ---
