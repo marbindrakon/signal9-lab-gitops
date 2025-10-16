@@ -337,7 +337,7 @@ spec:
         WEBSSO_CHOICES = (
           ("Signal9", _("Signal9 SSO")),
           ("Signal9-Admin", _("Signal9 Admin SSO")),
-          #("credentials", _("Keystone Credentials")),
+          ("credentials", _("Keystone Credentials")),
         )
 
         # Map Horizon's "OIDC" choice to the Keystone IDP and protocol
