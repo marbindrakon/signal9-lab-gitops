@@ -777,27 +777,7 @@ spec:
         controlNetworkName: designate
         networkAttachments:
           - designate
-        override:
-          services:
-            - metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: oso-designate-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.161.241
-              spec:
-                type: LoadBalancer
-            - metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: oso-designate-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.161.242
-              spec:
-                type: LoadBalancer
-            - metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: oso-designate-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.161.243
-              spec:
-                type: LoadBalancer
-        replicas: 3
+        replicas: 0
         serviceUser: designate
         storageClass: ocs-external-storagecluster-ceph-rbd
         storageRequest: 20G
@@ -826,27 +806,7 @@ spec:
               forward-addr: 172.18.42.11
         networkAttachments:
           - designate
-        override:
-          services:
-            - metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: oso-designate-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.161.244
-              spec:
-                type: LoadBalancer
-            - metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: oso-designate-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.161.245
-              spec:
-                type: LoadBalancer
-            - metadata:
-                annotations:
-                  metallb.universe.tf/address-pool: oso-designate-pool
-                  metallb.universe.tf/loadBalancerIPs: 172.18.161.246
-              spec:
-                type: LoadBalancer
-        replicas: 3
+        replicas: 0
         resources: {}
   openstackclient:
     template:
