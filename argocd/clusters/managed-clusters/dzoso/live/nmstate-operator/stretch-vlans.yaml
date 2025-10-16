@@ -21,7 +21,7 @@ spec:
     - description: designate vlan
       mtu: 1500
       name: bond1.572
-      state: absent
+      state: up
       type: vlan
       ipv4:
         enabled: false

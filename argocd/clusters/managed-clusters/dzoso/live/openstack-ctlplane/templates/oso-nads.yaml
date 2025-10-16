@@ -146,10 +146,10 @@ spec:
       "cniVersion": "0.3.1",
       "name": "designate",
       "type": "bridge",
-      "isDefaultGateway": true,
-      "isGateway": true,
+      "isDefaultGateway": false,
+      "isGateway": false,
       "forceAddress": false,
-      "ipMasq": true,
+      "ipMasq": false,
       "hairpinMode": true,
       "bridge": "br-designate",
       "ipam": {
