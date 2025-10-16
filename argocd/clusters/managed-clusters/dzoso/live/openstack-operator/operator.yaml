@@ -22,8 +22,6 @@ spec:
   sourceNamespace: openshift-marketplace
   config:
     env:
-      - name: RELATED_IMAGE_INFRA_OPERATOR_MANAGER_IMAGE_URL
-        value: quay.io/lmiccini/infra-operator@sha256:4d512de40ef3b2a2db12df6ad05d436c62fbf47c6b92ab48b580eaa00f37b6c5
       - name: RELATED_IMAGE_DESIGNATE_OPERATOR_MANAGER_IMAGE_URL
         value: quay.signal9.gg/aaustin/designate-controller-manager@sha256:06164f6a093a3749d3cc481cdd735984c360ae9736819b362bb2635624d5ec6b
 ---
