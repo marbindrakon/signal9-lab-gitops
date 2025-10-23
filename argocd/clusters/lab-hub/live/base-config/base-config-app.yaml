@@ -100,6 +100,14 @@ spec:
           enabled: false
         network:
           hostRouting: false
+        timesync:
+          enabled: true
+          ptp:
+            enabled: true
+            loadKvmModule: true
+            device: 'ptp_kvm'
+            sourceStratum: 2
+          ntpServers: []
         certManager:
           solvers:
             - http01:
