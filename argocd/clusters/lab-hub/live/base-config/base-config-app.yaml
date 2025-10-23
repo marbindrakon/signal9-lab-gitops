@@ -87,21 +87,21 @@ spec:
             vaultName: lab-hub-oidc
         monitoring:
           enabled: true
-          storageClass: ocs-external-storagecluster-ceph-rbd
+          storageClass: standard-csi
           prometheusSize: 100Gi
         externalSecrets:
           vaultAuthPath: 'k8s-lab-hub'
         odfStorage:
-          enabled: true
+          enabled: false
           external: true
           version: '4.18'
           externalSecret:
             name: rook-ceph-external-cluster-details
             vaultName: lab-hub-rook-data
         mirrorRegistry:
-          enabled: true
+          enabled: false
         network:
-          hostRouting: true
+          hostRouting: false
         certManager:
           solvers:
             - http01:
