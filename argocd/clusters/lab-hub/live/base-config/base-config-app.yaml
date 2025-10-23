@@ -95,9 +95,7 @@ spec:
           enabled: false
           external: false
           version: '4.18'
-          externalSecret:
-            name: rook-ceph-external-cluster-details
-            vaultName: lab-hub-rook-data
+          externalSecret: null
         mirrorRegistry:
           enabled: false
         network:
