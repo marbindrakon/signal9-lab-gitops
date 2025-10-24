@@ -19,7 +19,7 @@ spec:
   hub:
     disabled: false
     storage_type: file
-    file_storage_storage_class: manila-csi
+    file_storage_storage_class: csi-manila-default
     file_storage_size: 150Gi
   lightspeed:
     disabled: true
