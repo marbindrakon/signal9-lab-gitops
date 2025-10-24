@@ -4,6 +4,10 @@ kind: AnsibleAutomationPlatform
 metadata:
   name: acm-hub-aap
   namespace: aap
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+
 spec:
   # Platform
   image_pull_policy: IfNotPresent
