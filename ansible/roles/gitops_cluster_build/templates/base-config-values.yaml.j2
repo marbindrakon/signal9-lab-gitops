@@ -112,10 +112,10 @@ metallb:
   peers:
     - name: lab-rtr-a
       address: 172.18.16.2
-      asn: 65123
+      asn: 65002
     - name: lab-rtr-b
       address: 172.18.16.3
-      asn: 65123
+      asn: 65002
   clusterIpPool: "{{ metallb_network.value.prefix }}"
   anycastIpPool: "172.18.71.0/24"
 {% endif %}
