@@ -1,61 +1,61 @@
-assignments:
-  - node: az1-compute-0.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az1-compute-1.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az2-compute-0.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az2-compute-1.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az3-compute-0.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az3-compute-1.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az1-networker-0.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az1-networker-1.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az2-networker-0.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az2-networker-1.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az3-networker-0.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
-  - node: az3-networker-1.lab.signal9.gg
-    namespace: openstack
-    assignmentType: metal3
-    extraLabels: {}
-    extraAnnotations: {}
+assignments: []
+# - node: az1-compute-0.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az1-compute-1.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az2-compute-0.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az2-compute-1.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az3-compute-0.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az3-compute-1.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az1-networker-0.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az1-networker-1.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az2-networker-0.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az2-networker-1.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az3-networker-0.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
+# - node: az3-networker-1.lab.signal9.gg
+#   namespace: openstack
+#   assignmentType: metal3
+#   extraLabels: {}
+#   extraAnnotations: {}
