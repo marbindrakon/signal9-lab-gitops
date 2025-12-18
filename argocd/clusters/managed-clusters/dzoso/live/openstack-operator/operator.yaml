@@ -21,7 +21,5 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   config:
-    env:
-      - name: RELATED_IMAGE_DESIGNATE_OPERATOR_MANAGER_IMAGE_URL
-        value: quay.signal9.gg/aaustin/designate-controller-manager@sha256:d47f0d100ce21a659d5cb38c0b1891cd00d26bdb7d125cce121b5542e3c9795d
+    env: []
 ---
