@@ -37,7 +37,7 @@ spec:
     bmhLabelSelector:
       oso-role: networker
       oso-zone: az1
-    ctlplaneInterface: enp5s0
+    ctlplaneInterface: eno3
     cloudUserName: cloud-admin
     passwordSecret:
       name: {{ .Values.cloudName }}-password-secret
@@ -45,8 +45,6 @@ spec:
   nodes:
     az1-networker-0:
       hostName: az1-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    az1-networker-1:
-      hostName: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
   networkAttachments:
     - ctlplane
   nodeTemplate:
@@ -122,7 +120,7 @@ spec:
         dns_search_domains:
           - ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
           - {{ .Values.baseDomain }}
-        edpm_network_config_nmstate: false
+        edpm_network_config_nmstate: true
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
@@ -139,11 +137,11 @@ spec:
             bonding_options: "mode=active-backup"
             members:
             - type: interface
-              name: enp5s0
+              name: eno3
               mtu: {{ "{{ min_viable_mtu }}" }}
               primary: true
             - type: interface
-              name: enp6s0
+              name: eno3d1
               mtu: {{ "{{ min_viable_mtu }}" }}
           - type: vlan
             device: bond0
@@ -199,11 +197,11 @@ spec:
               bonding_options: "mode=active-backup"
               members:
               - type: interface
-                name: enp7s0
+                name: eno1
                 mtu: 9000
                 primary: true
               - type: interface
-                name: enp8s0
+                name: eno2
                 mtu: 9000
           {% for network in role_networks %}
           {% if network in bond1_nets %}
