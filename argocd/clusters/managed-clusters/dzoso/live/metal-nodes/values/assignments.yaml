@@ -1,9 +1,9 @@
-assignments: []
-# - node: az1-compute-0.lab.signal9.gg
-#   namespace: openstack
-#   assignmentType: metal3
-#   extraLabels: {}
-#   extraAnnotations: {}
+assignments:
+  - node: az1-compute-0.lab.signal9.gg
+    namespace: openstack
+    assignmentType: metal3
+    extraLabels: {}
+    extraAnnotations: {}
 # - node: az1-compute-1.lab.signal9.gg
 #   namespace: openstack
 #   assignmentType: metal3
