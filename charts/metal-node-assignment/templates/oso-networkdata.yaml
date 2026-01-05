@@ -1,0 +1,74 @@
+{{- range .Values.assignments -}}
+{{- if .createOsoNetworkData | default false -}}
+{{- $nodeConfig := (get $.Values.nodes .node) -}}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .node }}-network-data
+  namespace: openstack
+stringData:
+  networkData: |
+    links:
+    - name: eno3
+      id: eno3
+      mtu: 9000
+      type: vif
+    - name: eno3
+      id: eno3d1
+      mtu: 9000
+      type: vif
+    - name: bond0
+      type: bond
+      mtu: 9000
+      id: bond0
+      bond_links:
+        - eno3
+        - eno3d1
+      bond_mode: active-backup
+      bond_xmit_hash_policy: layer2
+      bond_miimon: 100
+    - name: bond0.100
+      id: bond0.100
+      type: vlan
+      mtu: 9000
+      vlan_id: 100
+      vlan_link: bond0
+      vlan_mac_address: null
+    - name: bond0.20
+      id: bond0.20
+      type: vlan
+      mtu: 1500
+      vlan_id: 20
+      vlan_link: bond0
+      vlan_mac_address: null
+
+    networks:
+    - link: bond0.{{ $nodeConfig.osoCtlplaneVlan }}
+      id: bond0.{{ $nodeConfig.osoCtlplaneVlan }}
+      type: ipv4
+      ip_address: {{ $nodeConfig.osoCtlplaneIp }}
+      netmask: "255.255.255.0"
+      routes:
+      - network: 172.18.150.0
+        netmask: 255.255.255.0
+        gateway: {{ $nodeConfig.osoCtlplaneGw }}
+    - link: bond0.{{ $nodeConfig.osoMgmtVlan }}
+      id: bond0.{{ $nodeConfig.osoMgmtVlan }}
+      type: ipv4
+      ip_address: {{ $nodeConfig.osoMgmtIp }}
+      netmask: "255.255.255.0"
+      routes:
+      - network: 0.0.0.0
+        netmask: 0.0.0.0
+        gateway: {{ $nodeConfig.osoMgmtGw }}
+
+    services:
+    - type: dns-nameserver
+      address:
+        - 172.18.150.240
+      search:
+        - ctlplane.dzcloud.lab.signal9.gg
+---
+{{ end }}
+{{ end }}

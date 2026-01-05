@@ -1,6 +1,7 @@
 assignments: []
   #- node: <node name from node list>
   #  namespace: <destination namespace>
+  #  createOsoNetworkData: false
   #  assignmentType: metal3 / agent
   #  extraLabels: {}
   #  extraAnnotations: {}
@@ -9,6 +10,12 @@ assignments: []
 nodes: []
   #<name>:
   #  labels:
+  #  osoCtlplaneGw:
+  #  osoCtlplaneVlan:
+  #  osoCtlplaneIp:
+  #  osoMgmtVlan:
+  #  osoMgmtGw:
+  #  osoMgmtIp:
   #  annotations:
   #  bootMac:
   #  bmc:

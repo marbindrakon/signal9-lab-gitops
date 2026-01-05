@@ -84,6 +84,12 @@ nodes:
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
+    osoCtlplaneVlan: 501
+    osoMgmtVlan: 581
+    osoCtlplaneGw: 172.18.150.1
+    osoMgmtGw: 172.18.158.1
+    osoCtlplaneIp: 172.18.150.6
+    osoMgmtIp: 172.18.158.6
   az1-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
@@ -169,6 +175,13 @@ nodes:
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
+    osoCtlplaneVlan: 501
+    osoMgmtVlan: 581
+    osoCtlplaneGw: 172.18.150.1
+    osoMgmtGw: 172.18.158.1
+    osoCtlplaneIp: 172.18.150.8
+    osoMgmtIp: 172.18.158.8
+
   az2-compute-0.lab.signal9.gg:
     bmc:
       externalSecret:
@@ -254,6 +267,14 @@ nodes:
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
+
+    osoCtlplaneVlan: 502
+    osoMgmtVlan: 582
+    osoCtlplaneGw: 172.18.150.65
+    osoMgmtGw: 172.18.158.65
+    osoCtlplaneIp: 172.18.150.72
+    osoMgmtIp: 172.18.158.72
+
   az2-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
@@ -339,6 +360,13 @@ nodes:
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
+    osoCtlplaneVlan: 502
+    osoMgmtVlan: 582
+    osoCtlplaneGw: 172.18.150.65
+    osoMgmtGw: 172.18.158.65
+    osoCtlplaneIp: 172.18.150.74
+    osoMgmtIp: 172.18.158.74
+
   az3-compute-0.lab.signal9.gg:
     bmc:
       externalSecret:
@@ -424,6 +452,13 @@ nodes:
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
+    osoCtlplaneVlan: 503
+    osoMgmtVlan: 583
+    osoCtlplaneGw: 172.18.150.129
+    osoMgmtGw: 172.18.158.129
+    osoCtlplaneIp: 172.18.150.134
+    osoMgmtIp: 172.18.158.134
+
   az3-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
@@ -509,3 +544,10 @@ nodes:
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
+    osoCtlplaneVlan: 503
+    osoMgmtVlan: 583
+    osoCtlplaneGw: 172.18.150.129
+    osoMgmtGw: 172.18.158.129
+    osoCtlplaneIp: 172.18.150.136
+    osoMgmtIp: 172.18.158.136
+
