@@ -9,3 +9,8 @@ spec:
   virtualMediaViaExternalNetwork: true
   provisioningNetwork: Disabled
   disableVirtualMediaTLS: true
+  preProvisioningOSDownloadURLs:
+    isoURL: http://172.18.0.11/lab-iso/metal3-4.18/rhcos-live.x86_64.iso
+    rootfsURL: http://172.18.0.11/lab-iso/metal3-4.18/rhcos-live-rootfs.x86_64.img
+    initramfsURL: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.18/4.18.30/rhcos-installer-initramfs.x86_64.img
+    kernelURL: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.18/4.18.30/rhcos-installer-kernel-x86_64
