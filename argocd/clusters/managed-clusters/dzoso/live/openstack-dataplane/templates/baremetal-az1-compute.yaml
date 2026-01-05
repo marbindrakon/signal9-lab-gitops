@@ -40,7 +40,7 @@ spec:
     bmhLabelSelector:
       oso-role: compute
       oso-zone: az1
-    ctlplaneInterface: enp5s0
+    ctlplaneInterface: eno3
     cloudUserName: cloud-admin
     passwordSecret:
       name: {{ .Values.cloudName }}-password-secret
@@ -48,6 +48,25 @@ spec:
   nodes:
     az1-compute-0:
       hostName: az1-compute-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+      networkData:
+        namespace: openstack
+        name: az1-compute-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}-network-data
+      networks:
+        - name: CtlPlane
+          subnetName: az1-subnet
+          fixedIP: 172.18.150.6
+        - name: InternalApi
+          subnetName: az1-subnet
+        - name: Management
+          subnetName: az1-subnet
+          fixedIP: 172.18.158.6
+          defaultRoute: true
+        - name: Storage
+          subnetName: az1-subnet
+        - name: Tenant
+          subnetName: az1-subnet
+        - name: TenantPeering
+          subnetName: az1-subnet
   networkAttachments:
     - ctlplane
   nodeTemplate:
@@ -98,19 +117,33 @@ spec:
         edpm_ovn_availability_zones: ['az1']
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_uplinks_scope: external
-        edpm_frr_bgp_asn: 65006
-        edpm_ovn_bgp_agent_bgp_as: 65006
         edpm_frr_bgp_ipv4_src_network: tenantpeering
+        edpm_frr_bgp_ipv4: false
+        edpm_frr_bgp_ipv6: false
+        edpm_frr_bgp_l2vpn: true
+        edpm_frr_bgp_l2vpn_ebgp_multihop: 3
+        edpm_frr_bgp_neighbor_ttl_security_hops: 3
+        edpm_frr_bgp_learning_routes: false
         edpm_ovn_bgp_agent_exposing_method: vrf
-        edpm_ovn_bgp_agent_evpn_nic: vlan532
+        edpm_ovn_bgp_agent_evpn_nic: vlan531
+        edpm_ovn_bgp_agent_reconcile_interval: 120
+        edpm_ovn_bgp_agent_evpn_local_ip: "{{ "{{ lookup('vars', 'tenantpeering_ip') }}" }}"
+        timesync_ntp_servers:
+          - hostname: 172.18.0.79
+          - hostname: 172.18.42.10
+          - hostname: 172.18.42.11
+        edpm_frr_bgp_asn: 65106
+        edpm_ovn_bgp_agent_bgp_as: 65106
         edpm_ovn_bridge_mappings:
           - 'datacentre:br-ex'
           - 'az1-vlan:br-az1-vlan'
           - 'bgp-physnet:br-bgp'
         edpm_frr_bgp_peers:
-          - 172.18.153.1
-          - 172.18.153.2
-
+          - 172.18.153.3
+          - 172.18.153.4
+        edpm_frr_bgp_l2vpn_peers:
+          - 172.18.153.3
+          - 172.18.153.4
         edpm_chrony_ntp_servers:
           - 172.18.0.79
           - 172.18.42.10
@@ -221,7 +254,7 @@ spec:
         # These vars are for the network config templates themselves and are
         # considered EDPM network defaults.
         neutron_physical_bridge_name: br-ex
-        neutron_public_interface_name: vlan{{ "{{ tenantpeering_vlan_id }}" }}
+        neutron_public_interface_name: vlan{{ "{{ tenant_vlan_id }}" }}
         role_networks:
         - InternalApi
         - Storage
@@ -233,7 +266,7 @@ spec:
           InternalApi: internal_api
           Storage: storage
           Tenant: tenant
-          TenantPeering: tenant_peering
+          TenantPeering: tenantpeering
         # edpm_nodes_validation
         edpm_nodes_validation_validate_controllers_icmp: false
         edpm_nodes_validation_validate_gateway_icmp: false
