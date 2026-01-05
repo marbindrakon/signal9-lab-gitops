@@ -44,8 +44,8 @@ spec:
   nodes:
     az3-networker-0:
       hostName: az3-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    az3-networker-1:
-      hostName: az3-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+#   az3-networker-1:
+#     hostName: az3-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
   networkAttachments:
     - ctlplane
   nodeTemplate:
