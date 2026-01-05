@@ -59,6 +59,7 @@ nodes:
                 - eno2
             mtu: 9000
             name: bond1
+            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -142,6 +143,7 @@ nodes:
                 - eno2
             mtu: 9000
             name: bond1
+            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -225,6 +227,7 @@ nodes:
                 - eno2
             mtu: 9000
             name: bond1
+            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -308,6 +311,7 @@ nodes:
                 - eno2
             mtu: 9000
             name: bond1
+            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -391,6 +395,7 @@ nodes:
                 - eno2
             mtu: 9000
             name: bond1
+            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -474,6 +479,7 @@ nodes:
                 - eno2
             mtu: 9000
             name: bond1
+            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
