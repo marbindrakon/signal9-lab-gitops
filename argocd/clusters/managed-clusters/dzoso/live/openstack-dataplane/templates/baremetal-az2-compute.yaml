@@ -48,8 +48,8 @@ spec:
   nodes:
     az2-compute-0:
       hostName: az2-compute-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-    az2-compute-1:
-      hostName: az2-compute-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+#   az2-compute-1:
+#     hostName: az2-compute-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
   networkAttachments:
     - ctlplane
   nodeTemplate:
