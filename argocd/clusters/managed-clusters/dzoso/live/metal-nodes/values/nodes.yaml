@@ -54,12 +54,13 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
+                primary: eno1
+                primary_reselect: always
               port:
                 - eno1
                 - eno2
             mtu: 9000
             name: bond1
-            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -138,12 +139,13 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
+                primary: eno1
+                primary_reselect: always
               port:
                 - eno1
                 - eno2
             mtu: 9000
             name: bond1
-            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -222,12 +224,13 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
+                primary: eno1
+                primary_reselect: always
               port:
                 - eno1
                 - eno2
             mtu: 9000
             name: bond1
-            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -306,12 +309,13 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
+                primary: eno1
+                primary_reselect: always
               port:
                 - eno1
                 - eno2
             mtu: 9000
             name: bond1
-            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -390,12 +394,13 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
+                primary: eno1
+                primary_reselect: always
               port:
                 - eno1
                 - eno2
             mtu: 9000
             name: bond1
-            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
@@ -474,12 +479,13 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
+                primary: eno1
+                primary_reselect: always
               port:
                 - eno1
                 - eno2
             mtu: 9000
             name: bond1
-            copy-mac-from: eno1
             state: up
             type: bond
           - ipv4:
