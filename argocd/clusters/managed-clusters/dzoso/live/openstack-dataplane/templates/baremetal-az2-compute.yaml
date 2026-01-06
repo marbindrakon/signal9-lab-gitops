@@ -50,7 +50,7 @@ spec:
       hostName: az2-compute-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
       networkData:
         namespace: openstack
-        name: az2-compute-0.{{ .Values.cloudName }}.{{ .Values.baseDomain }}-network-data
+        name: az2-compute-0.{{ .Values.baseDomain }}-network-data
       networks:
         - name: CtlPlane
           subnetName: az2-subnet
