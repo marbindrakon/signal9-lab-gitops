@@ -28,18 +28,18 @@ stringData:
       bond_mode: active-backup
       bond_xmit_hash_policy: layer2
       bond_miimon: 100
-    - name: bond0.100
-      id: bond0.100
+    - name: bond0.{{ $nodeConfig.osoCtlplaneVlan }}
+      id: bond0.{{ $nodeConfig.osoCtlplaneVlan }}
       type: vlan
       mtu: 9000
-      vlan_id: 100
+      vlan_id: {{ $nodeConfig.osoCtlplaneVlan }}
       vlan_link: bond0
       vlan_mac_address: null
-    - name: bond0.20
-      id: bond0.20
+    - name: bond0.{{ $nodeConfig.osoMgmtVlan }}
+      id: bond0.{{ $nodeConfig.osoMgmtVlan }}
       type: vlan
       mtu: 1500
-      vlan_id: 20
+      vlan_id: {{ $nodeConfig.osoMgmtVlan }}
       vlan_link: bond0
       vlan_mac_address: null
 
