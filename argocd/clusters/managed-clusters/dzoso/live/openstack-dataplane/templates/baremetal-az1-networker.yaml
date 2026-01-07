@@ -212,20 +212,14 @@ spec:
           - type: ovs_bridge
             name: br-az1-vlan
             mtu: 9000
+            members:
+            - type: ovs_patch_port
+              name: br-ex-patch
+              bridge_name: br-az1-vlan
+              peer: br-az1-vlan-patch
           - type: ovs_bridge
             name: br-bgp
             mtu: 9000
-          - type: ovs_patch_port
-            name: br-ex-patch
-            bridge_name: br-az1-vlan
-            mtu: 9000
-            peer: br-az1-vlan-patch
-          - type: ovs_patch_port
-            name: br-az1-vlan-patch
-            mtu: 9000
-            bridge_name: br-ex
-            mtu: 9000
-            peer: br-ex-patch
           - type: ovs_bridge
             name: br-ex
             members:
@@ -241,6 +235,10 @@ spec:
               - type: interface
                 name: eno2
                 mtu: 9000
+            - type: ovs_patch_port
+              name: br-az1-vlan-patch
+              bridge_name: br-ex
+              peer: br-ex-patch
           {% for network in role_networks %}
           {% if network in bond1_nets %}
             - type: vlan
