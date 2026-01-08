@@ -40,7 +40,7 @@ spec:
     bmhLabelSelector:
       oso-role: compute
       oso-zone: az1
-    ctlplaneInterface: eno3
+    ctlplaneInterface: enp2s0
     cloudUserName: cloud-admin
     passwordSecret:
       name: {{ .Values.cloudName }}-password-secret
@@ -175,11 +175,11 @@ spec:
             bonding_options: "mode=active-backup"
             members:
             - type: interface
-              name: eno3
+              name: enp2s0
               mtu: {{ "{{ min_viable_mtu }}" }}
               primary: true
             - type: interface
-              name: eno3d1
+              name: enp4s0
               mtu: {{ "{{ min_viable_mtu }}" }}
           - type: vlan
             device: bond0
@@ -229,11 +229,11 @@ spec:
               bonding_options: "mode=active-backup"
               members:
               - type: interface
-                name: eno1
+                name: enp1s0
                 mtu: 9000
                 primary: true
               - type: interface
-                name: eno2
+                name: enp3s0
                 mtu: 9000
             - type: ovs_patch_port
               name: br-az1-vlan-patch
