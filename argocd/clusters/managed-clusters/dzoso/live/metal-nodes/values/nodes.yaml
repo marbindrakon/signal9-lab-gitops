@@ -15,13 +15,13 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eth0
+        - name: enp1s0
           macAddress: 52:54:00:d3:b3:86
-        - name: eth1
+        - name: enp2s0
           macAddress: 52:54:00:4c:b4:14
-        - name: eth2
+        - name: enp3s0
           macAddress: 52:54:00:cd:a0:6f
-        - name: eth3
+        - name: enp4s0
           macAddress: 52:54:00:b4:a3:0c
       nmstateConfig:
         dns-resolver:
@@ -40,8 +40,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth0
-                - eth2
+                - enp1s0
+                - enp3s0
             mtu: 9000
             name: bond0
             state: up
@@ -56,8 +56,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth1
-                - eth3
+                - enp2s0
+                - enp4s0
             mtu: 9000
             name: bond1
             state: up
@@ -105,13 +105,13 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eth0
+        - name: enp1s0
           macAddress: 52:54:00:e3:a5:af
-        - name: eth1
+        - name: enp2s0
           macAddress: 52:54:00:d7:1a:d5
-        - name: eth2
+        - name: enp3s0
           macAddress: 52:54:00:5e:79:e1
-        - name: eth3
+        - name: enp4s0
           macAddress: 52:54:00:98:92:0e
       nmstateConfig:
         dns-resolver:
@@ -130,8 +130,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth0
-                - eth2
+                - enp1s0
+                - enp3s0
             mtu: 9000
             name: bond0
             state: up
@@ -146,8 +146,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth1
-                - eth3
+                - enp2s0
+                - enp4s0
             mtu: 9000
             name: bond1
             state: up
@@ -196,13 +196,13 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eth0
+        - name: enp1s0
           macAddress: 52:54:00:31:c0:9e
-        - name: eth1
+        - name: enp2s0
           macAddress: 52:54:00:f5:1f:d1
-        - name: eth2
+        - name: enp3s0
           macAddress: 52:54:00:10:37:0f
-        - name: eth3
+        - name: enp4s0
           macAddress: 52:54:00:c5:9a:e8
       nmstateConfig:
         dns-resolver:
@@ -221,8 +221,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth0
-                - eth2
+                - enp1s0
+                - enp3s0
             mtu: 9000
             name: bond0
             state: up
@@ -237,8 +237,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth1
-                - eth3
+                - enp2s0
+                - enp4s0
             mtu: 9000
             name: bond1
             state: up
@@ -286,13 +286,13 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eth0
+        - name: enp1s0
           macAddress: 52:54:00:f5:40:2e
-        - name: eth1
+        - name: enp2s0
           macAddress: 52:54:00:5a:ba:cc
-        - name: eth2
+        - name: enp3s0
           macAddress: 52:54:00:86:8e:a3
-        - name: eth3
+        - name: enp4s0
           macAddress: 52:54:00:d6:32:d4
       nmstateConfig:
         dns-resolver:
@@ -311,8 +311,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth0
-                - eth2
+                - enp1s0
+                - enp3s0
             mtu: 9000
             name: bond0
             state: up
@@ -327,8 +327,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth1
-                - eth3
+                - enp2s0
+                - enp4s0
             mtu: 9000
             name: bond1
             state: up
@@ -378,13 +378,13 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eth0
+        - name: enp1s0
           macAddress: 52:54:00:86:f6:8b
-        - name: eth1
+        - name: enp2s0
           macAddress: 52:54:00:54:d2:94
-        - name: eth2
+        - name: enp3s0
           macAddress: 52:54:00:23:07:8b
-        - name: eth3
+        - name: enp4s0
           macAddress: 52:54:00:c8:b9:ce
       nmstateConfig:
         dns-resolver:
@@ -403,8 +403,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth0
-                - eth2
+                - enp1s0
+                - enp3s0
             mtu: 9000
             name: bond0
             state: up
@@ -419,8 +419,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth1
-                - eth3
+                - enp2s0
+                - enp4s0
             mtu: 9000
             name: bond1
             state: up
@@ -470,13 +470,13 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eth0
+        - name: enp1s0
           macAddress: 52:54:00:e0:49:ab
-        - name: eth1
+        - name: enp2s0
           macAddress: 52:54:00:fa:2e:7b
-        - name: eth2
+        - name: enp3s0
           macAddress: 52:54:00:ec:d9:0c
-        - name: eth3
+        - name: enp4s0
           macAddress: 52:54:00:29:dc:67
       nmstateConfig:
         dns-resolver:
@@ -495,8 +495,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth0
-                - eth2
+                - enp1s0
+                - enp3s0
             mtu: 9000
             name: bond0
             state: up
@@ -511,8 +511,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eth1
-                - eth3
+                - enp2s0
+                - enp4s0
             mtu: 9000
             name: bond1
             state: up
