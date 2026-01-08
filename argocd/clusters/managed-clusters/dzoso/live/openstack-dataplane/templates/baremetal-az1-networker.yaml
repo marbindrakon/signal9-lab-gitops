@@ -52,20 +52,20 @@ spec:
         namespace: openstack
         name: az1-networker-0.{{ .Values.baseDomain }}-network-data
       networks:
-        - name: ctlplane
+        - name: CtlPlane
           subnetname: az1-subnet
           fixedip: 172.18.150.8
-        - name: internalapi
+        - name: InternalApi
           subnetname: az1-subnet
-        - name: management
+        - name: Management
           subnetname: az1-subnet
           fixedip: 172.18.158.8
           defaultroute: true
-        - name: storage
+        - name: Storage
           subnetname: az1-subnet
-        - name: tenant
+        - name: Tenant
           subnetname: az1-subnet
-        - name: tenantpeering
+        - name: TenantPeering
           subnetname: az1-subnet
     az1-networker-1:
       hostname: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
@@ -73,20 +73,20 @@ spec:
         namespace: openstack
         name: az1-networker-1.{{ .Values.baseDomain }}-network-data
       networks:
-        - name: ctlplane
+        - name: CtlPlane
           subnetname: az1-subnet
           fixedip: 172.18.150.9
-        - name: internalapi
+        - name: InternalApi
           subnetname: az1-subnet
-        - name: management
+        - name: Management
           subnetname: az1-subnet
           fixedip: 172.18.158.9
           defaultroute: true
-        - name: storage
+        - name: Storage
           subnetname: az1-subnet
-        - name: tenant
+        - name: Tenant
           subnetname: az1-subnet
-        - name: tenantpeering
+        - name: TenantPeering
           subnetname: az1-subnet
 
   networkAttachments:
