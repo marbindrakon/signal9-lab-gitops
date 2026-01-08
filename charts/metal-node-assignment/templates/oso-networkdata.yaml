@@ -10,12 +10,12 @@ metadata:
 stringData:
   networkData: |
     links:
-    - name: eno3
-      id: eno3
+    - name: enp1s0
+      id: enp1s0
       mtu: 9000
       type: vif
-    - name: eno3
-      id: eno3d1
+    - name: enp3s0
+      id: enp3s0
       mtu: 9000
       type: vif
     - name: bond0
@@ -23,8 +23,8 @@ stringData:
       mtu: 9000
       id: bond0
       bond_links:
-        - eno3
-        - eno3d1
+        - enp1s0
+        - enp3s0
       bond_mode: active-backup
       bond_xmit_hash_policy: layer2
       bond_miimon: 100
@@ -48,16 +48,19 @@ stringData:
       id: bond0.{{ $nodeConfig.osoCtlplaneVlan }}
       type: ipv4
       ip_address: {{ $nodeConfig.osoCtlplaneIp }}
-      netmask: "255.255.255.0"
+      netmask: "255.255.255.192"
       routes:
       - network: 172.18.150.0
+        netmask: 255.255.255.0
+        gateway: {{ $nodeConfig.osoCtlplaneGw }}
+      - network: 172.18.154.0
         netmask: 255.255.255.0
         gateway: {{ $nodeConfig.osoCtlplaneGw }}
     - link: bond0.{{ $nodeConfig.osoMgmtVlan }}
       id: bond0.{{ $nodeConfig.osoMgmtVlan }}
       type: ipv4
       ip_address: {{ $nodeConfig.osoMgmtIp }}
-      netmask: "255.255.255.0"
+      netmask: "255.255.255.192"
       routes:
       - network: 0.0.0.0
         netmask: 0.0.0.0
