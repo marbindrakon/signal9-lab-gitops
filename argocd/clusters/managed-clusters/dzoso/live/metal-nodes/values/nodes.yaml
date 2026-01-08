@@ -7,6 +7,7 @@ nodes:
         vaultName: openshift-ldap
       url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/52e1e7d4-7ad3-4099-bda1-b765faa27935
     bootMac: 52:54:00:d3:b3:86
+    bootMode: UEFISecureBoot
     labels:
       compute-model: virtual
       oso-role: compute
@@ -96,6 +97,7 @@ nodes:
         vaultName: openshift-ldap
       url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/15ebcc39-15d3-4d5c-ab4d-dfd3e0448d57
     bootMac: 52:54:00:e3:a5:af
+    bootMode: UEFISecureBoot
     labels:
       compute-model: virtual
       oso-role: networker
@@ -186,6 +188,7 @@ nodes:
         vaultName: openshift-ldap
       url: redfish-virtualmedia+http://172.18.0.62:8000/redfish/v1/Systems/dffecf40-b07f-4c10-a5f5-5b72ae3808c5
     bootMac: 52:54:00:31:c0:9e
+    bootMode: UEFISecureBoot
     labels:
       compute-model: virtual
       oso-role: compute
@@ -275,6 +278,7 @@ nodes:
         vaultName: openshift-ldap
       url: redfish-virtualmedia+http://172.18.0.62:8000/redfish/v1/Systems/f4b0cb2d-687f-4189-8c9b-7fa31a8043e1
     bootMac: 52:54:00:f5:40:2e
+    bootMode: UEFISecureBoot
     labels:
       compute-model: virtual
       oso-role: networker
@@ -366,6 +370,7 @@ nodes:
         vaultName: openshift-ldap
       url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/fd77b745-502d-4a82-90f2-2564b8586e15
     bootMac: 52:54:00:86:f6:8b
+    bootMode: UEFISecureBoot
     labels:
       compute-model: virtual
       oso-role: compute
@@ -457,6 +462,7 @@ nodes:
         vaultName: openshift-ldap
       url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/57814619-5a6e-4787-9701-4c011130e775
     bootMac: 52:54:00:e0:49:ab
+    bootMode: UEFISecureBoot
     labels:
       compute-model: virtual
       oso-role: networker
