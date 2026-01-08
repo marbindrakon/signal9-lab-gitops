@@ -47,47 +47,47 @@ spec:
       namespace: openstack
   nodes:
     az1-networker-0:
-      hostname: az1-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-      networkdata:
+      hostName: az1-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+      networkData:
         namespace: openstack
         name: az1-networker-0.{{ .Values.baseDomain }}-network-data
       networks:
         - name: CtlPlane
-          subnetname: az1-subnet
-          fixedip: 172.18.150.8
+          subnetName: az1-subnet
+          fixedIP: 172.18.150.8
         - name: InternalApi
-          subnetname: az1-subnet
+          subnetName: az1-subnet
         - name: Management
-          subnetname: az1-subnet
-          fixedip: 172.18.158.8
-          defaultroute: true
+          subnetName: az1-subnet
+          fixedIP: 172.18.158.8
+          defaultRoute: true
         - name: Storage
-          subnetname: az1-subnet
+          subnetName: az1-subnet
         - name: Tenant
-          subnetname: az1-subnet
+          subnetName: az1-subnet
         - name: TenantPeering
-          subnetname: az1-subnet
+          subnetName: az1-subnet
     az1-networker-1:
-      hostname: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-      networkdata:
+      hostName: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+      networkData:
         namespace: openstack
         name: az1-networker-1.{{ .Values.baseDomain }}-network-data
       networks:
         - name: CtlPlane
-          subnetname: az1-subnet
-          fixedip: 172.18.150.9
+          subnetName: az1-subnet
+          fixedIP: 172.18.150.9
         - name: InternalApi
-          subnetname: az1-subnet
+          subnetName: az1-subnet
         - name: Management
-          subnetname: az1-subnet
-          fixedip: 172.18.158.9
-          defaultroute: true
+          subnetName: az1-subnet
+          fixedIP: 172.18.158.9
+          defaultRoute: true
         - name: Storage
-          subnetname: az1-subnet
+          subnetName: az1-subnet
         - name: Tenant
-          subnetname: az1-subnet
+          subnetName: az1-subnet
         - name: TenantPeering
-          subnetname: az1-subnet
+          subnetName: az1-subnet
 
   networkAttachments:
     - ctlplane
