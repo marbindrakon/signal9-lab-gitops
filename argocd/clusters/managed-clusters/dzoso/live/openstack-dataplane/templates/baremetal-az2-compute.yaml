@@ -162,10 +162,10 @@ spec:
           - 'bgp-physnet:br-bgp'
         edpm_frr_bgp_peers:
           - 172.18.153.80
-          - 172.18.153.81
+          - 172.18.153.82
         edpm_frr_bgp_l2vpn_peers:
           - 172.18.153.80
-          - 172.18.153.81
+          - 172.18.153.82
         edpm_chrony_ntp_servers:
           - 172.18.0.79
           - 172.18.42.10
