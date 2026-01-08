@@ -161,11 +161,11 @@ spec:
           - 'az3-vlan:br-az3-vlan'
           - 'bgp-physnet:br-bgp'
         edpm_frr_bgp_peers:
-          - 172.18.153.3
-          - 172.18.153.4
+          - 172.18.153.140
+          - 172.18.153.141
         edpm_frr_bgp_l2vpn_peers:
-          - 172.18.153.3
-          - 172.18.153.4
+          - 172.18.153.140
+          - 172.18.153.141
         edpm_chrony_ntp_servers:
           - 172.18.0.79
           - 172.18.42.10
