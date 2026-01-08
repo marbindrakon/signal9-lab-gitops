@@ -67,6 +67,28 @@ spec:
           subnetName: az3-subnet
         - name: TenantPeering
           subnetName: az3-subnet
+    az3-compute-1:
+      hostName: az3-compute-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+      networkData:
+        namespace: openstack
+        name: az3-compute-1.{{ .Values.baseDomain }}-network-data
+      networks:
+        - name: CtlPlane
+          subnetName: az3-subnet
+          fixedIP: 172.18.150.135
+        - name: InternalApi
+          subnetName: az3-subnet
+        - name: Management
+          subnetName: az3-subnet
+          fixedIP: 172.18.158.135
+          defaultRoute: true
+        - name: Storage
+          subnetName: az3-subnet
+        - name: Tenant
+          subnetName: az3-subnet
+        - name: TenantPeering
+          subnetName: az3-subnet
+
   networkAttachments:
     - ctlplane
   nodeTemplate:
