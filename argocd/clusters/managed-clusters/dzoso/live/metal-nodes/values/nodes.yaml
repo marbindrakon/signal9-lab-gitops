@@ -5,8 +5,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-4.oob.signal9.gg
-    bootMac: 2c:41:38:eb:da:18
+      url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/52e1e7d4-7ad3-4099-bda1-b765faa27935
+    bootMac: 52:54:00:d3:b3:86
     labels:
       compute-model: virtual
       oso-role: compute
@@ -14,14 +14,14 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eno1
-          macAddress: 2c:41:38:eb:da:18
-        - name: eno2
-          macAddress: 2c:41:38:eb:da:19
-        - name: eno3
-          macAddress: 00:02:c9:2f:c0:a8
-        - name: eno3d1
-          macAddress: 00:02:c9:2f:c0:a9
+        - name: eth0
+          macAddress: 52:54:00:d3:b3:86
+        - name: eth1
+          macAddress: 52:54:00:4c:b4:14
+        - name: eth2
+          macAddress: 52:54:00:cd:a0:6f
+        - name: eth3
+          macAddress: 52:54:00:b4:a3:0c
       nmstateConfig:
         dns-resolver:
           config:
@@ -39,8 +39,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eno3
-                - eno3d1
+                - eth0
+                - eth2
             mtu: 9000
             name: bond0
             state: up
@@ -54,11 +54,9 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
-                primary: eno1
-                primary_reselect: always
               port:
-                - eno1
-                - eno2
+                - eth1
+                - eth3
             mtu: 9000
             name: bond1
             state: up
@@ -74,7 +72,7 @@ nodes:
             state: up
             type: vlan
             vlan:
-              base-iface: bond1
+              base-iface: bond0
               id: 581
         routes:
           config:
@@ -83,7 +81,7 @@ nodes:
               next-hop-interface: bond0.581
               table-id: 254
     rootDeviceHints:
-      deviceName: /dev/sda
+      deviceName: /dev/vda
     osoCtlplaneVlan: 501
     osoMgmtVlan: 581
     osoCtlplaneGw: 172.18.150.1
@@ -96,8 +94,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-6.oob.signal9.gg
-    bootMac: 2c:41:38:eb:d3:90
+      url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/15ebcc39-15d3-4d5c-ab4d-dfd3e0448d57
+    bootMac: 52:54:00:e3:a5:af
     labels:
       compute-model: virtual
       oso-role: networker
@@ -105,14 +103,14 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eno1
-          macAddress: 2c:41:38:eb:d3:90
-        - name: eno2
-          macAddress: 2c:41:38:eb:d3:91
-        - name: eno3
-          macAddress: 00:02:c9:2f:3b:68
-        - name: eno3d1
-          macAddress: 00:02:c9:2f:3b:69
+        - name: eth0
+          macAddress: 52:54:00:e3:a5:af
+        - name: eth1
+          macAddress: 52:54:00:d7:1a:d5
+        - name: eth2
+          macAddress: 52:54:00:5e:79:e1
+        - name: eth3
+          macAddress: 52:54:00:98:92:0e
       nmstateConfig:
         dns-resolver:
           config:
@@ -130,8 +128,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eno3
-                - eno3d1
+                - eth0
+                - eth2
             mtu: 9000
             name: bond0
             state: up
@@ -145,11 +143,9 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
-                primary: eno1
-                primary_reselect: always
               port:
-                - eno1
-                - eno2
+                - eth1
+                - eth3
             mtu: 9000
             name: bond1
             state: up
@@ -165,7 +161,7 @@ nodes:
             state: up
             type: vlan
             vlan:
-              base-iface: bond1
+              base-iface: bond0
               id: 581
         routes:
           config:
@@ -174,7 +170,7 @@ nodes:
               next-hop-interface: bond0.581
               table-id: 254
     rootDeviceHints:
-      deviceName: /dev/sda
+      deviceName: /dev/vda
     osoCtlplaneVlan: 501
     osoMgmtVlan: 581
     osoCtlplaneGw: 172.18.150.1
@@ -182,29 +178,29 @@ nodes:
     osoCtlplaneIp: 172.18.150.8
     osoMgmtIp: 172.18.158.8
 
-  az2-compute-0.lab.signal9.gg:
+  az1-compute-1.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-7.oob.signal9.gg
-    bootMac: e8:39:35:f0:32:2c
+      url: redfish-virtualmedia+http://172.18.0.62:8000/redfish/v1/Systems/dffecf40-b07f-4c10-a5f5-5b72ae3808c5
+    bootMac: 52:54:00:31:c0:9e
     labels:
       compute-model: virtual
       oso-role: compute
-      oso-zone: az2
+      oso-zone: az1
     namespace: openstack
     network:
       interfaceMap:
-        - name: eno1
-          macAddress: e8:39:35:f0:32:2c
-        - name: eno2
-          macAddress: e8:39:35:f0:32:2d
-        - name: eno3
-          macAddress: 00:02:c9:2f:25:d8
-        - name: eno3d1
-          macAddress: 00:02:c9:2f:25:d9
+        - name: eth0
+          macAddress: 52:54:00:31:c0:9e
+        - name: eth1
+          macAddress: 52:54:00:f5:1f:d1
+        - name: eth2
+          macAddress: 52:54:00:10:37:0f
+        - name: eth3
+          macAddress: 52:54:00:c5:9a:e8
       nmstateConfig:
         dns-resolver:
           config:
@@ -222,8 +218,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eno3
-                - eno3d1
+                - eth0
+                - eth2
             mtu: 9000
             name: bond0
             state: up
@@ -237,11 +233,189 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
-                primary: eno1
-                primary_reselect: always
               port:
-                - eno1
-                - eno2
+                - eth1
+                - eth3
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.7
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.581
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond0
+              id: 581
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
+              table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+    osoCtlplaneVlan: 501
+    osoMgmtVlan: 581
+    osoCtlplaneGw: 172.18.150.1
+    osoMgmtGw: 172.18.158.1
+    osoCtlplaneIp: 172.18.150.7
+    osoMgmtIp: 172.18.158.7
+  az1-networker-1.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.0.62:8000/redfish/v1/Systems/f4b0cb2d-687f-4189-8c9b-7fa31a8043e1
+    bootMac: 52:54:00:f5:40:2e
+    labels:
+      compute-model: virtual
+      oso-role: networker
+      oso-zone: az1
+    namespace: openstack
+    network:
+      interfaceMap:
+        - name: eth0
+          macAddress: 52:54:00:f5:40:2e
+        - name: eth1
+          macAddress: 52:54:00:5a:ba:cc
+        - name: eth2
+          macAddress: 52:54:00:86:8e:a3
+        - name: eth3
+          macAddress: 52:54:00:d6:32:d4
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        interfaces:
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eth0
+                - eth2
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eth1
+                - eth3
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.9
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.581
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond0
+              id: 581
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
+              table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/vda
+    osoCtlplaneVlan: 501
+    osoMgmtVlan: 581
+    osoCtlplaneGw: 172.18.150.1
+    osoMgmtGw: 172.18.158.1
+    osoCtlplaneIp: 172.18.150.9
+    osoMgmtIp: 172.18.158.9
+
+
+  az2-compute-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/fd77b745-502d-4a82-90f2-2564b8586e15
+    bootMac: 52:54:00:86:f6:8b
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az2
+    namespace: openstack
+    network:
+      interfaceMap:
+        - name: eth0
+          macAddress: 52:54:00:86:f6:8b
+        - name: eth1
+          macAddress: 52:54:00:54:d2:94
+        - name: eth2
+          macAddress: 52:54:00:23:07:8b
+        - name: eth3
+          macAddress: 52:54:00:c8:b9:ce
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        interfaces:
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eth0
+                - eth2
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eth1
+                - eth3
             mtu: 9000
             name: bond1
             state: up
@@ -257,7 +431,7 @@ nodes:
             state: up
             type: vlan
             vlan:
-              base-iface: bond1
+              base-iface: bond0
               id: 582
         routes:
           config:
@@ -266,7 +440,7 @@ nodes:
               next-hop-interface: bond0.582
               table-id: 254
     rootDeviceHints:
-      deviceName: /dev/sda
+      deviceName: /dev/vda
 
     osoCtlplaneVlan: 502
     osoMgmtVlan: 582
@@ -281,8 +455,8 @@ nodes:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-8.oob.signal9.gg
-    bootMac: 2c:41:38:eb:d3:2c
+      url: redfish-virtualmedia+http://172.18.0.61:8000/redfish/v1/Systems/57814619-5a6e-4787-9701-4c011130e775
+    bootMac: 52:54:00:e0:49:ab
     labels:
       compute-model: virtual
       oso-role: networker
@@ -290,14 +464,14 @@ nodes:
     namespace: openstack
     network:
       interfaceMap:
-        - name: eno1
-          macAddress: 2c:41:38:eb:d3:2c
-        - name: eno2
-          macAddress: 2c:41:38:eb:d3:2d
-        - name: eno3
-          macAddress: 24:be:05:a0:af:32
-        - name: eno3d1
-          macAddress: 24:be:05:a0:af:33
+        - name: eth0
+          macAddress: 52:54:00:e0:49:ab
+        - name: eth1
+          macAddress: 52:54:00:fa:2e:7b
+        - name: eth2
+          macAddress: 52:54:00:ec:d9:0c
+        - name: eth3
+          macAddress: 52:54:00:29:dc:67
       nmstateConfig:
         dns-resolver:
           config:
@@ -315,8 +489,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - eno3
-                - eno3d1
+                - eth0
+                - eth2
             mtu: 9000
             name: bond0
             state: up
@@ -330,11 +504,9 @@ nodes:
               mode: active-backup
               options:
                 miimon: '100'
-                primary: eno1
-                primary_reselect: always
               port:
-                - eno1
-                - eno2
+                - eth1
+                - eth3
             mtu: 9000
             name: bond1
             state: up
@@ -350,7 +522,7 @@ nodes:
             state: up
             type: vlan
             vlan:
-              base-iface: bond1
+              base-iface: bond0
               id: 582
         routes:
           config:
@@ -359,7 +531,7 @@ nodes:
               next-hop-interface: bond0.582
               table-id: 254
     rootDeviceHints:
-      deviceName: /dev/sda
+      deviceName: /dev/vda
     osoCtlplaneVlan: 502
     osoMgmtVlan: 582
     osoCtlplaneGw: 172.18.150.65
