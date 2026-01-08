@@ -10,6 +10,7 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
+    createOsoNetworkData: true
   - node: az2-compute-0.lab.signal9.gg
     namespace: openstack
     assignmentType: metal3
@@ -21,6 +22,7 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
+    createOsoNetworkData: true
   - node: az3-compute-0.lab.signal9.gg
     namespace: openstack
     assignmentType: metal3
@@ -32,6 +34,7 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
+    createOsoNetworkData: true
   - node: az1-networker-0.lab.signal9.gg
     namespace: openstack
     assignmentType: metal3
@@ -43,6 +46,7 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
+    createOsoNetworkData: true
   - node: az2-networker-0.lab.signal9.gg
     namespace: openstack
     assignmentType: metal3
@@ -54,6 +58,7 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
+    createOsoNetworkData: true
   - node: az3-networker-0.lab.signal9.gg
     namespace: openstack
     assignmentType: metal3
@@ -65,3 +70,4 @@ assignments:
     assignmentType: metal3
     extraLabels: {}
     extraAnnotations: {}
+    createOsoNetworkData: true
