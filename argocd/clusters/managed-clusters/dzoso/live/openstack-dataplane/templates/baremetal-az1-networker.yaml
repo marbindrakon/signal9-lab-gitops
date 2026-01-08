@@ -47,10 +47,10 @@ spec:
       namespace: openstack
   nodes:
     az1-networker-0:
-      hostname: az1-networker-0.ctlplane.{{ .values.cloudname }}.{{ .values.basedomain }}
+      hostname: az1-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
       networkdata:
         namespace: openstack
-        name: az1-networker-0.{{ .values.basedomain }}-network-data
+        name: az1-networker-0.{{ .Values.baseDomain }}-network-data
       networks:
         - name: ctlplane
           subnetname: az1-subnet
@@ -68,10 +68,10 @@ spec:
         - name: tenantpeering
           subnetname: az1-subnet
     az1-networker-1:
-      hostname: az1-networker-1.ctlplane.{{ .values.cloudname }}.{{ .values.basedomain }}
+      hostname: az1-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
       networkdata:
         namespace: openstack
-        name: az1-networker-1.{{ .values.basedomain }}-network-data
+        name: az1-networker-1.{{ .Values.baseDomain }}-network-data
       networks:
         - name: ctlplane
           subnetname: az1-subnet
