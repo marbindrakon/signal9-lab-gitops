@@ -546,6 +546,12 @@ spec:
                   metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
+      defaultConfigOverwrite:
+        policy-override.conf: |
+          [oslo_policy]
+          policy_file = /etc/barbican/barbican.conf.d/custom-policy.yaml
+        custom-policy.yaml: |
+          "secret_project_admin": "role:migrator or (role:admin and rule:secret_project_match)"
       barbicanWorker:
         replicas: 3
       barbicanKeystoneListener:
