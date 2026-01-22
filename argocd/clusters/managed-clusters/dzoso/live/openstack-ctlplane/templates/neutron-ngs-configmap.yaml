@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neutron-ml2-ngs
+  namespace: openstack
+data:
+  20-ml2-ngs.conf: |
+    [ml2]
+    mechanism_drivers = ovn,genericswitch
+
+    [genericswitch]
+    # Optional global defaults (timeouts, etc.)
+
+    # Example switch #1
+    [genericswitch:switch-core-1]
+    device_type = netmiko_sonic
+    ip = 172.18.1.5
+    username = ${SW1_USER}
+    password = ${SW1_PASS}
+    # Map Neutron ports to physical switch interfaces
+    interface_mapping = \
+      ilo-hp-blade-2-port-A:Ethernet80, \
+      ilo-hp-blade-4-port-A:Ethernet84, \
+      ilo-hp-blade-6-port-A:Ethernet88, \
+      ilo-hp-blade-8-port-A:Ethernet92
+
+    # Example switch #2
+    [genericswitch:switch-core-2]
+    device_type = netmiko_sonic
+    ip = 172.18.1.6
+    username = ${SW2_USER}
+    password = ${SW2_PASS}
+    interface_mapping = \
+      ilo-hp-blade-2-port-B:Ethernet80, \
+      ilo-hp-blade-4-port-B:Ethernet84, \
+      ilo-hp-blade-6-port-B:Ethernet88, \
+      ilo-hp-blade-8-port-B:Ethernet92
