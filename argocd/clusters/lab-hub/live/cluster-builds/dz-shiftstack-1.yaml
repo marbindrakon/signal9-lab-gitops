@@ -20,7 +20,7 @@ spec:
     syncOptions:
       - RespectIgnoreDifferences=true
   source:
-    repoURL: "https://www.github.com/marbindrakon/signal9-lab-gitops.git"
+    repoURL: "https://github.com/marbindrakon/signal9-lab-gitops.git"
     path: "charts/mce-cluster-build"
     targetRevision: HEAD
     helm:

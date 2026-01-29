@@ -4,7 +4,7 @@ cluster:
   createGitopsManifestWorks: false
   createGitopsSyncSet: false
   name: dz-shiftstack-1
-  gitOpsRepo: "https://www.github.com/marbindrakon/signal9-lab-gitops.git"
+  gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
   clusterImageSet: img4.18.30-x86-64-appsub
   controlPlaneCount: 3
