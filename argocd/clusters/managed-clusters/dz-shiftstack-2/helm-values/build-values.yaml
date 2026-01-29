@@ -93,5 +93,5 @@ provider:
       - az1
       - az2
       - az3
-    controlPlaneFlavor: ocp-controller
+    controlPlaneFlavor: ocp-controller-small
     workerFlavor: ocp-worker
