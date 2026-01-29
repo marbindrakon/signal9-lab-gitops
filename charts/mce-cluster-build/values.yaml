@@ -49,6 +49,9 @@ provider:
     existingImage: null
     externalNetwork: ""
     computeAZs: []
+    volumeAZs: []
+    rootVolumeSize: null
+    rootVolumeTypes: []
     controlPlaneFlavor: m1.xlarge
     workerFlavor: m1.large
   agent:

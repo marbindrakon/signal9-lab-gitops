@@ -93,5 +93,14 @@ provider:
       - az1
       - az2
       - az3
+    volumeAZs:
+      - az1
+      - az2
+      - az3
+    rootVolumeSize: 120
+    rootVolumeTypes:
+      - __DEFAULT__
+      - __DEFAULT__
+      - __DEFAULT__
     controlPlaneFlavor: ocp-controller-small
     workerFlavor: ocp-worker
