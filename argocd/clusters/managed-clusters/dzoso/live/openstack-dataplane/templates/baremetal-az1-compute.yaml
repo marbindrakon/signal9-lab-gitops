@@ -184,7 +184,7 @@ spec:
         edpm_network_config_template: |
           ---
           {% set mtu_list = [ctlplane_mtu] %}
-          {% set bond1_nets = ['Tenant'] %}
+          {% set bond1_nets = ['Tenant', 'TenantPeering'] %}
           {% for network in role_networks %}
           {{ "{{ mtu_list.append(lookup('vars', networks_lower[network] ~ '_mtu')) }}" }}
           {%- endfor %}
