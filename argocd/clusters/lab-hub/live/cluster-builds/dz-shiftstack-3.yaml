@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dz-shiftstack-2-deploy
+  name: dz-shiftstack-3-deploy
   namespace: openshift-gitops
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -25,4 +25,4 @@ spec:
     targetRevision: HEAD
     helm:
       valueFiles:
-        - "../../argocd/clusters/managed-clusters/dz-shiftstack-2/helm-values/build-values.yaml"
+        - "../../argocd/clusters/managed-clusters/dz-shiftstack-3/helm-values/build-values.yaml"
