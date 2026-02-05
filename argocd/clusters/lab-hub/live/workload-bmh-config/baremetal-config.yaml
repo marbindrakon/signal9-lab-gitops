@@ -27,5 +27,5 @@ spec:
     path: 'charts/metal-node-assignment'
     helm:
       valueFiles:
-        - ../../argocd/clusters/zardoz/live/workload-bmh-config/values/nodes.yaml
-        - ../../argocd/clusters/zardoz/live/workload-bmh-config/values/assignments.yaml
+        - ../../argocd/clusters/lab-hub/live/workload-bmh-config/values/nodes.yaml
+        - ../../argocd/clusters/lab-hub/live/workload-bmh-config/values/assignments.yaml
