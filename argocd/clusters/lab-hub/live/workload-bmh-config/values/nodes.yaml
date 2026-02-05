@@ -1,0 +1,97 @@
+nodes:
+  r730-sno.lab.signal9.gg:
+    labels:
+      compute-model: r730
+    bootMac: 24:6e:96:bf:21:5c
+    rootDeviceHints:
+      deviceName: "/dev/sda"
+    bmc:
+      url: idrac-virtualmedia://172.18.2.25
+      externalSecret:
+        vaultName: openshift-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno4
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - enp3s0
+                - enp3s0d1
+          - name: bond1.16
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 16
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.55
+                  prefix-length: 24
+          - name: bond1.19
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 19
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.19.55
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: bond1.16
+              table-id: 254
+            - destination: 172.18.14.0/24
+              next-hop-address: 172.18.19.1
+              next-hop-interface: bond1.19
+              table-id: 254
+      interfaceMap:
+        - name: eno3
+          macAddress: 24:6e:96:bf:21:5c
+        - name: eno4
+          macAddress: 24:6e:96:bf:21:5d
+        - name: enp3s0
+          macAddress: 24:8a:07:f6:f3:c0
+        - name: enp3s0d1
+          macAddress: 24:8a:07:f6:f3:c1
