@@ -236,7 +236,7 @@ spec:
             - type: ovs_patch_port
               name: br-ex-patch
               bridge_name: br-az2-vlan
-              peer: br-az2-vlan-patch
+              peer: p-az2-vlan
           - type: ovs_bridge
             name: br-bgp
             mtu: 9000
@@ -244,7 +244,7 @@ spec:
             name: br-ex
             members:
             - type: ovs_patch_port
-              name: br-az2-vlan-patch
+              name: p-az2-vlan
               bridge_name: br-ex
               peer: br-ex-patch
             - type: linux_bond

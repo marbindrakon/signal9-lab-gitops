@@ -236,7 +236,7 @@ spec:
             - type: ovs_patch_port
               name: br-ex-patch
               bridge_name: br-az1-vlan
-              peer: br-az1-vlan-patch
+              peer: p-az1-vlan
           - type: ovs_bridge
             name: br-bgp
             mtu: 9000
@@ -256,7 +256,7 @@ spec:
                 name: enp3s0
                 mtu: 9000
             - type: ovs_patch_port
-              name: br-az1-vlan-patch
+              name: p-az1-vlan
               bridge_name: br-ex
               peer: br-ex-patch
           {% for network in role_networks %}
