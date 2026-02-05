@@ -1,5 +1,6 @@
 {{- range .Values.assignments -}}
 {{- $nodeConfig := get $.Values.nodes .node -}}
+{{- if not (eq .assignmentType "agent-nobmh") -}}
 ---
 apiVersion: metal3.io/v1alpha1
 kind: BareMetalHost
@@ -44,4 +45,5 @@ spec:
     credentialsName: '{{ .node }}-creds'
     disableCertificateVerification: true
 ---
+{{ end }}
 {{ end }}

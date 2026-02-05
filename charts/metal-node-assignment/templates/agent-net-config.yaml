@@ -1,5 +1,5 @@
 {{- range .Values.assignments -}}
-{{- if eq .assignmentType "agent" -}}
+{{- if or (eq .assignmentType "agent") (eq .assignmentType "agent-nobmh") -}}
 {{- $nodeConfig := get $.Values.nodes .node -}}
 ---
 apiVersion: agent-install.openshift.io/v1beta1
