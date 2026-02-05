@@ -6,7 +6,13 @@ metadata:
   namespace: openshift-monitoring
 data:
   config.yaml: |
+{{ if .Values.monitoring.userWorkloadMonitoring }}
+    enableUserWorkload: true
     alertmanagerMain:
+      enableUserAlertmanagerConfig: true
+{{ else }}
+    alertmanagerMain:
+{{ end }}
       volumeClaimTemplate:
        spec:
          storageClassName: {{ .Values.monitoring.storageClass }}

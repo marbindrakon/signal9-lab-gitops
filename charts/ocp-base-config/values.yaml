@@ -54,6 +54,7 @@ monitoring:
   storageClass: standard
   alertManagerSize: 10Gi
   prometheusSize: 50Gi
+  userWorkloadMonitoring: false
 
 network:
   hostRouting: false
