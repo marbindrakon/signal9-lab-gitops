@@ -12,7 +12,7 @@ spec:
   admin_password_secret: aap-admin-password
   route_host: aap.lab.signal9.gg
   route_tls_secret: aap-route-certificate
-  route_tls_termination_mechanism: Passthrough
+  route_tls_termination_mechanism: Edge
   # Platform
   image_pull_policy: IfNotPresent
   # Components
