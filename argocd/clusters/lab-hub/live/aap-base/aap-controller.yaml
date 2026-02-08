@@ -9,8 +9,10 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 spec:
+  admin_password_secret: aap-admin-password
   route_host: aap.lab.signal9.gg
   route_tls_secret: aap-route-certificate
+  route_tls_termination_mechanism: Passthrough
   # Platform
   image_pull_policy: IfNotPresent
   # Components
