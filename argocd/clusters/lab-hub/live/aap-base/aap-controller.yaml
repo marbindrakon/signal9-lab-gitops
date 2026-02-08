@@ -9,6 +9,8 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
 spec:
+  route_host: aap.lab.signal9.gg
+  route_tls_secret: aap-route-certificate
   # Platform
   image_pull_policy: IfNotPresent
   # Components
