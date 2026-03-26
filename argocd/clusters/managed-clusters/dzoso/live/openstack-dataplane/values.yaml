@@ -336,7 +336,7 @@ networks:
         allocationRanges:
           - start: 172.18.159.30
             end: 172.18.159.49
-        cidr: 172.18.152.0/26
+        cidr: 172.18.159.0/26
         vlan: 921
         routes:
           - destination: 172.18.159.0/24
@@ -354,7 +354,7 @@ networks:
         allocationRanges:
           - start: 172.18.159.158
             end: 172.18.159.177
-        cidr: 172.18.152.129/26
+        cidr: 172.18.159.129/26
         vlan: 923
         routes:
           - destination: 172.18.159.0/24
