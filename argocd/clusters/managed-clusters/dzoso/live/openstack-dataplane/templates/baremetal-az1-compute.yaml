@@ -63,6 +63,8 @@ spec:
           defaultRoute: true
         - name: Storage
           subnetName: az1-subnet
+        - name: Storage2
+          subnetName: az1-subnet
         - name: Tenant
           subnetName: az1-subnet
         - name: TenantPeering
@@ -83,6 +85,8 @@ spec:
           fixedIP: 172.18.158.7
           defaultRoute: true
         - name: Storage
+          subnetName: az1-subnet
+        - name: Storage2
           subnetName: az1-subnet
         - name: Tenant
           subnetName: az1-subnet
@@ -112,6 +116,8 @@ spec:
         subnetName: az1-subnet
         defaultRoute: true
       - name: Storage
+        subnetName: az1-subnet
+      - name: Storage2
         subnetName: az1-subnet
       - name: Tenant
         subnetName: az1-subnet
@@ -276,6 +282,7 @@ spec:
         role_networks:
         - InternalApi
         - Storage
+        - Storage2
         - Management
         - Tenant
         - TenantPeering
@@ -283,6 +290,7 @@ spec:
           Management: management
           InternalApi: internal_api
           Storage: storage
+          Storage2: storage2
           Tenant: tenant
           TenantPeering: tenantpeering
         # edpm_nodes_validation
