@@ -318,6 +318,47 @@ networks:
         routes:
           - destination: 172.18.153.0/24
             nexthop: 172.18.153.129
+  storage2:
+    mtu: 9000
+    supernets:
+      - 172.18.159.0/24
+    controlPlaneSegment:
+      subnet: 172.18.159.192/26
+      containerRange:
+        start: 172.18.159.194
+        end: 172.18.159.239
+      loadbalancerRange:
+        start: 172.18.159.240
+        end: 172.18.159.254
+      loadbalancerIPs: []
+    nodeSegments:
+      - name: az1-subnet
+        allocationRanges:
+          - start: 172.18.159.30
+            end: 172.18.159.49
+        cidr: 172.18.152.0/26
+        vlan: 921
+        routes:
+          - destination: 172.18.159.0/24
+            nexthop: 172.18.159.1
+      - name: az2-subnet
+        allocationRanges:
+          - start: 172.18.159.94
+            end: 172.18.159.113
+        cidr: 172.18.159.64/26
+        vlan: 922
+        routes:
+          - destination: 172.18.159.0/24
+            nexthop: 172.18.159.65
+      - name: az3-subnet
+        allocationRanges:
+          - start: 172.18.159.158
+            end: 172.18.159.177
+        cidr: 172.18.152.129/26
+        vlan: 923
+        routes:
+          - destination: 172.18.159.0/24
+            nexthop: 172.18.159.129
 
 dataplaneBgpPeers:
   az1:
