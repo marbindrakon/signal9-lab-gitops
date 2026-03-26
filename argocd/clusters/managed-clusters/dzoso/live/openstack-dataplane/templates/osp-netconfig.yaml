@@ -38,3 +38,8 @@ spec:
     mtu: {{ .Values.networks.tenantPeering.mtu }}
     subnets:
 {{ toYaml .Values.networks.tenantPeering.nodeSegments | indent 6 }}
+  - name: Storage2
+    dnsDomain: storage2.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+    mtu: {{ .Values.networks.storage2.mtu }}
+    subnets:
+{{ toYaml .Values.networks.storage2.nodeSegments | indent 6 }}
