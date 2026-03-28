@@ -314,6 +314,36 @@ spec:
         dns_servers = 172.18.150.244,172.18.150.245,172.18.150.246
         [ml2_type_vlan]
         network_vlan_ranges = az1-vlan:1:999,az2-vlan:1:999,az3-vlan:1:999,datacentre:1:999,bgp-physnet:1:3999
+        # Added for NGS - ANDREW - CHECK TO CONFIRM?
+        [ml2]
+        mechanism_drivers = ovn,genericswitch,vlan
+      extraMounts:
+        - name: ml2-ngs
+          mountPath: /etc/neutron/plugins/ml2.d/20-ml2-ngs.conf
+          subPath: 20-ml2-ngs.conf
+          configMap:
+            name: neutron-ml2-ngs
+      extraEnvVars:
+        - name: SW1_USER
+          valueFrom:
+            secretKeyRef: oso-ngs-secret
+              name: oso-ngs-secret
+              key: SW1_USER
+        - name: SW1_PASS
+          valueFrom:
+            secretKeyRef: oso-ngs-secret
+              name: oso-ngs-secret
+              key: SW1_PASS
+        - name: SW2_USER
+          valueFrom:
+            secretKeyRef: oso-ngs-secret
+              name: oso-ngs-secret
+              key: SW2_USER
+        - name: SW2_PASS
+          valueFrom:
+            secretKeyRef: oso-ngs-secret
+              name: oso-ngs-secret
+              key: SW2_PASS
       networkAttachments:
       - internalapi
 
