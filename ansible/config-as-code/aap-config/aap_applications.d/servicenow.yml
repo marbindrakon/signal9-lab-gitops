@@ -1,5 +1,5 @@
 ---
-controller_applications:
+aap_applications:
   - name: "{{ env }} - servicenow"
     description: ""
     organization: "Signal9 Lab - {{ env }}"
