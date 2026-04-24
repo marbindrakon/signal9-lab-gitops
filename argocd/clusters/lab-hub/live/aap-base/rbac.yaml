@@ -25,6 +25,9 @@ subjects:
   - kind: ServiceAccount
     name: acm-hub-aap
     namespace: aap
+  - kind: ServiceAccount
+    name: acm-hub-aap-controller
+    namespace: aap
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
