@@ -8,41 +8,6 @@
     aap_hostname: "{{ vault_aap_hostname }}"
     aap_validate_certs: "{{ vault_aap_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL')) }}"
     output_path: "../filetree"
-  pre_tasks:
-    - name: "Setup authentication (block)"
-      block:
-        - name: "Get the Authentication Token for the future requests"
-          ansible.builtin.uri:
-            url: "https://{{ aap_hostname }}/api/v2/tokens/"
-            user: "{{ aap_username }}"
-            password: "{{ aap_password }}"
-            method: POST
-            force_basic_auth: true
-            validate_certs: "{{ aap_validate_certs }}"
-            status_code: 201
-          register: authtoken_res
-
-        - name: "Set the oauth token to be used since now"
-          ansible.builtin.set_fact:
-            aap_token: "{{ authtoken_res.json.token }}"
-            aap_token_url: "{{ authtoken_res.json.url }}"
-      no_log: "{{ aap_configuration_secure_logging | default('false') }}"
-      when: aap_token is not defined
-      tags:
-        - always
-
 
   roles:
     - infra.aap_configuration_extended.filetree_create
-
-  post_tasks:
-    - name: "Delete the Authentication Token used"
-      ansible.builtin.uri:
-        url: "https://{{ aap_hostname }}{{ aap_token_url }}"
-        user: "{{ aap_username }}"
-        password: "{{ aap_password }}"
-        method: DELETE
-        force_basic_auth: true
-        validate_certs: "{{ aap_validate_certs }}"
-        status_code: 204
-      when: aap_token_url is defined

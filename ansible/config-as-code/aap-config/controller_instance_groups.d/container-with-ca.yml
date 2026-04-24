@@ -1,0 +1,67 @@
+---
+controller_instance_groups:
+  - name: container-with-ca
+    is_container_group: true
+    pod_spec_override: |
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        namespace: aap
+        labels:
+          ansible_job: ''
+      spec:
+        serviceAccountName: acm-hub-aap
+        automountServiceAccountToken: false
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: ansible_job
+                        operator: Exists
+                  topologyKey: kubernetes.io/hostname
+        containers:
+          - image: >-
+              registry.redhat.io/ansible-automation-platform-26/ee-supported-rhel9@sha256:fe0982d489065a2a287fe076873cf1faa5410c0879def91bbc756280e924118d
+            name: worker
+            args:
+              - ansible-runner
+              - worker
+              - '--private-data-dir=/runner'
+            resources:
+              requests:
+                cpu: 250m
+                memory: 100Mi
+            volumeMounts:
+              - name: app-ca-trust
+                mountPath: /etc/pki/ca-trust/source/anchors/bundle-ca.crt
+                subPath: bundle-ca.crt
+                readOnly: true
+              - name: kube-api-access
+                mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+                readOnly: true
+        volumes:
+          - name: app-ca-trust
+            secret:
+              secretName: app-ca-trust
+          - name: kube-api-access
+            projected:
+              defaultMode: 420
+              sources:
+                - serviceAccountToken:
+                    expirationSeconds: 3600
+                    path: token
+                - configMap:
+                    name: kube-root-ca.crt
+                    items:
+                      - key: ca.crt
+                        path: ca.crt
+                - downwardAPI:
+                    items:
+                      - fieldRef:
+                          apiVersion: v1
+                          fieldPath: metadata.namespace
+                        path: namespace
+...
