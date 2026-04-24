@@ -16,6 +16,9 @@ spec:
   # Platform
   image_pull_policy: IfNotPresent
   # Components
+  mcp:
+    disabled: false
+    allow_write_operations: true
   controller:
     disabled: false
   eda:
