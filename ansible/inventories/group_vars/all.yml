@@ -2,10 +2,10 @@
 
 # DNS domain where all managed OCP clusters will be created
 base_domain: '{% if cluster_platform == "aws" %}{{ domain_slug }}.aws.signal9.gg{% else %}lab.signal9.gg{% endif %}'
-foundation_ingress_base_domain: "apps.zardoz.lab.signal9.gg"
+foundation_ingress_base_domain: "apps.lab-hub.lab.signal9.gg"
 gitops_repo_url: "https://github.com/marbindrakon/signal9-lab-gitops.git"
 gitops_repo_url_authed: "https://{{ upstream_git_user|urlencode }}:{{ upstream_git_password|urlencode }}@github.com/marbindrakon/signal9-lab-gitops.git"
-cluster_builds_dir: "argocd/clusters/zardoz/live/cluster-builds"
+cluster_builds_dir: "argocd/clusters/lab-hub/live/cluster-builds"
 hub_type: acm
 
 # LB type can be external or internal, this will likely be overridden
@@ -42,7 +42,7 @@ enabled_dns_providers:
 hashicorp_vault:
   url: "https://vault.lab.signal9.gg"
   auth_type: jwt
-  auth_mount: k8s-zardoz
+  auth_mount: k8s-lab-hub
   jwt_location: "/var/run/secrets/kubernetes.io/serviceaccount/token"
   auth_role: aap
   # Policy to be used for new k8s auth methods
@@ -169,15 +169,11 @@ cluster_sso:
 metallb_network_container: 172.18.72.0/21
 
 version_mapping:
-  "okd-4.16": "okd-4.16.0"
-  "okd-4.17": "okd-4.17.0"
-  "4.16": "4.16.32"
-  "4.17": "4.17.14"
-  "4.18": "4.18.3"
-  "4.15": "4.15.22"
-  "4.14": "4.14.33"
-  "4.13": "4.13.44"
-  "4.12": "4.12.60"
+  "4.16": "4.16.55"
+  "4.18": "4.18.37"
+  "4.19": "4.19.28"
+  "4.20": "4.20.18"
+  "4.21": "4.21.10"
 
 platform_configs:
   aws:
@@ -474,7 +470,7 @@ platform_configs:
         worker_count: 5
 
   hcp_kubevirt:
-    ingress_base_domain: "apps.zardoz.{{ base_domain }}"
+    ingress_base_domain: "apps.lab-hub.{{ base_domain }}"
     cluster_sizes:
       sandbox:
         etcd_size: 8Gi
