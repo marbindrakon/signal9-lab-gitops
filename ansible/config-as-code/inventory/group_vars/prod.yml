@@ -1,5 +1,5 @@
 servicenow_host: dev71874.service-now.com
 servicenow_client_id: fake
-aap_vault_auth_path: k8s-zardoz
-gitops_ee_image: quay.signal9.gg/aaustin/rhte-2023-gitops-ansible-env:50678
+aap_vault_auth_path: k8s-lab-hub
+gitops_ee_image: quay.signal9.gg/signal9-ee-images/signal9-openshift-iac:a00a53514fe74d82e01059438b1c3f3df1c5da25
 vault_aap_hostname: aap.lab.signal9.gg
