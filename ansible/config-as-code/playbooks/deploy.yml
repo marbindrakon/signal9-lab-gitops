@@ -3,23 +3,23 @@
   connection: local
   gather_facts: false
   vars:
-    controller_username: "{{ vault_controller_username | default(lookup('env', 'CONTROLLER_USERNAME')) }}"
-    controller_password: "{{ vault_controller_password | default(lookup('env', 'CONTROLLER_PASSWORD')) }}"
-    controller_hostname: "{{ vault_controller_hostname }}"
-    controller_validate_certs: "{{ vault_controller_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL')) }}"
+    aap_username: "{{ vault_aap_username | default(lookup('env', 'CONTROLLER_USERNAME')) }}"
+    aap_password: "{{ vault_aap_password | default(lookup('env', 'CONTROLLER_PASSWORD')) }}"
+    aap_hostname: "{{ vault_aap_hostname }}"
+    aap_validate_certs: "{{ vault_aap_validate_certs | default(lookup('env', 'CONTROLLER_VERIFY_SSL')) }}"
     dir_orgs_vars: "../aap-config"
     filetree_controller_settings: "{{ dir_orgs_vars }}/controller_settings.d/"
-    filetree_controller_organizations: "{{ dir_orgs_vars }}/controller_organizations.d/"
+    filetree_aap_organizations: "{{ dir_orgs_vars }}/aap_organizations.d/"
     filetree_controller_labels: "{{ dir_orgs_vars }}/controller_labels.d/"
-    filetree_controller_user_accounts: "{{ dir_orgs_vars }}/controller_users.d/"
-    filetree_controller_teams: "{{ dir_orgs_vars }}/controller_teams.d/"
+    filetree_aap_user_accounts: "{{ dir_orgs_vars }}/controller_users.d/"
+    filetree_aap_teams: "{{ dir_orgs_vars }}/controller_teams.d/"
     filetree_controller_credential_types: "{{ dir_orgs_vars }}/controller_credential_types.d/"
     filetree_controller_credentials: "{{ dir_orgs_vars }}/controller_credentials.d/"
     filetree_controller_credential_input_sources: "{{ dir_orgs_vars }}/controller_credential_input_sources.d/"
     filetree_controller_notifications: "{{ dir_orgs_vars }}/controller_notification_templates.d/"
     filetree_controller_projects: "{{ dir_orgs_vars }}/controller_projects.d/"
     filetree_controller_execution_environments: "{{ dir_orgs_vars }}/controller_execution_environments.d/"
-    filetree_controller_applications: "{{ dir_orgs_vars }}/controller_applications.d/"
+    filetree_aap_applications: "{{ dir_orgs_vars }}/aap_applications.d/"
     filetree_controller_inventories: "{{ dir_orgs_vars }}/controller_inventories.d/"
     filetree_controller_inventory_sources: "{{ dir_orgs_vars }}/controller_inventory_sources.d/"
     filetree_controller_instance_groups: "{{ dir_orgs_vars }}/controller_instance_groups.d/"
@@ -34,37 +34,37 @@
       block:
         - name: "Get the Authentication Token for the future requests"
           ansible.builtin.uri:
-            url: "https://{{ controller_hostname }}/api/v2/tokens/"
-            user: "{{ controller_username }}"
-            password: "{{ controller_password }}"
+            url: "https://{{ aap_hostname }}/api/v2/tokens/"
+            user: "{{ aap_username }}"
+            password: "{{ aap_password }}"
             method: POST
             force_basic_auth: true
-            validate_certs: "{{ controller_validate_certs }}"
+            validate_certs: "{{ aap_validate_certs }}"
             status_code: 201
           register: authtoken_res
 
         - name: "Set the oauth token to be used since now"
           ansible.builtin.set_fact:
-            controller_oauthtoken: "{{ authtoken_res.json.token }}"
-            controller_oauthtoken_url: "{{ authtoken_res.json.url }}"
-      no_log: "{{ controller_configuration_filetree_create_secure_logging | default('false') }}"
-      when: controller_oauthtoken is not defined
+            aap_token: "{{ authtoken_res.json.token }}"
+            aap_token_url: "{{ authtoken_res.json.url }}"
+      no_log: "{{ aap_configuration_secure_logging | default('false') }}"
+      when: aap_token is not defined
       tags:
         - always
 
 
   roles:
-    - infra.controller_configuration.filetree_read
-    - infra.controller_configuration.dispatch
+    - infra.aap_configuration_extended.filetree_read
+    - infra.aap_configuration.dispatch
 
   post_tasks:
     - name: "Delete the Authentication Token used"
       ansible.builtin.uri:
-        url: "https://{{ controller_hostname }}{{ controller_oauthtoken_url }}"
-        user: "{{ controller_username }}"
-        password: "{{ controller_password }}"
+        url: "https://{{ aap_hostname }}{{ aap_token_url }}"
+        user: "{{ aap_username }}"
+        password: "{{ aap_password }}"
         method: DELETE
         force_basic_auth: true
-        validate_certs: "{{ controller_validate_certs }}"
+        validate_certs: "{{ aap_validate_certs }}"
         status_code: 204
-      when: controller_oauthtoken_url is defined
+      when: aap_token_url is defined
