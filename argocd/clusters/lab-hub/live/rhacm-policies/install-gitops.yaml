@@ -117,22 +117,21 @@ metadata:
   namespace: rhacm-hub
 placementRef:
   name: placement-policy-managed-gitops
-  kind: PlacementRule
-  apiGroup: apps.open-cluster-management.io
+  kind: Placement
+  apiGroup: cluster.open-cluster-management.io
 subjects:
   - name: policy-managed-gitops
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
-apiVersion: apps.open-cluster-management.io/v1
-kind: PlacementRule
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
 metadata:
   name: placement-policy-managed-gitops
   namespace: rhacm-hub
 spec:
-  clusterConditions:
-    - status: "True"
-      type: ManagedClusterConditionAvailable
-  clusterSelector:
-    matchExpressions:
-      - { key: spoke-gitops, operator: In, values: ["true"] }
+  predicates:
+  - requiredClusterSelector:
+      labelSelector:
+        matchExpressions:
+          - { key: spoke-gitops, operator: In, values: ["true"] }
