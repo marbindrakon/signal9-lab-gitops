@@ -1,8 +1,8 @@
 cluster:
-  importToHub: true
-  useACM: true
+  importToHub: false
+  useACM: false
   createGitopsManifestWorks: false
-  createGitopsSyncSet: false
+  createGitopsSyncSet: true
   name: shc-central
   gitOpsRepo: "https://github.com/marbindrakon/signal9-lab-gitops.git"
   baseDomain: lab.signal9.gg
