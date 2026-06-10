@@ -2,7 +2,7 @@ all:
   children:
     ipaservers:
       hosts:
-        xna-ipa-1.home.signal9.gg: {}
+        xna-ipa-b.home.signal9.gg: {}
     loadbalancers:
       hosts:
         xna-haproxy-a.lab.signal9.gg: {}
@@ -10,4 +10,4 @@ all:
         xna-haproxy-c.home.signal9.gg: {}
     cephclients:
       hosts:
-        ceph-1.lab.signal9.gg: {}
+        great-tphon.mgmt.signal9.gg: {}
