@@ -1,0 +1,867 @@
+apiVersion: core.openstack.org/v1beta1
+kind: OpenStackControlPlane
+metadata:
+  name: {{ .Values.cloudName }}
+  namespace: openstack
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  topologyRef:
+    name: spread-pods
+  secret: {{ .Values.cloudName }}-password-secret
+  tls:
+    caBundleSecretName: {{ .Values.cloudName }}-ca-secret
+  storageClass: ocs-external-storagecluster-ceph-rbd
+  extraMounts:
+    - name: v1
+      region: {{ .Values.keystone.region }}
+      extraVol:
+        - propagation:
+          - CinderVolume
+          - CinderBackup
+          - GlanceAPI
+          - ManilaShare
+          extraVolType: Ceph
+          volumes:
+          - name: ceph
+            projected:
+              sources:
+              - secret:
+                  name: ceph-conf-files
+          mounts:
+          - name: ceph
+            mountPath: "/etc/ceph"
+            readOnly: true
+    - name: keystone-federation
+      region: {{ .Values.keystone.region }}
+      extraVol:
+        - propagation:
+          - Keystone
+          extraVolType: oidc-config
+          volumes:
+          - name: oidc-config
+            persistentVolumeClaim:
+              claimName: keystone-federation-files
+          mounts:
+          - name: oidc-config
+            mountPath: "/etc/httpd/metadata"
+            readOnly: false
+
+  dns:
+    template:
+      override:
+        service:
+          metadata:
+            annotations:
+              metallb.universe.tf/address-pool: oso-ctlplane-pool
+              metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+              metallb.universe.tf/loadBalancerIPs: 172.18.150.240
+          spec:
+            type: LoadBalancer
+      options:
+      - key: server
+        values:
+        - 172.18.42.10
+      - key: server
+        values:
+        - 172.18.42.11
+      replicas: 2
+  cinder:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.cinder }}
+
+    template:
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      cinderAPI:
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+      cinderScheduler:
+        customServiceConfig: |
+          [DEFAULT]
+          default_availability_zone=az1
+        replicas: 2
+      cinderBackup:
+        customServiceConfig: |
+          [DEFAULT]
+          backup_driver = cinder.backup.drivers.ceph.CephBackupDriver
+          backup_ceph_pool = {{ .Values.ceph.pools.cinderBackup }}
+          backup_ceph_user = {{ .Values.ceph.client }}
+        replicas: 0
+      cinderVolumes:
+        ceph-az1:
+          topologyRef:
+            name: prefer-az1
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph-az1
+            default_availability_zone=az1
+            [ceph-az1]
+            backend_availability_zone=az1
+            volume_backend_name=ceph-az1
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user={{ .Values.ceph.client }}
+            rbd_pool=az1-volumes
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid={{ .Values.ceph.fsid }}
+          replicas: 1
+        ceph-az2:
+          topologyRef:
+            name: prefer-az2
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph-az2
+            default_availability_zone=az1
+            [ceph-az2]
+            backend_availability_zone=az2
+            volume_backend_name=ceph-az2
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user={{ .Values.ceph.client }}
+            rbd_pool=az2-volumes
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid={{ .Values.ceph.fsid }}
+          replicas: 1
+        ceph-az3:
+          topologyRef:
+            name: prefer-az3
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_backends=ceph-az3
+            default_availability_zone=az1
+            [ceph-az3]
+            backend_availability_zone=az3
+            volume_backend_name=ceph-az3
+            volume_driver=cinder.volume.drivers.rbd.RBDDriver
+            rbd_ceph_conf=/etc/ceph/ceph.conf
+            rbd_user={{ .Values.ceph.client }}
+            rbd_pool=az3-volumes
+            rbd_flatten_volume_from_snapshot=False
+            rbd_secret_uuid={{ .Values.ceph.fsid }}
+          replicas: 1
+
+  glance:
+    apiOverrides:
+      default:
+        tls:
+          secretName: {{ .Values.cloudName }}-manual-cert
+        route:
+          spec:
+            host: {{ .Values.apiEndpointNames.glance }}
+
+    template:
+      databaseInstance: openstack
+      storageClass: "ocs-external-storagecluster-ceph-rbd"
+      storageRequest: 150G
+      customServiceConfig: |
+        [DEFAULT]
+        enabled_backends = default_backend:rbd
+        [glance_store]
+        default_backend = default_backend
+        [default_backend]
+        rbd_store_ceph_conf = /etc/ceph/ceph.conf
+        store_description = "RBD backend"
+        rbd_store_pool = {{ .Values.ceph.pools.glance }}
+        rbd_store_user = {{ .Values.ceph.client }}
+      keystoneEndpoint: default
+      glanceAPIs:
+        az1:
+          topologyRef:
+            name: prefer-az1
+          replicas: 2
+          type: edge
+        az2:
+          topologyRef:
+            name: prefer-az2
+          replicas: 2
+          type: edge
+        az3:
+          topologyRef:
+            name: prefer-az3
+          replicas: 2
+          type: edge
+        default:
+          replicas: 3
+          override:
+            service:
+              internal:
+                metadata:
+                  annotations:
+                    metallb.universe.tf/address-pool: oso-intapi-pool
+                    metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                    metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+                spec:
+                  type: LoadBalancer
+
+  keystone:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.keystone }}
+
+    template:
+      region: {{ .Values.keystone.region }}
+      customServiceConfig: |
+        [DEFAULT]
+        debug = True
+        [federation]
+        trusted_dashboard=https://dzcloud.lab.signal9.gg/dashboard/auth/websso/ 
+        [openid]
+        remote_id_attribute=HTTP_OIDC_ISS
+        [auth]
+        methods = password,token,oauth1,mapped,application_credential,openid 
+      httpdCustomization:
+        customConfigSecret: keystone-httpd-override 
+      replicas: 3
+      override:
+        service:
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+  galera:
+    enabled: true
+    templates:
+      openstack:
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+      openstack-cell1:
+        topologyRef:
+          name: prefer-az1
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+      openstack-cell2:
+        topologyRef:
+          name: prefer-az2
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+      openstack-cell3:
+        topologyRef:
+          name: prefer-az3
+        storageRequest: 5Gi
+        secret: {{ .Values.cloudName }}-password-secret
+        replicas: 3
+
+  memcached:
+    enabled: true
+    templates:
+      memcached:
+        replicas: 3
+      memcached-az1:
+        topologyRef:
+          name: prefer-az1
+        replicas: 3
+      memcached-az2:
+        topologyRef:
+          name: prefer-az2
+        replicas: 3
+      memcached-az3:
+        topologyRef:
+          name: prefer-az3
+        replicas: 3
+  neutron:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.neutron }}
+
+    template:
+      override:
+        service:
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      customServiceConfig: |
+        [DEFAULT]
+        debug = True
+        global_physnet_mtu = 9000
+        [ovn]
+        dns_servers = 172.18.150.244,172.18.150.245,172.18.150.246
+        [ml2_type_vlan]
+        network_vlan_ranges = az1-vlan:1:999,az2-vlan:1:999,az3-vlan:1:999,datacentre:1:999,bgp-physnet:1:3999
+      networkAttachments:
+      - internalapi
+
+  horizon:
+    enabled: true
+    apiOverride:
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.horizon }}
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+    template:
+      customServiceConfig: |
+        # Point Horizon to the Keystone public endpoint
+        OPENSTACK_KEYSTONE_URL = "https://identity.dzcloud.lab.signal9.gg/v3" 
+
+        # Enable WebSSO in Horizon
+        WEBSSO_ENABLED = True
+
+        # Provide login options in Horizon's dropdown menu
+        WEBSSO_CHOICES = (
+          ("Signal9", _("Signal9 SSO")),
+          ("Signal9-Admin", _("Signal9 Admin SSO")),
+          ("credentials", _("Keystone Credentials")),
+        )
+
+        # Map Horizon's "OIDC" choice to the Keystone IDP and protocol
+        WEBSSO_IDP_MAPPING = {
+          "Signal9": ("signal9", "openid"), 
+          "Signal9-Admin": ("signal9-admin", "openid"), 
+        }
+      replicas: 3
+      secret: {{ .Values.cloudName }}-password-secret
+  nova:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.nova }}
+    cellOverride:
+      cell1:
+        noVNCProxy:
+          tls:
+            secretName: {{ .Values.cloudName }}-manual-cert
+          route:
+            spec:
+              host: {{ .Values.apiEndpointNames.cell1Vnc }}
+      cell2:
+        noVNCProxy:
+          tls:
+            secretName: {{ .Values.cloudName }}-manual-cert
+          route:
+            spec:
+              host: {{ .Values.apiEndpointNames.cel2Vnc }}
+      cell3:
+        noVNCProxy:
+          tls:
+            secretName: {{ .Values.cloudName }}-manual-cert
+          route:
+            spec:
+              host: {{ .Values.apiEndpointNames.cel3Vnc }}
+
+    template:
+      apiServiceTemplate:
+        replicas: 3
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+      metadataServiceTemplate:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+            spec:
+              type: LoadBalancer
+      schedulerServiceTemplate:
+        replicas: 3
+      cellTemplates:
+        cell0:
+          cellDatabaseAccount: nova-cell0
+          cellDatabaseInstance: openstack
+          cellMessageBusInstance: rabbitmq
+          hasAPIAccess: true
+        cell1:
+          topologyRef:
+            name: prefer-az1
+          cellDatabaseAccount: nova-cell1
+          cellDatabaseInstance: openstack-cell1
+          cellMessageBusInstance: rabbitmq-cell1
+          memcachedInstance: memcached-az1
+          novaComputeTemplates:
+            az1-ironic:
+              computeDriver: ironic.IronicDriver
+              customServiceConfig: |
+                [ironic]
+                condudctor_group = az1
+          noVNCProxyServiceTemplate:
+            enabled: true
+            networkAttachments:
+            - ctlplane
+          hasAPIAccess: true
+        cell2:
+          topologyRef:
+            name: prefer-az1
+          cellDatabaseAccount: nova-cell2
+          cellDatabaseInstance: openstack-cell2
+          cellMessageBusInstance: rabbitmq-cell2
+          memcachedInstance: memcached-az2
+          novaComputeTemplates:
+            az2-ironic:
+              computeDriver: ironic.IronicDriver
+              customServiceConfig: |
+                [ironic]
+                condudctor_group = az2
+
+          noVNCProxyServiceTemplate:
+            enabled: true
+            networkAttachments:
+            - ctlplane
+          hasAPIAccess: true
+        cell3:
+          topologyRef:
+            name: prefer-az1
+          cellDatabaseAccount: nova-cell3
+          cellDatabaseInstance: openstack-cell3
+          cellMessageBusInstance: rabbitmq-cell3
+          memcachedInstance: memcached-az3
+          novaComputeTemplates:
+            az3-ironic:
+              computeDriver: ironic.IronicDriver
+              customServiceConfig: |
+                [ironic]
+                condudctor_group = az3
+          noVNCProxyServiceTemplate:
+            enabled: true
+            networkAttachments:
+            - ctlplane
+          hasAPIAccess: true
+      secret: {{ .Values.cloudName }}-password-secret
+  manila:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.manila }}
+    template:
+      secret: {{ .Values.cloudName }}-password-secret
+      manilaAPI:
+        replicas: 3
+        networkAttachments:
+        - internalapi
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+      manilaScheduler:
+        replicas: 2
+      manilaShares:
+        share1:
+          customServiceConfig: |
+            [DEFAULT]
+            enabled_share_backends=cephfs
+            enabled_share_protocols=cephfs
+            [cephfs]
+            driver_handles_share_servers=False
+            share_backend_name=cephfs
+            share_driver=manila.share.drivers.cephfs.driver.CephFSDriver
+            cephfs_conf_path=/etc/ceph/ceph.conf
+            cephfs_auth_id=openstack
+            cephfs_cluster_name=ceph
+            cephfs_volume_mode=0755
+            cephfs_protocol_helper_type=CEPHFS
+          replicas: 1
+          networkAttachments: []
+  ovn:
+    template:
+      ovnDBCluster:
+        ovndbcluster-nb:
+          replicas: 3
+          dbType: NB
+          storageRequest: 10G
+          networkAttachment: internalapi
+        ovndbcluster-sb:
+          replicas: 3
+          dbType: SB
+          storageRequest: 10G
+          networkAttachment: internalapi
+      ovnNorthd: {}
+
+  barbican:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.barbican }}
+    template:
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+      simpleCryptoBackendSecret: {{ .Values.cloudName }}-password-secret
+      barbicanAPI:
+        replicas: 3
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+      defaultConfigOverwrite:
+        policy-override.conf: |
+          [oslo_policy]
+          policy_file = /etc/barbican/barbican.conf.d/custom-policy.yaml
+        custom-policy.yaml: |
+          "secret_project_admin": "role:migrator or (role:admin and rule:secret_project_match)"
+      barbicanWorker:
+        replicas: 3
+      barbicanKeystoneListener:
+        replicas: 1
+
+  placement:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.placement }}
+    template:
+      replicas: 2
+      override:
+        service:
+          internal:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+            spec:
+              type: LoadBalancer
+      databaseInstance: openstack
+      secret: {{ .Values.cloudName }}-password-secret
+  rabbitmq:
+    templates:
+      rabbitmq:
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.241
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell1:
+        topologyRef:
+          name: prefer-az1
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.242
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell2:
+        topologyRef:
+          name: prefer-az1
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.243
+            spec:
+              type: LoadBalancer
+      rabbitmq-cell3:
+        topologyRef:
+          name: prefer-az1
+        replicas: 3
+        override:
+          service:
+            metadata:
+              annotations:
+                metallb.universe.tf/address-pool: oso-intapi-pool
+                metallb.universe.tf/loadBalancerIPs: 172.18.151.244
+            spec:
+              type: LoadBalancer
+  heat:
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.heat }}
+    cnfAPIOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.heatCfn }}
+    enabled: true
+    template:
+      databaseInstance: openstack
+      heatAPI:
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+        replicas: 3
+      heatCfnAPI:
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+        replicas: 3
+
+      heatEngine:
+        replicas: 3
+      secret: {{ .Values.cloudName }}-password-secret
+  ironic:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.ironic }}
+    inspectorOverride: {}
+    template:
+      databaseInstance: openstack
+      ironicAPI:
+        replicas: 3
+      ironicConductors:
+      - replicas: 2
+        conductorGroup: az1
+        storageClass: "ocs-external-storagecluster-ceph-rbd"
+        storageRequest: 150G
+        topologyRef:
+          name: prefer-az1
+      - replicas: 2
+        conductorGroup: az2
+        storageClass: "ocs-external-storagecluster-ceph-rbd"
+        storageRequest: 150G
+        topologyRef:
+          name: prefer-az2
+      - replicas: 2
+        conductorGroup: az3
+        storageClass: "ocs-external-storagecluster-ceph-rbd"
+        storageRequest: 150G
+        topologyRef:
+          name: prefer-az3
+      ironicInspector:
+        replicas: 1
+      ironicNeutronAgent:
+        replicas: 1
+      secret: {{ .Values.cloudName }}-password-secret
+  swift:
+    enabled: false
+  octavia:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.octavia }}
+    template:
+      databaseInstance: openstack
+      amphoraImageContainerImage: registry.redhat.io/rhoso/octavia-amphora-image-rhel9:18.0.12
+      amphoraCustomFlavors:
+        - name: lb-small
+          disk: 5
+          VCPUs: 2
+          RAM: 2048
+        - name: lb-medium
+          disk: 5
+          VCPUs: 4
+          RAM: 4096
+        - name: lb-large
+          disk: 5
+          VCPUs: 8
+          RAM: 8192
+      lbMgmtNetwork:
+        createDefaultLbMgmtNetwork: true
+        manageLbMgmtNetworks: true
+      octaviaHousekeeping:
+        networkAttachments:
+          - octavia
+      octaviaHealthManager:
+        networkAttachments:
+          - octavia
+      octaviaWorker:
+        networkAttachments:
+          - octavia
+      secret: {{ .Values.cloudName }}-password-secret
+  redis:
+    enabled: true
+    templates:
+      designate-redis:
+        replicas: 3
+  designate:
+    enabled: true
+    apiOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.designate }}
+    template:
+      designateNetworkAttachment: designate
+      nsRecords:
+        - hostname: ns1.dzcloud.lab.signal9.gg.
+          priority: 1
+        - hostname: ns2.dzcloud.lab.signal9.gg.
+          priority: 2
+      designateAPI:
+        networkAttachments:
+        - internalapi
+        override:
+          service:
+            internal:
+              metadata:
+                annotations:
+                  metallb.universe.tf/address-pool: oso-intapi-pool
+                  metallb.universe.tf/allow-shared-ip: {{ .Values.cloudName }}-ctlplane
+                  metallb.universe.tf/loadBalancerIPs: 172.18.151.240
+              spec:
+                type: LoadBalancer
+      designateBackendbind9:
+        controlNetworkName: designate
+        networkAttachments:
+          - designate
+        replicas: 3
+        serviceUser: designate
+        storageClass: ocs-external-storagecluster-ceph-rbd
+        storageRequest: 20G
+      designateCentral:
+        replicas: 3
+      designateMdns:
+        networkAttachments:
+          - designate
+        replicas: 3
+      designateWorker:
+        networkAttachments:
+          - designate
+      designateProducer:
+        replicas: 3
+      designateUnbound:
+        defaultConfigOverwrite:
+          01-unbound.conf: |
+            server:
+              verbosity: 2
+              access-control: 172.18.150.0/24 allow
+              module-config: "iterator"
+          forwarders.conf: |
+            forward-zone:
+              name: "."
+              forward-addr: 172.18.42.10
+              forward-addr: 172.18.42.11
+        networkAttachments:
+          - designate
+        replicas: 0
+        resources: {}
+  openstackclient:
+    template:
+      nodeSelector:
+        node-role.kubernetes.io/worker: ""
+  telemetry:
+    aodhApiOverride:
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.aodh }}
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+    prometheusOverride:
+      tls:
+        secretName: {{ .Values.cloudName }}-manual-cert
+      route:
+        spec:
+          host: {{ .Values.apiEndpointNames.prometheus }}
+    enabled: true
+    template:
+      metricStorage:
+        enabled: true
+        dataplaneNetwork: ctlplane
+        networkAttachments:
+          - ctlplane
+        dashboardsEnabled: true
+        monitoringStack:
+          alertingEnabled: true
+          scrapeInterval: 30s
+          storage:
+            strategy: persistent
+            retention: 24h
+            persistent:
+              pvcStorageRequest: 20G
+      autoscaling: 
+        enabled: true
+        aodh:
+          databaseAccount: aodh
+          databaseInstance: openstack
+          passwordSelector:
+            aodhService: AodhPassword
+          rabbitMqClusterName: rabbitmq
+          serviceUser: aodh
+          secret: {{ .Values.cloudName }}-password-secret
+        heatInstance: heat
+      ceilometer:
+        enabled: true
+        secret: {{ .Values.cloudName }}-password-secret
+      logging:
+        enabled: false
+        ipaddr: 172.17.0.80
+

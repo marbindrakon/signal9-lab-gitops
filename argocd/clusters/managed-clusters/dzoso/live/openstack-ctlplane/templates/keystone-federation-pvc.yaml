@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
+  name: keystone-federation-files
+  namespace: openstack
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1G
+  storageClassName: ocs-external-storagecluster-cephfs
+  volumeMode: Filesystem

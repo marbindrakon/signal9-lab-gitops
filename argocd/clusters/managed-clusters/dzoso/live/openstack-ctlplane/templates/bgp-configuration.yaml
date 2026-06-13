@@ -1,0 +1,6 @@
+apiVersion: network.openstack.org/v1beta1
+kind: BGPConfiguration
+metadata:
+  name: bgpconfiguration
+  namespace: openstack
+spec: {}
