@@ -10,11 +10,11 @@ metadata:
 stringData:
   networkData: |
     links:
-    - name: enp1s0
+    - name: eno1
       id: enp1s0
       mtu: 9000
       type: vif
-    - name: enp3s0
+    - name: eno2
       id: enp3s0
       mtu: 9000
       type: vif
@@ -23,8 +23,8 @@ stringData:
       mtu: 9000
       id: bond0
       bond_links:
-        - enp1s0
-        - enp3s0
+        - eno1
+        - eno2
       bond_mode: active-backup
       bond_xmit_hash_policy: layer2
       bond_miimon: 100
