@@ -9,7 +9,7 @@ nodes:
     bootMac: 2c:41:38:eb:da:18
     labels:
       compute-model: virtual
-      oso-role: compute
+      oso-role: networker
       oso-zone: az1
     namespace: openstack
     network:
@@ -90,6 +90,7 @@ nodes:
     osoMgmtGw: 172.18.158.1
     osoCtlplaneIp: 172.18.150.6
     osoMgmtIp: 172.18.158.6
+
   az2-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
@@ -101,7 +102,7 @@ nodes:
     labels:
       compute-model: virtual
       oso-role: networker
-      oso-zone: az1
+      oso-zone: az2
     namespace: openstack
     network:
       interfaceMap:
@@ -192,8 +193,8 @@ nodes:
     bootMac: e8:39:35:f0:32:2c
     labels:
       compute-model: virtual
-      oso-role: compute
-      oso-zone: az2
+      oso-role: networker
+      oso-zone: az3
     namespace: openstack
     network:
       interfaceMap:
@@ -267,7 +268,6 @@ nodes:
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
-
     osoCtlplaneVlan: 502
     osoMgmtVlan: 582
     osoCtlplaneGw: 172.18.150.65
@@ -275,7 +275,7 @@ nodes:
     osoCtlplaneIp: 172.18.150.72
     osoMgmtIp: 172.18.158.72
 
-  az3-computer-0.lab.signal9.gg:
+  az3-compute-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
@@ -285,8 +285,8 @@ nodes:
     bootMac: 2c:41:38:eb:d9:58
     labels:
       compute-model: virtual
-      oso-role: networker
-      oso-zone: az2
+      oso-role: compute
+      oso-zone: az3
     namespace: openstack
     network:
       interfaceMap:
@@ -378,7 +378,7 @@ nodes:
     labels:
       compute-model: virtual
       oso-role: compute
-      oso-zone: az3
+      oso-zone: az1
     namespace: openstack
     network:
       interfaceMap:
@@ -469,8 +469,8 @@ nodes:
     bootMac: 00:02:c9:2f:4d:80
     labels:
       compute-model: virtual
-      oso-role: networker
-      oso-zone: az3
+      oso-role: compute
+      oso-zone: az2
     namespace: openstack
     network:
       interfaceMap:
