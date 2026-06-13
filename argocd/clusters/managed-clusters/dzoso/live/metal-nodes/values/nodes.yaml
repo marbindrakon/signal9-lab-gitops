@@ -1,5 +1,5 @@
 nodes:
-  az1-compute-0.lab.signal9.gg:
+  az1-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
@@ -90,7 +90,7 @@ nodes:
     osoMgmtGw: 172.18.158.1
     osoCtlplaneIp: 172.18.150.6
     osoMgmtIp: 172.18.158.6
-  az1-networker-0.lab.signal9.gg:
+  az2-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
@@ -182,7 +182,7 @@ nodes:
     osoCtlplaneIp: 172.18.150.8
     osoMgmtIp: 172.18.158.8
 
-  az2-compute-0.lab.signal9.gg:
+  az3-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
@@ -275,14 +275,14 @@ nodes:
     osoCtlplaneIp: 172.18.150.72
     osoMgmtIp: 172.18.158.72
 
-  az2-networker-0.lab.signal9.gg:
+  az3-computer-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-8.oob.signal9.gg
-    bootMac: 2c:41:38:eb:d3:2c
+      url: ilo4-virtualmedia://ilo-hp-blade-3.oob.signal9.gg
+    bootMac: 2c:41:38:eb:d9:58
     labels:
       compute-model: virtual
       oso-role: networker
@@ -291,13 +291,13 @@ nodes:
     network:
       interfaceMap:
         - name: eno1
-          macAddress: 2c:41:38:eb:d3:2c
+          macAddress: 2c:41:38:eb:d9:58
         - name: eno2
-          macAddress: 2c:41:38:eb:d3:2d
+          macAddress: 2c:41:38:eb:d9:59
         - name: eno3
-          macAddress: 24:be:05:a0:af:32
+          macAddress: 00:02:c9:36:19:10
         - name: eno3d1
-          macAddress: 24:be:05:a0:af:33
+          macAddress: 00:02:c9:36:19:11
       nmstateConfig:
         dns-resolver:
           config:
@@ -367,7 +367,7 @@ nodes:
     osoCtlplaneIp: 172.18.150.74
     osoMgmtIp: 172.18.158.74
 
-  az3-compute-0.lab.signal9.gg:
+  az1-compute-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
@@ -459,7 +459,7 @@ nodes:
     osoCtlplaneIp: 172.18.150.134
     osoMgmtIp: 172.18.158.134
 
-  az3-networker-0.lab.signal9.gg:
+  az2-compute-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
