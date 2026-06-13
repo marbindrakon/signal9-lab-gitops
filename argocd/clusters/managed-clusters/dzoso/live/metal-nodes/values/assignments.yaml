@@ -1,4 +1,4 @@
-assignments: []
+assignments:
  - node: az1-compute-0.lab.signal9.gg
    namespace: openstack
    assignmentType: metal3
