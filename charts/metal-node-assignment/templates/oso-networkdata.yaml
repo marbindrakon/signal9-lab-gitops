@@ -11,11 +11,11 @@ stringData:
   networkData: |
     links:
     - name: eno1
-      id: enp1s0
+      id: eno1
       mtu: 9000
       type: vif
     - name: eno2
-      id: enp3s0
+      id: eno2
       mtu: 9000
       type: vif
     - name: bond0
