@@ -1,0 +1,11 @@
+apiVersion: network.openstack.org/v1beta1
+kind: DNSData
+metadata:
+  name: satellite-redirect
+  namespace: openstack
+spec:
+  dnsDataLabelSelectorValue: dnsdata
+  hosts:
+  - hostnames:
+    - satellite.lab.signal9.gg
+    ip: 172.18.150.3
