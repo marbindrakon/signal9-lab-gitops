@@ -65,98 +65,6 @@ nodes:
             type: bond
           - ipv4:
               address:
-                - ip: 172.18.158.6
-                  prefix-length: 26
-              dhcp: false
-              enabled: true
-            mtu: 1500
-            name: bond0.581
-            state: up
-            type: vlan
-            vlan:
-              base-iface: bond1
-              id: 581
-        routes:
-          config:
-            - destination: 0.0.0.0/0
-              next-hop-address: 172.18.158.1
-              next-hop-interface: bond0.581
-              table-id: 254
-    rootDeviceHints:
-      deviceName: /dev/sda
-    osoCtlplaneVlan: 501
-    osoMgmtVlan: 581
-    osoCtlplaneGw: 172.18.150.1
-    osoMgmtGw: 172.18.158.1
-    osoCtlplaneIp: 172.18.150.6
-    osoMgmtIp: 172.18.158.6
-
-  az2-networker-0.lab.signal9.gg:
-    bmc:
-      externalSecret:
-        passwordKey: ipmi_password
-        usernameKey: username
-        vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-6.oob.signal9.gg
-    bootMac: 2c:41:38:eb:d3:90
-    labels:
-      compute-model: virtual
-      oso-role: networker
-      oso-zone: az2
-    namespace: openstack
-    network:
-      interfaceMap:
-        - name: eno1
-          macAddress: 2c:41:38:eb:d3:90
-        - name: eno2
-          macAddress: 2c:41:38:eb:d3:91
-        - name: eno3
-          macAddress: 00:02:c9:2f:3b:68
-        - name: eno3d1
-          macAddress: 00:02:c9:2f:3b:69
-      nmstateConfig:
-        dns-resolver:
-          config:
-            server:
-              - 172.18.42.10
-              - 172.18.42.11
-        interfaces:
-          - ipv4:
-              dhcp: false
-              enabled: false
-            ipv6:
-              enabled: false
-            link-aggregation:
-              mode: active-backup
-              options:
-                miimon: '100'
-              port:
-                - eno3
-                - eno3d1
-            mtu: 9000
-            name: bond0
-            state: up
-            type: bond
-          - ipv4:
-              dhcp: false
-              enabled: false
-            ipv6:
-              enabled: false
-            link-aggregation:
-              mode: active-backup
-              options:
-                miimon: '100'
-                primary: eno1
-                primary_reselect: always
-              port:
-                - eno1
-                - eno2
-            mtu: 9000
-            name: bond1
-            state: up
-            type: bond
-          - ipv4:
-              address:
                 - ip: 172.18.158.8
                   prefix-length: 26
               dhcp: false
@@ -183,121 +91,29 @@ nodes:
     osoCtlplaneIp: 172.18.150.8
     osoMgmtIp: 172.18.158.8
 
-  az3-networker-0.lab.signal9.gg:
+  az2-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-7.oob.signal9.gg
-    bootMac: e8:39:35:f0:32:2c
+      url: ilo4-virtualmedia://ilo-hp-blade-6.oob.signal9.gg
+    bootMac: 2c:41:38:eb:d3:90
     labels:
       compute-model: virtual
       oso-role: networker
-      oso-zone: az3
+      oso-zone: az2
     namespace: openstack
     network:
       interfaceMap:
         - name: eno1
-          macAddress: e8:39:35:f0:32:2c
+          macAddress: 2c:41:38:eb:d3:90
         - name: eno2
-          macAddress: e8:39:35:f0:32:2d
+          macAddress: 2c:41:38:eb:d3:91
         - name: eno3
-          macAddress: 00:02:c9:2f:25:d8
+          macAddress: 00:02:c9:2f:3b:68
         - name: eno3d1
-          macAddress: 00:02:c9:2f:25:d9
-      nmstateConfig:
-        dns-resolver:
-          config:
-            server:
-              - 172.18.42.10
-              - 172.18.42.11
-        interfaces:
-          - ipv4:
-              dhcp: false
-              enabled: false
-            ipv6:
-              enabled: false
-            link-aggregation:
-              mode: active-backup
-              options:
-                miimon: '100'
-              port:
-                - eno3
-                - eno3d1
-            mtu: 9000
-            name: bond0
-            state: up
-            type: bond
-          - ipv4:
-              dhcp: false
-              enabled: false
-            ipv6:
-              enabled: false
-            link-aggregation:
-              mode: active-backup
-              options:
-                miimon: '100'
-                primary: eno1
-                primary_reselect: always
-              port:
-                - eno1
-                - eno2
-            mtu: 9000
-            name: bond1
-            state: up
-            type: bond
-          - ipv4:
-              address:
-                - ip: 172.18.158.72
-                  prefix-length: 26
-              dhcp: false
-              enabled: true
-            mtu: 1500
-            name: bond0.582
-            state: up
-            type: vlan
-            vlan:
-              base-iface: bond1
-              id: 582
-        routes:
-          config:
-            - destination: 0.0.0.0/0
-              next-hop-address: 172.18.158.65
-              next-hop-interface: bond0.582
-              table-id: 254
-    rootDeviceHints:
-      deviceName: /dev/sda
-    osoCtlplaneVlan: 502
-    osoMgmtVlan: 582
-    osoCtlplaneGw: 172.18.150.65
-    osoMgmtGw: 172.18.158.65
-    osoCtlplaneIp: 172.18.150.72
-    osoMgmtIp: 172.18.158.72
-
-  az3-compute-0.lab.signal9.gg:
-    bmc:
-      externalSecret:
-        passwordKey: ipmi_password
-        usernameKey: username
-        vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-3.oob.signal9.gg
-    bootMac: 2c:41:38:eb:d9:58
-    labels:
-      compute-model: virtual
-      oso-role: compute
-      oso-zone: az3
-    namespace: openstack
-    network:
-      interfaceMap:
-        - name: eno1
-          macAddress: 2c:41:38:eb:d9:58
-        - name: eno2
-          macAddress: 2c:41:38:eb:d9:59
-        - name: eno3
-          macAddress: 00:02:c9:36:19:10
-        - name: eno3d1
-          macAddress: 00:02:c9:36:19:11
+          macAddress: 00:02:c9:2f:3b:69
       nmstateConfig:
         dns-resolver:
           config:
@@ -367,29 +183,121 @@ nodes:
     osoCtlplaneIp: 172.18.150.74
     osoMgmtIp: 172.18.158.74
 
-  az1-compute-0.lab.signal9.gg:
+  az3-networker-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-1.oob.signal9.gg
-    bootMac: 00:02:c9:2f:30:c0
+      url: ilo4-virtualmedia://ilo-hp-blade-7.oob.signal9.gg
+    bootMac: e8:39:35:f0:32:2c
     labels:
       compute-model: virtual
-      oso-role: compute
-      oso-zone: az1
+      oso-role: networker
+      oso-zone: az3
     namespace: openstack
     network:
       interfaceMap:
-        - macAddress: 00:02:c9:2f:30:c0
-          name: eno3
-        - macAddress: 00:02:c9:2f:30:c1
-          name: eno3d1
-        - macAddress: 2c:41:38:eb:d2:38
-          name: eno1
-        - macAddress: 2c:41:38:eb:d2:39
-          name: eno2
+        - name: eno1
+          macAddress: e8:39:35:f0:32:2c
+        - name: eno2
+          macAddress: e8:39:35:f0:32:2d
+        - name: eno3
+          macAddress: 00:02:c9:2f:25:d8
+        - name: eno3d1
+          macAddress: 00:02:c9:2f:25:d9
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        interfaces:
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno3d1
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+                primary: eno1
+                primary_reselect: always
+              port:
+                - eno1
+                - eno2
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.136
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.583
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 583
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.129
+              next-hop-interface: bond0.583
+              table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/sda
+    osoCtlplaneVlan: 503
+    osoMgmtVlan: 583
+    osoCtlplaneGw: 172.18.150.129
+    osoMgmtGw: 172.18.158.129
+    osoCtlplaneIp: 172.18.150.136
+    osoMgmtIp: 172.18.158.136
+
+  az3-compute-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: ilo4-virtualmedia://ilo-hp-blade-3.oob.signal9.gg
+    bootMac: 2c:41:38:eb:d9:58
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az3
+    namespace: openstack
+    network:
+      interfaceMap:
+        - name: eno1
+          macAddress: 2c:41:38:eb:d9:58
+        - name: eno2
+          macAddress: 2c:41:38:eb:d9:59
+        - name: eno3
+          macAddress: 00:02:c9:36:19:10
+        - name: eno3d1
+          macAddress: 00:02:c9:36:19:11
       nmstateConfig:
         dns-resolver:
           config:
@@ -459,29 +367,29 @@ nodes:
     osoCtlplaneIp: 172.18.150.134
     osoMgmtIp: 172.18.158.134
 
-  az2-compute-0.lab.signal9.gg:
+  az1-compute-0.lab.signal9.gg:
     bmc:
       externalSecret:
         passwordKey: ipmi_password
         usernameKey: username
         vaultName: openshift-ldap
-      url: ilo4-virtualmedia://ilo-hp-blade-2.oob.signal9.gg
-    bootMac: 00:02:c9:2f:4d:80
+      url: ilo4-virtualmedia://ilo-hp-blade-1.oob.signal9.gg
+    bootMac: 00:02:c9:2f:30:c0
     labels:
       compute-model: virtual
       oso-role: compute
-      oso-zone: az2
+      oso-zone: az1
     namespace: openstack
     network:
       interfaceMap:
-        - macAddress: 2c:41:38:eb:d6:10
-          name: eno1
-        - macAddress: 2c:41:38:eb:d6:11
-          name: eno2
-        - macAddress: 00:02:c9:2f:4d:80
+        - macAddress: 00:02:c9:2f:30:c0
           name: eno3
-        - macAddress: 00:02:c9:2f:4d:81
-          name: enp3d1
+        - macAddress: 00:02:c9:2f:30:c1
+          name: eno3d1
+        - macAddress: 2c:41:38:eb:d2:38
+          name: eno1
+        - macAddress: 2c:41:38:eb:d2:39
+          name: eno2
       nmstateConfig:
         dns-resolver:
           config:
@@ -525,28 +433,120 @@ nodes:
             type: bond
           - ipv4:
               address:
-                - ip: 172.18.158.136
+                - ip: 172.18.158.6
                   prefix-length: 26
               dhcp: false
               enabled: true
             mtu: 1500
-            name: bond0.583
+            name: bond0.581
             state: up
             type: vlan
             vlan:
               base-iface: bond1
-              id: 583
+              id: 581
         routes:
           config:
             - destination: 0.0.0.0/0
-              next-hop-address: 172.18.158.129
-              next-hop-interface: bond0.583
+              next-hop-address: 172.18.158.1
+              next-hop-interface: bond0.581
               table-id: 254
     rootDeviceHints:
       deviceName: /dev/sda
-    osoCtlplaneVlan: 503
-    osoMgmtVlan: 583
-    osoCtlplaneGw: 172.18.150.129
-    osoMgmtGw: 172.18.158.129
-    osoCtlplaneIp: 172.18.150.136
-    osoMgmtIp: 172.18.158.136
+    osoCtlplaneVlan: 501
+    osoMgmtVlan: 581
+    osoCtlplaneGw: 172.18.150.1
+    osoMgmtGw: 172.18.158.1
+    osoCtlplaneIp: 172.18.150.6
+    osoMgmtIp: 172.18.158.6
+
+  az2-compute-0.lab.signal9.gg:
+    bmc:
+      externalSecret:
+        passwordKey: ipmi_password
+        usernameKey: username
+        vaultName: openshift-ldap
+      url: ilo4-virtualmedia://ilo-hp-blade-2.oob.signal9.gg
+    bootMac: 00:02:c9:2f:4d:80
+    labels:
+      compute-model: virtual
+      oso-role: compute
+      oso-zone: az2
+    namespace: openstack
+    network:
+      interfaceMap:
+        - macAddress: 2c:41:38:eb:d6:10
+          name: eno1
+        - macAddress: 2c:41:38:eb:d6:11
+          name: eno2
+        - macAddress: 00:02:c9:2f:4d:80
+          name: eno3
+        - macAddress: 00:02:c9:2f:4d:81
+          name: eno3d1
+      nmstateConfig:
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        interfaces:
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno3d1
+            mtu: 9000
+            name: bond0
+            state: up
+            type: bond
+          - ipv4:
+              dhcp: false
+              enabled: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+                primary: eno1
+                primary_reselect: always
+              port:
+                - eno1
+                - eno2
+            mtu: 9000
+            name: bond1
+            state: up
+            type: bond
+          - ipv4:
+              address:
+                - ip: 172.18.158.72
+                  prefix-length: 26
+              dhcp: false
+              enabled: true
+            mtu: 1500
+            name: bond0.582
+            state: up
+            type: vlan
+            vlan:
+              base-iface: bond1
+              id: 582
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.158.65
+              next-hop-interface: bond0.582
+              table-id: 254
+    rootDeviceHints:
+      deviceName: /dev/sda
+    osoCtlplaneVlan: 502
+    osoMgmtVlan: 582
+    osoCtlplaneGw: 172.18.150.65
+    osoMgmtGw: 172.18.158.65
+    osoCtlplaneIp: 172.18.150.72
+    osoMgmtIp: 172.18.158.72
