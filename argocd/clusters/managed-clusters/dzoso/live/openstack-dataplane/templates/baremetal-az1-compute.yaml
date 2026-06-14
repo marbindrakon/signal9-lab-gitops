@@ -135,12 +135,19 @@ spec:
             name: {{ .Values.cloudName }}-registry-secret
       ansibleVars:
         edpm_bootstrap_release_version_package: "rhoso-release"
+        edpm_kernel_args: "console=ttyS1,115200n8 usbcore.autosuspend=-1 mitigations=off tsc=nowatchdog"
         edpm_bootstrap_command: |
           #dnf install -y http://satellite.lab.signal9.gg/pub/katello-ca-consumer-latest.noarch.rpm
           subscription-manager register --org {{ "{{ subscription_manager_org }}" }} --activationkey {{ "{{ subscription_manager_activation_key }}" }}
           subscription-manager release --set=9.4
           subscription-manager repos --disable=*
           subscription-manager repos --enable=rhel-9-for-x86_64-baseos-eus-rpms --enable=rhel-9-for-x86_64-appstream-eus-rpms --enable=rhel-9-for-x86_64-highavailability-eus-rpms --enable=fast-datapath-for-rhel-9-x86_64-rpms --enable=rhoso-18.0-for-rhel-9-x86_64-rpms --enable=rhceph-7-tools-for-rhel-9-x86_64-rpms
+          # HP Gen8 iLO4 console: serial-getty on ttyS0+ttyS1 (VSP mapping varies per server) + disable USB autosuspend (virtual keyboard fade)
+          for tty in ttyS0 ttyS1; do systemctl enable --now serial-getty@$tty.service || true; done
+          for f in /sys/bus/usb/devices/*/power/control; do echo on > "$f" 2>/dev/null || true; done
+          grubby --update-kernel=ALL --args="console=ttyS1,115200n8 usbcore.autosuspend=-1" || true
+          printf 'ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"\n' > /etc/udev/rules.d/90-ilo-usb-noautosuspend.rules
+          udevadm control --reload-rules || true
         edpm_enable_chassis_gw: false
         edpm_ovn_availability_zones: ['az1']
         edpm_ovn_bgp_agent_expose_tenant_networks: false
