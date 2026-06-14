@@ -130,7 +130,7 @@ spec:
       ansibleVars:
         edpm_bootstrap_release_version_package: "rhoso-release"
         edpm_bootstrap_command: |
-          dnf install -y http://satellite.lab.signal9.gg/pub/katello-ca-consumer-latest.noarch.rpm
+          #dnf install -y http://satellite.lab.signal9.gg/pub/katello-ca-consumer-latest.noarch.rpm
           subscription-manager register --org {{ "{{ subscription_manager_org }}" }} --activationkey {{ "{{ subscription_manager_activation_key }}" }}
           subscription-manager release --set=9.4
           subscription-manager repos --disable=*
