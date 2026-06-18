@@ -21,5 +21,10 @@ spec:
   source: redhat-operators
   sourceNamespace: openshift-marketplace
   config:
-    env: []
+    env:
+      # Validate the cherry-picked ACME public-TLS patch (18.0-fr5 + PR #1938).
+      # Overrides the image used for the spawned openstack-operator-controller-manager,
+      # which runs the patched internal/openstack control-plane reconciler.
+      - name: OPERATOR_IMAGE_URL
+        value: quay.signal9.gg/aaustin/openstack-operator-tls:0618202601
 ---
