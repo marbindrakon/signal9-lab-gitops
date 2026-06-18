@@ -19,7 +19,7 @@ spec:
     - server auth
     - client auth
   dnsNames:
-    - '*.{{ .Values.foundationIngressBase }}'
+    - '*.{{ .Values.cloudName }}.{{ .Values.baseDomain }}'
     - '{{ .Values.cloudName }}.{{ .Values.baseDomain }}'
   issuerRef:
     name: cluster-acme
