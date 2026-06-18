@@ -368,14 +368,14 @@ spec:
             secretName: {{ .Values.cloudName }}-public-cert
           route:
             spec:
-              host: {{ .Values.apiEndpointNames.cel2Vnc }}
+              host: {{ .Values.apiEndpointNames.cell2Vnc }}
       cell3:
         noVNCProxy:
           tls:
             secretName: {{ .Values.cloudName }}-public-cert
           route:
             spec:
-              host: {{ .Values.apiEndpointNames.cel3Vnc }}
+              host: {{ .Values.apiEndpointNames.cell3Vnc }}
 
     template:
       apiServiceTemplate:
