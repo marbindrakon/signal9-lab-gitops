@@ -90,6 +90,15 @@ monitoring:
   enabled: true
   storageClass: ocs-external-storagecluster-ceph-rbd
 
+gitops:
+  applicationControllerResources:
+    limits:
+      cpu: '4'
+      memory: 8Gi
+    requests:
+      cpu: 250m
+      memory: 3Gi
+
 odfStorage:
   enabled: true
   external: true
