@@ -582,6 +582,10 @@ spec:
     templates:
       rabbitmq:
         replicas: 3
+        resources:
+          limits:
+            cpu: 4
+            memory: 4Gi
         override:
           service:
             metadata:
