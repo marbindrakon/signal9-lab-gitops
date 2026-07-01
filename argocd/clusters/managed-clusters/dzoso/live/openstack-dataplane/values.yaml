@@ -369,11 +369,6 @@ dataplaneNodeGroups:
   - az: az1
     role: compute
     chassisGw: false
-    includeStorage2: true
-    # az1's live NodeSets order br-ex members bond-then-patch-port; az2/az3
-    # order patch-port-then-bond. Pre-existing drift, preserved verbatim to
-    # avoid an unreviewed diff on live nodes. See consolidation notes.
-    legacyBridgeMemberOrder: true
     asn: 65106
     evpnNic: vlan531
     bridgeVlanTag: az1-vlan
@@ -396,8 +391,6 @@ dataplaneNodeGroups:
   - az: az1
     role: networker
     chassisGw: true
-    includeStorage2: false
-    legacyBridgeMemberOrder: true
     asn: 65106
     evpnNic: vlan531
     bridgeVlanTag: az1-vlan
@@ -420,7 +413,6 @@ dataplaneNodeGroups:
   - az: az2
     role: compute
     chassisGw: false
-    includeStorage2: false
     asn: 65107
     evpnNic: vlan532
     bridgeVlanTag: az2-vlan
@@ -443,7 +435,6 @@ dataplaneNodeGroups:
   - az: az2
     role: networker
     chassisGw: true
-    includeStorage2: false
     asn: 65107
     evpnNic: vlan532
     bridgeVlanTag: az2-vlan
@@ -466,7 +457,6 @@ dataplaneNodeGroups:
   - az: az3
     role: compute
     chassisGw: false
-    includeStorage2: false
     asn: 65108
     evpnNic: vlan533
     bridgeVlanTag: az3-vlan
@@ -489,7 +479,6 @@ dataplaneNodeGroups:
   - az: az3
     role: networker
     chassisGw: true
-    includeStorage2: false
     asn: 65108
     evpnNic: vlan533
     bridgeVlanTag: az3-vlan

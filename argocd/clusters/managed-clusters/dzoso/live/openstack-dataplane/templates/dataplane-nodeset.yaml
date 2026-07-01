@@ -246,24 +246,6 @@ spec:
           - type: ovs_bridge
             name: br-ex
             members:
-{{- if $group.legacyBridgeMemberOrder }}
-            - type: linux_bond
-              name: bond1
-              mtu: 9000
-              bonding_options: "mode=active-backup"
-              members:
-              - type: interface
-                name: eno3
-                mtu: 9000
-                primary: true
-              - type: interface
-                name: eno3d1
-                mtu: 9000
-            - type: ovs_patch_port
-              name: p-{{ $group.bridgeVlanTag }}
-              bridge_name: br-ex
-              peer: br-ex-patch
-{{- else }}
             - type: ovs_patch_port
               name: p-{{ $group.bridgeVlanTag }}
               bridge_name: br-ex
@@ -280,7 +262,6 @@ spec:
               - type: interface
                 name: eno3d1
                 mtu: 9000
-{{- end }}
           {% for network in role_networks %}
           {% if network in bond1_nets %}
             - type: vlan
@@ -298,9 +279,6 @@ spec:
         role_networks:
         - InternalApi
         - Storage
-{{- if $group.includeStorage2 }}
-        - Storage2
-{{- end }}
         - Management
         - Tenant
         - TenantPeering
@@ -308,9 +286,6 @@ spec:
           Management: management
           InternalApi: internal_api
           Storage: storage
-{{- if $group.includeStorage2 }}
-          Storage2: storage2
-{{- end }}
           Tenant: tenant
           TenantPeering: tenantpeering
         # edpm_nodes_validation
