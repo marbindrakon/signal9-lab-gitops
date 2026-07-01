@@ -373,11 +373,11 @@ dataplaneNodeGroups:
     evpnNic: vlan531
     bridgeVlanTag: az1-vlan
     bgpPeers:
-      - 172.18.153.20
-      - 172.18.153.22
+      - 172.18.153.1
+      - 172.18.153.2
     bgpL2vpnPeers:
-      - 172.18.153.20
-      - 172.18.153.22
+      - 172.18.153.1
+      - 172.18.153.2
     nodes:
       az1-compute-0:
         enabled: true
@@ -395,11 +395,11 @@ dataplaneNodeGroups:
     evpnNic: vlan531
     bridgeVlanTag: az1-vlan
     bgpPeers:
-      - 172.18.153.20
-      - 172.18.153.22
+      - 172.18.153.1
+      - 172.18.153.2
     bgpL2vpnPeers:
-      - 172.18.153.20
-      - 172.18.153.22
+      - 172.18.153.1
+      - 172.18.153.2
     nodes:
       az1-networker-0:
         enabled: true
@@ -417,11 +417,11 @@ dataplaneNodeGroups:
     evpnNic: vlan532
     bridgeVlanTag: az2-vlan
     bgpPeers:
-      - 172.18.153.80
-      - 172.18.153.82
+      - 172.18.153.65
+      - 172.18.153.66
     bgpL2vpnPeers:
-      - 172.18.153.80
-      - 172.18.153.82
+      - 172.18.153.65
+      - 172.18.153.66
     nodes:
       az2-compute-0:
         enabled: true
@@ -439,11 +439,11 @@ dataplaneNodeGroups:
     evpnNic: vlan532
     bridgeVlanTag: az2-vlan
     bgpPeers:
-      - 172.18.153.80
-      - 172.18.153.82
+      - 172.18.153.65
+      - 172.18.153.66
     bgpL2vpnPeers:
-      - 172.18.153.80
-      - 172.18.153.82
+      - 172.18.153.65
+      - 172.18.153.66
     nodes:
       az2-networker-0:
         enabled: true
@@ -461,11 +461,11 @@ dataplaneNodeGroups:
     evpnNic: vlan533
     bridgeVlanTag: az3-vlan
     bgpPeers:
-      - 172.18.153.140
-      - 172.18.153.142
+      - 172.18.153.129
+      - 172.18.153.130
     bgpL2vpnPeers:
-      - 172.18.153.140
-      - 172.18.153.142
+      - 172.18.153.129
+      - 172.18.153.130
     nodes:
       az3-compute-0:
         enabled: true
@@ -483,11 +483,11 @@ dataplaneNodeGroups:
     evpnNic: vlan533
     bridgeVlanTag: az3-vlan
     bgpPeers:
-      - 172.18.153.140
-      - 172.18.153.142
+      - 172.18.153.129
+      - 172.18.153.130
     bgpL2vpnPeers:
-      - 172.18.153.140
-      - 172.18.153.142
+      - 172.18.153.129
+      - 172.18.153.130
     nodes:
       az3-networker-0:
         enabled: true
