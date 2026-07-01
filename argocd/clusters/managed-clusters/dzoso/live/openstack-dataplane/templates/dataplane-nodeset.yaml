@@ -1,7 +1,10 @@
+{{- $root := . }}
+{{- range $group := .Values.dataplaneNodeGroups }}
+---
 apiVersion: dataplane.openstack.org/v1beta1
 kind: OpenStackDataPlaneNodeSet
 metadata:
-  name: {{ .Values.cloudName }}-az3-networker
+  name: {{ $root.Values.cloudName }}-{{ $group.az }}-{{ $group.role }}
   namespace: openstack
   annotations:
     argocd.argoproj.io/sync-wave: '4'
@@ -24,7 +27,7 @@ spec:
     - ovn-bgp-agent
     - ceph-client
     - libvirt
-    - nova-custom-ceph-az3
+    - nova-custom-ceph-{{ $group.az }}
     - telemetry
   env:
     - name: ANSIBLE_FORCE_COLOR
@@ -38,61 +41,48 @@ spec:
   baremetalSetTemplate:
     bmhNamespace: openstack
     bmhLabelSelector:
-      oso-role: networker
-      oso-zone: az3
+      oso-role: {{ $group.role }}
+      oso-zone: {{ $group.az }}
     ctlplaneInterface: eno1
     cloudUserName: cloud-admin
     passwordSecret:
-      name: {{ .Values.cloudName }}-password-secret
+      name: {{ $root.Values.cloudName }}-password-secret
       namespace: openstack
   nodes:
-    az3-networker-0:
-      hostName: az3-networker-0.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
+{{- range $nodeName, $node := $group.nodes }}
+{{- if $node.enabled }}
+    {{ $nodeName }}:
+      hostName: {{ $nodeName }}.ctlplane.{{ $root.Values.cloudName }}.{{ $root.Values.baseDomain }}
       networkData:
         namespace: openstack
-        name: az3-networker-0.{{ .Values.baseDomain }}-network-data
+        name: {{ $nodeName }}.{{ $root.Values.baseDomain }}-network-data
       networks:
         - name: CtlPlane
-          subnetName: az3-subnet
-          fixedIP: 172.18.150.136
+          subnetName: {{ $group.az }}-subnet
+          fixedIP: {{ $node.ctlplaneIP }}
         - name: InternalApi
-          subnetName: az3-subnet
+          subnetName: {{ $group.az }}-subnet
         - name: Management
-          subnetName: az3-subnet
-          fixedIP: 172.18.158.136
+          subnetName: {{ $group.az }}-subnet
+          fixedIP: {{ $node.managementIP }}
           defaultRoute: true
         - name: Storage
-          subnetName: az3-subnet
+          subnetName: {{ $group.az }}-subnet
+{{- if $group.includeStorage2 }}
+        - name: Storage2
+          subnetName: {{ $group.az }}-subnet
+{{- end }}
         - name: Tenant
-          subnetName: az3-subnet
+          subnetName: {{ $group.az }}-subnet
         - name: TenantPeering
-          subnetName: az3-subnet
-#   az3-networker-1:
-#     hostName: az3-networker-1.ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-#     networkData:
-#       namespace: openstack
-#       name: az3-networker-1.{{ .Values.baseDomain }}-network-data
-#     networks:
-#       - name: CtlPlane
-#         subnetName: az3-subnet
-#         fixedIP: 172.18.150.137
-#       - name: InternalApi
-#         subnetName: az3-subnet
-#       - name: Management
-#         subnetName: az3-subnet
-#         fixedIP: 172.18.158.137
-#         defaultRoute: true
-#       - name: Storage
-#         subnetName: az3-subnet
-#       - name: Tenant
-#         subnetName: az3-subnet
-#       - name: TenantPeering
-#         subnetName: az3-subnet
+          subnetName: {{ $group.az }}-subnet
+{{- end }}
+{{- end }}
 
   networkAttachments:
     - ctlplane
   nodeTemplate:
-    ansibleSSHPrivateKeySecret: {{ .Values.cloudName }}-node-ssh-key
+    ansibleSSHPrivateKeySecret: {{ $root.Values.cloudName }}-node-ssh-key
     extraMounts:
     - extraVolType: Ceph
       mounts:
@@ -105,18 +95,22 @@ spec:
           secretName: ceph-conf-files
     networks:
       - name: CtlPlane
-        subnetName: az3-subnet
+        subnetName: {{ $group.az }}-subnet
       - name: InternalApi
-        subnetName: az3-subnet
+        subnetName: {{ $group.az }}-subnet
       - name: Management
-        subnetName: az3-subnet
+        subnetName: {{ $group.az }}-subnet
         defaultRoute: true
       - name: Storage
-        subnetName: az3-subnet
+        subnetName: {{ $group.az }}-subnet
+{{- if $group.includeStorage2 }}
+      - name: Storage2
+        subnetName: {{ $group.az }}-subnet
+{{- end }}
       - name: Tenant
-        subnetName: az3-subnet
+        subnetName: {{ $group.az }}-subnet
       - name: TenantPeering
-        subnetName: az3-subnet
+        subnetName: {{ $group.az }}-subnet
     managementNetwork: ctlplane
     ansible:
       ansibleUser: cloud-admin
@@ -124,12 +118,12 @@ spec:
       ansibleVarsFrom:
         - prefix: subscription_manager_
           secretRef:
-            name: {{ .Values.cloudName }}-subscription-secret
+            name: {{ $root.Values.cloudName }}-subscription-secret
         - secretRef:
-            name: {{ .Values.cloudName }}-registry-secret
+            name: {{ $root.Values.cloudName }}-registry-secret
       ansibleVars:
         edpm_bootstrap_release_version_package: "rhoso-release"
-        edpm_kernel_args: "console=ttyS1,115200n8 usbcore.autosuspend=-1 mitigations=off tsc=nowatchdog intel_idle.max_cstate=1"
+        edpm_kernel_args: "console=ttyS1,115200n8 usbcore.autosuspend=-1 mitigations=off tsc=nowatchdog{{ if eq $group.role "networker" }} intel_idle.max_cstate=1{{ end }}"
         edpm_bootstrap_command: |
           #dnf install -y http://satellite.lab.signal9.gg/pub/katello-ca-consumer-latest.noarch.rpm
           subscription-manager register --org {{ "{{ subscription_manager_org }}" }} --activationkey {{ "{{ subscription_manager_activation_key }}" }}
@@ -142,8 +136,8 @@ spec:
           grubby --update-kernel=ALL --args="console=ttyS1,115200n8 usbcore.autosuspend=-1" || true
           printf 'ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="on"\n' > /etc/udev/rules.d/90-ilo-usb-noautosuspend.rules
           udevadm control --reload-rules || true
-        edpm_enable_chassis_gw: true
-        edpm_ovn_availability_zones: ['az3']
+        edpm_enable_chassis_gw: {{ $group.chassisGw }}
+        edpm_ovn_availability_zones: ['{{ $group.az }}']
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_uplinks_scope: external
         edpm_frr_bgp_ipv4_src_network: tenantpeering
@@ -152,25 +146,27 @@ spec:
         edpm_frr_bgp_l2vpn: true
         edpm_frr_bgp_learning_routes: false
         edpm_ovn_bgp_agent_exposing_method: vrf
-        edpm_ovn_bgp_agent_evpn_nic: vlan533
+        edpm_ovn_bgp_agent_evpn_nic: {{ $group.evpnNic }}
         edpm_ovn_bgp_agent_reconcile_interval: 120
         edpm_ovn_bgp_agent_evpn_local_ip: "{{ "{{ lookup('vars', 'tenantpeering_ip') }}" }}"
         timesync_ntp_servers:
           - hostname: 172.18.0.79
           - hostname: 172.18.42.10
           - hostname: 172.18.42.11
-        edpm_frr_bgp_asn: 65108
-        edpm_ovn_bgp_agent_bgp_as: 65108
+        edpm_frr_bgp_asn: {{ $group.asn }}
+        edpm_ovn_bgp_agent_bgp_as: {{ $group.asn }}
         edpm_ovn_bridge_mappings:
           - 'datacentre:br-ex'
-          - 'az3-vlan:br-az3-vlan'
+          - '{{ $group.bridgeVlanTag }}:br-{{ $group.bridgeVlanTag }}'
           - 'bgp-physnet:br-bgp'
         edpm_frr_bgp_peers:
-          - 172.18.153.140
-          - 172.18.153.142
+{{- range $group.bgpPeers }}
+          - {{ . }}
+{{- end }}
         edpm_frr_bgp_l2vpn_peers:
-          - 172.18.153.140
-          - 172.18.153.142
+{{- range $group.bgpL2vpnPeers }}
+          - {{ . }}
+{{- end }}
         edpm_chrony_ntp_servers:
           - 172.18.0.79
           - 172.18.42.10
@@ -181,10 +177,10 @@ spec:
         edpm_network_config_hide_sensitive_logs: false
         edpm_network_config_override: ""
         ctlplane_dns_nameservers:
-          - {{ index .Values.networks.ctlplane.controlPlaneSegment.loadbalancerIPs 0 }}
+          - {{ index $root.Values.networks.ctlplane.controlPlaneSegment.loadbalancerIPs 0 }}
         dns_search_domains:
-          - ctlplane.{{ .Values.cloudName }}.{{ .Values.baseDomain }}
-          - {{ .Values.baseDomain }}
+          - ctlplane.{{ $root.Values.cloudName }}.{{ $root.Values.baseDomain }}
+          - {{ $root.Values.baseDomain }}
         edpm_network_config_nmstate: true
         edpm_network_config_template: |
           ---
@@ -237,21 +233,39 @@ spec:
           {% endif %}
           {% endfor %}
           - type: ovs_bridge
-            name: br-az3-vlan
+            name: br-{{ $group.bridgeVlanTag }}
             mtu: 9000
             members:
             - type: ovs_patch_port
               name: br-ex-patch
-              bridge_name: br-az3-vlan
-              peer: p-az3-vlan
+              bridge_name: br-{{ $group.bridgeVlanTag }}
+              peer: p-{{ $group.bridgeVlanTag }}
           - type: ovs_bridge
             name: br-bgp
             mtu: 9000
           - type: ovs_bridge
             name: br-ex
             members:
+{{- if $group.legacyBridgeMemberOrder }}
+            - type: linux_bond
+              name: bond1
+              mtu: 9000
+              bonding_options: "mode=active-backup"
+              members:
+              - type: interface
+                name: eno3
+                mtu: 9000
+                primary: true
+              - type: interface
+                name: eno3d1
+                mtu: 9000
             - type: ovs_patch_port
-              name: p-az3-vlan
+              name: p-{{ $group.bridgeVlanTag }}
+              bridge_name: br-ex
+              peer: br-ex-patch
+{{- else }}
+            - type: ovs_patch_port
+              name: p-{{ $group.bridgeVlanTag }}
               bridge_name: br-ex
               peer: br-ex-patch
             - type: linux_bond
@@ -266,6 +280,7 @@ spec:
               - type: interface
                 name: eno3d1
                 mtu: 9000
+{{- end }}
           {% for network in role_networks %}
           {% if network in bond1_nets %}
             - type: vlan
@@ -283,6 +298,9 @@ spec:
         role_networks:
         - InternalApi
         - Storage
+{{- if $group.includeStorage2 }}
+        - Storage2
+{{- end }}
         - Management
         - Tenant
         - TenantPeering
@@ -290,6 +308,9 @@ spec:
           Management: management
           InternalApi: internal_api
           Storage: storage
+{{- if $group.includeStorage2 }}
+          Storage2: storage2
+{{- end }}
           Tenant: tenant
           TenantPeering: tenantpeering
         # edpm_nodes_validation
@@ -302,3 +323,4 @@ spec:
         edpm_sshd_allowed_ranges: ['172.18.0.0/16']
         # SELinux module
         edpm_selinux_mode: enforcing
+{{- end }}

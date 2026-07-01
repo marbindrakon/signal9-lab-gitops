@@ -360,25 +360,154 @@ networks:
           - destination: 172.18.159.0/24
             nexthop: 172.18.159.129
 
-dataplaneBgpPeers:
-  az1:
-    localAs: 65007
-    remoteAs: 65003
-    peers:
-    - 172.18.153.1
-    - 172.18.153.2
-  az2:
-    localAs: 65007
-    remoteAs: 65003
-    peers:
-    - 172.18.153.65
-    - 172.18.153.66
-  az3:
-    localAs: 65007
-    remoteAs: 65003
-    peers:
-    - 172.18.153.129
-    - 172.18.153.130
+# dataplaneNodeGroups drives the consolidated baremetal-nodeset template
+# (templates/dataplane-nodeset.yaml). One entry per {az, role}. This is the
+# single place to touch per-AZ FRR/BGP/EVPN settings, e.g. when cutting the
+# ovn-bgp-agent peerings over from the unicast<>EVPN bridge to direct EVPN
+# on the XNA-HSC Nexus pair.
+dataplaneNodeGroups:
+  - az: az1
+    role: compute
+    chassisGw: false
+    includeStorage2: true
+    # az1's live NodeSets order br-ex members bond-then-patch-port; az2/az3
+    # order patch-port-then-bond. Pre-existing drift, preserved verbatim to
+    # avoid an unreviewed diff on live nodes. See consolidation notes.
+    legacyBridgeMemberOrder: true
+    asn: 65106
+    evpnNic: vlan531
+    bridgeVlanTag: az1-vlan
+    bgpPeers:
+      - 172.18.153.20
+      - 172.18.153.22
+    bgpL2vpnPeers:
+      - 172.18.153.20
+      - 172.18.153.22
+    nodes:
+      az1-compute-0:
+        enabled: true
+        ctlplaneIP: 172.18.150.6
+        managementIP: 172.18.158.6
+      az1-compute-1:
+        enabled: false
+        ctlplaneIP: 172.18.150.7
+        managementIP: 172.18.158.7
+
+  - az: az1
+    role: networker
+    chassisGw: true
+    includeStorage2: false
+    legacyBridgeMemberOrder: true
+    asn: 65106
+    evpnNic: vlan531
+    bridgeVlanTag: az1-vlan
+    bgpPeers:
+      - 172.18.153.20
+      - 172.18.153.22
+    bgpL2vpnPeers:
+      - 172.18.153.20
+      - 172.18.153.22
+    nodes:
+      az1-networker-0:
+        enabled: true
+        ctlplaneIP: 172.18.150.8
+        managementIP: 172.18.158.8
+      az1-networker-1:
+        enabled: false
+        ctlplaneIP: 172.18.150.9
+        managementIP: 172.18.158.9
+
+  - az: az2
+    role: compute
+    chassisGw: false
+    includeStorage2: false
+    asn: 65107
+    evpnNic: vlan532
+    bridgeVlanTag: az2-vlan
+    bgpPeers:
+      - 172.18.153.80
+      - 172.18.153.82
+    bgpL2vpnPeers:
+      - 172.18.153.80
+      - 172.18.153.82
+    nodes:
+      az2-compute-0:
+        enabled: true
+        ctlplaneIP: 172.18.150.72
+        managementIP: 172.18.158.72
+      az2-compute-1:
+        enabled: false
+        ctlplaneIP: 172.18.150.73
+        managementIP: 172.18.158.73
+
+  - az: az2
+    role: networker
+    chassisGw: true
+    includeStorage2: false
+    asn: 65107
+    evpnNic: vlan532
+    bridgeVlanTag: az2-vlan
+    bgpPeers:
+      - 172.18.153.80
+      - 172.18.153.82
+    bgpL2vpnPeers:
+      - 172.18.153.80
+      - 172.18.153.82
+    nodes:
+      az2-networker-0:
+        enabled: true
+        ctlplaneIP: 172.18.150.74
+        managementIP: 172.18.158.74
+      az2-networker-1:
+        enabled: false
+        ctlplaneIP: 172.18.150.75
+        managementIP: 172.18.158.75
+
+  - az: az3
+    role: compute
+    chassisGw: false
+    includeStorage2: false
+    asn: 65108
+    evpnNic: vlan533
+    bridgeVlanTag: az3-vlan
+    bgpPeers:
+      - 172.18.153.140
+      - 172.18.153.142
+    bgpL2vpnPeers:
+      - 172.18.153.140
+      - 172.18.153.142
+    nodes:
+      az3-compute-0:
+        enabled: true
+        ctlplaneIP: 172.18.150.134
+        managementIP: 172.18.158.134
+      az3-compute-1:
+        enabled: false
+        ctlplaneIP: 172.18.150.135
+        managementIP: 172.18.158.135
+
+  - az: az3
+    role: networker
+    chassisGw: true
+    includeStorage2: false
+    asn: 65108
+    evpnNic: vlan533
+    bridgeVlanTag: az3-vlan
+    bgpPeers:
+      - 172.18.153.140
+      - 172.18.153.142
+    bgpL2vpnPeers:
+      - 172.18.153.140
+      - 172.18.153.142
+    nodes:
+      az3-networker-0:
+        enabled: true
+        ctlplaneIP: 172.18.150.136
+        managementIP: 172.18.158.136
+      az3-networker-1:
+        enabled: false
+        ctlplaneIP: 172.18.150.137
+        managementIP: 172.18.158.137
 
 customCaBundle: |
   -----BEGIN CERTIFICATE-----
