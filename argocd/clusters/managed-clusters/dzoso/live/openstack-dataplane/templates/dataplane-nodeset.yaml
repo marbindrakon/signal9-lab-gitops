@@ -145,6 +145,15 @@ spec:
         edpm_frr_bgp_ipv6: false
         edpm_frr_bgp_l2vpn: true
         edpm_frr_bgp_learning_routes: false
+        # XNA-HSC uplink is a Cisco NX-OS vPC pair: it has no GTSM, so the
+        # role default ttl-security (hops 1) makes it send TTL 1 which the
+        # node's IP_MINTTL=255 drops -> sessions stuck. Disable GTSM.
+        edpm_frr_bgp_neighbor_ttl_security_hops: 0
+        # BFD is unsupported over vPC for a bonded/dual-homed peer (only the
+        # vPC primary's BFD sustains). Drop BFD; use fast BGP timers instead.
+        edpm_frr_bfd: false
+        edpm_frr_bgp_neighbor_keepalive: 1
+        edpm_frr_bgp_neighbor_holdtime: 3
         edpm_ovn_bgp_agent_exposing_method: vrf
         edpm_ovn_bgp_agent_evpn_nic: {{ $group.evpnNic }}
         edpm_ovn_bgp_agent_reconcile_interval: 120
