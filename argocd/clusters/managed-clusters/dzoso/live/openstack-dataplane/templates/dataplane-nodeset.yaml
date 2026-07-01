@@ -141,10 +141,15 @@ spec:
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_uplinks_scope: external
         edpm_frr_bgp_ipv4_src_network: tenantpeering
-        edpm_frr_bgp_ipv4: false
+        # ipv4 unicast is needed so the node learns the XNA-HSC VTEP loopbacks
+        # (192.168.153.26/.27) over the tenant-peering underlay; without it the
+        # node routes VXLAN-return to the switch VTEP via mgmt and it blackholes.
+        # learning_routes must be true or the node's rm-only-default route-map
+        # only installs 0/0, not the learned VTEP /32s.
+        edpm_frr_bgp_ipv4: true
         edpm_frr_bgp_ipv6: false
         edpm_frr_bgp_l2vpn: true
-        edpm_frr_bgp_learning_routes: false
+        edpm_frr_bgp_learning_routes: true
         # XNA-HSC uplink is a Cisco NX-OS vPC pair: it has no GTSM, so the
         # role default ttl-security (hops 1) makes it send TTL 1 which the
         # node's IP_MINTTL=255 drops -> sessions stuck. Disable GTSM.
