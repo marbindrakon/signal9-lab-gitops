@@ -141,8 +141,8 @@ spec:
         edpm_ovn_bgp_agent_expose_tenant_networks: false
         edpm_frr_bgp_uplinks_scope: external
         edpm_frr_bgp_ipv4_src_network: tenantpeering
-        # ipv4 unicast is needed so the node learns the XNA-HSC VTEP loopbacks
-        # (192.168.153.26/.27) over the tenant-peering underlay; without it the
+        # ipv4 unicast is needed so the node learns the LAB-AST anycast VTEP
+        # (192.168.153.10) over the tenant-peering underlay; without it the
         # node routes VXLAN-return to the switch VTEP via mgmt and it blackholes.
         # learning_routes must be true or the node's rm-only-default route-map
         # only installs 0/0, not the learned VTEP /32s.
@@ -150,10 +150,14 @@ spec:
         edpm_frr_bgp_ipv6: false
         edpm_frr_bgp_l2vpn: true
         edpm_frr_bgp_learning_routes: true
-        # XNA-HSC uplink is a Cisco NX-OS vPC pair: it has no GTSM, so the
-        # role default ttl-security (hops 1) makes it send TTL 1 which the
-        # node's IP_MINTTL=255 drops -> sessions stuck. Disable GTSM.
-        edpm_frr_bgp_neighbor_ttl_security_hops: 0
+        # Uplinks are now the LAB-AST MLAG pair (EOS). The peers' global VARP
+        # mode (ip virtual-router mac-address mlag-peer) makes each switch
+        # ROUTE frames addressed to its MLAG peer's SVI MAC, decrementing TTL,
+        # so plain eBGP TTL=1 dies for whichever switch is across the
+        # peer-link -> only one of the two sessions forms. GTSM hops 2 makes
+        # FRR send TTL 255 and accept >=254; switch side runs ebgp-multihop
+        # 255 on the OSO peer-groups. (Old NX-OS uplink needed hops 0.)
+        edpm_frr_bgp_neighbor_ttl_security_hops: 2
         # BFD is unsupported over vPC for a bonded/dual-homed peer (only the
         # vPC primary's BFD sustains). Drop BFD; use fast BGP timers instead.
         edpm_frr_bfd: false
