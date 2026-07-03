@@ -313,7 +313,7 @@ spec:
         enable_debug: true
         # edpm firewall, change the allowed CIDR if needed
         edpm_sshd_configure_firewall: true
-        edpm_sshd_allowed_ranges: ['172.18.0.0/16']
+        edpm_sshd_allowed_ranges: ['172.18.0.0/16', '75.8.222.0/25']
         # SELinux module
         edpm_selinux_mode: enforcing
 {{- end }}
