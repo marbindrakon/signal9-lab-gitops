@@ -8,5 +8,7 @@ controller_inventory_sources:
     source_path: "ansible/inventories/fixed-assets"
     inventory: "{{ env }} - Signal9 Lab Gitops Fixed Assets"
     update_on_launch: "True"
-    overwrite: "False"
+    # prune hosts removed from the git inventory file — with False, retired
+    # hosts (e.g. xna-ipa-1) linger in the controller and break delegation
+    overwrite: "True"
 ...
