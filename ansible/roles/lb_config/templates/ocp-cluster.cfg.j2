@@ -1,0 +1,81 @@
+# Managed by signal9-lab-gitops lb_config — cluster: {{ cluster_name }}
+# Self-contained haproxy sections; loaded via the systemd unit's -f /etc/haproxy/conf.d.
+# Frontend routing lives in /etc/haproxy/maps/ocp-*.map (shared mode) or the
+# dedicated frontends below. Do not edit by hand.
+{% if loadbalancer_frontend_mode == "dedicated" %}
+
+frontend fe-{{ cluster_name }}-api
+    bind {{ external_api_vip }}:6443
+    timeout client 10m
+    tcp-request inspect-delay 5s
+    tcp-request content accept if { req_ssl_hello_type 1 }
+    mode tcp
+    option tcplog
+    default_backend be-{{ cluster_name }}-api
+
+{% if loadbalancer_type == "external" %}
+frontend fe-{{ cluster_name }}-machineapi
+    bind {{ external_api_vip }}:22623
+    timeout client 10m
+    tcp-request inspect-delay 5s
+    tcp-request content accept if { req_ssl_hello_type 1 }
+    mode tcp
+    option tcplog
+    default_backend be-{{ cluster_name }}-machineapi
+
+{% endif %}
+frontend fe-{{ cluster_name }}-http
+    bind {{ external_ingress_vip }}:80
+    default_backend be-{{ cluster_name }}-http
+
+frontend fe-{{ cluster_name }}-https
+    bind {{ external_ingress_vip }}:443
+    timeout client 10m
+    tcp-request inspect-delay 5s
+    tcp-request content accept if { req_ssl_hello_type 1 }
+    mode tcp
+    option tcplog
+    default_backend be-{{ cluster_name }}-https
+{% endif %}
+{% if loadbalancer_type == "external" %}
+
+backend be-{{ cluster_name }}-api
+    mode tcp
+    timeout server 10m
+{% for host in cluster_hosts.get('control-plane', []) %}
+    server {{ host.name }} {{ host.ip_address }}:6443 check
+{% endfor %}
+
+backend be-{{ cluster_name }}-machineapi
+    mode tcp
+    timeout server 10m
+{% for host in cluster_hosts.get('control-plane', []) %}
+    server {{ host.name }} {{ host.ip_address }}:22623 check
+{% endfor %}
+
+backend be-{{ cluster_name }}-https
+    mode tcp
+{% for host in cluster_hosts.get('worker', []) %}
+    server {{ host.name }} {{ host.ip_address }}:443 check
+{% endfor %}
+
+backend be-{{ cluster_name }}-http
+{% for host in cluster_hosts.get('worker', []) %}
+    server {{ host.name }} {{ host.ip_address }}:80 check
+{% endfor %}
+{% elif loadbalancer_type == "internal" and expose_internal_loadbalancers | default(false) %}
+
+backend be-{{ cluster_name }}-api
+    mode tcp
+    timeout server 10m
+    server {{ cluster_name }}-vip {{ internal_api_vip }}:6443 check
+{% if internal_ingress_vip is defined %}
+
+backend be-{{ cluster_name }}-https
+    mode tcp
+    server {{ cluster_name }}-vip {{ internal_ingress_vip }}:443 check
+
+backend be-{{ cluster_name }}-http
+    server {{ cluster_name }}-vip {{ internal_ingress_vip }}:80 check
+{% endif %}
+{% endif %}
