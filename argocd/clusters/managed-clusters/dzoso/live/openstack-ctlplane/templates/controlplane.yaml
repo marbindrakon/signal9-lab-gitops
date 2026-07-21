@@ -613,7 +613,7 @@ spec:
               type: LoadBalancer
       rabbitmq-cell2:
         topologyRef:
-          name: prefer-az1
+          name: prefer-az2
         replicas: 3
         override:
           service:
@@ -625,7 +625,7 @@ spec:
               type: LoadBalancer
       rabbitmq-cell3:
         topologyRef:
-          name: prefer-az1
+          name: prefer-az3
         replicas: 3
         override:
           service:
