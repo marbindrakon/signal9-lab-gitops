@@ -8,7 +8,6 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  label: dataplane-deployment-nova-custom-ceph
   caCerts: combined-ca-bundle
   edpmServiceType: nova
   dataSources:
@@ -29,7 +28,6 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  label: dataplane-deployment-nova-custom-ceph
   caCerts: combined-ca-bundle
   edpmServiceType: nova
   dataSources:
@@ -50,7 +48,6 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  label: dataplane-deployment-nova-custom-ceph
   caCerts: combined-ca-bundle
   edpmServiceType: nova
   dataSources:

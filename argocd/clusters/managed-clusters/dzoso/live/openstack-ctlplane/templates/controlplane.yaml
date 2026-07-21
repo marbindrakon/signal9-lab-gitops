@@ -165,8 +165,8 @@ spec:
 
     template:
       databaseInstance: openstack
-      storageClass: "ocs-external-storagecluster-ceph-rbd"
-      storageRequest: 150G
+      storage:
+        external: true
       customServiceConfig: |
         [DEFAULT]
         enabled_backends = default_backend:rbd
