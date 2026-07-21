@@ -407,14 +407,16 @@ spec:
         cell0:
           cellDatabaseAccount: nova-cell0
           cellDatabaseInstance: openstack
-          cellMessageBusInstance: rabbitmq
+          messagingBus:
+            cluster: rabbitmq
           hasAPIAccess: true
         cell1:
           topologyRef:
             name: prefer-az1
           cellDatabaseAccount: nova-cell1
           cellDatabaseInstance: openstack-cell1
-          cellMessageBusInstance: rabbitmq-cell1
+          messagingBus:
+            cluster: rabbitmq-cell1
           memcachedInstance: memcached-az1
           novaComputeTemplates:
             az1-ironic:
@@ -432,7 +434,8 @@ spec:
             name: prefer-az1
           cellDatabaseAccount: nova-cell2
           cellDatabaseInstance: openstack-cell2
-          cellMessageBusInstance: rabbitmq-cell2
+          messagingBus:
+            cluster: rabbitmq-cell2
           memcachedInstance: memcached-az2
           novaComputeTemplates:
             az2-ironic:
@@ -451,7 +454,8 @@ spec:
             name: prefer-az1
           cellDatabaseAccount: nova-cell3
           cellDatabaseInstance: openstack-cell3
-          cellMessageBusInstance: rabbitmq-cell3
+          messagingBus:
+            cluster: rabbitmq-cell3
           memcachedInstance: memcached-az3
           novaComputeTemplates:
             az3-ironic:
@@ -858,7 +862,8 @@ spec:
           databaseInstance: openstack
           passwordSelector:
             aodhService: AodhPassword
-          rabbitMqClusterName: rabbitmq
+          notificationsBus:
+            cluster: rabbitmq
           serviceUser: aodh
           secret: {{ .Values.cloudName }}-password-secret
         heatInstance: heat
@@ -867,5 +872,8 @@ spec:
         secret: {{ .Values.cloudName }}-password-secret
       logging:
         enabled: false
-        ipaddr: 172.17.0.80
+        annotations:
+          metallb.universe.tf/address-pool: internalapi
+          metallb.universe.tf/allow-shared-ip: internalapi
+          metallb.universe.tf/loadBalancerIPs: 172.17.0.80
 
