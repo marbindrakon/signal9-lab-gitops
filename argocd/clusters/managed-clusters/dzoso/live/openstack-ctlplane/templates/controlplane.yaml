@@ -46,7 +46,6 @@ spec:
           mounts:
           - name: oidc-config
             mountPath: "/etc/httpd/metadata"
-            readOnly: false
 
   dns:
     template:
@@ -66,6 +65,9 @@ spec:
       - key: server
         values:
         - 172.18.42.11
+      - key: local
+        values:
+        - /openstack.svc/
       replicas: 2
   cinder:
     apiOverride:
@@ -511,7 +513,6 @@ spec:
             cephfs_volume_mode=0755
             cephfs_protocol_helper_type=CEPHFS
           replicas: 1
-          networkAttachments: []
   ovn:
     template:
       ovnDBCluster:
@@ -588,7 +589,7 @@ spec:
         replicas: 3
         resources:
           limits:
-            cpu: 4
+            cpu: "4"
             memory: 4Gi
         override:
           service:
