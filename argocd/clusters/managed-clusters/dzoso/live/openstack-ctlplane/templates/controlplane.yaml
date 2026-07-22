@@ -222,9 +222,8 @@ spec:
       region: {{ .Values.keystone.region }}
       customServiceConfig: |
         [DEFAULT]
-        debug = True
         [federation]
-        trusted_dashboard=https://dzcloud.lab.signal9.gg/dashboard/auth/websso/ 
+        trusted_dashboard=https://dzcloud.lab.signal9.gg/dashboard/auth/websso/
         [openid]
         remote_id_attribute=HTTP_OIDC_ISS
         [auth]
@@ -312,12 +311,20 @@ spec:
       replicas: 3
       customServiceConfig: |
         [DEFAULT]
-        debug = True
         global_physnet_mtu = 9000
+        [oslo_policy]
+        # policy_file must exist or oslo.policy re-searches the filesystem on
+        # every policy check (~1400 checks per 50-port GET /v2.0/ports).
+        policy_file = /etc/neutron/neutron.conf.d/policy.yaml
         [ovn]
         dns_servers = 172.18.150.244,172.18.150.245,172.18.150.246
         [ml2_type_vlan]
         network_vlan_ranges = az1-vlan:1:999,az2-vlan:1:999,az3-vlan:1:999,datacentre:1:999,bgp-physnet:1:3999
+      defaultConfigOverwrite:
+        # Empty ruleset: keeps all registered policy defaults, but gives
+        # oslo.policy a real file to stat instead of a failing path search.
+        policy.yaml: |
+          {}
       networkAttachments:
       - internalapi
 
