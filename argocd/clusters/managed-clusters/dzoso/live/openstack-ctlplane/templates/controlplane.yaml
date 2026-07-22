@@ -91,6 +91,7 @@ spec:
                   metallb.universe.tf/loadBalancerIPs: 172.18.151.240
               spec:
                 type: LoadBalancer
+        replicas: 3
       cinderScheduler:
         customServiceConfig: |
           [DEFAULT]
@@ -308,6 +309,7 @@ spec:
               type: LoadBalancer
       databaseInstance: openstack
       secret: {{ .Values.cloudName }}-password-secret
+      replicas: 3
       customServiceConfig: |
         [DEFAULT]
         debug = True
