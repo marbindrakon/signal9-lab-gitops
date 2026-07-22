@@ -312,17 +312,16 @@ spec:
       customServiceConfig: |
         [DEFAULT]
         global_physnet_mtu = 9000
-        [oslo_policy]
-        # policy_file must exist or oslo.policy re-searches the filesystem on
-        # every policy check (~1400 checks per 50-port GET /v2.0/ports).
-        policy_file = /etc/neutron/neutron.conf.d/policy.yaml
         [ovn]
         dns_servers = 172.18.150.244,172.18.150.245,172.18.150.246
         [ml2_type_vlan]
         network_vlan_ranges = az1-vlan:1:999,az2-vlan:1:999,az3-vlan:1:999,datacentre:1:999,bgp-physnet:1:3999
       defaultConfigOverwrite:
         # Empty ruleset: keeps all registered policy defaults, but gives
-        # oslo.policy a real file to stat instead of a failing path search.
+        # oslo.policy a real file to stat instead of a failing path search
+        # on every check. Lands at /etc/neutron/policy.yaml, which is where
+        # the operator's own policy_file in 01-neutron.conf already points -
+        # do NOT also override policy_file in customServiceConfig.
         policy.yaml: |
           {}
       networkAttachments:
