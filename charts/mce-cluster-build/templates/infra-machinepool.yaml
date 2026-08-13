@@ -13,7 +13,7 @@ spec:
   platform:
 {{- if eq .Values.provider.type "AWS" }}
     aws:
-      type: {{ .Values.provider.aws.workerFlavor }}
+      type: {{ .Values.provider.aws.infraFlavor }}
       rootVolume:
         iops: 2000
         size: 120
@@ -21,7 +21,7 @@ spec:
 {{- end }}
 {{- if eq .Values.provider.type "OpenStack" }}
     openstack:
-      flavor: {{ .Values.provider.openstack.workerFlavor }}
+      flavor: {{ .Values.provider.openstack.infraFlavor }}
 {{- end }}
   labels:
     node-role.kubernetes.io/infra: ''

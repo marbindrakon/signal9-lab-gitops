@@ -31,6 +31,7 @@ provider:
     region: us-east-2
     controllerFlavor: m1.xlarge
     workerFlavor: m1.large
+    infraFlavor: m1.large
     credentialsMode: Manual
     publishMode: External
     assumeRole:
@@ -54,6 +55,7 @@ provider:
     rootVolumeTypes: []
     controlPlaneFlavor: m1.xlarge
     workerFlavor: m1.large
+    infraFlavor: m1.large
   agent:
     # Override provider type on AgentClusterInstall (i.e. agent install on VSphere)
     infraEnvType: shared
