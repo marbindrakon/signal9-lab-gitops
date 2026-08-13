@@ -8,7 +8,7 @@ cluster:
   baseDomain: lab.signal9.gg
   clusterImageSet: img4.21.10-x86-64-appsub
   controlPlaneCount: 3
-  workerCount: 15
+  workerCount: 3
   infraCount: 2
   apiVIP: "172.18.104.198"
   ingressVIP: "172.18.104.147"
