@@ -55,6 +55,10 @@ monitoring:
   alertManagerSize: 10Gi
   prometheusSize: 50Gi
   userWorkloadMonitoring: false
+  infraNodePlacement: false
+
+ingress:
+  infraNodePlacement: false
 
 network:
   hostRouting: false

@@ -60,3 +60,15 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Node selector and tolerations for placing workloads on infra nodes
+*/}}
+{{- define "ocp-base-config.infraPlacement" -}}
+nodeSelector:
+  node-role.kubernetes.io/infra: ""
+tolerations:
+- key: node-role.kubernetes.io/infra
+  operator: Exists
+  effect: NoSchedule
+{{- end }}

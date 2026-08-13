@@ -13,6 +13,9 @@ data:
 {{ else }}
     alertmanagerMain:
 {{ end }}
+{{- if .Values.monitoring.infraNodePlacement }}
+{{ include "ocp-base-config.infraPlacement" . | indent 6 }}
+{{- end }}
       volumeClaimTemplate:
        spec:
          storageClassName: {{ .Values.monitoring.storageClass }}
@@ -21,10 +24,19 @@ data:
              storage: {{ .Values.monitoring.alertManagerSize }}
     prometheusK8s:
       retention: 7d
+{{- if .Values.monitoring.infraNodePlacement }}
+{{ include "ocp-base-config.infraPlacement" . | indent 6 }}
+{{- end }}
       volumeClaimTemplate:
        spec:
          storageClassName: {{ .Values.monitoring.storageClass }}
          resources:
            requests:
              storage: {{ .Values.monitoring.prometheusSize }}
+{{- if .Values.monitoring.infraNodePlacement }}
+{{- range tuple "prometheusOperator" "kubeStateMetrics" "openshiftStateMetrics" "telemeterClient" "thanosQuerier" "metricsServer" "monitoringPlugin" }}
+    {{ . }}:
+{{ include "ocp-base-config.infraPlacement" $ | indent 6 }}
+{{- end }}
+{{- end }}
 {{ end }}

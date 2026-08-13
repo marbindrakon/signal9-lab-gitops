@@ -89,6 +89,10 @@ cluster:
 monitoring:
   enabled: true
   storageClass: standard-csi
+  infraNodePlacement: true
+
+ingress:
+  infraNodePlacement: true
 
 
 externalSecrets:
