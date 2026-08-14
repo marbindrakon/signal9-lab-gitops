@@ -8,6 +8,12 @@ spec:
     namespace: openshift-gitops
     server: "https://kubernetes.default.svc"
   project: default
+  ignoreDifferences:
+    - kind: ConfigMap
+      name: cluster-monitoring-config
+      namespace: openshift-monitoring
+      jsonPointers:
+        - /data/config.yaml
   syncPolicy:
     automated: {}
     retry:
