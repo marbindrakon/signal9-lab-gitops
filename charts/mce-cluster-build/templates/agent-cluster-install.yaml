@@ -24,12 +24,16 @@ spec:
 {{ end }}
   networking:
     clusterNetwork:
-      - cidr: 10.128.0.0/14
-        hostPrefix: 23
+{{- range .Values.cluster.networking.clusterNetworks }}
+      - cidr: {{ .cidr }}
+        hostPrefix: {{ .hostPrefix }}
+{{- end }}
     machineNetwork:
       - cidr: {{ .Values.provider.agent.machineCIDR }}
     serviceNetwork:
-      - 172.30.0.0/16
+{{- range .Values.cluster.networking.serviceNetworks }}
+      - {{ . }}
+{{- end }}
     userManagedNetworking: {{ .Values.provider.agent.useExternalLB }}
   provisionRequirements:
     controlPlaneAgents: {{ .Values.cluster.controlPlaneCount }}

@@ -19,6 +19,12 @@ cluster:
   sshKeyVault: ""
   sshPubKey: ""
   dnsServers: []
+  networking:
+    clusterNetworks:
+      - cidr: 10.128.0.0/14
+        hostPrefix: 23
+    serviceNetworks:
+      - 172.30.0.0/16
 
 provider:
   providerCredsVault: ""
