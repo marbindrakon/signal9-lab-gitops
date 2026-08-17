@@ -1,4 +1,97 @@
 nodes:
+  dl380-gen10.lab.signal9.gg:
+    labels:
+      compute-model: dl380-gen10
+    bootMac: 08:f1:ea:92:9f:9a
+    rootDeviceHints:
+      deviceName: "/dev/sda"
+    bmc:
+      url: redfish-virtualmedia://ilo-nvme-host.oob.signal9.gg/redfish/v1/Systems/1
+      externalSecret:
+        vaultName: openshift-ldap
+        usernameKey: username
+        passwordKey: ipmi_password
+    network:
+      nmstateConfig:
+        interfaces:
+          - name: bond0
+            type: bond
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno3
+                - eno4
+          - name: bond1
+            type: bond
+            mtu: 9000
+            state: up
+            ipv4:
+              enabled: false
+              dhcp: false
+            ipv6:
+              enabled: false
+            link-aggregation:
+              mode: active-backup
+              options:
+                miimon: '100'
+              port:
+                - eno5np1
+                - eno6np1
+          - name: bond1.16
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 16
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.16.65
+                  prefix-length: 24
+          - name: bond1.11
+            type: vlan
+            state: up
+            mtu: 9000
+            vlan:
+              id: 19
+              base-iface: bond1
+            ipv4:
+              enabled: true
+              dhcp: false
+              address:
+                - ip: 172.18.5.65
+                  prefix-length: 24
+        dns-resolver:
+          config:
+            server:
+              - 172.18.42.10
+              - 172.18.42.11
+        routes:
+          config:
+            - destination: 0.0.0.0/0
+              next-hop-address: 172.18.16.1
+              next-hop-interface: bond1.16
+              table-id: 254
+      interfaceMap:
+        - name: eno3
+          macAddress: 08:f1:ea:92:9f:9a
+        - name: eno4
+          macAddress: 08:f1:ea:92:9f:9b
+        - name: eno5np1
+          macAddress: b8:83:03:65:e3:64
+        - name: eno6np1
+          macAddress: b8:83:03:65:e3:65
+
   r730-sno.lab.signal9.gg:
     labels:
       compute-model: r730
