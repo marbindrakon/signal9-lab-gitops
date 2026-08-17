@@ -1,15 +1,15 @@
-assignments: []
-# - node: dl380-gen10.lab.signal9.gg
-#   namespace: metal-infra-env
-#   assignmentType: agent
-#   infraEnvName: metal-infra-env
-#   extraLabels: {}
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
-# - node: r730-sno.lab.signal9.gg
-#   namespace: metal-infra-env
-#   assignmentType: agent
-#   infraEnvName: metal-infra-env
-#   extraLabels: {}
-#   extraAnnotations:
-#     bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+assignments:
+  - node: dl380-gen10.lab.signal9.gg
+    namespace: metal-infra-env
+    assignmentType: agent
+    infraEnvName: metal-infra-env
+    extraLabels: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
+  - node: r730-sno.lab.signal9.gg
+    namespace: metal-infra-env
+    assignmentType: agent
+    infraEnvName: metal-infra-env
+    extraLabels: {}
+    extraAnnotations:
+      bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
