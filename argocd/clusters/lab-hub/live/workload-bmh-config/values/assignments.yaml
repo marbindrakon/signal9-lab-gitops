@@ -2,7 +2,7 @@ assignments:
   - node: dl380-gen10.lab.signal9.gg
     namespace: metal-infra-env
     assignmentType: agent
-    ifnraEnvName: metal-infra-env
+    infraEnvName: metal-infra-env
     extraLabels: {}
     extraAnnotations:
       bmac.agent-install.openshift.io.node-label.cluster.ocs.openshift.io/openshift-storage: ''
