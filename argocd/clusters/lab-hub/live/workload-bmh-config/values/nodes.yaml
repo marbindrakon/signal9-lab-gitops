@@ -63,7 +63,7 @@ nodes:
             state: up
             mtu: 9000
             vlan:
-              id: 19
+              id: 11
               base-iface: bond1
             ipv4:
               enabled: true
@@ -151,18 +151,18 @@ nodes:
               address:
                 - ip: 172.18.16.55
                   prefix-length: 24
-          - name: bond1.19
+          - name: bond1.11
             type: vlan
             state: up
             mtu: 9000
             vlan:
-              id: 19
+              id: 11
               base-iface: bond1
             ipv4:
               enabled: true
               dhcp: false
               address:
-                - ip: 172.18.19.55
+                - ip: 172.18.5.55
                   prefix-length: 24
         dns-resolver:
           config:
@@ -174,10 +174,6 @@ nodes:
             - destination: 0.0.0.0/0
               next-hop-address: 172.18.16.1
               next-hop-interface: bond1.16
-              table-id: 254
-            - destination: 172.18.14.0/24
-              next-hop-address: 172.18.19.1
-              next-hop-interface: bond1.19
               table-id: 254
       interfaceMap:
         - name: eno3
