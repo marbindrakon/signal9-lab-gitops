@@ -1,6 +1,6 @@
 assignments:
   - node: dl380-gen10.lab.signal9.gg
-    namespace: meta-infra-env
+    namespace: metal-infra-env
     assignmentType: agent-nobmh
     ifnraEnvName: metal-infra-env
     extraLabels: {}
