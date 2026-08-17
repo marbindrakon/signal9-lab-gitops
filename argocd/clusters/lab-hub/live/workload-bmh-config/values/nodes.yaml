@@ -3,6 +3,7 @@ nodes:
     labels:
       compute-model: dl380-gen10
     bootMac: 08:f1:ea:92:9f:9a
+    agentPreprovisioningConfig: true
     rootDeviceHints:
       deviceName: "/dev/sda"
     bmc:
@@ -96,6 +97,7 @@ nodes:
     labels:
       compute-model: r730
     bootMac: 24:6e:96:bf:21:5c
+    agentPreprovisioningConfig: true
     rootDeviceHints:
       deviceName: "/dev/sda"
     bmc:
