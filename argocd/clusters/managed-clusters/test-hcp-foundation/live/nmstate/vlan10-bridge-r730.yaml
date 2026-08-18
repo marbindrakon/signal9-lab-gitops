@@ -77,9 +77,17 @@ spec:
         - ip-from: 172.18.0.204/32
           route-table: 100
           priority: 904
+          state: absent
+        # 172.18.0.200/29 covers the VIPs (.200/.201), node bridge IPs
+        # (.202/.203), EgressIP (.204) and spares - block reserved in NetBox
+        - ip-from: 172.18.0.200/29
+          route-table: 100
+          priority: 900
         - ip-from: 172.18.0.200/31
           route-table: 100
           priority: 900
+          state: absent
         - ip-from: 172.18.0.203/32
           route-table: 100
           priority: 901
+          state: absent
