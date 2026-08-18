@@ -14,4 +14,3 @@ spec:
     priority: 10
     namespaces:
       - clusters-test-hcp-vlan10
-      - openshift-ingress
