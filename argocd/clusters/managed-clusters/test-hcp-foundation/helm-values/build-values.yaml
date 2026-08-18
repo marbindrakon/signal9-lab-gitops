@@ -1,5 +1,5 @@
 cluster:
-  importToHub: true
+  importToHub: false
   useACM: true
   createGitopsManifestWorks: false
   createGitopsSyncSet: false
