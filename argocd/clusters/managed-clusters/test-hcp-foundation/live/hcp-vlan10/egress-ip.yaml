@@ -1,0 +1,23 @@
+---
+# SNATs guest worker VM egress to a VLAN 10 address. OVN-K hosts the IP
+# on br-vlan10 (secondary host network) of one egress-assignable node.
+# podSelector scopes to the virt-launcher pods only - the HCP control
+# plane shares this namespace and must keep default node-IP egress.
+# Requires k8s.ovn.org/egress-assignable label on the nodes (applied
+# imperatively).
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: test-hcp-vlan10-workers
+  annotations:
+    argocd.argoproj.io/sync-wave: '5'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  egressIPs:
+    - 172.18.0.204
+  namespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: clusters-test-hcp-vlan10
+  podSelector:
+    matchLabels:
+      kubevirt.io: virt-launcher
