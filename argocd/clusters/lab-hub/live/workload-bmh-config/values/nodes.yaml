@@ -140,8 +140,8 @@ nodes:
               options:
                 miimon: '100'
               port:
-                - enp3s0
-                - enp3s0d1
+                - enp3s0f0np0
+                - enp3s0f1np1
           - name: bond1.16
             type: vlan
             state: up
@@ -184,7 +184,7 @@ nodes:
           macAddress: 24:6e:96:bf:21:5c
         - name: eno4
           macAddress: 24:6e:96:bf:21:5d
-        - name: enp3s0
-          macAddress: 24:8a:07:f6:f3:c0
-        - name: enp3s0d1
-          macAddress: 24:8a:07:f6:f3:c1
+        - name: enp3s0f0np0
+          macAddress: 98:03:9b:ca:c9:04
+        - name: enp3s0f1np1
+          macAddress: 98:03:9b:ca:c9:05
