@@ -98,7 +98,6 @@ nodes:
     labels:
       compute-model: r730
     bootMac: 24:6e:96:bf:21:5c
-    bootMode: UEFI
     agentPreprovisioningConfig: true
     rootDeviceHints:
       deviceName: "/dev/sda"
