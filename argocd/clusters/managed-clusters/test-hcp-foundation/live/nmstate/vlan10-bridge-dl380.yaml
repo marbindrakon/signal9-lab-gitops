@@ -53,14 +53,12 @@ spec:
           next-hop-address: 172.18.0.1
           next-hop-interface: br-vlan10
           table-id: 100
-    # The main-table default (metric 425, never beats br-ex's metric-0
-    # default) exists so OVN-K's multi-NIC EgressIP sync finds a gateway
-    # for br-vlan10 - without it, its per-pod egress table gets an onlink
-    # default that ARPs for off-subnet destinations and fails.
+        # remove the previously-applied main-table default via br-vlan10
         - destination: 0.0.0.0/0
           next-hop-address: 172.18.0.1
           next-hop-interface: br-vlan10
           metric: 425
+          state: absent
     # NOTE: OVN-KUBE-EXTERNALIP DNATs VIP->ClusterIP in PREROUTING, before
     # the RPF check and reply routing - both see the ClusterIP, not the VIP.
     # So the ClusterIPs of kube-apiserver (172.30.79.89) and
@@ -68,6 +66,15 @@ spec:
     # These change if either service is recreated.
     route-rules:
       config:
+        # EgressIP: forwarded pod-sourced traffic entering via the OVN
+        # management port is exactly the multi-NIC EgressIP path (pod->node
+        # traffic resolves in the local table first). Shadows OVN-K's
+        # prio-6000 rules whose table has an unusable onlink default,
+        # keeping the main table free of extra default routes.
+        - ip-from: 10.128.0.0/14
+          iif: ovn-k8s-mp0
+          route-table: 100
+          priority: 5900
         - ip-from: 172.30.79.89/32
           route-table: 100
           priority: 902
