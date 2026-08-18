@@ -1,0 +1,30 @@
+---
+# Publishes the parent's default router on the VLAN 10 ingress VIP.
+# Guest ingress reaches the router via the wildcard Subdomain passthrough
+# route created by baseDomainPassthrough
+# (https.apps.test-hcp-vlan10.lab.signal9.gg).
+apiVersion: v1
+kind: Service
+metadata:
+  name: router-vlan10-metallb
+  namespace: openshift-ingress
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 172.18.0.201
+    argocd.argoproj.io/sync-wave: '5'
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    ingresscontroller.operator.openshift.io/deployment-ingresscontroller: default
+  type: LoadBalancer
