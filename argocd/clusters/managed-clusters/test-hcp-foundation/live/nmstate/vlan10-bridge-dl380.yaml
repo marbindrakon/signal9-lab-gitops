@@ -53,8 +53,19 @@ spec:
           next-hop-address: 172.18.0.1
           next-hop-interface: br-vlan10
           table-id: 100
+    # NOTE: OVN-KUBE-EXTERNALIP DNATs VIP->ClusterIP in PREROUTING, before
+    # the RPF check and reply routing - both see the ClusterIP, not the VIP.
+    # So the ClusterIPs of kube-apiserver (172.30.79.89) and
+    # vlan10-ingress-passthrough (172.30.222.179) must be keyed here too.
+    # These change if either service is recreated.
     route-rules:
       config:
+        - ip-from: 172.30.79.89/32
+          route-table: 100
+          priority: 902
+        - ip-from: 172.30.222.179/32
+          route-table: 100
+          priority: 903
         - ip-from: 172.18.0.200/31
           route-table: 100
           priority: 900
