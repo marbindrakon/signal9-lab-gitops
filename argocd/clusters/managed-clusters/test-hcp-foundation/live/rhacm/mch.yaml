@@ -8,4 +8,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   availabilityConfig: Basic
-  localClusterName: test-hcp-foundation
+  # NOTE: must NOT be test-hcp-foundation - that namespace already exists on
+  # this cluster (owned by lab-hub's governance-policy-framework addon), which
+  # blocks MCE from creating the local ManagedCluster
+  localClusterName: local-cluster
