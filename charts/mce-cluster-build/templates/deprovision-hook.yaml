@@ -21,10 +21,13 @@ rules:
   resources: ["clusterdeployments"]
   verbs: ["get", "list", "watch", "delete"]
 # Needed to drop the ownerReference on the metadata-json secret before the
-# ClusterDeployment goes away -- see the comment in the Job below.
+# ClusterDeployment goes away -- see the comment in the Job below. "delete" is
+# required even though the hook never deletes a secret: the
+# OwnerReferencesPermissionEnforcement admission plugin refuses to let you
+# change metadata.ownerReferences on an object you lack delete rights on.
 - apiGroups: [""]
   resources: ["secrets"]
-  verbs: ["get", "list", "patch"]
+  verbs: ["get", "list", "patch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
