@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.cluster.name }}
   annotations:
     argocd.argoproj.io/hook: PreDelete
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -15,11 +15,16 @@ metadata:
   namespace: {{ .Values.cluster.name }}
   annotations:
     argocd.argoproj.io/hook: PreDelete
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
 rules:
 - apiGroups: ["hive.openshift.io"]
   resources: ["clusterdeployments"]
   verbs: ["get", "list", "watch", "delete"]
+# Needed to drop the ownerReference on the metadata-json secret before the
+# ClusterDeployment goes away -- see the comment in the Job below.
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -28,7 +33,7 @@ metadata:
   namespace: {{ .Values.cluster.name }}
   annotations:
     argocd.argoproj.io/hook: PreDelete
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -45,9 +50,14 @@ metadata:
   namespace: {{ .Values.cluster.name }}
   annotations:
     argocd.argoproj.io/hook: PreDelete
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
 spec:
-  activeDeadlineSeconds: 3600
+  # When this deadline trips the Job is *terminally* Failed -- Hive keeps
+  # recreating its own uninstall job, but this hook never reports success, so
+  # the Argo Application wedges mid-cascade-delete. A real cloud destroy can
+  # comfortably exceed an hour, so keep it generous.
+  activeDeadlineSeconds: {{ .Values.deprovision.timeoutSeconds }}
+  backoffLimit: 6
   template:
     spec:
       serviceAccountName: deprovision-hook
@@ -59,13 +69,42 @@ spec:
         - /bin/bash
         - -c
         - |
+          set -euo pipefail
           CLUSTER={{ .Values.cluster.name }}
           NS={{ .Values.cluster.name }}
-          if oc get clusterdeployment "$CLUSTER" -n "$NS" &>/dev/null; then
-            echo "Deleting ClusterDeployment $CLUSTER to trigger Hive deprovision..."
-            oc delete clusterdeployment "$CLUSTER" -n "$NS"
-            echo "Waiting for Hive deprovision to complete..."
-            oc wait --for=delete clusterdeployment/"$CLUSTER" -n "$NS" --timeout=3600s
-          else
+
+          if ! oc get clusterdeployment "$CLUSTER" -n "$NS" &>/dev/null; then
             echo "ClusterDeployment $CLUSTER already gone, nothing to do."
+            exit 0
           fi
+
+          # Hive's uninstall job loads the metadata.json secret by the name in
+          # spec.clusterMetadata.metadataJSONSecretRef. That secret is a
+          # dependent of the ClusterDeployment with blockOwnerDeletion=true, so
+          # any *foreground* delete of the CD makes the GC reap it immediately,
+          # long before deprovision is finished with it -- leaving the uninstall
+          # pod to crashloop on "secret not found" and the cloud resources to
+          # leak. Orphan the secret first so it survives regardless of which
+          # propagation policy the CD ends up being deleted with.
+          MD_SECRET=$(oc get clusterdeployment "$CLUSTER" -n "$NS" \
+            -o jsonpath='{.spec.clusterMetadata.metadataJSONSecretRef.name}' || true)
+          if [[ -n "${MD_SECRET:-}" ]] && oc get secret "$MD_SECRET" -n "$NS" &>/dev/null; then
+            if [[ "$(oc get secret "$MD_SECRET" -n "$NS" \
+                 -o jsonpath='{.metadata.ownerReferences}')" != "" ]]; then
+              echo "Orphaning $MD_SECRET so it outlives the ClusterDeployment..."
+              oc patch secret "$MD_SECRET" -n "$NS" --type=json \
+                -p '[{"op":"remove","path":"/metadata/ownerReferences"}]'
+            fi
+          else
+            echo "WARNING: no metadata.json secret found for $CLUSTER." \
+                 "Deprovision will fail until it is restored."
+          fi
+
+          echo "Deleting ClusterDeployment $CLUSTER to trigger Hive deprovision..."
+          # --wait=false: background propagation, and let the explicit wait
+          # below own the timeout rather than oc delete's client-side wait.
+          oc delete clusterdeployment "$CLUSTER" -n "$NS" --wait=false
+
+          echo "Waiting for Hive deprovision to complete..."
+          oc wait --for=delete clusterdeployment/"$CLUSTER" -n "$NS" \
+            --timeout={{ sub .Values.deprovision.timeoutSeconds 300 }}s

@@ -26,6 +26,13 @@ cluster:
     serviceNetworks:
       - 172.30.0.0/16
 
+deprovision:
+  # Max time the PreDelete hook waits for Hive to finish destroying the cluster.
+  # If this trips, the hook Job is terminally Failed and the Argo Application
+  # wedges mid-cascade-delete, so err on the generous side. The hook's oc wait
+  # uses this minus 300s so the wait fails cleanly before the Job is killed.
+  timeoutSeconds: 10800
+
 provider:
   providerCredsVault: ""
   providerCAs: ""

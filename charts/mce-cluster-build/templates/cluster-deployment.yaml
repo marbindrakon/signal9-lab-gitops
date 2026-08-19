@@ -8,6 +8,16 @@ metadata:
     vendor: 'OpenShift'
   annotations:
     argocd.argoproj.io/sync-wave: '1'
+    # Hive's deprovision job reads <cluster>-metadata-json, which is a dependent
+    # of this ClusterDeployment with blockOwnerDeletion=true. Argo's cascade
+    # delete uses foreground propagation, so the GC reaps every such dependent
+    # the instant the CD is marked for deletion -- while the CD itself lingers
+    # behind the hive.openshift.io/deprovision finalizer. The uninstall pod then
+    # crashloops on "secrets <cluster>-metadata-json not found" forever and the
+    # cloud resources leak. Let the PreDelete hook own the delete instead; it
+    # uses background propagation, which defers dependent GC until the CD is
+    # actually gone (i.e. after deprovision has finished with them).
+    argocd.argoproj.io/sync-options: Delete=false
 spec:
 {{ if eq .Values.provider.type "Agent" }}
   clusterInstallRef:
