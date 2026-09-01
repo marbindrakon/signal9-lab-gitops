@@ -24,7 +24,7 @@ spec:
   eda:
     disabled: false
   hub:
-    disabled: false
+    disabled: true
     storage_type: file
     file_storage_storage_class: csi-manila-default
     file_storage_size: 150Gi
