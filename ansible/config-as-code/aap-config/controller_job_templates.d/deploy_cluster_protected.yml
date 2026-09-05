@@ -111,6 +111,7 @@ controller_templates:
             - '4.19'
             - '4.20'
             - '4.21'
+            - '4.22'
         - question_name: Use External or Internal LB
           question_description: ""
           required: True
