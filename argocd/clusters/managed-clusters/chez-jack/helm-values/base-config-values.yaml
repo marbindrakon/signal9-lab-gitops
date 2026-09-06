@@ -111,22 +111,23 @@ auth:
     vaultName: chez-jack-openid
 
 certManager:
-  acmeBase: 'https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory'
-  validationNameserver: "172.18.42.10:53"
+  acmeBase: 'https://acme-v02.api.letsencrypt.org/directory'
+  validationNameserver: "8.8.8.8:53"
   externalSecret:
-    name: tsig-key
-    vaultName: ipa-tsig
+    name: route53-key
+    vaultName: signal9-route53
   solvers:
     - http01:
         ingress: {}
     - dns01:
-        rfc2136:
-          nameserver: 172.18.42.10
-          tsigKeyName: cert-manager
-          tsigAlgorithm: HMACSHA256
-          tsigSecretSecretRef:
-            name: tsig-key
-            key: key
+        route53:
+          region: us-east-1
+          accessKeyIDSecretRef:
+            key: access-key
+            name: route53-key
+          secretAccessKeySecretRef:
+            key: secret-access-key
+            name: route53-key
       selector:
         dnsZones:
           - lab.signal9.gg
