@@ -109,3 +109,13 @@
     - loadbalancer_frontend_mode == "dedicated"
     - cluster_state == "absent"
     - external_ingress_vip is defined
+
+- name: use the internal VIPs as the external VIPs when the cluster is not exposed on the shared LB
+  ansible.builtin.set_fact:
+    external_api_vip: "{{ internal_api_vip }}"
+    external_ingress_vip: "{{ internal_ingress_vip }}"
+  when:
+    - loadbalancer_type == "internal"
+    - not expose_internal_loadbalancers|bool
+    - internal_api_vip is defined
+    - internal_ingress_vip is defined

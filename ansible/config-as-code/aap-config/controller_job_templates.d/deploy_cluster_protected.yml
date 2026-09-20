@@ -157,6 +157,30 @@ controller_templates:
           default: ""
           choices: ""
           new_question: True
+        - question_name: Expose Internal LB on Shared HAProxy
+          question_description: "When false, clusters with an internal LB are NOT registered on xna-haproxy and public DNS points straight at the cluster VIPs"
+          required: True
+          type: multiplechoice
+          variable: expose_internal_loadbalancers
+          min: 0
+          max: 1024
+          new_question: True
+          default: "true"
+          choices:
+            - "true"
+            - "false"
+        - question_name: ACME CA
+          question_description: "internal = Vault ACME CA (rfc2136/TSIG), letsencrypt = public LE via Route53"
+          required: True
+          type: multiplechoice
+          variable: acme_ca
+          min: 0
+          max: 1024
+          new_question: True
+          default: internal
+          choices:
+            - internal
+            - letsencrypt
         - question_name: Manage with ACM
           question_description: ""
           required: True

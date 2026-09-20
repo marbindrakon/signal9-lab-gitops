@@ -63,7 +63,7 @@ backend be-{{ cluster_name }}-http
 {% for host in cluster_hosts.get('worker', []) %}
     server {{ host.name }} {{ host.ip_address }}:80 check
 {% endfor %}
-{% elif loadbalancer_type == "internal" and expose_internal_loadbalancers | default(false) %}
+{% elif loadbalancer_type == "internal" and expose_internal_loadbalancers | default(false) | bool %}
 
 backend be-{{ cluster_name }}-api
     mode tcp
