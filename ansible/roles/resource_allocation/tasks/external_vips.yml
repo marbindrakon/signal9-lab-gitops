@@ -40,6 +40,7 @@
       role: VIP
       dns_name: "api.{{ cluster_name }}.{{ base_domain }}"
       description: "{{ cluster_name }}-External-API"
+      tenant: "{{ netbox_tenant }}"
   register: nb_external_api_create
   when:
     - loadbalancer_type == "external" or expose_internal_loadbalancers|bool
@@ -66,6 +67,7 @@
       role: VIP
       dns_name: "apps.{{ cluster_name }}.{{ base_domain }}"
       description: "{{ cluster_name }}-External-Ingress"
+      tenant: "{{ netbox_tenant }}"
   register: nb_external_ingress_create
   when:
     - loadbalancer_type == "external" or expose_internal_loadbalancers|bool

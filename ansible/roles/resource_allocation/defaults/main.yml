@@ -5,6 +5,11 @@ cluster_name: ""
 # cluster_state should be present or absent
 cluster_state: present
 
+# NetBox tenant set on every prefix and IP address this role allocates. The svc-lab-gitops token is only
+# allowed to create/delete objects of tenant lab (MetalLB /25s under metallb_network_container, VIPs in
+# internal_vip_prefix / external_vip_prefix), so creates without it are refused.
+netbox_tenant: lab
+
 openstack_platform_config:
   # The external network where Floating IPs will be allocated
   vip_network: ""
