@@ -1,0 +1,65 @@
+# Kubernetes access for AAP cluster jobs.
+#
+# AAP 2.6 (controller 4.7.17, RHSA-2026:71113) strips service-account tokens
+# from container-group job pods, so these jobs no longer get in-cluster API
+# access. The "<env> - lab-hub job identity" credential passes in instead:
+#   vault_jwt            a per-job Vault identity token (1h), also used for
+#                        every Vault login in these playbooks
+#   K8S_AUTH_KUBECONFIG  the kubeconfig path kubernetes.core reads
+# This play uses vault_jwt to mint a short-lived token for the lab-hub service
+# account aap-cluster-automation and writes it to that kubeconfig. Outside AAP
+# (K8S_AUTH_KUBECONFIG unset) it does nothing.
+- name: get a kubernetes token for this job
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: mint and install the job kubeconfig
+      when: lookup('ansible.builtin.env', 'K8S_AUTH_KUBECONFIG') | length > 0
+      block:
+        - name: mint service account token from vault
+          no_log: true
+          community.hashi_vault.vault_write:
+            url: "{{ hashicorp_vault['url'] }}"
+            auth_method: jwt
+            mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+            role_id: "{{ hashicorp_vault['auth_role'] }}"
+            jwt: "{{ vault_jwt }}"
+            path: "{{ hashicorp_vault['k8s_creds_path'] }}"
+            data:
+              ttl: "{{ hashicorp_vault['k8s_token_ttl'] }}"
+          register: job_k8s_creds
+
+        - name: write job kubeconfig
+          no_log: true
+          ansible.builtin.copy:
+            dest: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_KUBECONFIG') }}"
+            mode: "0600"
+            content: "{{ job_kubeconfig | to_nice_yaml }}"
+          vars:
+            job_kubeconfig:
+              apiVersion: v1
+              kind: Config
+              clusters:
+                - name: lab-hub
+                  cluster:
+                    server: "{{ hashicorp_vault['k8s_api_host'] }}"
+              users:
+                - name: aap-cluster-automation
+                  user:
+                    token: "{{ job_k8s_creds.data.data.service_account_token }}"
+              contexts:
+                - name: lab-hub
+                  context:
+                    cluster: lab-hub
+                    user: aap-cluster-automation
+                    namespace: aap
+              current-context: lab-hub
+
+        - name: check kubernetes access
+          kubernetes.core.k8s_info:
+            api_version: v1
+            kind: ServiceAccount
+            namespace: aap
+            name: aap-cluster-automation
+          register: job_k8s_check
+          failed_when: job_k8s_check.resources | length == 0

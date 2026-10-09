@@ -1,3 +1,6 @@
+- name: get a kubernetes token for this job
+  ansible.builtin.import_playbook: _job_auth.yml
+
 - hosts: loadbalancers
   gather_facts: false
   vars:

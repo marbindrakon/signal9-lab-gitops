@@ -1,0 +1,20 @@
+---
+# Per-job Vault identity for cluster jobs; see ansible/playbooks/_job_auth.yml.
+# jwt is filled at launch by the "{{ env }} - vault identity" lookup.
+controller_credential_types:
+  - name: "{{ env }} - Job Vault identity"
+    description: "Per-job Vault identity token for cluster jobs (playbooks/_job_auth.yml)"
+    kind: "cloud"
+    inputs:
+      fields:
+      - id: jwt
+        label: Vault identity token
+        secret: true
+        type: string
+
+    injectors:
+      extra_vars:
+        vault_jwt: !unsafe '{{ jwt }}'
+      env:
+        K8S_AUTH_KUBECONFIG: /runner/kubeconfig-lab-hub
+...

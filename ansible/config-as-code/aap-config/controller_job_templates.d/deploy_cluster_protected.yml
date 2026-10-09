@@ -22,6 +22,7 @@ controller_templates:
       - "{{ env }} - vSphere"
       - "{{ env }} - XNA FreeIPA OpenShift"
       - "{{ env }} - XNA Netbox"
+      - "{{ env }} - lab-hub job identity"
       - "{{ env }} - Infoblox"
     allow_simultaneous: True
     ask_scm_branch_on_launch: False

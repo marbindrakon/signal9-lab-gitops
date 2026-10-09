@@ -42,9 +42,16 @@ enabled_dns_providers:
 hashicorp_vault:
   url: "https://vault.lab.signal9.gg"
   auth_type: jwt
-  auth_mount: k8s-lab-hub
+  # AAP cluster jobs log in with the per-job identity token from the
+  # "<env> - lab-hub job identity" credential (vault_jwt); see
+  # playbooks/_job_auth.yml. jwt_location is only read when vault_jwt is unset.
+  auth_mount: jwt-aap-job
   jwt_location: "/var/run/secrets/kubernetes.io/serviceaccount/token"
-  auth_role: aap
+  auth_role: aap-cluster-jobs
+  # lab-hub service account token minted per job for kubernetes.core
+  k8s_creds_path: k8s-creds-lab-hub/creds/aap-cluster-automation
+  k8s_token_ttl: 1h
+  k8s_api_host: "https://api.lab-hub.lab.signal9.gg:6443"
   # Policy to be used for new k8s auth methods
   cluster_policy: "rht-lab-ocp"
   # Name for new k8s auth method

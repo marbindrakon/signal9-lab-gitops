@@ -1,4 +1,5 @@
 aap_vault_auth_role: aap
+aap_vault_identity_role: aap-job-identity
 aap_vault_url: https://vault.lab.signal9.gg
 vcenter_host: xna-vcenter.lab.signal9.gg
 openstack_user_domain: Default

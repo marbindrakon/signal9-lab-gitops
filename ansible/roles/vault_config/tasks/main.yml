@@ -3,6 +3,7 @@
   no_log: true
   ansible.builtin.set_fact:
     vault_jwt: "{{ lookup('ansible.builtin.file', hashicorp_vault['jwt_location']) }}"
+  when: vault_jwt is not defined
 
 - name: list enabled auth methods
   community.hashi_vault.vault_read:
