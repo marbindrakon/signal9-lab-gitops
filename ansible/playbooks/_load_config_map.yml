@@ -1,9 +1,9 @@
-- name: get cluster configmap from aap namespace
+- name: get cluster configmap from aap-jobs namespace
   kubernetes.core.k8s_info:
     api_version: v1
     kind: ConfigMap
     name: "{{ cluster_name }}"
-    namespace: aap
+    namespace: aap-jobs
   delegate_to: localhost
   run_once: true
   register: existing_settings_configmaps

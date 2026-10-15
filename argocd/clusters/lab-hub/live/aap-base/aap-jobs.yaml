@@ -1,0 +1,160 @@
+# Namespace for AAP cluster job pods (container group "container-with-ca")
+# and the per-cluster settings ConfigMaps they read and write.
+#
+# Job identity: pods run as aap-job, which has no RBAC and no token (AAP
+# strips them). SPIRE attests the pod and issues
+#   spiffe://lab-hub.lab.signal9.gg/ns/aap-jobs/sa/aap-job
+# The spiffe-helper sidecar keeps a JWT-SVID for Vault in /spiffe-jwt. The job
+# logs in to Vault auth spiffe-lab-hub (role aap-cluster-jobs) with it and has
+# Vault mint a short-lived token for aap-cluster-automation, the service
+# account it acts as on lab-hub (ansible/playbooks/_job_auth.yml).
+#
+# Anything that can create pods here can claim that identity, so only the
+# controller may. aap-cluster-automation gets ConfigMaps only, never pods or
+# secrets (a secret can mint a token for any service account in the
+# namespace).
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aap-jobs
+  annotations:
+    argocd.argoproj.io/sync-wave: '0'
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aap-job
+  namespace: aap-jobs
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aap-cluster-automation
+  namespace: aap-jobs
+---
+# The controller runs the container group with its own service account.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aap-job-pods
+  namespace: aap-jobs
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods/attach"]
+    verbs: ["create"]
+  # image pull secrets for execution environment credentials
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: aap-job-pods
+  namespace: aap-jobs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: aap-job-pods
+subjects:
+  - kind: ServiceAccount
+    name: acm-hub-aap-controller
+    namespace: aap
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aap-cluster-config
+  namespace: aap-jobs
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: [""]
+    resources: ["serviceaccounts"]
+    resourceNames: ["aap-cluster-automation"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: aap-cluster-config
+  namespace: aap-jobs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: aap-cluster-config
+subjects:
+  - kind: ServiceAccount
+    name: aap-cluster-automation
+    namespace: aap-jobs
+---
+# Vault's Kubernetes secrets engine (k8s-creds-lab-hub) logs in as
+# vault-auth/vault-k8s-creds and may only mint aap-cluster-automation tokens.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: vault-k8s-creds-mint
+  namespace: aap-jobs
+rules:
+  - apiGroups: [""]
+    resources: ["serviceaccounts/token"]
+    resourceNames: ["aap-cluster-automation"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["serviceaccounts"]
+    resourceNames: ["aap-cluster-automation"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: vault-k8s-creds-mint
+  namespace: aap-jobs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: vault-k8s-creds-mint
+subjects:
+  - kind: ServiceAccount
+    name: vault-k8s-creds
+    namespace: vault-auth
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spiffe-helper
+  namespace: aap-jobs
+data:
+  helper.conf: |
+    agent_address = "/spiffe-workload-api/spire-agent.sock"
+    cert_dir = "/spiffe-jwt"
+    jwt_svids = [{
+      jwt_audience = "https://vault.lab.signal9.gg"
+      jwt_svid_file_name = "vault.jwt"
+    }]
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: aap-jobs
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  className: zero-trust-workload-identity-manager-spire
+  spiffeIDTemplate: 'spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}'
+  namespaceSelector:
+    matchLabels:
+      kubernetes.io/metadata.name: aap-jobs
+  # set by the controller on every job pod, after pod_spec_override
+  podSelector:
+    matchExpressions:
+      - key: ansible-awx-job-id
+        operator: Exists

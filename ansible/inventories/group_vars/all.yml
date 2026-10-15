@@ -39,14 +39,17 @@ enabled_dns_providers:
     split_horizon_internal: false
 
 
+# AAP cluster jobs log in to Vault with their SPIFFE JWT-SVID, which the
+# spiffe-helper sidecar in the job pod keeps at jwt_location; see
+# playbooks/_job_auth.yml. JWT-SVIDs last minutes and the sidecar renews them,
+# so the file is read on every use instead of being stored with set_fact.
+vault_jwt: "{{ lookup('ansible.builtin.file', hashicorp_vault['jwt_location']) }}"
+
 hashicorp_vault:
   url: "https://vault.lab.signal9.gg"
   auth_type: jwt
-  # AAP cluster jobs log in with the per-job identity token from the
-  # "<env> - lab-hub job identity" credential (vault_jwt); see
-  # playbooks/_job_auth.yml. jwt_location is only read when vault_jwt is unset.
-  auth_mount: jwt-aap-job
-  jwt_location: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+  auth_mount: spiffe-lab-hub
+  jwt_location: "/spiffe-jwt/vault.jwt"
   auth_role: aap-cluster-jobs
   # lab-hub service account token minted per job for kubernetes.core
   k8s_creds_path: k8s-creds-lab-hub/creds/aap-cluster-automation

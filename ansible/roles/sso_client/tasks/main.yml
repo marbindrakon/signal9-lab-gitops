@@ -1,10 +1,4 @@
 ---
-- name: read serviceaccount token
-  no_log: true
-  ansible.builtin.set_fact:
-    vault_jwt: "{{ lookup('ansible.builtin.file', hashicorp_vault['jwt_location']) }}"
-  when: vault_jwt is not defined
-
 - name: construct redirect uri (Standalone)
   ansible.builtin.set_fact:
     sso_redirect_uri: "https://oauth-openshift.apps.{{ cluster_name }}.{{ base_domain }}/oauth2callback/{{ cluster_sso['console_sso_label'] }}"

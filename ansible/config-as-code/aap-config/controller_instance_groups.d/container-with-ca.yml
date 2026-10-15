@@ -1,4 +1,16 @@
 ---
+# Cluster job pods run in aap-jobs as aap-job, with a SPIFFE identity instead
+# of a service account token; see
+# argocd/clusters/lab-hub/live/aap-base/aap-jobs.yaml.
+#
+# The controller (4.7.17+) drops secret volumes and service account token
+# projections from this spec and refuses to save them. The SPIFFE CSI volume
+# survives only because the sanitizer doesn't filter csi volumes.
+#
+# spiffe-helper is a native sidecar (init container, restartPolicy Always): it
+# starts before the worker, waits until the JWT-SVID is written, renews it
+# while the job runs, and exits with the pod. Its image tracks the Zero Trust
+# Workload Identity Manager version on lab-hub.
 controller_instance_groups:
   - name: container-with-ca
     is_container_group: true
@@ -6,11 +18,11 @@ controller_instance_groups:
       apiVersion: v1
       kind: Pod
       metadata:
-        namespace: aap
+        namespace: aap-jobs
         labels:
           ansible_job: ''
       spec:
-        serviceAccountName: acm-hub-aap
+        serviceAccountName: aap-job
         automountServiceAccountToken: false
         affinity:
           podAntiAffinity:
@@ -22,6 +34,32 @@ controller_instance_groups:
                       - key: ansible_job
                         operator: Exists
                   topologyKey: kubernetes.io/hostname
+        initContainers:
+          - name: spiffe-helper
+            image: >-
+              registry.redhat.io/zero-trust-workload-identity-manager/spiffe-helper-rhel9@sha256:a659b18e6cf51f10980a4b7b53b7279c6c9e8813b89fcc8a490bc99305518334
+            restartPolicy: Always
+            args:
+              - '-config'
+              - /etc/spiffe-helper/helper.conf
+            startupProbe:
+              exec:
+                command: ['test', '-s', '/spiffe-jwt/vault.jwt']
+              periodSeconds: 2
+              failureThreshold: 90
+            resources:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+            volumeMounts:
+              - name: spiffe-workload-api
+                mountPath: /spiffe-workload-api
+                readOnly: true
+              - name: spiffe-jwt
+                mountPath: /spiffe-jwt
+              - name: spiffe-helper
+                mountPath: /etc/spiffe-helper
+                readOnly: true
         containers:
           - image: >-
               registry.redhat.io/ansible-automation-platform-26/ee-supported-rhel9@sha256:fe0982d489065a2a287fe076873cf1faa5410c0879def91bbc756280e924118d
@@ -34,34 +72,25 @@ controller_instance_groups:
               requests:
                 cpu: 250m
                 memory: 100Mi
+            env:
+              - name: REQUESTS_CA_BUNDLE
+                value: /etc/pki/tls/certs/ca-bundle.crt
+              - name: K8S_AUTH_KUBECONFIG
+                value: /runner/kubeconfig-lab-hub
             volumeMounts:
-              - name: app-ca-trust
-                mountPath: /etc/pki/ca-trust/source/anchors/bundle-ca.crt
-                subPath: bundle-ca.crt
-                readOnly: true
-              - name: kube-api-access
-                mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              - name: spiffe-jwt
+                mountPath: /spiffe-jwt
                 readOnly: true
         volumes:
-          - name: app-ca-trust
-            secret:
-              secretName: app-ca-trust
-          - name: kube-api-access
-            projected:
-              defaultMode: 420
-              sources:
-                - serviceAccountToken:
-                    expirationSeconds: 3600
-                    path: token
-                - configMap:
-                    name: kube-root-ca.crt
-                    items:
-                      - key: ca.crt
-                        path: ca.crt
-                - downwardAPI:
-                    items:
-                      - fieldRef:
-                          apiVersion: v1
-                          fieldPath: metadata.namespace
-                        path: namespace
+          - name: spiffe-workload-api
+            csi:
+              driver: csi.spiffe.io
+              readOnly: true
+          - name: spiffe-jwt
+            emptyDir:
+              medium: Memory
+              sizeLimit: 1Mi
+          - name: spiffe-helper
+            configMap:
+              name: spiffe-helper
 ...
