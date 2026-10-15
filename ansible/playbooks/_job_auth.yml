@@ -30,6 +30,15 @@
             data:
               ttl: "{{ hashicorp_vault['k8s_token_ttl'] }}"
           register: job_k8s_creds
+          ignore_errors: true
+
+        # no_log hides why the call failed; its msg names the failing step
+        # (reading the JWT-SVID, the Vault login, the creds write) and never
+        # contains the JWT or the token.
+        - name: fail if vault did not mint the token
+          ansible.builtin.fail:
+            msg: "{{ job_k8s_creds.msg | default('vault_write failed') }}"
+          when: job_k8s_creds is failed
 
         - name: write job kubeconfig
           no_log: true
