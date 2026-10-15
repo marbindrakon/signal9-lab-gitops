@@ -5,12 +5,20 @@
 # let it claim another job pod's SPIFFE identity). Run it from the
 # "<env> - Job Identity Check" template after AAP, Zero Trust Workload
 # Identity Manager or Vault changes.
+#
+# hashicorp_vault (group_vars) has values templated on cluster_name, and
+# reading any of its keys templates all of them, so both plays get a
+# placeholder; this check isn't about a cluster.
 - name: get a kubernetes token for this job
   ansible.builtin.import_playbook: ../_job_auth.yml
+  vars:
+    cluster_name: job-identity-check
 
 - name: check the job identity
   hosts: localhost
   gather_facts: false
+  vars:
+    cluster_name: job-identity-check
   tasks:
     - name: log in to vault with the job's JWT-SVID
       no_log: true
