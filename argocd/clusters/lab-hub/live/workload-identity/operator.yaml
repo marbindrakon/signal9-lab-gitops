@@ -1,0 +1,34 @@
+# Zero Trust Workload Identity Manager (SPIFFE/SPIRE). Gives AAP cluster job
+# pods a SPIFFE identity they use to log in to Vault; see
+# ../aap-base/aap-jobs.yaml.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: zero-trust-workload-identity-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: '0'
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-zero-trust-workload-identity-manager
+  namespace: zero-trust-workload-identity-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
+spec:
+  upgradeStrategy: Default
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: openshift-zero-trust-workload-identity-manager
+  namespace: zero-trust-workload-identity-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: '1'
+spec:
+  channel: stable-v1
+  installPlanApproval: Automatic
+  name: openshift-zero-trust-workload-identity-manager
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
