@@ -141,6 +141,10 @@ data:
       jwt_svid_file_name = "vault.jwt"
     }]
 ---
+# The operator's fallback ClusterSPIFFEID (...-spire-default) renders the same
+# ns/sa ID for every other pod, so the label selector below is not a security
+# boundary: any pod running as aap-job in aap-jobs gets this identity. This
+# entry just makes the job identity explicit.
 apiVersion: spire.spiffe.io/v1alpha1
 kind: ClusterSPIFFEID
 metadata:
