@@ -1,0 +1,94 @@
+# SPIRE for lab-hub, trust domain lab-hub.lab.signal9.gg. Red Hat's docs
+# require this order: ZeroTrustWorkloadIdentityManager, server, agent, CSI
+# driver, OIDC discovery provider.
+#
+# The OIDC discovery provider publishes the JWT-SVID signing keys at
+# jwtIssuer (managed route, default *.apps Let's Encrypt cert). Vault's
+# spiffe-lab-hub JWT auth mount trusts it; trustDomain, clusterName and
+# jwtIssuer can't change without re-pointing that mount.
+---
+apiVersion: operator.openshift.io/v1alpha1
+kind: ZeroTrustWorkloadIdentityManager
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  trustDomain: lab-hub.lab.signal9.gg
+  clusterName: lab-hub
+  bundleConfigMap: spire-bundle
+---
+apiVersion: operator.openshift.io/v1alpha1
+kind: SpireServer
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  logLevel: info
+  logFormat: text
+  jwtIssuer: https://oidc-discovery.apps.lab-hub.lab.signal9.gg
+  caValidity: 24h
+  defaultX509Validity: 1h
+  defaultJWTValidity: 5m
+  caSubject:
+    country: US
+    organization: Signal9 Labs
+    commonName: SPIRE lab-hub CA
+  persistence:
+    size: 1Gi
+    accessMode: ReadWriteOnce
+    storageClass: standard-csi
+  datastore:
+    databaseType: sqlite3
+    connectionString: /run/spire/data/datastore.sqlite3
+    maxOpenConns: 100
+    maxIdleConns: 2
+    connMaxLifetime: 0
+    disableMigration: 'false'
+---
+apiVersion: operator.openshift.io/v1alpha1
+kind: SpireAgent
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: '4'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  socketPath: /run/spire/agent-sockets
+  logLevel: info
+  logFormat: text
+  nodeAttestor:
+    k8sPSATEnabled: 'true'
+  workloadAttestors:
+    k8sEnabled: 'true'
+    workloadAttestorsVerification:
+      type: auto
+---
+apiVersion: operator.openshift.io/v1alpha1
+kind: SpiffeCSIDriver
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: '5'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  agentSocketPath: /run/spire/agent-sockets
+  pluginName: csi.spiffe.io
+---
+apiVersion: operator.openshift.io/v1alpha1
+kind: SpireOIDCDiscoveryProvider
+metadata:
+  name: cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: '6'
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  logLevel: info
+  logFormat: text
+  csiDriverName: csi.spiffe.io
+  jwtIssuer: https://oidc-discovery.apps.lab-hub.lab.signal9.gg
+  replicaCount: 1
+  managedRoute: 'true'
