@@ -1,0 +1,11 @@
+# OCP 5.0 candidate build for Hive test deploys. Not on the ACM "fast"
+# imageset channel, so it is pinned here by digest (candidate-5.0 graph).
+apiVersion: hive.openshift.io/v1
+kind: ClusterImageSet
+metadata:
+  labels:
+    channel: candidate
+    visible: "true"
+  name: img5.0.0-rc.7-x86-64-appsub
+spec:
+  releaseImage: quay.io/openshift-release-dev/ocp-release@sha256:d86593b04acdcce3a07c8d20757ccf44571aec502f1a50f7d8f2fe28f0b6a852

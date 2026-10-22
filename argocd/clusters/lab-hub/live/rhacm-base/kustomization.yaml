@@ -14,6 +14,7 @@ resources:
   - hive-config.yaml
   - hive-route53-secret.yaml
   - hive-aws-secret.yaml
+  - clusterimageset-5.0.0-rc.7.yaml
 
   # These must be re-enabled after adding the s3 bucket credentials to vault
   - thanos-secret.yaml
