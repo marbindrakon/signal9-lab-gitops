@@ -1,3 +1,7 @@
+# The ACM hub this AAP runs on, and the branch of the gitops repository its
+# project follows. Hub-specific values below and in prod.yml derive from these.
+hub_name: acm-hub
+hub_git_branch: autoshift-acm-hub
 aap_vault_auth_role: aap
 aap_vault_url: https://vault.lab.signal9.gg
 vcenter_host: xna-vcenter.lab.signal9.gg

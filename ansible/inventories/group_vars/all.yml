@@ -1,12 +1,26 @@
 # High-level variables used in cluster provisioning
 
+# The ACM hub these jobs build clusters on. Everything hub-specific below (Vault
+# mounts, API URL, ingress domain, the gitops paths and branch) derives from it.
+hub_name: acm-hub
+# Branch of this repository the hub's Argo CD and AAP project follow; the
+# gitops_cluster_build role commits cluster definitions to it.
+hub_git_branch: autoshift-acm-hub
+hub_domain: "{{ hub_name }}.lab.signal9.gg"
+
 # DNS domain where all managed OCP clusters will be created
 base_domain: '{% if cluster_platform == "aws" %}{{ domain_slug }}.aws.signal9.gg{% else %}lab.signal9.gg{% endif %}'
-foundation_ingress_base_domain: "apps.lab-hub.lab.signal9.gg"
+foundation_ingress_base_domain: "apps.{{ hub_domain }}"
 gitops_repo_url: "https://github.com/marbindrakon/signal9-lab-gitops.git"
 gitops_repo_url_authed: "https://{{ upstream_git_user|urlencode }}:{{ upstream_git_password|urlencode }}@github.com/marbindrakon/signal9-lab-gitops.git"
-cluster_builds_dir: "argocd/clusters/lab-hub/live/cluster-builds"
+gitops_repo_branch: "{{ hub_git_branch }}"
+cluster_builds_dir: "argocd/clusters/{{ hub_name }}/live/cluster-builds"
+# AutoShift per-cluster values (labels + config), one file for every spoke; the
+# hub's AutoShift Application lists it in its valueFiles.
+autoshift_managed_clusters_file: autoshift/managed-clusters.yaml
 hub_type: acm
+# ExternalSecret API version served on the hub (Red Hat External Secrets operator).
+hub_external_secrets_api_version: external-secrets.io/v1
 
 # LB type can be external or internal, this will likely be overridden
 # for each cluster
@@ -48,13 +62,13 @@ vault_jwt: "{{ lookup('ansible.builtin.file', hashicorp_vault['jwt_location']) }
 hashicorp_vault:
   url: "https://vault.lab.signal9.gg"
   auth_type: jwt
-  auth_mount: spiffe-lab-hub
+  auth_mount: "spiffe-{{ hub_name }}"
   jwt_location: "/spiffe-jwt/vault.jwt"
   auth_role: aap-cluster-jobs
-  # lab-hub service account token minted per job for kubernetes.core
-  k8s_creds_path: k8s-creds-lab-hub/creds/aap-cluster-automation
+  # hub service account token minted per job for kubernetes.core
+  k8s_creds_path: "k8s-creds-{{ hub_name }}/creds/aap-cluster-automation"
   k8s_token_ttl: 1h
-  k8s_api_host: "https://api.lab-hub.lab.signal9.gg:6443"
+  k8s_api_host: "https://api.{{ hub_domain }}:6443"
   # Policy to be used for new k8s auth methods
   cluster_policy: "rht-lab-ocp"
   # Name for new k8s auth method
@@ -482,7 +496,7 @@ platform_configs:
         worker_count: 5
 
   hcp_kubevirt:
-    ingress_base_domain: "apps.lab-hub.{{ base_domain }}"
+    ingress_base_domain: "apps.{{ hub_name }}.{{ base_domain }}"
     cluster_sizes:
       sandbox:
         etcd_size: 8Gi

@@ -1,7 +1,7 @@
 ---
 # Cluster job pods run in aap-jobs as aap-job, with a SPIFFE identity instead
 # of a service account token; see
-# argocd/clusters/lab-hub/live/aap-base/aap-jobs.yaml.
+# argocd/clusters/<hub_name>/live/aap-jobs/aap-jobs.yaml.
 #
 # The controller (4.7.17+) drops secret volumes and service account token
 # projections from this spec and refuses to save them. The SPIFFE CSI volume
@@ -10,7 +10,7 @@
 # spiffe-helper is a native sidecar (init container, restartPolicy Always): it
 # starts before the worker, waits until the JWT-SVID is written, renews it
 # while the job runs, and exits with the pod. Its image tracks the Zero Trust
-# Workload Identity Manager version on lab-hub.
+# Workload Identity Manager version on the hub.
 controller_instance_groups:
   - name: container-with-ca
     is_container_group: true
@@ -76,7 +76,7 @@ controller_instance_groups:
               - name: REQUESTS_CA_BUNDLE
                 value: /etc/pki/tls/certs/ca-bundle.crt
               - name: K8S_AUTH_KUBECONFIG
-                value: /runner/kubeconfig-lab-hub
+                value: "/runner/kubeconfig-{{ hub_name }}"
             volumeMounts:
               - name: spiffe-jwt
                 mountPath: /spiffe-jwt

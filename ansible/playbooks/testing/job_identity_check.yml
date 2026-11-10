@@ -1,5 +1,5 @@
 # Checks the cluster job identity chain without touching any cluster:
-#   SPIFFE JWT-SVID -> Vault (spiffe-lab-hub) -> lab-hub token for
+#   SPIFFE JWT-SVID -> Vault (spiffe-<hub_name>) -> hub token for
 #   aap-cluster-automation -> cluster settings ConfigMaps in aap-jobs
 # and that the job still can't create pods or secrets in aap-jobs (which would
 # let it claim another job pod's SPIFFE identity). Run it from the
@@ -37,7 +37,7 @@
         namespace: aap-jobs
       register: job_cluster_configmaps
 
-    - name: ask lab-hub whether the job may create pods or secrets in aap-jobs
+    - name: ask the hub whether the job may create pods or secrets in aap-jobs
       no_log: true
       ansible.builtin.uri:
         url: "{{ hashicorp_vault['k8s_api_host'] }}/apis/authorization.k8s.io/v1/selfsubjectaccessreviews"
@@ -70,4 +70,4 @@
     - name: fail if the job can create pods or secrets in aap-jobs
       ansible.builtin.assert:
         that: job_access_reviews.results | map(attribute='json.status.allowed') | select | list | length == 0
-        fail_msg: the job's lab-hub identity can create pods or secrets in aap-jobs
+        fail_msg: the job's hub identity can create pods or secrets in aap-jobs

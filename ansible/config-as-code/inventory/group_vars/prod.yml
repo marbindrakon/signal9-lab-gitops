@@ -1,5 +1,8 @@
 servicenow_host: dev71874.service-now.com
 servicenow_client_id: fake
-aap_vault_auth_path: k8s-lab-hub
+# Vault kubernetes auth mount for the hub this AAP runs on
+aap_vault_auth_path: "k8s-{{ hub_name }}"
 gitops_ee_image: quay.signal9.gg/signal9-ee-images/signal9-openshift-iac:a00a53514fe74d82e01059438b1c3f3df1c5da25
-vault_aap_hostname: aap.lab.signal9.gg
+# Default route of the AnsibleAutomationPlatform CR "aap" in namespace
+# ansible-automation-platform (AutoShift sets no route_host).
+vault_aap_hostname: "aap-ansible-automation-platform.apps.{{ hub_name }}.lab.signal9.gg"

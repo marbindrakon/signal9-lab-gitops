@@ -6,7 +6,7 @@ controller_projects:
     scm_type: "git"
     scm_url: "git@github.com:marbindrakon/signal9-lab-gitops.git"
     scm_credential: "{{ env }} - git-ssh"
-    scm_branch: "main"
+    scm_branch: "{{ hub_git_branch }}"
     scm_clean: "True"
     scm_delete_on_update: "False"
     scm_update_on_launch: "True"

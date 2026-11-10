@@ -3,13 +3,14 @@
 # AAP 2.6 (controller 4.7.17, RHSA-2026:71113) strips service-account tokens
 # from container-group job pods, so these jobs no longer get in-cluster API
 # access. The container group pod (namespace aap-jobs, see
-# argocd/clusters/lab-hub/live/aap-base/aap-jobs.yaml) provides instead:
+# argocd/clusters/<hub_name>/live/aap-jobs/aap-jobs.yaml) provides instead:
 #   vault_jwt            the pod's SPIFFE JWT-SVID for Vault, kept fresh by the
 #                        spiffe-helper sidecar and used for every Vault login
 #                        in these playbooks (inventories/group_vars/all.yml)
 #   K8S_AUTH_KUBECONFIG  the kubeconfig path kubernetes.core reads
-# This play uses vault_jwt to mint a short-lived token for the lab-hub service
-# account aap-jobs/aap-cluster-automation and writes it to that kubeconfig.
+# This play uses vault_jwt to mint a short-lived token for the hub's
+# (hub_name, group_vars) service account aap-jobs/aap-cluster-automation and
+# writes it to that kubeconfig.
 # Outside AAP (K8S_AUTH_KUBECONFIG unset) it does nothing.
 - name: get a kubernetes token for this job
   hosts: localhost
@@ -51,7 +52,7 @@
               apiVersion: v1
               kind: Config
               clusters:
-                - name: lab-hub
+                - name: "{{ hub_name }}"
                   cluster:
                     server: "{{ hashicorp_vault['k8s_api_host'] }}"
               users:
@@ -59,12 +60,12 @@
                   user:
                     token: "{{ job_k8s_creds.data.data.service_account_token }}"
               contexts:
-                - name: lab-hub
+                - name: "{{ hub_name }}"
                   context:
-                    cluster: lab-hub
+                    cluster: "{{ hub_name }}"
                     user: aap-cluster-automation
                     namespace: aap-jobs
-              current-context: lab-hub
+              current-context: "{{ hub_name }}"
 
         - name: check kubernetes access
           kubernetes.core.k8s_info:

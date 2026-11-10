@@ -1,9 +1,9 @@
 ---
 # Read-only check of the cluster job identity chain (SPIFFE -> Vault ->
-# lab-hub); see ansible/playbooks/testing/job_identity_check.yml.
+# the hub); see ansible/playbooks/testing/job_identity_check.yml.
 controller_templates:
   - name: "{{ env }} - Job Identity Check"
-    description: "Checks the cluster job SPIFFE/Vault/lab-hub identity chain; changes nothing"
+    description: "Checks the cluster job SPIFFE/Vault/hub identity chain; changes nothing"
     organization: "Signal9 Lab - {{ env }}"
     project: "Signal9 Lab Gitops - {{ env }}"
     inventory: "{{ env }} - Signal9 Lab Gitops Fixed Assets"
