@@ -66,14 +66,36 @@ hubClusterSets:
           imageStorageSize: 100Gi
           # metal3 boots the IPMI-only hosts over PXE on the provisioning VLAN. The provisioning
           # IP and NIC MACs differ per hub: see hubs/<name>.yaml.
+          # The policy enforces exactly this spec once metal3 is set, so it lists everything.
           metal3:
             provisioningNetwork: Managed
+            watchAllNamespaces: true
+            additionalNTPServers:
+              - 172.18.0.79
+              - 172.18.42.10
+              - 172.18.42.11
             provisioningNetworkCIDR: 172.18.101.0/24
             provisioningDHCPRange: 172.18.101.50,172.18.101.199
             virtualMediaViaExternalNetwork: true
             disableVirtualMediaTLS: true
 
       externalSecretsOperator:
+        # The operator's pods are deny-all by default; let the controller reach Vault
+        # (the lab Vault's IPv4 and IPv6 front-end addresses).
+        operatorConfig:
+          controllerConfig:
+            networkPolicies:
+              - name: allow-vault
+                componentName: ExternalSecretsCoreController
+                egress:
+                  - to:
+                      - ipBlock:
+                          cidr: 23.166.28.49/32
+                      - ipBlock:
+                          cidr: 2602:81f:4001::17/128
+                    ports:
+                      - port: 443
+                        protocol: TCP
         clusterSecretStores:
           # Secrets shared by every lab cluster. The auth mount is per cluster: hubs/<name>.yaml.
           vault:
