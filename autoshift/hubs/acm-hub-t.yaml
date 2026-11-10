@@ -11,6 +11,15 @@ hubClusterSets:
               - 'fa:16:3e:52:10:9f'
               - 'fa:16:3e:2d:a7:69'
 
+        observability:
+          thanosStorage:
+            bucket: acm-hub-t-mco
+
+      ztwim:
+        trustDomain: acm-hub-t.lab.signal9.gg
+        clusterName: acm-hub-t
+        jwtIssuer: https://oidc-discovery.apps.acm-hub-t.lab.signal9.gg
+
       externalSecretsOperator:
         clusterSecretStores:
           vault:
@@ -52,6 +61,41 @@ hubClusterSets:
               target: {name: rook-csi-cephfs-provisioner, creationPolicy: Owner}
               dataFrom:
                 - extract: {key: acm-hub-t-ceph-csi-cephfs-provisioner}
+          - name: thanos-s3-credentials
+            namespace: open-cluster-management-observability
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: thanos-s3-credentials, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-t-mco-rgw}
+          - name: hive-route53-secret
+            namespace: hive
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: hive-route53-secret, creationPolicy: Owner}
+              data:
+                - secretKey: aws_access_key_id
+                  remoteRef: {key: signal9-route53, property: access-key}
+                - secretKey: aws_secret_access_key
+                  remoteRef: {key: signal9-route53, property: secret-access-key}
+          - name: hive-aws-secret
+            namespace: hive
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: hive-aws-secret, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: hive-aws-credentials}
+          - name: signal9-ca-bundle
+            namespace: hive
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: signal9-ca-bundle, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: signal9-ca-bundle}
           - name: route53-key
             namespace: cert-manager
             spec:

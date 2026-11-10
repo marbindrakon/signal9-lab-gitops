@@ -33,6 +33,42 @@ hubClusterSets:
       odf-csi-all-nodes: 'true'
 
 
+      acm-search-storage: 'true'
+      acm-search-storage-class: ocs-storagecluster-ceph-rbd
+      acm-search-storage-size: 10Gi
+
+      # Observability: Thanos on the lab Ceph object gateway (bucket per hub in hubs/<name>.yaml).
+      acm-observability: 'true'
+      acm-observability-storage: external-s3
+
+      # Hive settings (Route 53 managed domain, lab CA) under config.hiveConfig.
+      hive-config: 'true'
+
+      # Zero Trust Workload Identity Manager (SPIRE); trust domain per hub.
+      ztwim: 'true'
+      ztwim-subscription-name: openshift-zero-trust-workload-identity-manager
+      ztwim-channel: stable-v1
+      ztwim-source: redhat-operators
+      ztwim-source-namespace: openshift-marketplace
+
+      # OpenShift Pipelines
+      pipelines: 'true'
+      pipelines-subscription-name: openshift-pipelines-operator-rh
+      pipelines-channel: pipelines-1.24
+      pipelines-source: redhat-operators
+      pipelines-source-namespace: openshift-marketplace
+
+      # Ansible Automation Platform 2.7: controller, Event-Driven Ansible and the MCP server.
+      aap: 'true'
+      aap-subscription-name: ansible-automation-platform-operator
+      aap-channel: stable-2.7
+      aap-install-plan-approval: Automatic
+      aap-source: redhat-operators
+      aap-source-namespace: openshift-marketplace
+      aap-hub-disabled: 'true'
+      aap-eda-disabled: 'false'
+      aap-lightspeed-disabled: 'true'
+
       # etcd on Ceph RBD stalls briefly under load; the Slower profile rides through it.
       etcd-hardware-speed: Slower
 
@@ -59,6 +95,13 @@ hubClusterSets:
 
     config:
       acm:
+        observability:
+          thanosStorage:
+            endpoint: objectstore.atuin.signal9.gg:443
+            insecure: false
+            source:
+              namespace: open-cluster-management-observability
+              secretName: thanos-s3-credentials
         provisioning:
           storageClass: ocs-storagecluster-ceph-rbd
           databaseSize: 50Gi
@@ -163,3 +206,23 @@ hubClusterSets:
             name: letsencrypt
             kind: ClusterIssuer
             group: cert-manager.io
+
+      hiveConfig:
+        managedDomains:
+          - domains:
+              - aws.signal9.gg
+            aws:
+              credentialsSecretRef:
+                name: hive-route53-secret
+        serviceProviderCredentialsConfig:
+          aws:
+            credentialsSecretRef:
+              name: hive-aws-secret
+        additionalCertificateAuthoritiesSecretRef:
+          - name: signal9-ca-bundle
+
+      aap:
+        instance:
+          mcp:
+            disabled: false
+            allow_write_operations: true
