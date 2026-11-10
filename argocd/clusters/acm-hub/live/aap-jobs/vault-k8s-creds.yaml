@@ -1,0 +1,24 @@
+# Identity the lab Vault uses to mint short-lived tokens for aap-jobs/aap-cluster-automation
+# (Vault kubernetes secrets engine k8s-creds-acm-hub). Its only permission is the
+# vault-k8s-creds-mint Role in aap-jobs. The long-lived token in the Secret is configured on the
+# engine as service_account_jwt; to rotate, delete the Secret, let it be re-created, and re-write
+# the engine config.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault-auth
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vault-k8s-creds
+  namespace: vault-auth
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-k8s-creds-token
+  namespace: vault-auth
+  annotations:
+    kubernetes.io/service-account.name: vault-k8s-creds
+type: kubernetes.io/service-account-token
