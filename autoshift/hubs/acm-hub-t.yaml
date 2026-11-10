@@ -1,0 +1,71 @@
+# Throwaway gate cluster used to prove the build before acm-hub exists.
+hubClusterSets:
+  hub:
+    config:
+      acm:
+        provisioning:
+          metal3:
+            provisioningIP: 172.18.101.6
+            provisioningMacAddresses:
+              - 'fa:16:3e:e4:ba:c4'
+              - 'fa:16:3e:52:10:9f'
+              - 'fa:16:3e:2d:a7:69'
+
+      externalSecretsOperator:
+        clusterSecretStores:
+          vault:
+            provider:
+              vault:
+                auth:
+                  kubernetes:
+                    mountPath: k8s-acm-hub-t
+          vault-cluster:
+            provider:
+              vault:
+                auth:
+                  kubernetes:
+                    mountPath: k8s-acm-hub-t
+        externalSecrets:
+          - name: rook-ceph-external-cluster-details
+            namespace: openshift-storage
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: rook-ceph-external-cluster-details, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-t-ceph-external}
+          - name: route53-key
+            namespace: cert-manager
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: route53-key, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: signal9-route53}
+          - name: oidc-client-secret
+            namespace: openshift-config
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: oidc-client-secret, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-t-oidc}
+
+      oauthIdentityProviders:
+        identityProviders:
+          - name: Signal9-RHT
+            mappingMethod: claim
+            type: OpenID
+            openID:
+              issuer: https://login.home.signal9.gg/realms/Signal9-RHT
+              clientID: acm-hub-t
+              clientSecret:
+                name: oidc-client-secret
+              extraScopes: [profile]
+              claims:
+                preferredUsername: [preferred_username, email]
+                name: [name]
+                email: [email]
+                groups: [groups]
+        clusterAdminGroups:
+          - global-admins

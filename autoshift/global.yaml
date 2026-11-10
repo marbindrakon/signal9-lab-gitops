@@ -1,0 +1,13 @@
+autoshift:
+  dryRun: false
+
+gitopsNamespace: openshift-gitops
+
+# Git mode: the PolicyGenerator sidecar renders policies from the fork.
+policyGenerator: true
+
+# No MachineSets on agent-installed clusters.
+excludePolicies:
+  - infra-nodes
+  - worker-nodes
+  - machine-health-checks

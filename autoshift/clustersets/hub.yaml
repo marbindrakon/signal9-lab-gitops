@@ -1,0 +1,143 @@
+hubClusterSets:
+  hub:
+    labels:
+      openshift-version: '5.0.1'
+      self-managed: 'true'
+
+      # OpenShift GitOps
+      gitops: 'true'
+      gitops-subscription-name: openshift-gitops-operator
+      gitops-disable-default-argocd: 'true'
+      gitops-channel: gitops-1.22
+      gitops-source: redhat-operators
+      gitops-source-namespace: openshift-marketplace
+
+      # Advanced Cluster Management
+      acm-subscription-name: advanced-cluster-management
+      acm-channel: release-2.17
+      acm-source: redhat-operators
+      acm-source-namespace: openshift-marketplace
+      acm-availability-config: Basic
+      acm-enable-provisioning: 'true'
+
+      # OpenShift Data Foundation, external mode against the lab Ceph cluster.
+      # The 5.0 catalog only carries the stable-4.22 channel.
+      odf: 'true'
+      odf-external: 'true'
+      odf-external-mcg: ignore
+      odf-subscription-name: odf-operator
+      odf-channel: stable-4.22
+      odf-source: redhat-operators
+      odf-source-namespace: openshift-marketplace
+      odf-default-storageclass: ocs-storagecluster-ceph-rbd
+      odf-csi-all-nodes: 'true'
+
+
+      # etcd on Ceph RBD stalls briefly under load; the Slower profile rides through it.
+      etcd-hardware-speed: Slower
+
+      # External Secrets (Red Hat operator), with the Vault stores and secrets under config.
+      external-secrets-operator: 'true'
+      external-secrets-config: 'true'
+      external-secrets-operator-subscription-name: openshift-external-secrets-operator
+      external-secrets-operator-channel: stable-v1
+      external-secrets-operator-source: redhat-operators
+      external-secrets-operator-source-namespace: openshift-marketplace
+
+      # cert-manager: Let's Encrypt (Route 53 DNS-01) for the API and ingress certificates.
+      cert-manager: 'true'
+      cert-manager-subscription-name: openshift-cert-manager-operator
+      cert-manager-channel: stable-v1
+      cert-manager-source: redhat-operators
+      cert-manager-source-namespace: openshift-marketplace
+      cert-manager-issuers: 'true'
+      cert-manager-api-cert: 'true'
+      cert-manager-ingress-cert: 'true'
+
+      # Log in through Keycloak.
+      oauth-identity-providers: 'true'
+
+    config:
+      acm:
+        provisioning:
+          storageClass: ocs-storagecluster-ceph-rbd
+          databaseSize: 50Gi
+          filesystemStorageSize: 100Gi
+          imageStorageSize: 100Gi
+          # metal3 boots the IPMI-only hosts over PXE on the provisioning VLAN. The provisioning
+          # IP and NIC MACs differ per hub: see hubs/<name>.yaml.
+          metal3:
+            provisioningNetwork: Managed
+            provisioningNetworkCIDR: 172.18.101.0/24
+            provisioningDHCPRange: 172.18.101.50,172.18.101.199
+            virtualMediaViaExternalNetwork: true
+            disableVirtualMediaTLS: true
+
+      externalSecretsOperator:
+        clusterSecretStores:
+          # Secrets shared by every lab cluster. The auth mount is per cluster: hubs/<name>.yaml.
+          vault:
+            provider:
+              vault:
+                server: https://vault.lab.signal9.gg
+                path: lab/rht-shared
+                version: v2
+                auth:
+                  kubernetes:
+                    role: external-secrets-operator
+                    serviceAccountRef:
+                      name: external-secrets
+                      namespace: external-secrets
+          # Secrets only this cluster may read (Ceph keys, object storage keys).
+          vault-cluster:
+            provider:
+              vault:
+                server: https://vault.lab.signal9.gg
+                path: lab/ansible-secrets
+                version: v2
+                auth:
+                  kubernetes:
+                    role: external-secrets-operator
+                    serviceAccountRef:
+                      name: external-secrets
+                      namespace: external-secrets
+
+      certManager:
+        # The lab resolvers serve a private view of lab.signal9.gg, so the DNS-01 self-check has
+        # to ask public resolvers or it never sees the challenge record.
+        operatorConfig:
+          controllerConfig:
+            overrideArgs:
+              - '--dns01-recursive-nameservers-only'
+              - '--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53'
+        clusterIssuers:
+          letsencrypt:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: admin@signal9.gg
+              privateKeySecretRef:
+                name: letsencrypt-account-key
+              solvers:
+                - dns01:
+                    route53:
+                      region: us-east-1
+                      accessKeyIDSecretRef:
+                        name: route53-key
+                        key: access-key
+                      secretAccessKeySecretRef:
+                        name: route53-key
+                        key: secret-access-key
+                  selector:
+                    dnsZones:
+                      - signal9.gg
+                      - lab.signal9.gg
+        apiCert:
+          issuer:
+            name: letsencrypt
+            kind: ClusterIssuer
+            group: cert-manager.io
+        ingressCert:
+          issuer:
+            name: letsencrypt
+            kind: ClusterIssuer
+            group: cert-manager.io
