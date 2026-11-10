@@ -1,0 +1,133 @@
+# The acm-hub cluster.
+hubClusterSets:
+  hub:
+    config:
+      acm:
+        provisioning:
+          metal3:
+            provisioningIP: 172.18.101.5
+            provisioningMacAddresses:
+              - 'fa:16:3e:05:19:de'
+              - 'fa:16:3e:61:81:a7'
+              - 'fa:16:3e:42:2a:66'
+
+        observability:
+          thanosStorage:
+            bucket: acm-hub-mco
+
+      ztwim:
+        trustDomain: acm-hub.lab.signal9.gg
+        clusterName: acm-hub
+        jwtIssuer: https://oidc-discovery.apps.acm-hub.lab.signal9.gg
+
+      externalSecretsOperator:
+        clusterSecretStores:
+          vault:
+            provider:
+              vault:
+                auth:
+                  kubernetes:
+                    mountPath: k8s-acm-hub
+          vault-cluster:
+            provider:
+              vault:
+                auth:
+                  kubernetes:
+                    mountPath: k8s-acm-hub
+        externalSecrets:
+          - name: rook-ceph-external-cluster-details
+            namespace: openshift-storage
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: rook-ceph-external-cluster-details, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-ceph-external}
+          # ODF looks for the provisioner credentials under these default names at volume attach;
+          # the exporter creates them with a per-cluster suffix.
+          - name: rook-csi-rbd-provisioner
+            namespace: openshift-storage
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: rook-csi-rbd-provisioner, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-ceph-csi-rbd-provisioner}
+          - name: rook-csi-cephfs-provisioner
+            namespace: openshift-storage
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: rook-csi-cephfs-provisioner, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-ceph-csi-cephfs-provisioner}
+          - name: thanos-s3-credentials
+            namespace: open-cluster-management-observability
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: thanos-s3-credentials, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-mco-rgw}
+          - name: hive-route53-secret
+            namespace: hive
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: hive-route53-secret, creationPolicy: Owner}
+              data:
+                - secretKey: aws_access_key_id
+                  remoteRef: {key: signal9-route53, property: access-key}
+                - secretKey: aws_secret_access_key
+                  remoteRef: {key: signal9-route53, property: secret-access-key}
+          - name: hive-aws-secret
+            namespace: hive
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: hive-aws-secret, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: hive-aws-credentials}
+          - name: signal9-ca-bundle
+            namespace: hive
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: signal9-ca-bundle, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: signal9-ca-bundle}
+          - name: route53-key
+            namespace: cert-manager
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: route53-key, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: signal9-route53}
+          - name: oidc-client-secret
+            namespace: openshift-config
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target: {name: oidc-client-secret, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-oidc}
+
+      oauthIdentityProviders:
+        identityProviders:
+          - name: Signal9-RHT
+            mappingMethod: claim
+            type: OpenID
+            openID:
+              issuer: https://login.home.signal9.gg/realms/Signal9-RHT
+              clientID: acm-hub
+              clientSecret:
+                name: oidc-client-secret
+              extraScopes: [profile]
+              claims:
+                preferredUsername: [preferred_username, email]
+                name: [name]
+                email: [email]
+                groups: [groups]
+        clusterAdminGroups:
+          - global-admins
