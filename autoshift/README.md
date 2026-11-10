@@ -10,7 +10,7 @@ says which of them each cluster gets and with what settings.
 | `clustersets/hub.yaml` | the `hub` clusterset (the hub's own `local-cluster`) |
 | `clustersets/managed.yaml` | the `managed` clusterset (spokes) |
 | `hubs/<name>.yaml` | settings that differ per hub cluster (addresses, MACs) |
-| `clusters/<name>.yaml` | one spoke |
+| `managed-clusters.yaml` | every spoke, one entry each (`clusters.<name>`); written by the `gitops_cluster_build` Ansible role |
 
 The hub's `autoshift` Argo CD Application lists these files in that order; later files win.
 

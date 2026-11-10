@@ -1,0 +1,6 @@
+# AutoShift per-cluster values for the spokes of acm-hub.
+# Written by the gitops_cluster_build Ansible role on cluster deploy and
+# undeploy; edits by hand are kept, but the role rewrites the whole file
+# (keys sorted, comments other than this header dropped).
+# Nothing secret: AutoShift renders this into ConfigMaps on the hub.
+clusters: {}

@@ -1,0 +1,139 @@
+# The managed clusterset: spoke clusters the AAP cluster-build jobs create on the hub.
+# What used to come from charts/ocp-base-config, expressed as AutoShift policies.
+#
+# Per-cluster values (Vault auth mount, Keycloak client, which ACME CA, the Secrets to sync)
+# are in managed-clusters.yaml, which the gitops_cluster_build Ansible role maintains.
+# AutoShift merges cluster config over this file map by map, but a LIST in a cluster entry
+# replaces the list here, so lists that differ per cluster (externalSecrets,
+# oauthIdentityProviders.identityProviders) live only in the cluster entries.
+#
+# Not covered yet (no AutoShift policy for it, or not wired up): chrony/NTP, MetalLB,
+# ODF on spokes, monitoring storage, the mirror registry IDMS.
+#
+# No 'gitops' label: the spoke Argo CD only ever synced managed-clusters/<cluster>/live/*,
+# whose one generated entry (base-configs) is replaced by these policies.
+managedClusterSets:
+  managed:
+    labels:
+      # External Secrets (Red Hat operator), with the Vault store and secrets under config.
+      external-secrets-operator: 'true'
+      external-secrets-config: 'true'
+      external-secrets-operator-subscription-name: openshift-external-secrets-operator
+      external-secrets-operator-channel: stable-v1
+      external-secrets-operator-source: redhat-operators
+      external-secrets-operator-source-namespace: openshift-marketplace
+
+      # cert-manager: API and ingress certificates from the issuer each cluster names.
+      cert-manager: 'true'
+      cert-manager-subscription-name: openshift-cert-manager-operator
+      cert-manager-channel: stable-v1
+      cert-manager-source: redhat-operators
+      cert-manager-source-namespace: openshift-marketplace
+      cert-manager-issuers: 'true'
+      cert-manager-api-cert: 'true'
+      cert-manager-ingress-cert: 'true'
+
+      # Log in through Keycloak.
+      oauth-identity-providers: 'true'
+
+    config:
+      externalSecretsOperator:
+        # The operator's pods are deny-all by default; let the controller reach Vault
+        # (the lab Vault's IPv4 and IPv6 front-end addresses).
+        operatorConfig:
+          controllerConfig:
+            networkPolicies:
+              - name: allow-vault
+                componentName: ExternalSecretsCoreController
+                egress:
+                  - to:
+                      - ipBlock:
+                          cidr: 23.166.28.49/32
+                      - ipBlock:
+                          cidr: 2602:81f:4001::17/128
+                    ports:
+                      - port: 443
+                        protocol: TCP
+        clusterSecretStores:
+          # Secrets shared by every lab cluster. The auth mount (k8s-mgd-<cluster>) is per
+          # cluster, in managed-clusters.yaml.
+          vault:
+            provider:
+              vault:
+                server: https://vault.lab.signal9.gg
+                path: lab/rht-shared
+                version: v2
+                auth:
+                  kubernetes:
+                    role: external-secrets-operator
+                    serviceAccountRef:
+                      name: external-secrets
+                      namespace: external-secrets
+
+      certManager:
+        # Self-check resolvers for Let's Encrypt (public view). A cluster on the lab ACME CA
+        # overrides this list with the lab resolver, which serves the private view.
+        operatorConfig:
+          controllerConfig:
+            overrideArgs:
+              - '--dns01-recursive-nameservers-only'
+              - '--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53'
+        # Both issuers exist on every spoke; a cluster picks one with apiCert/ingressCert
+        # (acme_ca in the cluster-build job) and syncs only that issuer's DNS credential.
+        clusterIssuers:
+          # Let's Encrypt, Route 53 DNS-01. Needs Secret cert-manager/route53-key.
+          letsencrypt:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: admin@signal9.gg
+              privateKeySecretRef:
+                name: letsencrypt-account-key
+              solvers:
+                - dns01:
+                    route53:
+                      region: us-east-1
+                      accessKeyIDSecretRef:
+                        name: route53-key
+                        key: access-key
+                      secretAccessKeySecretRef:
+                        name: route53-key
+                        key: secret-access-key
+                  selector:
+                    dnsZones:
+                      - signal9.gg
+                      - lab.signal9.gg
+          # The lab Vault ACME directory, RFC 2136 DNS-01 against IPA. Needs Secret
+          # cert-manager/tsig-key.
+          lab-vault-acme:
+            acme:
+              server: https://vault.lab.signal9.gg/v1/lab/acme-ca/acme/directory
+              email: admin@signal9.gg
+              privateKeySecretRef:
+                name: lab-vault-acme-account-key
+              solvers:
+                - dns01:
+                    rfc2136:
+                      nameserver: 172.18.42.10
+                      tsigKeyName: cert-manager
+                      tsigAlgorithm: HMACSHA256
+                      tsigSecretSecretRef:
+                        name: tsig-key
+                        key: key
+                  selector:
+                    dnsZones:
+                      - lab.signal9.gg
+        apiCert:
+          issuer:
+            name: letsencrypt
+            kind: ClusterIssuer
+            group: cert-manager.io
+        ingressCert:
+          issuer:
+            name: letsencrypt
+            kind: ClusterIssuer
+            group: cert-manager.io
+
+      oauthIdentityProviders:
+        # The Keycloak client differs per cluster, so identityProviders is in each cluster entry.
+        clusterAdminGroups:
+          - global-admins
