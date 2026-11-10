@@ -1,0 +1,39 @@
+---
+# The AAP controller logs in to Vault (credential "<env> - vault", kubernetes
+# auth mount k8s-acm-hub, role aap) with its own service account token. The
+# mount has no reviewer JWT, so Vault reviews the token with the caller's own
+# token and the caller needs these two permissions.
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: aap-token-review
+rules:
+  - verbs:
+      - create
+    apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+  - verbs:
+      - create
+    apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+---
+# The AAP controller logs in to Vault (credential "<env> - vault", kubernetes
+# auth mount k8s-acm-hub, role aap) with its own service account token. The
+# mount has no reviewer JWT, so Vault reviews the token with the caller's own
+# token and the caller needs these two permissions.
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: aap-token-review
+subjects:
+  - kind: ServiceAccount
+    name: aap-controller
+    namespace: ansible-automation-platform
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aap-token-review

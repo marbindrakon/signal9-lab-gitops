@@ -1,0 +1,42 @@
+# Site content for the acm-hub cluster: one Argo CD Application per directory
+# under argocd/clusters/acm-hub/live/. Applied by hand once; the infra Argo CD
+# instance (infra-gitops, namespace openshift-gitops) runs it.
+#
+# Hub platform configuration (operators, ACM, AAP, ODF, certificates, OAuth,
+# External Secrets) comes from AutoShift (autoshift/ in this repository), not
+# from here.
+#
+# No prune: the cluster-builds Application owns one Application per spoke whose
+# deletion destroys that cluster, so nothing here is deleted automatically.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: acm-hub-site
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/marbindrakon/signal9-lab-gitops.git
+        revision: autoshift-acm-hub
+        directories:
+          - path: argocd/clusters/acm-hub/live/*
+  template:
+    metadata:
+      name: 'acm-hub-{{ .path.basename }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/marbindrakon/signal9-lab-gitops.git
+        targetRevision: autoshift-acm-hub
+        path: '{{ .path.path }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: openshift-gitops
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: false
+        syncOptions:
+          - CreateNamespace=false
