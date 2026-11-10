@@ -20,4 +20,20 @@ gitops_retain_cluster_configs: true
 gitops_import_to_hub: true
 
 metallb_network: null
+# ACME CA for the spoke's API and ingress certificates: 'letsencrypt'
+# (Route 53 DNS-01) or 'internal' (lab Vault ACME directory, RFC 2136 DNS-01
+# against IPA). AWS clusters always use Let's Encrypt.
 acme_ca: 'internal'
+
+# Standalone OpenShift spokes (every platform except hcp_*) are imported into
+# ACM and configured by AutoShift: the role writes the cluster's entry in
+# autoshift_managed_clusters_file (group_vars) instead of an ocp-base-config
+# Argo CD Application. hcp_* platforms keep the base-config path.
+gitops_autoshift_spokes: true
+# Base ManagedClusterSet the spoke joins (config.clusterSet and the ManagedCluster label).
+gitops_autoshift_cluster_set: managed
+gitops_hcp_platforms:
+  - hcp_kubevirt
+  - hcp_agent
+# True when this cluster takes the AutoShift path (derived; do not set per job).
+gitops_autoshift_managed: "{{ (gitops_autoshift_spokes | bool) and (cluster_platform not in gitops_hcp_platforms) }}"

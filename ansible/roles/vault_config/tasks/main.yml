@@ -114,11 +114,12 @@
       data:
         alias_name_source: serviceaccount_uid
         bound_service_account_names:
-          - external-secrets-operator
+          - "{{ vault_eso_service_account }}"
         bound_service_account_namespaces:
-          - external-secrets-operator
+          - "{{ vault_eso_namespace }}"
         token_policies:
           - "{{ hashicorp_vault['cluster_policy'] }}"
+        token_ttl: "{{ vault_eso_token_ttl }}"
 
   when: cluster_state == "present" and not (vault_existing_auth)
 

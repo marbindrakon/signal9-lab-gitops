@@ -3,6 +3,10 @@ cluster:
   baseDomain: lab.signal9.gg
   gitOpsRepo: https://github.com/marbindrakon/rhte-2023-fleet-gitops.git
   importToHub: true
+  # ManagedClusterSet to place the cluster in when it is imported (the
+  # cluster.open-cluster-management.io/clusterset label). Empty leaves it to ACM
+  # (the "default" set) or to whatever assigns clustersets later.
+  clusterSet: ""
   createGitopsManifestWorks: false
   createGitopsSyncSet: false
   useACM: false
@@ -25,6 +29,10 @@ cluster:
         hostPrefix: 23
     serviceNetworks:
       - 172.30.0.0/16
+
+externalSecrets:
+  # ExternalSecret API version the hub's External Secrets operator serves.
+  apiVersion: external-secrets.io/v1beta1
 
 deprovision:
   # Max time the PreDelete hook waits for Hive to finish destroying the cluster.

@@ -1,2 +1,10 @@
 ---
 # defaults file for vault_config
+
+# The spoke's External Secrets controller, which logs in to the cluster's
+# k8s-mgd-<cluster> auth mount as role external-secrets-operator. AutoShift
+# installs the Red Hat operator, whose operand runs as external-secrets in
+# namespace external-secrets.
+vault_eso_service_account: external-secrets
+vault_eso_namespace: external-secrets
+vault_eso_token_ttl: 1h

@@ -1,5 +1,5 @@
 {{- if .Values.provider.aws.extraManifestsSecret -}}
-apiVersion: external-secrets.io/v1beta1
+apiVersion: {{ .Values.externalSecrets.apiVersion | default "external-secrets.io/v1beta1" }}
 kind: ExternalSecret
 metadata:
   name: {{ .Values.cluster.name }}-manifests

@@ -24,6 +24,7 @@
   ansible.builtin.git:
     repo: "{{ gitops_repo_url_authed }}"
     dest: "{{ gitops_temp_dir.path }}"
+    version: "{{ gitops_repo_branch }}"
   no_log: true
 
 - name: set git user name
@@ -40,9 +41,10 @@
   ansible.builtin.file:
     state: directory
     path: "{{ gitops_temp_dir.path }}/{{ item }}"
-  loop:
-    - "argocd/clusters/managed-clusters/{{ cluster_name }}/live/base-configs"
-    - "argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values"
+  loop: >-
+    {{ ['argocd/clusters/managed-clusters/' ~ cluster_name ~ '/helm-values']
+       + ([] if gitops_autoshift_managed | bool
+          else ['argocd/clusters/managed-clusters/' ~ cluster_name ~ '/live/base-configs']) }}
   when: cluster_state == "present"
 
 - name: template cluster deployment
@@ -61,15 +63,18 @@
   ansible.builtin.template:
     src: "base-config-app.yaml.j2"
     dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/live/base-configs/base-config-app.yaml"
-  when: cluster_state == "present"
+  when:
+    - cluster_state == "present"
+    - not (gitops_autoshift_managed | bool)
 
 - name: template base config values
   ansible.builtin.template:
     src: "base-config-values.yaml.j2"
     dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/base-config-values.yaml"
-  when: 
+  when:
     - cluster_state == "present"
-    - cluster_platform not in ["hcp_kubevirt", "hcp_agent"]
+    - cluster_platform not in gitops_hcp_platforms
+    - not (gitops_autoshift_managed | bool)
 
 - name: template base config values
   ansible.builtin.template:
@@ -77,7 +82,66 @@
     dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/base-config-values.yaml"
   when: 
     - cluster_state == "present"
-    - cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+    - cluster_platform in gitops_hcp_platforms
+
+# AutoShift spokes: add, replace or remove this cluster's entry in the one
+# per-cluster values file. Read-modify-write; keys are written sorted, so the
+# file only changes when an entry does.
+- name: update the cluster's AutoShift entry
+  when: gitops_autoshift_managed | bool
+  vars:
+    autoshift_values_path: "{{ gitops_temp_dir.path }}/{{ autoshift_managed_clusters_file }}"
+  block:
+    - name: check for the AutoShift per-cluster values file
+      ansible.builtin.stat:
+        path: "{{ autoshift_values_path }}"
+      register: autoshift_values_stat
+
+    - name: read the AutoShift per-cluster values file
+      ansible.builtin.slurp:
+        src: "{{ autoshift_values_path }}"
+      register: autoshift_values_raw
+      when: autoshift_values_stat.stat.exists
+
+    - name: load the current AutoShift cluster entries
+      ansible.builtin.set_fact:
+        autoshift_clusters: >-
+          {{ (autoshift_values_doc['clusters'] | default({}, true))
+             if autoshift_values_doc is mapping else {} }}
+      vars:
+        autoshift_values_doc: >-
+          {{ (autoshift_values_raw.content | b64decode | from_yaml)
+             if autoshift_values_stat.stat.exists else {} }}
+
+    - name: set this cluster's AutoShift entry
+      ansible.builtin.set_fact:
+        autoshift_clusters: >-
+          {{ autoshift_clusters | combine({cluster_name: lookup('ansible.builtin.template', 'autoshift-cluster-values.yaml.j2') | from_yaml}) }}
+      when: cluster_state == "present"
+
+    - name: drop this cluster's AutoShift entry
+      ansible.builtin.set_fact:
+        autoshift_clusters: >-
+          {{ autoshift_clusters | dict2items | rejectattr('key', 'equalto', cluster_name) | items2dict }}
+      when: cluster_state == "absent"
+
+    - name: write the AutoShift per-cluster values file
+      ansible.builtin.copy:
+        dest: "{{ autoshift_values_path }}"
+        mode: "0644"
+        content: |
+          # AutoShift per-cluster values for the spokes of {{ hub_name }}.
+          # Written by the gitops_cluster_build Ansible role on cluster deploy and
+          # undeploy; edits by hand are kept, but the role rewrites the whole file
+          # (keys sorted, comments other than this header dropped).
+          # Nothing secret: AutoShift renders this into ConfigMaps on the hub.
+          {{ {'clusters': autoshift_clusters} | to_nice_yaml(indent=2, sort_keys=true, width=1000) }}
+
+    - name: stage the AutoShift per-cluster values file
+      ansible.builtin.command:
+        cmd: "/usr/bin/git add {{ autoshift_managed_clusters_file }}"
+        chdir: "{{ gitops_temp_dir.path }}"
+      changed_when: false
 
 - name: run git add for new files
   ansible.builtin.command:

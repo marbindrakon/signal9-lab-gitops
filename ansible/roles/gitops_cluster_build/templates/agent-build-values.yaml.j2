@@ -2,7 +2,14 @@ cluster:
 {% if 'okd' in cluster_version %}
   type: okd
 {% endif %}
-{% if gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
+{% if gitops_autoshift_managed | bool %}
+{# AutoShift spoke: always imported into ACM; AutoShift policies (not a SyncSet or ManifestWork) configure it. #}
+  importToHub: true
+  useACM: true
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: false
+  clusterSet: "{{ gitops_autoshift_cluster_set }}"
+{% elif gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
   importToHub: false
   useACM: false
   createGitopsManifestWorks: false
@@ -42,3 +49,5 @@ provider:
     sharedInfraEnv:
       name: {{ agent_platform_config['shared_infra_env']['name'] }}
       namespace: {{ agent_platform_config['shared_infra_env']['namespace'] }}
+externalSecrets:
+  apiVersion: "{{ hub_external_secrets_api_version }}"

@@ -1,0 +1,97 @@
+{#
+  One spoke's entry in the AutoShift per-cluster values file
+  (clusters.<cluster_name>). The managed clusterset (autoshift/clustersets/managed.yaml)
+  carries everything that is the same on every spoke; this carries what differs.
+  AutoShift merges cluster config over clusterset config key by key, but a list
+  here REPLACES the clusterset's list, so every list below is complete.
+  Nothing secret: AutoShift renders this into ConfigMaps on the hub.
+#}
+{% set le = (acme_ca == 'letsencrypt' or cluster_platform == 'aws') %}
+labels: {}
+config:
+  clusterSet: "{{ gitops_autoshift_cluster_set }}"
+  externalSecretsOperator:
+    clusterSecretStores:
+      vault:
+        provider:
+          vault:
+            auth:
+              kubernetes:
+                mountPath: "{{ hashicorp_vault['vault_managed_auth_name'] }}"
+    externalSecrets:
+{% if le and cluster_platform != 'aws' %}
+      - name: route53-key
+        namespace: cert-manager
+        spec:
+          refreshInterval: 1h
+          secretStoreRef: {kind: ClusterSecretStore, name: vault}
+          target: {name: route53-key, creationPolicy: Owner}
+          dataFrom:
+            - extract: {key: "{{ hashicorp_vault['cluster_secrets']['cert-manager-route53'] }}"}
+{% elif not le %}
+      - name: tsig-key
+        namespace: cert-manager
+        spec:
+          refreshInterval: 1h
+          secretStoreRef: {kind: ClusterSecretStore, name: vault}
+          target: {name: tsig-key, creationPolicy: Owner}
+          dataFrom:
+            - extract: {key: "{{ hashicorp_vault['cluster_secrets']['cert-manager-tsig'] }}"}
+{% endif %}
+      - name: oidc-client-secret
+        namespace: openshift-config
+        spec:
+          refreshInterval: 1h
+          secretStoreRef: {kind: ClusterSecretStore, name: vault}
+          target: {name: oidc-client-secret, creationPolicy: Owner}
+          dataFrom:
+            - extract: {key: "{{ hashicorp_vault['cluster_secrets']['oidc'] }}"}
+  certManager:
+    operatorConfig:
+      controllerConfig:
+        overrideArgs:
+          - '--dns01-recursive-nameservers-only'
+{% if le %}
+          - '--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53'
+{% else %}
+          - '--dns01-recursive-nameservers=172.18.42.10:53'
+{% endif %}
+{% if cluster_platform == 'aws' %}
+    # AWS: Route 53 through the cluster's ambient (STS) credentials, for this cluster's zone.
+    clusterIssuers:
+      letsencrypt:
+        acme:
+          solvers:
+            - dns01:
+                route53:
+                  region: us-east-1
+              selector:
+                dnsZones:
+                  - "{{ base_domain }}"
+{% endif %}
+    apiCert:
+      issuer:
+        name: "{{ 'letsencrypt' if le else 'lab-vault-acme' }}"
+        kind: ClusterIssuer
+        group: cert-manager.io
+    ingressCert:
+      issuer:
+        name: "{{ 'letsencrypt' if le else 'lab-vault-acme' }}"
+        kind: ClusterIssuer
+        group: cert-manager.io
+  oauthIdentityProviders:
+    identityProviders:
+      - name: "{{ cluster_sso['console_sso_label'] }}"
+        mappingMethod: claim
+        type: OpenID
+        openID:
+          issuer: "{{ cluster_sso['sso_url'] }}/realms/{{ cluster_sso['client_realm'] }}"
+          clientID: "{{ cluster_sso['client_id'] }}"
+          clientSecret:
+            name: oidc-client-secret
+          extraScopes: [profile]
+          claims:
+            preferredUsername: [preferred_username, email]
+            name: [name]
+            email: [email]
+            groups: [groups]

@@ -28,7 +28,7 @@ spec:
 {% else %}
     path: "charts/mce-cluster-build"
 {% endif %}
-    targetRevision: HEAD
+    targetRevision: "{{ gitops_repo_branch }}"
     helm:
       valueFiles:
         - "../../argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/build-values.yaml"

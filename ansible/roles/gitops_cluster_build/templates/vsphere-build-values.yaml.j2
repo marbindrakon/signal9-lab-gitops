@@ -1,5 +1,12 @@
 cluster:
-{% if gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
+{% if gitops_autoshift_managed | bool %}
+{# AutoShift spoke: always imported into ACM; AutoShift policies (not a SyncSet or ManifestWork) configure it. #}
+  importToHub: true
+  useACM: true
+  createGitopsManifestWorks: false
+  createGitopsSyncSet: false
+  clusterSet: "{{ gitops_autoshift_cluster_set }}"
+{% elif gitops_import_to_hub == 'false' or not gitops_import_to_hub %}
   importToHub: false
   useACM: false
   createGitopsManifestWorks: false
@@ -43,3 +50,5 @@ provider:
     folder: {{ vsphere_platform_config['folder'] | default("null") }}
     vcenterHost: {{ vsphere_platform_config['vcenter'] }}
     
+externalSecrets:
+  apiVersion: "{{ hub_external_secrets_api_version }}"
