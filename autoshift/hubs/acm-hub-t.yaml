@@ -34,6 +34,24 @@ hubClusterSets:
               target: {name: rook-ceph-external-cluster-details, creationPolicy: Owner}
               dataFrom:
                 - extract: {key: acm-hub-t-ceph-external}
+          # ODF looks for the provisioner credentials under these default names at volume attach;
+          # the exporter creates them with a per-cluster suffix.
+          - name: rook-csi-rbd-provisioner
+            namespace: openshift-storage
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: rook-csi-rbd-provisioner, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-t-ceph-csi-rbd-provisioner}
+          - name: rook-csi-cephfs-provisioner
+            namespace: openshift-storage
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: rook-csi-cephfs-provisioner, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-t-ceph-csi-cephfs-provisioner}
           - name: route53-key
             namespace: cert-manager
             spec:
