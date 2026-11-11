@@ -50,7 +50,6 @@ controller_templates:
     execution_environment: "{{ env }} - signal9-lab-gitops"
     host_config_key: ""
     survey_enabled: False
-    survey_spec: {}
     become_enabled: False
     diff_mode: False
     webhook_service: ""
