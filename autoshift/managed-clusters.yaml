@@ -3,4 +3,318 @@
 # undeploy; edits by hand are kept, but the role rewrites the whole file
 # (keys sorted, comments other than this header dropped).
 # Nothing secret: AutoShift renders this into ConfigMaps on the hub.
-clusters: {}
+clusters:
+  as-ocp422-metal1:
+    config:
+      certManager:
+        apiCert:
+          issuer:
+            group: cert-manager.io
+            kind: ClusterIssuer
+            name: letsencrypt
+        ingressCert:
+          issuer:
+            group: cert-manager.io
+            kind: ClusterIssuer
+            name: letsencrypt
+        operatorConfig:
+          controllerConfig:
+            overrideArgs:
+            - --dns01-recursive-nameservers-only
+            - --dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53
+      chrony:
+        servers:
+        - 172.18.42.10
+        - 172.18.42.11
+      clusterInstall:
+        apiVip: 172.18.16.80
+        baseDomain: lab.signal9.gg
+        bmcCredentialRef: default-bmc-cred
+        controlPlaneAgents: 3
+        createCluster: 'true'
+        ingressVip: 172.18.16.84
+        mastersSchedulable: true
+        ntpSources:
+        - 172.18.42.10
+        - 172.18.42.11
+        openshiftVersion: 4.22.20
+        platform: baremetal
+        pullSecretRef: default-pull-secret
+        secretSourceNamespace: cluster-install-secrets
+        sshPublicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDgvctEXuDg84taMVkL+cD8ny5F6f0+mYsMfTYa48SdBhU9nwB/W4/7vmTMNASWf0urWSDl4YtzSrsca5I1v8VA1LLdqSWD/bFPlLNRtZ4wTKidk9uk1uP5JyeYUpLB31Sq5P7cyzKcd8OaHgDgzPSk0nZIcrcU/hdO/A0UcMGEFZ4fDuMAVhHdjto7k4rQbyAZtsdkfDbex14wiNNy4bHeQxECV644+GAPy7xXDUT4j/AF1ud7sXTq1hnlIc12FtaIQZ3WGX69Om3Qv5XJL3mdYafX721xEIdyX+U8obr+dc2E7TtLxcrHCb8Rqko6rvy8YLLPx+2Dj4ypuDZCmS/3vWQ50kEwRsWze20z835cJEodNS5wo0RanrrGgCGRMlMi9xNofBWnvpr7VCBXgywPN2JmfDwDcurBvJ++L8ednadGI7Xqp8Q17LIM9b8ag92GeZ86ycmaVJUKCb5DRScMsn6UCC9QBL2I9pP+GKDNzjGFTXga+WSU0vhE5Jsng1c= rhte-demo@ocp-ansible-bastion.lab.signal9.gg
+      clusterSet: managed
+      externalSecretsOperator:
+        clusterSecretStores:
+          vault:
+            provider:
+              vault:
+                auth:
+                  kubernetes:
+                    mountPath: k8s-mgd-as-ocp422-metal1
+        externalSecrets:
+        - name: route53-key
+          namespace: cert-manager
+          spec:
+            dataFrom:
+            - extract:
+                key: signal9-route53
+            refreshInterval: 1h
+            secretStoreRef:
+              kind: ClusterSecretStore
+              name: vault
+            target:
+              creationPolicy: Owner
+              name: route53-key
+        - name: rook-ceph-external-cluster-details
+          namespace: openshift-storage
+          spec:
+            dataFrom:
+            - extract:
+                key: as-ocp422-metal1-rook-data
+            refreshInterval: 1h
+            secretStoreRef:
+              kind: ClusterSecretStore
+              name: vault
+            target:
+              creationPolicy: Owner
+              name: rook-ceph-external-cluster-details
+        - name: oidc-client-secret
+          namespace: openshift-config
+          spec:
+            dataFrom:
+            - extract:
+                key: as-ocp422-metal1-openid
+            refreshInterval: 1h
+            secretStoreRef:
+              kind: ClusterSecretStore
+              name: vault
+            target:
+              creationPolicy: Owner
+              name: oidc-client-secret
+      hosts:
+        master-0:
+          bmcEndpoint: ''
+          bmcIP: 172.18.2.30
+          bmcPrefix: ipmi
+          bootMACAddress: 00:25:90:85:1f:02
+          bootMode: legacy
+          interfaces:
+          - macAddress: 00:25:90:85:1f:02
+            name: eno1
+          - macAddress: 00:25:90:85:1f:03
+            name: eno2
+          - macAddress: 90:e2:ba:91:1c:20
+            name: enp131s0f0
+          - macAddress: 90:e2:ba:91:1c:21
+            name: enp131s0f1
+          networking:
+            interfaces:
+              machine:
+                ipv4:
+                  addresses:
+                  - ip: 172.18.16.81
+                    prefixLength: 24
+              storage:
+                ipv4:
+                  addresses:
+                  - ip: 172.18.5.231
+                    prefixLength: 24
+          primaryMac: 90:e2:ba:91:1c:20
+          role: master
+          rootDeviceHints:
+            serialNumber: CVWL420402GB800RGN
+        master-1:
+          bmcEndpoint: ''
+          bmcIP: 172.18.2.48
+          bmcPrefix: ipmi
+          bootMACAddress: 00:25:90:85:20:36
+          bootMode: legacy
+          interfaces:
+          - macAddress: 00:25:90:85:20:36
+            name: eno1
+          - macAddress: 00:25:90:85:20:37
+            name: eno2
+          - macAddress: 00:1b:21:af:64:08
+            name: enp131s0f0
+          - macAddress: 00:1b:21:af:64:09
+            name: enp131s0f1
+          networking:
+            interfaces:
+              machine:
+                ipv4:
+                  addresses:
+                  - ip: 172.18.16.82
+                    prefixLength: 24
+              storage:
+                ipv4:
+                  addresses:
+                  - ip: 172.18.5.232
+                    prefixLength: 24
+          primaryMac: 00:1b:21:af:64:08
+          role: master
+          rootDeviceHints:
+            serialNumber: BTWL505205M9480QGN
+        master-2:
+          bmcEndpoint: ''
+          bmcIP: 172.18.2.49
+          bmcPrefix: ipmi
+          bootMACAddress: 00:25:90:85:75:7c
+          bootMode: legacy
+          interfaces:
+          - macAddress: 00:25:90:85:75:7c
+            name: eno1
+          - macAddress: 00:25:90:85:75:7d
+            name: eno2
+          - macAddress: 90:e2:ba:91:4d:cc
+            name: enp131s0f0
+          - macAddress: 90:e2:ba:91:4d:cd
+            name: enp131s0f1
+          networking:
+            interfaces:
+              machine:
+                ipv4:
+                  addresses:
+                  - ip: 172.18.16.83
+                    prefixLength: 24
+              storage:
+                ipv4:
+                  addresses:
+                  - ip: 172.18.5.233
+                    prefixLength: 24
+          primaryMac: 90:e2:ba:91:4d:cc
+          role: master
+          rootDeviceHints:
+            serialNumber: BTWL505204ZF480QGN
+      metallb:
+        bgpAdvertisements:
+          external:
+            ipAddressPools:
+            - cluster-bgp-pool
+            - anycast-bgp-pool
+            peers:
+            - peer-lab-rtr-a
+            - peer-lab-rtr-b
+        bgpPeers:
+          peer-lab-rtr-a:
+            myASN: 64720
+            peerASN: 65002
+            peerAddress: 172.18.16.2
+            peerPort: 179
+          peer-lab-rtr-b:
+            myASN: 64720
+            peerASN: 65002
+            peerAddress: 172.18.16.3
+            peerPort: 179
+        ipAddressPools:
+          anycast-bgp-pool:
+            addresses:
+            - 172.18.71.0/24
+            autoAssign: false
+          cluster-bgp-pool:
+            addresses:
+            - 172.18.72.0/25
+      networking:
+        clusterNetwork:
+          cidr: 10.128.0.0/14
+          hostPrefix: 23
+        dns:
+          servers:
+          - 172.18.42.10
+          - 172.18.42.11
+        interfaces:
+          data:
+            ipv4: disabled
+            ipv6: disabled
+            miimon: 100
+            mode: active-backup
+            mtu: 9000
+            name: bond1
+            ports:
+            - enp131s0f0
+            - enp131s0f1
+            state: up
+            type: bond
+          eno1:
+            ipv4: disabled
+            ipv6: disabled
+            name: eno1
+            state: up
+            type: ethernet
+          eno2:
+            ipv4: disabled
+            ipv6: disabled
+            name: eno2
+            state: up
+            type: ethernet
+          machine:
+            base: bond1
+            id: 16
+            ipv4: static
+            ipv6: disabled
+            mtu: 1500
+            name: bond1.16
+            state: up
+            type: vlan
+          storage:
+            base: bond1
+            id: 11
+            ipv4: static
+            ipv6: disabled
+            mtu: 9000
+            name: bond1.11
+            state: up
+            type: vlan
+          ten0:
+            ipv4: disabled
+            ipv6: disabled
+            mtu: 9000
+            name: enp131s0f0
+            state: up
+            type: ethernet
+          ten1:
+            ipv4: disabled
+            ipv6: disabled
+            mtu: 9000
+            name: enp131s0f1
+            state: up
+            type: ethernet
+        machineNetwork:
+          cidr: 172.18.16.0/24
+        routes:
+          default:
+            destination: 0.0.0.0/0
+            gateway: 172.18.16.1
+            interface: bond1.16
+        serviceNetwork:
+        - 172.30.0.0/16
+      oauthIdentityProviders:
+        identityProviders:
+        - mappingMethod: claim
+          name: Signal9-RHT
+          openID:
+            claims:
+              email:
+              - email
+              groups:
+              - groups
+              name:
+              - name
+              preferredUsername:
+              - preferred_username
+              - email
+            clientID: as-ocp422-metal1-openshift
+            clientSecret:
+              name: oidc-client-secret
+            extraScopes:
+            - profile
+            issuer: https://login.home.signal9.gg/realms/Signal9-RHT
+          type: OpenID
+    labels:
+      chrony: 'true'
+      metallb: 'true'
+      metallb-config: 'true'
+      odf: 'true'
+      odf-channel: stable-4.22
+      odf-csi-all-nodes: 'true'
+      odf-external: 'true'
+      odf-external-mcg: ignore
