@@ -13,3 +13,7 @@ openstack_region: RegionOne
 netbox_url: https://xna-ipam.lab.signal9.gg
 orgs: Signal9Lab
 vault_aap_validate_certs: true
+# AAP 2.7 no longer ships ansible.controller.application; OAuth applications (aap_applications)
+# are created by the gateway_applications role, so the controller one is left out.
+aap_configuration_dispatcher_exclude_roles:
+  - controller_applications
