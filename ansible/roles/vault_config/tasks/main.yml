@@ -74,6 +74,69 @@
       vault_k8s_ca_bundle: "{{ cluster_trust_bundle }}"
     when: cluster_platform in ["hcp_agent", "hcp_kubevirt"]
 
+  # Vault runs outside the cluster, so it needs its own identity to call the spoke's
+  # TokenReview API (the hub has the same: data/vault token reviewer). Without it Vault
+  # would reuse each client's token, which the External Secrets service account is not
+  # allowed to do, and audience-scoped tokens cannot do at all.
+  - name: create the vault token reviewer identity on the cluster (Standalone)
+    kubernetes.core.k8s:
+      kubeconfig: "{{ cluster_kubeconfig }}"
+      state: present
+      definition: "{{ item }}"
+    loop:
+      - apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: vault-auth
+      - apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          name: vault-token-reviewer
+          namespace: vault-auth
+      - apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: vault-token-reviewer-auth-delegator
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: system:auth-delegator
+        subjects:
+          - kind: ServiceAccount
+            name: vault-token-reviewer
+            namespace: vault-auth
+      - apiVersion: v1
+        kind: Secret
+        type: kubernetes.io/service-account-token
+        metadata:
+          name: vault-token-reviewer-token
+          namespace: vault-auth
+          annotations:
+            kubernetes.io/service-account.name: vault-token-reviewer
+    loop_control:
+      label: "{{ item.kind }}/{{ item.metadata.name }}"
+    when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
+
+  - name: read the token reviewer token (Standalone)
+    kubernetes.core.k8s_info:
+      kubeconfig: "{{ cluster_kubeconfig }}"
+      api_version: v1
+      kind: Secret
+      namespace: vault-auth
+      name: vault-token-reviewer-token
+    register: vault_reviewer_secret
+    until: (vault_reviewer_secret.resources | length > 0) and (vault_reviewer_secret.resources.0.data.token | default('') | length > 0)
+    retries: 30
+    delay: 2
+    no_log: true
+    when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
+
+  - name: set the token reviewer fact (Standalone)
+    ansible.builtin.set_fact:
+      vault_token_reviewer_jwt: "{{ vault_reviewer_secret.resources.0.data.token | b64decode }}"
+    no_log: true
+    when: cluster_platform not in ["hcp_agent", "hcp_kubevirt"]
+
   - name: write k8s auth method to vault
     community.hashi_vault.vault_write:
       url: "{{ hashicorp_vault['url'] }}"
@@ -102,6 +165,8 @@
         kubernetes_ca_cert: "{{ vault_k8s_ca_bundle | default(omit) }}"
         disable_local_ca_jwt: true
         disable_iss_validation: true
+        token_reviewer_jwt: "{{ vault_token_reviewer_jwt | default(omit) }}"
+    no_log: true
 
   - name: write external-secrets-operator role to vault
     community.hashi_vault.vault_write:

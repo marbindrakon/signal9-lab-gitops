@@ -7,8 +7,50 @@
   Nothing secret: AutoShift renders this into ConfigMaps on the hub.
 #}
 {% set le = (acme_ca == 'letsencrypt' or cluster_platform == 'aws') %}
-labels: {}
+labels:
+  # Node time sources (config.chrony below); the Machine Config Operator rolls the nodes once.
+  chrony: 'true'
+{% if metallb_network %}
+  metallb: 'true'
+  metallb-config: 'true'
+{% endif %}
 config:
+  chrony:
+{% if cluster_platform == 'openstack' %}
+    # Virtual machines on the lab cloud follow the hypervisor clock.
+    ptpKvm: true
+    servers: []
+{% elif cluster_platform == 'aws' %}
+    servers: ["169.254.169.123"]
+{% else %}
+    servers: {{ cluster_ntp_sources | to_json }}
+{% endif %}
+{% if metallb_network %}
+  metallb:
+    ipAddressPools:
+      cluster-bgp-pool:
+        addresses:
+          - "{{ metallb_network.value.prefix }}"
+      anycast-bgp-pool:
+        addresses:
+          - 172.18.71.0/24
+        autoAssign: false
+    bgpPeers:
+      peer-lab-rtr-a:
+        myASN: {{ metallb_asn }}
+        peerASN: 65002
+        peerAddress: 172.18.16.2
+        peerPort: 179
+      peer-lab-rtr-b:
+        myASN: {{ metallb_asn }}
+        peerASN: 65002
+        peerAddress: 172.18.16.3
+        peerPort: 179
+    bgpAdvertisements:
+      external:
+        ipAddressPools: [cluster-bgp-pool, anycast-bgp-pool]
+        peers: [peer-lab-rtr-a, peer-lab-rtr-b]
+{% endif %}
   clusterSet: "{{ gitops_autoshift_cluster_set }}"
   externalSecretsOperator:
     clusterSecretStores:
