@@ -1,2 +1,6 @@
 ---
 ceph_iscsi_setup: false
+# Where the exporter script is placed on the Ceph host, and what it is told about the cluster.
+ceph_exporter_dir: /var/lib/odf-external-exporter
+ceph_filesystem_name: cephfs
+ceph_rgw_endpoint: objectstore.atuin.signal9.gg:443

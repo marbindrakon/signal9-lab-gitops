@@ -1,7 +1,16 @@
-ceph osd pool create {{ cluster_name }}-odf
-ceph osd pool set {{ cluster_name }}-odf min_size 2
-ceph osd pool set {{ cluster_name }}-odf size 4
-ceph osd pool set {{ cluster_name }}-odf crush_rule replicated_rule
-ceph osd pool application enable {{ cluster_name }}-odf rbd
+{{ lookup('template', 'cephadm-env.sh.j2') }}
+POOL={{ cluster_name }}-odf
+ceph_sh ceph osd pool ls | grep -qx "$POOL" || ceph_sh ceph osd pool create "$POOL" 32 32 replicated replicated_rule
+ceph_sh ceph osd pool set "$POOL" min_size 2
+ceph_sh ceph osd pool set "$POOL" size 4
+ceph_sh ceph osd pool set "$POOL" crush_rule replicated_rule
+ceph_sh ceph osd pool application enable "$POOL" rbd
 
-python3 /root/create-external-cluster-resources.py --rbd-data-pool-name {{ cluster_name }}-odf --rgw-endpoint objectstore.atuin.signal9.gg:443 --rgw-skip-tls=true > /root/{{ cluster_name}}-odf.json
+# Connection details for ODF external mode. cephx-key-type aes: RHCOS kernels map RBD with krbd,
+# which does not speak the newer aes256k key type.
+umask 077
+ceph_sh -m {{ ceph_exporter_dir }}:/exporter python3 /exporter/ceph-external-cluster-details-exporter.py \
+  --rbd-data-pool-name "$POOL" --cephfs-filesystem-name {{ ceph_filesystem_name }} --v2-port-enable \
+  --rgw-endpoint {{ ceph_rgw_endpoint }} --rgw-skip-tls=true --cephx-key-type aes --format json \
+  > /root/{{ cluster_name }}-odf.json
+python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); assert isinstance(d,list) and d' /root/{{ cluster_name }}-odf.json

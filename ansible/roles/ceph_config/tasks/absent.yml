@@ -7,7 +7,11 @@
   become: true
 
 - name: configure ceph cluster
-  ansible.builtin.shell: "ceph osd pool delete {{ cluster_name }}-odf {{ cluster_name }}-odf --yes-i-really-really-mean-it"
+  ansible.builtin.shell:
+    cmd: |
+      {{ lookup('template', 'cephadm-env.sh.j2') | indent(6) }}
+      ceph_sh ceph osd pool delete {{ cluster_name }}-odf {{ cluster_name }}-odf --yes-i-really-really-mean-it
+    executable: /bin/bash
   delegate_to: "{{ groups['cephclients'][0] }}"
   become: true
 

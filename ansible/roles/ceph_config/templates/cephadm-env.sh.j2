@@ -1,0 +1,12 @@
+# The Ceph hosts carry no ceph CLI of their own: run it inside `cephadm shell`, using the copy of
+# cephadm the cluster keeps and the image its monitor runs. ceph_sh [-m host:ctr] <command...>
+set -e
+FSID=$(ls /var/lib/ceph | grep -E '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' | head -1)
+CEPHADM=$(ls /var/lib/ceph/$FSID/cephadm.* | head -1)
+IMG=$(podman ps --format '{{ "{{" }}.Image{{ "}}" }}' --filter "name=ceph-$FSID-mon" | head -1)
+[ -n "$FSID" ] && [ -n "$CEPHADM" ] && [ -n "$IMG" ] || { echo "cannot locate cephadm, the cluster fsid or the monitor image" >&2; exit 1; }
+ceph_sh() {
+  local m=""
+  if [ "$1" = "-m" ]; then m="--mount $2"; shift 2; fi
+  python3 "$CEPHADM" --image "$IMG" shell $m -- "$@" 2> >(grep -v '^Inferring\|^Using ceph image' >&2)
+}

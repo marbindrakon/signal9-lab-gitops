@@ -1,7 +1,18 @@
 ---
+- name: place the ODF external-mode exporter on the ceph host
+  ansible.builtin.copy:
+    src: ceph-external-cluster-details-exporter.py
+    dest: "{{ ceph_exporter_dir }}/"
+    mode: "0644"
+    directory_mode: "0700"
+  delegate_to: "{{ groups['cephclients'][0] }}"
+  become: true
+
 - name: configure ceph cluster
-  ansible.builtin.shell: |
-    {{ lookup('template', 'pool-create.sh.j2') }}
+  ansible.builtin.shell:
+    cmd: |
+      {{ lookup('template', 'pool-create.sh.j2') | indent(6) }}
+    executable: /bin/bash
   delegate_to: "{{ groups['cephclients'][0] }}"
   become: true
 
