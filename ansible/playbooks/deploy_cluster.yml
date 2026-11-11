@@ -22,6 +22,8 @@
     - name: set cluster image set
       ansible.builtin.set_fact:
         cluster_image_set: "img{{ mapped_cluster_version }}-x86-64-appsub"
+      # AutoShift creates the ClusterImageSet for the metal platform itself.
+      when: cluster_platform != "metal"
 
     - name: resolve cluster image set
       kubernetes.core.k8s_info:
@@ -29,10 +31,14 @@
         kind: ClusterImageSet
         name: "{{ cluster_image_set }}"
       register: cis_info
+      # AutoShift creates the ClusterImageSet for the metal platform itself.
+      when: cluster_platform != "metal"
 
     - name: save release image
       ansible.builtin.set_fact:
         cluster_release_image: "{{ cis_info.resources.0.spec.releaseImage }}"
+      # AutoShift creates the ClusterImageSet for the metal platform itself.
+      when: cluster_platform != "metal"
 
     - name: include resource_allocation role
       ansible.builtin.include_role:

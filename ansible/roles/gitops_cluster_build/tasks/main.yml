@@ -45,19 +45,21 @@
     {{ ['argocd/clusters/managed-clusters/' ~ cluster_name ~ '/helm-values']
        + ([] if gitops_autoshift_managed | bool
           else ['argocd/clusters/managed-clusters/' ~ cluster_name ~ '/live/base-configs']) }}
-  when: cluster_state == "present"
+  when: cluster_state == "present" and cluster_platform != "metal"
 
 - name: template cluster deployment
   ansible.builtin.template:
     src: "cluster-deploy-app.yaml.j2"
     dest: "{{ gitops_temp_dir.path }}/{{ cluster_builds_dir }}/{{ cluster_name }}.yaml"
-  when: cluster_state == "present" or gitops_task == "unprotect"
+  # The metal platform has no Application: AutoShift's cluster-install policies build the
+  # cluster from its entry in the AutoShift values file.
+  when: (cluster_state == "present" or gitops_task == "unprotect") and cluster_platform != "metal"
 
 - name: template cluster deployment values
   ansible.builtin.template:
     src: "{{ cluster_platform }}-build-values.yaml.j2"
     dest: "{{ gitops_temp_dir.path }}/argocd/clusters/managed-clusters/{{ cluster_name }}/helm-values/build-values.yaml"
-  when: cluster_state == "present"
+  when: cluster_state == "present" and cluster_platform != "metal"
 
 - name: template base config
   ansible.builtin.template:

@@ -1,0 +1,75 @@
+# Bare metal installed by AutoShift cluster-install: pick the hosts, then the two VIPs and one
+# machine-network address per host from NetBox. Existing records (matched by description) are
+# reused, so a re-run or a pre-reserved address is honoured.
+- name: set SNO flag
+  ansible.builtin.set_fact:
+    is_sno: "{{ metal_platform_config.cluster_sizes[cluster_size].controller_count == 1 and metal_platform_config.cluster_sizes[cluster_size].worker_count == 0 }}"
+
+- name: allocate metallb network
+  ansible.builtin.include_tasks: "include/_allocate_metallb_network.yml"
+
+- name: select the hosts for this cluster
+  ansible.builtin.set_fact:
+    metal_selected_hosts: >-
+      {{ (metal_hosts | default(metal_host_pool.keys() | list))[:(metal_platform_config.cluster_sizes[cluster_size].controller_count
+          + metal_platform_config.cluster_sizes[cluster_size].worker_count)] }}
+
+- name: check the selection
+  ansible.builtin.assert:
+    that:
+      - metal_selected_hosts | length == (metal_platform_config.cluster_sizes[cluster_size].controller_count + metal_platform_config.cluster_sizes[cluster_size].worker_count)
+      - metal_selected_hosts | difference(metal_host_pool.keys() | list) | length == 0
+    fail_msg: "not enough hosts in metal_host_pool (or an unknown name in metal_hosts) for a {{ cluster_size }} cluster"
+  when: cluster_state == "present"
+
+- name: allocate vips from netbox
+  ansible.builtin.include_tasks: "include/_allocate_vips_from_netbox.yml"
+
+- name: initialize node addresses
+  ansible.builtin.set_fact:
+    metal_node_addresses: {}
+
+- name: look up existing node addresses
+  ansible.builtin.set_fact:
+    metal_node_addresses: >-
+      {{ metal_node_addresses | combine({item: (nb_node_query.values() | map(attribute='address') | first)}) }}
+  vars:
+    nb_node_query: "{{ query('netbox.netbox.nb_lookup', 'ip-addresses', api_filter='description=' + cluster_name + '-node-' + item) | items2dict }}"
+  loop: "{{ metal_selected_hosts }}"
+  when: nb_node_query | length > 0
+
+- name: allocate node addresses
+  netbox.netbox.netbox_ip_address:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+    state: new
+    data:
+      prefix: "{{ metal_platform_config.node_prefix }}"
+      dns_name: "master-{{ idx }}.{{ cluster_name }}.{{ base_domain }}"
+      description: "{{ cluster_name }}-node-{{ item }}"
+      tenant: "{{ netbox_tenant }}"
+  loop: "{{ metal_selected_hosts }}"
+  loop_control:
+    index_var: idx
+  register: nb_node_create
+  when:
+    - cluster_state == "present"
+    - item not in metal_node_addresses
+
+- name: record new node addresses
+  ansible.builtin.set_fact:
+    metal_node_addresses: "{{ metal_node_addresses | combine({item.item: item.ip_address.address}) }}"
+  loop: "{{ nb_node_create.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item }}"
+  when: item.ip_address is defined
+
+- name: release node addresses
+  netbox.netbox.netbox_ip_address:
+    netbox_url: "{{ lookup('env', 'NETBOX_URL') }}"
+    netbox_token: "{{ lookup('env', 'NETBOX_TOKEN') }}"
+    state: absent
+    data:
+      address: "{{ item.value }}"
+  loop: "{{ metal_node_addresses | dict2items }}"
+  when: cluster_state == "absent"

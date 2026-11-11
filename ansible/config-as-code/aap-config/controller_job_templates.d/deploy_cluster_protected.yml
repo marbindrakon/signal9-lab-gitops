@@ -93,6 +93,7 @@ controller_templates:
             - hcp_kubevirt
             - hcp_agent
             - agent
+            - metal
             - vsphere
             - aws
         - question_name: Version

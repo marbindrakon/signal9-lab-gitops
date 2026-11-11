@@ -7,12 +7,22 @@
   Nothing secret: AutoShift renders this into ConfigMaps on the hub.
 #}
 {% set le = (acme_ca == 'letsencrypt' or cluster_platform == 'aws') %}
+{% set odf_ext = ('odf-external' in cluster_special_feature) %}
+{% set metal = (cluster_platform == 'metal') %}
 labels:
   # Node time sources (config.chrony below); the Machine Config Operator rolls the nodes once.
   chrony: 'true'
 {% if metallb_network %}
   metallb: 'true'
   metallb-config: 'true'
+{% endif %}
+{% if metal and odf_ext %}
+  # ODF in external mode against the lab Ceph (the 5.0 catalog only carries stable-4.22).
+  odf: 'true'
+  odf-external: 'true'
+  odf-external-mcg: ignore
+  odf-channel: stable-4.22
+  odf-csi-all-nodes: 'true'
 {% endif %}
 config:
   chrony:
@@ -80,6 +90,16 @@ config:
           dataFrom:
             - extract: {key: "{{ hashicorp_vault['cluster_secrets']['cert-manager-tsig'] }}"}
 {% endif %}
+{% if metal and odf_ext %}
+      - name: rook-ceph-external-cluster-details
+        namespace: openshift-storage
+        spec:
+          refreshInterval: 1h
+          secretStoreRef: {kind: ClusterSecretStore, name: vault}
+          target: {name: rook-ceph-external-cluster-details, creationPolicy: Owner}
+          dataFrom:
+            - extract: {key: "{{ hashicorp_vault['cluster_secrets']['odf'] }}"}
+{% endif %}
       - name: oidc-client-secret
         namespace: openshift-config
         spec:
@@ -137,3 +157,61 @@ config:
             name: [name]
             email: [email]
             groups: [groups]
+{% if metal %}
+  # ---- Install definition read by AutoShift's cluster-install policies on the hub ----
+  networking:
+    clusterNetwork: {cidr: 10.128.0.0/14, hostPrefix: 23}
+    machineNetwork: {cidr: "{{ metal_platform_config.node_prefix }}"}
+    serviceNetwork: [172.30.0.0/16]
+    # The 1G ports only PXE-boot the host; the cluster lives on VLANs of the 10G bond.
+    interfaces:
+      eno1: {type: ethernet, name: eno1, state: up, ipv4: disabled, ipv6: disabled}
+      eno2: {type: ethernet, name: eno2, state: up, ipv4: disabled, ipv6: disabled}
+      ten0: {type: ethernet, name: enp131s0f0, state: up, mtu: {{ metal_platform_config.ceph_mtu }}, ipv4: disabled, ipv6: disabled}
+      ten1: {type: ethernet, name: enp131s0f1, state: up, mtu: {{ metal_platform_config.ceph_mtu }}, ipv4: disabled, ipv6: disabled}
+      data: {type: bond, name: bond1, state: up, mode: active-backup, miimon: 100, mtu: {{ metal_platform_config.ceph_mtu }}, ports: [enp131s0f0, enp131s0f1], ipv4: disabled, ipv6: disabled}
+      machine: {type: vlan, name: "bond1.{{ metal_platform_config.machine_vlan }}", state: up, id: {{ metal_platform_config.machine_vlan }}, base: bond1, mtu: {{ metal_platform_config.machine_mtu }}, ipv4: static, ipv6: disabled}
+      storage: {type: vlan, name: "bond1.{{ metal_platform_config.ceph_vlan }}", state: up, id: {{ metal_platform_config.ceph_vlan }}, base: bond1, mtu: {{ metal_platform_config.ceph_mtu }}, ipv4: static, ipv6: disabled}
+    routes:
+      default: {destination: 0.0.0.0/0, gateway: "{{ metal_platform_config.node_gateway }}", interface: "bond1.{{ metal_platform_config.machine_vlan }}"}
+    dns:
+      servers: {{ cluster_dns_servers | to_json }}
+  hosts:
+{% for h in metal_selected_hosts %}
+{% set hw = metal_host_pool[h] %}
+    master-{{ loop.index0 }}:
+      # physical host: {{ h }}
+      role: {{ 'master' if loop.index0 < metal_platform_config.cluster_sizes[cluster_size].controller_count else 'worker' }}
+      bmcIP: "{{ hw.bmc_address }}"
+      bmcPrefix: {{ hw.bmc_prefix }}
+      bmcEndpoint: ''
+      bootMode: {{ hw.boot_mode }}
+      bootMACAddress: "{{ hw.boot_mac }}"
+      primaryMac: "{{ hw.data.values() | first }}"
+      rootDeviceHints: {{ hw.root_device_hints | to_json }}
+      interfaces:
+{% for name, mac in (hw.lom | combine(hw.data)).items() %}
+        - {macAddress: "{{ mac }}", name: {{ name }}}
+{% endfor %}
+      networking:
+        interfaces:
+          machine: {ipv4: {addresses: [{ip: "{{ metal_node_addresses[h] | ansible.netcommon.ipaddr('address') }}", prefixLength: {{ metal_node_addresses[h] | ansible.netcommon.ipaddr('prefix') }}}]}}
+          storage: {ipv4: {addresses: [{ip: "{{ hw.ceph_address }}", prefixLength: {{ metal_platform_config.ceph_prefix_length }}}]}}
+{% endfor %}
+  clusterInstall:
+    createCluster: 'true'
+    platform: baremetal
+    baseDomain: "{{ base_domain }}"
+    openshiftVersion: "{{ mapped_cluster_version }}"
+    controlPlaneAgents: {{ metal_platform_config.cluster_sizes[cluster_size].controller_count }}
+{% if not is_sno %}
+    apiVip: "{{ internal_api_vip }}"
+    ingressVip: "{{ internal_ingress_vip }}"
+    mastersSchedulable: {{ (metal_platform_config.cluster_sizes[cluster_size].worker_count == 0) | to_json }}
+{% endif %}
+    pullSecretRef: default-pull-secret
+    bmcCredentialRef: default-bmc-cred
+    secretSourceNamespace: cluster-install-secrets
+    sshPublicKey: "{{ cluster_ssh_pubkey }}"
+    ntpSources: {{ cluster_ntp_sources | to_json }}
+{% endif %}

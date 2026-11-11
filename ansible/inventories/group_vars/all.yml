@@ -199,7 +199,7 @@ version_mapping:
   "4.20": "4.20.18"
   "4.21": "4.21.10"
   "4.22": "4.22.12"
-  "5.0": "5.0.0-rc.7"
+  "5.0": "5.0.1"
 
 platform_configs:
   aws:
@@ -495,6 +495,25 @@ platform_configs:
         controller_count: 3
         worker_count: 5
 
+  # Bare metal installed by AutoShift's cluster-install policies on the hub (SiteConfig +
+  # assisted installer). Hosts come from metal_host_pool below.
+  metal:
+    vip_prefix: "172.18.16.0/24"
+    node_prefix: "172.18.16.0/24"
+    node_gateway: "172.18.16.1"
+    machine_vlan: 16
+    machine_mtu: 1500
+    ceph_vlan: 11
+    ceph_mtu: 9000
+    ceph_prefix_length: 24
+    cluster_sizes:
+      sandbox:
+        controller_count: 1
+        worker_count: 0
+      small:
+        controller_count: 3
+        worker_count: 0
+
   hcp_kubevirt:
     ingress_base_domain: "apps.{{ hub_name }}.{{ base_domain }}"
     cluster_sizes:
@@ -537,3 +556,37 @@ platform_configs:
       large:
         etcd_size: 32Gi
         agent_count: 5
+
+# Bare-metal hosts the "metal" platform may use, in the order they are picked. Hardware facts
+# only (verified from metal3 inspection): the BMC, the PXE NIC, the two 10G ports that carry the
+# machine and storage VLANs, the install disk, and the host's fixed storage (VLAN 11) address.
+# The 1G ports sit on the hub's provisioning VLAN and only PXE-boot the host.
+# Override the selection for one build with metal_hosts: [name, ...].
+metal_host_pool:
+  smc-node1:
+    bmc_address: 172.18.2.30
+    bmc_prefix: ipmi
+    boot_mode: legacy
+    boot_mac: "00:25:90:85:1f:02"
+    lom: {eno1: "00:25:90:85:1f:02", eno2: "00:25:90:85:1f:03"}
+    data: {enp131s0f0: "90:e2:ba:91:1c:20", enp131s0f1: "90:e2:ba:91:1c:21"}
+    root_device_hints: {serialNumber: CVWL420402GB800RGN}
+    ceph_address: 172.18.5.231
+  smc-node2:
+    bmc_address: 172.18.2.48
+    bmc_prefix: ipmi
+    boot_mode: legacy
+    boot_mac: "00:25:90:85:20:36"
+    lom: {eno1: "00:25:90:85:20:36", eno2: "00:25:90:85:20:37"}
+    data: {enp131s0f0: "00:1b:21:af:64:08", enp131s0f1: "00:1b:21:af:64:09"}
+    root_device_hints: {serialNumber: BTWL505205M9480QGN}
+    ceph_address: 172.18.5.232
+  smc-node3:
+    bmc_address: 172.18.2.49
+    bmc_prefix: ipmi
+    boot_mode: legacy
+    boot_mac: "00:25:90:85:75:7c"
+    lom: {eno1: "00:25:90:85:75:7c", eno2: "00:25:90:85:75:7d"}
+    data: {enp131s0f0: "90:e2:ba:91:4d:cc", enp131s0f1: "90:e2:ba:91:4d:cd"}
+    root_device_hints: {serialNumber: BTWL505204ZF480QGN}
+    ceph_address: 172.18.5.233
