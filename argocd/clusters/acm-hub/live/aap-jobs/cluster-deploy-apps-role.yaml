@@ -1,0 +1,37 @@
+# Lets the AAP cluster jobs (aap-jobs/aap-cluster-automation) destroy a spoke
+# by deleting its <cluster>-deploy Argo CD Application in openshift-gitops.
+#
+# Why: the acm-hub-site ApplicationSet syncs cluster-builds without prune, so
+# removing a cluster's file from Git never deletes its Application or the
+# cluster. Undeploy is an explicit job action instead
+# (ansible/playbooks/_cluster_teardown.yml): read the Application, check it
+# carries Argo's resources-finalizer (protected clusters do not), delete it and
+# poll until it is gone. Application names are not known in advance, so
+# resourceNames cannot narrow this; it is limited to the applications resource
+# in this one namespace. No create/update/patch: the Application spec and its
+# finalizer come from Git only. Read access to ClusterDeployments and
+# ManagedClusters for the wait comes from the aap-managedcluster-view
+# ClusterRole.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: aap-cluster-deploy-apps
+  namespace: openshift-gitops
+rules:
+  - apiGroups: ["argoproj.io"]
+    resources: ["applications"]
+    verbs: ["get", "list", "watch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: aap-cluster-deploy-apps
+  namespace: openshift-gitops
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: aap-cluster-deploy-apps
+subjects:
+  - kind: ServiceAccount
+    name: aap-cluster-automation
+    namespace: aap-jobs
