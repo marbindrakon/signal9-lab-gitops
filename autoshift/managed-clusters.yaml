@@ -235,7 +235,7 @@ clusters:
             state: up
             type: bond
           eno1:
-            ipv4: disabled
+            ipv4: dhcp
             ipv6: disabled
             name: eno1
             state: up

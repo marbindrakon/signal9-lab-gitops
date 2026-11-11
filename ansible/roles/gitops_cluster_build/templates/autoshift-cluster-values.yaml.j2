@@ -163,9 +163,12 @@ config:
     clusterNetwork: {cidr: 10.128.0.0/14, hostPrefix: 23}
     machineNetwork: {cidr: "{{ metal_platform_config.node_prefix }}"}
     serviceNetwork: [172.30.0.0/16]
-    # The 1G ports only PXE-boot the host; the cluster lives on VLANs of the 10G bond.
+    # The cluster lives on VLANs of the 10G bond. The first 1G port is the PXE NIC on the hub's
+    # provisioning VLAN: it keeps a DHCP lease there (metal3 hands out no gateway) because the
+    # provisioning agent has to reach the hub's Ironic API on that network directly. The second
+    # 1G port stays without an address so the two do not answer for each other.
     interfaces:
-      eno1: {type: ethernet, name: eno1, state: up, ipv4: disabled, ipv6: disabled}
+      eno1: {type: ethernet, name: eno1, state: up, ipv4: dhcp, ipv6: disabled}
       eno2: {type: ethernet, name: eno2, state: up, ipv4: disabled, ipv6: disabled}
       ten0: {type: ethernet, name: enp131s0f0, state: up, mtu: {{ metal_platform_config.ceph_mtu }}, ipv4: disabled, ipv6: disabled}
       ten1: {type: ethernet, name: enp131s0f1, state: up, mtu: {{ metal_platform_config.ceph_mtu }}, ipv4: disabled, ipv6: disabled}
