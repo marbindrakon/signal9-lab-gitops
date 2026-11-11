@@ -152,7 +152,8 @@
   loop:
     - "argocd/clusters/managed-clusters/{{ cluster_name }}"
     - "{{ cluster_builds_dir }}"
-  when: cluster_state == "present"
+  # The metal platform writes neither: its whole definition is the AutoShift values entry.
+  when: cluster_state == "present" and cluster_platform != "metal"
 
 - name: delete cluster gitops configs (retain cluster configs)
   ansible.builtin.command:
