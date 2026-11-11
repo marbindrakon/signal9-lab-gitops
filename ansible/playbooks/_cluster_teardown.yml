@@ -1,0 +1,97 @@
+# Destroy a spoke cluster on the hub: delete its <cluster>-deploy Argo CD
+# Application and wait until the Application, the Hive ClusterDeployment and the
+# ManagedCluster are gone. Included by undeploy_cluster.yml before anything
+# else is removed (load balancer, Vault auth mount, DNS, ...), so the spoke
+# keeps its secrets and endpoints while it is being deprovisioned.
+#
+# Why the job deletes the Application itself: the hub's site ApplicationSet
+# syncs argocd/clusters/<hub>/live/cluster-builds without prune, so removing a
+# file there never deletes the Application or the cluster. Deleting the
+# Application with Argo's resources-finalizer runs the chart's PreDelete hook
+# (mce-cluster-build: deletes the ClusterDeployment and waits for Hive's
+# deprovision) and then cascade-deletes the rest of the chart.
+#
+# Protected clusters: their Application is rendered without the finalizer, so
+# deleting it would orphan the cluster rather than destroy it. This file refuses
+# to delete an Application without the finalizer; undeploy_protected_cluster.yml
+# adds it first (_unprotect_cluster_app.yml).
+#
+# Variables (defaults in undeploy_cluster.yml):
+#   cluster_teardown_timeout_seconds        overall wait (chart deprovision timeout + margin)
+#   cluster_teardown_poll_seconds           poll interval
+#   cluster_teardown_token_refresh_seconds  re-mint the hub token this often (< k8s_token_ttl)
+
+- name: look up the cluster's deploy Application
+  kubernetes.core.k8s_info:
+    api_version: argoproj.io/v1alpha1
+    kind: Application
+    name: "{{ cluster_name }}-deploy"
+    namespace: openshift-gitops
+  register: cluster_teardown_app
+
+- name: refuse to destroy a protected cluster
+  ansible.builtin.fail:
+    msg: >-
+      Application openshift-gitops/{{ cluster_name }}-deploy does not carry the
+      resources-finalizer.argocd.argoproj.io finalizer: {{ cluster_name }} is a
+      protected cluster and deleting the Application would orphan it, not
+      destroy it. Nothing was changed. Use the protected undeploy
+      (ansible/playbooks/undeploy_protected_cluster.yml), which adds the
+      finalizer first.
+  when:
+    - cluster_teardown_app.resources | length > 0
+    - "'resources-finalizer.argocd.argoproj.io' not in (cluster_teardown_app.resources.0.metadata.finalizers | default([]))"
+
+- name: note that the deploy Application is already gone
+  ansible.builtin.debug:
+    msg: >-
+      Application openshift-gitops/{{ cluster_name }}-deploy does not exist;
+      checking that the ClusterDeployment and ManagedCluster are gone.
+  when: cluster_teardown_app.resources | length == 0
+
+# Foreground: the API server keeps the Application until its dependents are
+# gone; Argo's own finalizer runs the PreDelete hook and the cascade. The uid
+# precondition makes sure this deletes the Application checked above.
+- name: delete the cluster's deploy Application
+  kubernetes.core.k8s:
+    state: absent
+    api_version: argoproj.io/v1alpha1
+    kind: Application
+    name: "{{ cluster_name }}-deploy"
+    namespace: openshift-gitops
+    delete_options:
+      propagationPolicy: Foreground
+      preconditions:
+        uid: "{{ cluster_teardown_app.resources.0.metadata.uid }}"
+  when:
+    - cluster_teardown_app.resources | length > 0
+    - cluster_teardown_app.resources.0.metadata.deletionTimestamp is not defined
+
+- name: start the teardown clock
+  ansible.builtin.set_fact:
+    cluster_teardown_deadline: "{{ now(utc=true).timestamp() | int + cluster_teardown_timeout_seconds | int }}"
+    cluster_teardown_done: false
+    cluster_teardown_expired: false
+    cluster_teardown_remaining: []
+
+# The hub token lasts hashicorp_vault.k8s_token_ttl (1h) and a deprovision can
+# take hours, so wait in slices and re-mint the token before each one.
+- name: wait for the cluster's hub resources to be deleted
+  ansible.builtin.include_tasks: _cluster_teardown_wait.yml
+  loop: "{{ range(((cluster_teardown_timeout_seconds | int) / (cluster_teardown_token_refresh_seconds | int)) | round(0, 'ceil') | int + 1) | list }}"
+  loop_control:
+    loop_var: cluster_teardown_slice
+
+- name: fail if the cluster was not destroyed in time
+  ansible.builtin.fail:
+    msg: >-
+      {{ cluster_name }} was not torn down within
+      {{ cluster_teardown_timeout_seconds }} seconds; still present on the hub:
+      {{ cluster_teardown_remaining | join(', ') }}. Nothing else (load
+      balancer, Vault, DNS, Git) was removed. Check the Application's
+      PreDelete hook Job (namespace {{ cluster_name }}, deprovision-wait) and
+      Hive's uninstall job, then re-run the undeploy.
+  when: not cluster_teardown_done | bool
+
+- name: refresh the hub token for the remaining steps
+  ansible.builtin.include_tasks: _job_auth_tasks.yml

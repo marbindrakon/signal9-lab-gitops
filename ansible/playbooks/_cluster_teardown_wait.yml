@@ -1,0 +1,60 @@
+# One slice of the teardown wait in _cluster_teardown.yml: re-mint the hub
+# token, then poll until the Application, ClusterDeployment and ManagedCluster
+# are all gone or the slice (or the overall deadline) ends. Sets
+# cluster_teardown_done and cluster_teardown_remaining.
+- name: wait slice {{ cluster_teardown_slice }}
+  when:
+    - not cluster_teardown_done | bool
+    - not cluster_teardown_expired | bool
+  block:
+    - name: refresh the hub token
+      ansible.builtin.include_tasks: _job_auth_tasks.yml
+
+    - name: end this slice before the token expires or the deadline passes
+      ansible.builtin.set_fact:
+        cluster_teardown_slice_end: >-
+          {{ [now(utc=true).timestamp() | int + cluster_teardown_token_refresh_seconds | int,
+              cluster_teardown_deadline | int] | min }}
+
+    # Polled one after another: the Application goes last in Argo's cascade
+    # (after the PreDelete hook saw the ClusterDeployment deleted), so most of
+    # the slice is spent on the first item. Errors are retried, not fatal.
+    - name: wait for the cluster's hub resources to be gone
+      kubernetes.core.k8s_info:
+        api_version: "{{ item.api_version }}"
+        kind: "{{ item.kind }}"
+        name: "{{ item.name }}"
+        namespace: "{{ item.namespace | default(omit) }}"
+      loop:
+        - api_version: argoproj.io/v1alpha1
+          kind: Application
+          name: "{{ cluster_name }}-deploy"
+          namespace: openshift-gitops
+        - api_version: hive.openshift.io/v1
+          kind: ClusterDeployment
+          name: "{{ cluster_name }}"
+          namespace: "{{ cluster_name }}"
+        - api_version: cluster.open-cluster-management.io/v1
+          kind: ManagedCluster
+          name: "{{ cluster_name }}"
+      loop_control:
+        label: "{{ item.kind }} {{ (item.namespace ~ '/') if item.namespace is defined else '' }}{{ item.name }}"
+      register: cluster_teardown_poll
+      until: cluster_teardown_poll.resources | default(['unknown']) | length == 0
+      retries: >-
+        {{ [((cluster_teardown_slice_end | int - now(utc=true).timestamp() | int)
+             / cluster_teardown_poll_seconds | int) | int, 1] | max }}
+      delay: "{{ cluster_teardown_poll_seconds | int }}"
+      failed_when: false
+
+    - name: record what is still present
+      ansible.builtin.set_fact:
+        cluster_teardown_remaining: >-
+          {{ (cluster_teardown_poll.results | rejectattr('resources', 'defined') | list
+              + cluster_teardown_poll.results | selectattr('resources', 'defined') | selectattr('resources') | list)
+             | map(attribute='item') | map(attribute='kind') | list }}
+
+    - name: note whether the teardown finished or ran out of time
+      ansible.builtin.set_fact:
+        cluster_teardown_done: "{{ cluster_teardown_remaining | length == 0 }}"
+        cluster_teardown_expired: "{{ now(utc=true).timestamp() | int >= cluster_teardown_deadline | int }}"

@@ -1,0 +1,62 @@
+# Make a protected cluster destroyable: re-render its <cluster>-deploy
+# Application with Argo's resources-finalizer (gitops_cluster_build,
+# gitops_task: unprotect), push it, and wait until the live Application on the
+# hub carries the finalizer. The hub applies the change through the
+# acm-hub-cluster-builds Application (automated sync, new revision), so this
+# waits on the live object instead of a fixed pause.
+#
+# Skips the commit when the Application already has the finalizer, and when it
+# does not exist at all: re-rendering the file of an already removed cluster
+# would bring the Application, and the cluster, back.
+#
+# Used by undeploy_protected_cluster.yml and e2e-demo/snow_undeploy_cluster.yml.
+# Variables: cluster_unprotect_timeout_seconds (default 900),
+#            cluster_unprotect_poll_seconds (default 15).
+- name: look up the cluster's deploy Application
+  kubernetes.core.k8s_info:
+    api_version: argoproj.io/v1alpha1
+    kind: Application
+    name: "{{ cluster_name }}-deploy"
+    namespace: openshift-gitops
+  register: cluster_unprotect_app
+
+- name: add the resources finalizer to the Application in Git
+  ansible.builtin.include_role:
+    name: gitops_cluster_build
+  vars:
+    gitops_task: unprotect
+    cluster_state: unchanged
+  when:
+    - cluster_unprotect_app.resources | length > 0
+    - "'resources-finalizer.argocd.argoproj.io' not in (cluster_unprotect_app.resources.0.metadata.finalizers | default([]))"
+
+- name: wait for the live Application to carry the finalizer
+  kubernetes.core.k8s_info:
+    api_version: argoproj.io/v1alpha1
+    kind: Application
+    name: "{{ cluster_name }}-deploy"
+    namespace: openshift-gitops
+  register: cluster_unprotect_live
+  until: >-
+    cluster_unprotect_live.resources is defined
+    and cluster_unprotect_live.resources | length > 0
+    and 'resources-finalizer.argocd.argoproj.io' in (cluster_unprotect_live.resources.0.metadata.finalizers | default([]))
+  retries: "{{ ((cluster_unprotect_timeout_seconds | default(900) | int) / (cluster_unprotect_poll_seconds | default(15) | int)) | round(0, 'ceil') | int }}"
+  delay: "{{ cluster_unprotect_poll_seconds | default(15) | int }}"
+  failed_when: false
+  when: cluster_unprotect_app.resources | length > 0
+
+- name: fail if the finalizer did not reach the hub
+  ansible.builtin.fail:
+    msg: >-
+      Application openshift-gitops/{{ cluster_name }}-deploy still has no
+      resources-finalizer.argocd.argoproj.io after
+      {{ cluster_unprotect_timeout_seconds | default(900) }} seconds. Check that
+      Argo CD application acm-hub-cluster-builds synced the latest
+      {{ gitops_repo_branch }} commit, then re-run. Nothing was destroyed.
+  when:
+    - cluster_unprotect_app.resources | length > 0
+    - cluster_unprotect_live is not skipped
+    - not (cluster_unprotect_live.resources is defined
+           and cluster_unprotect_live.resources | length > 0
+           and 'resources-finalizer.argocd.argoproj.io' in (cluster_unprotect_live.resources.0.metadata.finalizers | default([])))

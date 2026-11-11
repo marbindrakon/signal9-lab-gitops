@@ -1,3 +1,6 @@
+- name: get a kubernetes token for this job
+  ansible.builtin.import_playbook: ../_job_auth.yml
+
 - hosts: localhost
   gather_facts: false
   tasks:
@@ -9,17 +12,10 @@
         data:
           status: "Deprovisioning"
 
+    # Adds Argo's resources finalizer and waits for it on the live
+    # Application; undeploy_cluster.yml refuses Applications without it.
     - name: unprotect cluster since approval happened in SNOW
-      ansible.builtin.include_role:
-        name: gitops_cluster_build
-      vars:
-        gitops_task: unprotect
-        cluster_state: unchanged
-      when: cluster_protected == true
-
-    - name: wait 30 seconds
-      ansible.builtin.pause:
-        seconds: 30
+      ansible.builtin.include_tasks: ../_unprotect_cluster_app.yml
       when: cluster_protected == true
 
 - name: run cluster undeploy

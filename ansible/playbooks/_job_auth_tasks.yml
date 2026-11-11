@@ -1,0 +1,63 @@
+# Mint a short-lived hub token for aap-jobs/aap-cluster-automation and write the
+# job kubeconfig. Included by _job_auth.yml at the start of a job and again by
+# long-running steps (the undeploy teardown wait) before the token's TTL
+# (hashicorp_vault.k8s_token_ttl) runs out. See _job_auth.yml.
+- name: mint and install the job kubeconfig
+  when: lookup('ansible.builtin.env', 'K8S_AUTH_KUBECONFIG') | length > 0
+  block:
+    - name: mint service account token from vault
+      no_log: true
+      community.hashi_vault.vault_write:
+        url: "{{ hashicorp_vault['url'] }}"
+        auth_method: jwt
+        mount_point: "{{ hashicorp_vault['auth_mount'] }}"
+        role_id: "{{ hashicorp_vault['auth_role'] }}"
+        jwt: "{{ vault_jwt }}"
+        path: "{{ hashicorp_vault['k8s_creds_path'] }}"
+        data:
+          ttl: "{{ hashicorp_vault['k8s_token_ttl'] }}"
+      register: job_k8s_creds
+      ignore_errors: true
+
+    # no_log hides why the call failed; its msg names the failing step
+    # (reading the JWT-SVID, the Vault login, the creds write) and never
+    # contains the JWT or the token.
+    - name: fail if vault did not mint the token
+      ansible.builtin.fail:
+        msg: "{{ job_k8s_creds.msg | default('vault_write failed') }}"
+      when: job_k8s_creds is failed
+
+    - name: write job kubeconfig
+      no_log: true
+      ansible.builtin.copy:
+        dest: "{{ lookup('ansible.builtin.env', 'K8S_AUTH_KUBECONFIG') }}"
+        mode: "0600"
+        content: "{{ job_kubeconfig | to_nice_yaml }}"
+      vars:
+        job_kubeconfig:
+          apiVersion: v1
+          kind: Config
+          clusters:
+            - name: "{{ hub_name }}"
+              cluster:
+                server: "{{ hashicorp_vault['k8s_api_host'] }}"
+          users:
+            - name: aap-cluster-automation
+              user:
+                token: "{{ job_k8s_creds.data.data.service_account_token }}"
+          contexts:
+            - name: "{{ hub_name }}"
+              context:
+                cluster: "{{ hub_name }}"
+                user: aap-cluster-automation
+                namespace: aap-jobs
+          current-context: "{{ hub_name }}"
+
+    - name: check kubernetes access
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: ServiceAccount
+        namespace: aap-jobs
+        name: aap-cluster-automation
+      register: job_k8s_check
+      failed_when: job_k8s_check.resources | length == 0

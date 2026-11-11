@@ -1,16 +1,16 @@
-- hosts: localhost
-  gather_facts: false
-  vars:
-    cluster_state: unchanged
-    gitops_task: unprotect
-  tasks:
-    - name: include gitops_cluster_build role
-      ansible.builtin.include_role:
-        name: gitops_cluster_build
+# Undeploy a protected cluster. Protected clusters' Applications are rendered
+# without Argo's resources-finalizer, and undeploy_cluster.yml refuses to delete
+# such an Application. This playbook first adds the finalizer (through Git, then
+# waits for it on the live Application), then runs the normal undeploy.
+- name: get a kubernetes token for this job
+  ansible.builtin.import_playbook: _job_auth.yml
 
-    - name: wait 30 seconds
-      ansible.builtin.pause:
-        seconds: 30
+- name: make the cluster destroyable
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: add the resources finalizer and wait for it on the hub
+      ansible.builtin.include_tasks: _unprotect_cluster_app.yml
 
 - name: include undeploy plays
   ansible.builtin.import_playbook: undeploy_cluster.yml

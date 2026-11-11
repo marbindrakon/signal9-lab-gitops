@@ -1,25 +1,31 @@
+# Undeploy a spoke cluster. Destroying the cluster is this job's explicit
+# action, never a side effect of a Git change (the hub syncs cluster-builds
+# without prune):
+#   1. delete the <cluster>-deploy Application on the hub and wait until it,
+#      the ClusterDeployment and the ManagedCluster are gone
+#      (_cluster_teardown.yml; refuses protected clusters, see
+#      undeploy_protected_cluster.yml)
+#   2. remove the cluster from Git (cluster-builds file, AutoShift entry), so
+#      a later sync of the hub cannot re-create the Application
+#   3. remove the load balancer config
+#   4. remove the Vault auth mount, SSO client, Ceph config, allocated
+#      resources and DNS records
+# Nothing in 2-4 runs until the cluster is gone, so the spoke keeps its
+# secrets, endpoints and names while it is being deprovisioned.
 - name: get a kubernetes token for this job
   ansible.builtin.import_playbook: _job_auth.yml
 
-- hosts: loadbalancers
+- name: destroy the cluster on the hub
+  hosts: localhost
   gather_facts: false
   vars:
     cluster_state: absent
-  tasks:
-    - name: load variables from configmap if present
-      ansible.builtin.include_tasks: _load_config_map.yml
-
-    - name: include lb_config role
-      ansible.builtin.include_role:
-        name: lb_config
-        apply:
-          become: true
-      when: hostvars['localhost']['cluster_platform'] not in ["aws", "azure", "gcp"]
-
-- hosts: localhost
-  gather_facts: false
-  vars:
-    cluster_state: absent
+    # Chart deprovision timeout (charts/mce-cluster-build deprovision.timeoutSeconds)
+    # plus a margin for Argo's cascade and the ManagedCluster detach.
+    cluster_teardown_timeout_seconds: 11100
+    cluster_teardown_poll_seconds: 30
+    # Below hashicorp_vault.k8s_token_ttl (1h): the wait re-mints the hub token this often.
+    cluster_teardown_token_refresh_seconds: 2700
   tasks:
     - name: load variables from configmap if present
       ansible.builtin.include_tasks: _load_config_map.yml
@@ -28,10 +34,9 @@
       ansible.builtin.set_fact:
         "{{ cluster_platform }}_platform_config": "{{ platform_configs[cluster_platform] }}"
 
-    - name: include vault_config role
-      ansible.builtin.include_role:
-        name: vault_config
-
+    # Read before the teardown: the Service goes away with the hosted cluster.
+    # lb_config and dns_config use the VIP afterwards; on a re-run after the
+    # teardown the ConfigMap's internal_api_vip (if any) stays in place.
     - name: get hcp api vip
       kubernetes.core.k8s_info:
         api_version: v1
@@ -40,17 +45,44 @@
         namespace: "clusters-{{ cluster_name }}"
       register: hcp_api_vip
       when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
-      delegate_to: localhost
 
     - name: set api vip fact
       ansible.builtin.set_fact:
         internal_api_vip: "{{ hcp_api_vip.resources.0.status.loadBalancer.ingress.0.ip }}"
-      when: cluster_platform in ["hcp_kubevirt", "hcp_agent"]
-      delegate_to: localhost
+      when:
+        - cluster_platform in ["hcp_kubevirt", "hcp_agent"]
+        - hcp_api_vip.resources | default([]) | length > 0
+
+    - name: delete the cluster's Application and wait for the cluster to be gone
+      ansible.builtin.include_tasks: _cluster_teardown.yml
 
     - name: include gitops_cluster_build role
       ansible.builtin.include_role:
         name: gitops_cluster_build
+
+# lb_config reads the cluster facts from localhost (set above).
+- name: remove the load balancer config
+  hosts: loadbalancers
+  gather_facts: false
+  vars:
+    cluster_state: absent
+  tasks:
+    - name: include lb_config role
+      ansible.builtin.include_role:
+        name: lb_config
+        apply:
+          become: true
+      when: hostvars['localhost']['cluster_platform'] not in ["aws", "azure", "gcp"]
+
+- name: remove the cluster's remaining configuration
+  hosts: localhost
+  gather_facts: false
+  vars:
+    cluster_state: absent
+  tasks:
+    - name: include vault_config role
+      ansible.builtin.include_role:
+        name: vault_config
 
     - name: include sso_client role
       ansible.builtin.include_role:
