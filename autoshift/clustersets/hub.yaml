@@ -95,6 +95,9 @@ hubClusterSets:
       # Log in through Keycloak.
       oauth-identity-providers: 'true'
 
+      # Enable autoshift console
+      autoshift-console: 'true'
+
     config:
       acm:
         observability:
