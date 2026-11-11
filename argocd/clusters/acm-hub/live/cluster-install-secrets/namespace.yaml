@@ -1,0 +1,7 @@
+# Source namespace for AutoShift's cluster-install policies: the BMC credentials and pull secret
+# they copy into each new cluster's namespace live here. The Secrets themselves are ExternalSecrets
+# declared in the hub's AutoShift values (autoshift/hubs/acm-hub.yaml) and come from Vault.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cluster-install-secrets

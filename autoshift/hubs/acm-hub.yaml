@@ -96,6 +96,27 @@ hubClusterSets:
               target: {name: signal9-ca-bundle, creationPolicy: Owner}
               dataFrom:
                 - extract: {key: signal9-ca-bundle}
+          # Sources for AutoShift cluster-install (copied into each new cluster's namespace).
+          - name: default-bmc-cred
+            namespace: cluster-install-secrets
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault-cluster}
+              target: {name: default-bmc-cred, creationPolicy: Owner}
+              dataFrom:
+                - extract: {key: acm-hub-bmc-smc}
+          - name: default-pull-secret
+            namespace: cluster-install-secrets
+            spec:
+              refreshInterval: 1h
+              secretStoreRef: {kind: ClusterSecretStore, name: vault}
+              target:
+                name: default-pull-secret
+                creationPolicy: Owner
+                template:
+                  type: kubernetes.io/dockerconfigjson
+              dataFrom:
+                - extract: {key: ocp-pull-secret}
           - name: route53-key
             namespace: cert-manager
             spec:
