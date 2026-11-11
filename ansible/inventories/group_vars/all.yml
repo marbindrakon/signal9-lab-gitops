@@ -198,7 +198,7 @@ version_mapping:
   "4.19": "4.19.28"
   "4.20": "4.20.18"
   "4.21": "4.21.10"
-  "4.22": "4.22.12"
+  "4.22": "4.22.20"
   "5.0": "5.0.1"
 
 platform_configs:
@@ -557,6 +557,7 @@ platform_configs:
         etcd_size: 32Gi
         agent_count: 5
 
+# These Supermicro X9 hosts have x86-64-v2 CPUs: OCP 4.22 at most (OCP 5.0 = RHCOS 10 needs v3).
 # Bare-metal hosts the "metal" platform may use, in the order they are picked. Hardware facts
 # only (verified from metal3 inspection): the BMC, the PXE NIC, the two 10G ports that carry the
 # machine and storage VLANs, the install disk, and the host's fixed storage (VLAN 11) address.

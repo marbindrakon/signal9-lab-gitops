@@ -108,7 +108,13 @@ hubClusterSets:
           # multicluster engine 2.17 ships assisted-installer images up to 4.22; OCP 5.0 boots
           # RHCOS 10.2 (the build `openshift-install 5.0.1 coreos print-stream-json` reports).
           # Setting the list replaces the default catalog, so only what the lab installs is here.
+          # RHCOS 10 needs x86-64-v3 CPUs: the Supermicro X9 hosts can only run 4.22 (RHCOS 9).
           osImages:
+            - openshiftVersion: '4.22'
+              version: '4.22.21'
+              cpuArchitecture: x86_64
+              url: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.22/4.22.21/rhcos-4.22.21-x86_64-live-iso.x86_64.iso
+              rootFSUrl: https://mirror.openshift.com/pub/openshift-v4/x86_64/dependencies/rhcos/4.22/4.22.21/rhcos-4.22.21-x86_64-live-rootfs.x86_64.img
             - openshiftVersion: '5.0'
               version: '10.2.20261026-0'
               cpuArchitecture: x86_64
